@@ -17,6 +17,8 @@ Quickstart
 
 * Clone this repo to wherever it is on your machine that you work on your projects
 
+        git clone git@github.com:SCPR/kpcc_backroom_handshakes.git
+
 * Change into that directory
 
         cd kpcc_backroom_handshakes
@@ -60,20 +62,15 @@ Still very much learning how to configure a collaborative project in different e
 
 Of course, like with all things, we'll learn something new that makes all of this seem silly.
 
-* ```settings_common.py```
-    * Contains middlware classes and installed apps common to the project.
+* ```settings_common.py``` contains middlware classes and installed apps common to the project.
 
-* ```settings_production.py```
-    * Contains references to Installed Apps, API, database and other configuration variables defined in ```config.yml``` during production and ```development.yml``` during development.
+* ```settings_production.py``` contains references to Installed Apps, API, database and other configuration variables defined in ```config.yml``` during production and ```development.yml``` during development.
 
-* ```config.yml```
-    * Installed Apps, API, database and other configuration variables for production
+* ```config.yml``` contains installed apps, API, database and other configuration variables for production
 
-* ```development.yml```
-    * Installed Apps, API, database and other configuration variables for development
+* ```development.yml``` contains installed apps, API, database and other configuration variables for development
 
-* ```TEMPLATE_development.yml```
-    * Template for development configuration variables
+* ```TEMPLATE_development.yml``` is the template for development configuration variables
 
 ----
 
