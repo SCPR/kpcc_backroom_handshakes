@@ -135,7 +135,7 @@ LOGGING = {
     }
 }
 
-TEST_RUNNER = "django.test.simple.DjangoTestSuiteRunner"
+# TEST_RUNNER = "django.test.simple.DjangoTestSuiteRunner"
 
 AUTH_PROFILE_MODULE = "create_user.UserProfile"
 
