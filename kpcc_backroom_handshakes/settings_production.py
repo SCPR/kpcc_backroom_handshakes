@@ -166,13 +166,13 @@ STATICFILES_DIRS = (
 
 )
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-if "build" in CONFIG:
-    STAGING = CONFIG["build"]["staging"]
-    STAGING_PREFIX = CONFIG["build"]["staging_prefix"]
-    LIVE_PREFIX = CONFIG["build"]["live_prefix"]
-    DEPLOY_DIR = CONFIG["build"]["deploy_dir"]
-    STATIC_DIR = STATIC_URL
-    BUILD_DIR = CONFIG["build"]["build_dir"]
-    BAKERY_VIEWS = tuple(CONFIG["build"]["views"])
-    URL_PATH = ""
+# build paths inside the project like this: os.path.join(base_dir, ...)
+# if "build" in CONFIG:
+#     STAGING = CONFIG["build"]["staging"]
+#     STAGING_PREFIX = CONFIG["build"]["staging_prefix"]
+#     LIVE_PREFIX = CONFIG["build"]["live_prefix"]
+#     DEPLOY_DIR = CONFIG["build"]["deploy_dir"]
+#     STATIC_DIR = STATIC_URL
+#     BUILD_DIR = CONFIG["build"]["build_dir"]
+#     BAKERY_VIEWS = tuple(CONFIG["build"]["views"])
+#     URL_PATH = ""
