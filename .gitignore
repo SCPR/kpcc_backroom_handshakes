@@ -63,4 +63,6 @@ public/static/*
 dbsync_setup.rb
 data/*
 SCRATCHPAD.md
-kpcc_backroom_handshakes/ballot_box/data_dump/*
+ballot_box/data_dump/*.zip
+ballot_box/data_dump/sos_latest/*.xml
+ballot_box/data_dump/lac_latest/*.txt
