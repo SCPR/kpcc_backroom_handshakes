@@ -65,6 +65,12 @@ def superuser():
     """
     local("python manage.py createsuperuser")
 
+def test():
+    """
+    shortcut for base manage.py function to create a superuser
+    """
+    local("python manage.py test")
+
 """
 bootstrapping functions
 """
