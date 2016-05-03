@@ -27,7 +27,7 @@ Quickstart
 
 * Run ```fab makesecret``` and add the output on line 5 of ```development.yml```
 
-* Assuming you have MySQL installed, open ```development.yml``` and add ```kpcc_backroom_handshakes``` as the database name on line 17. Add in any username and password you might have for your MySQL install.
+* Assuming you have Fabric, Django 1.9, MySQL-python and MySQL installed, open ```development.yml``` and add ```kpcc_backroom_handshakes``` as the database name on line 17. Add in any username and password you might have for your MySQL install.
 
         database:
           host: "127.0.0.1"
