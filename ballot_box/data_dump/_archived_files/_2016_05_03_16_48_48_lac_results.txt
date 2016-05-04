@@ -1,0 +1,1203 @@
+000ET0014      County of Los Angeles                                                           
+000ET0014      Department of Registrar-Recorder/County Clerk                                   
+000ET0014      NOVEMBER 04, 2014 - GENERAL ELECTION                                            
+000ET0014      Final Official Election Returns                                                 
+000TD0014      13:07 11/25/2014                                                                
+001CC00  03    GOVERNOR                                                                        
+001VN00  03    VOTER NOMINATED                                                                 
+001BK00  03                                                                                    
+001CN00  03       EDMUND G BROWN         DEM                               978,142    66.84    
+001CN00  03       NEEL KASHKARI          REP                               485,186    33.16    
+001BK00  03                                                                                    
+001PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+001DR00  03    REGISTRATION     4,892,047                                                      
+002CC00  03    LIEUTENANT GOVERNOR                                                             
+002VN00  03    VOTER NOMINATED                                                                 
+002BK00  03                                                                                    
+002CN00  03       RON NEHRING            REP                               495,577    34.79    
+002CN00  03       GAVIN NEWSOM           DEM                               929,107    65.21    
+002BK00  03                                                                                    
+002PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+002DR00  03    REGISTRATION     4,892,047                                                      
+003CC00  03    SECRETARY OF STATE                                                              
+003VN00  03    VOTER NOMINATED                                                                 
+003BK00  03                                                                                    
+003CN00  03       ALEX PADILLA           DEM                               880,939    62.50    
+003CN00  03       PETE PETERSON          REP                               528,630    37.50    
+003BK00  03                                                                                    
+003PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+003DR00  03    REGISTRATION     4,892,047                                                      
+004CC00  03    CONTROLLER                                                                      
+004VN00  03    VOTER NOMINATED                                                                 
+004BK00  03                                                                                    
+004CN00  03       ASHLEY SWEARENGIN      REP                               546,211    39.04    
+004CN00  03       BETTY T YEE            DEM                               852,777    60.96    
+004BK00  03                                                                                    
+004PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+004DR00  03    REGISTRATION     4,892,047                                                      
+005CC00  03    TREASURER                                                                       
+005VN00  03    VOTER NOMINATED                                                                 
+005BK00  03                                                                                    
+005CN00  03       JOHN CHIANG            DEM                               949,745    66.93    
+005CN00  03       GREG CONLON            REP                               469,300    33.07    
+005BK00  03                                                                                    
+005PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+005DR00  03    REGISTRATION     4,892,047                                                      
+006CC00  03    ATTORNEY GENERAL                                                                
+006VN00  03    VOTER NOMINATED                                                                 
+006BK00  03                                                                                    
+006CN00  03       KAMALA D HARRIS        DEM                               957,238    66.94    
+006CN00  03       RONALD GOLD            REP                               472,744    33.06    
+006BK00  03                                                                                    
+006PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+006DR00  03    REGISTRATION     4,892,047                                                      
+007CC00  03    INSURANCE COMMISSIONER                                                          
+007VN00  03    VOTER NOMINATED                                                                 
+007BK00  03                                                                                    
+007CN00  03       DAVE JONES             DEM                               932,863    66.64    
+007CN00  03       TED GAINES             REP                               466,963    33.36    
+007BK00  03                                                                                    
+007PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+007DR00  03    REGISTRATION     4,892,047                                                      
+008CC07  01    MEMBER STATE BOARD OF        EQUALIZATION-1ST DISTRICT                          
+008VN07  01    VOTER NOMINATED                                                                 
+008BK07  01                                                                                    
+008CN07  01       GEORGE RUNNER          REP                                94,055    51.53    
+008CN07  01       CHRIS PARKER           DEM                                88,455    48.47    
+008BK07  01                                                                                    
+008PR07  01    TOTAL PRECINCTS        723            PRECINCTS REPORTING       723      100    
+008DR07  01    REGISTRATION       660,887                                                      
+009CC07  03    MEMBER STATE BOARD OF        EQUALIZATION-3RD DISTRICT                          
+009VN07  03    VOTER NOMINATED                                                                 
+009BK07  03                                                                                    
+009CN07  03       JEROME E HORTON        DEM                               762,189    64.95    
+009CN07  03       G RICK MARSHALL        REP                               411,311    35.05    
+009BK07  03                                                                                    
+009PR07  03    TOTAL PRECINCTS      4,304            PRECINCTS REPORTING     4,304      100    
+009DR07  03    REGISTRATION     4,231,160                                                      
+010CC02  23    U.S. REPRESENTATIVE          23RD DISTRICT                                      
+010VN02  23    VOTER NOMINATED                                                                 
+010BK02  23                                                                                    
+010CN02  23       RAUL GARCIA            DEM                                 4,552    33.15    
+010CN02  23       KEVIN MC CARTHY        REP                                 9,181    66.85    
+010BK02  23                                                                                    
+010PR02  23    TOTAL PRECINCTS         45            PRECINCTS REPORTING        45      100    
+010DR02  23    REGISTRATION        42,111                                                      
+011CC02  25    U.S. REPRESENTATIVE          25TH DISTRICT                                      
+011VN02  25    VOTER NOMINATED                                                                 
+011BK02  25                                                                                    
+011CN02  25       TONY STRICKLAND        REP                                40,774    46.50    
+011CN02  25       STEVE KNIGHT           REP                                46,915    53.50    
+011BK02  25                                                                                    
+011PR02  25    TOTAL PRECINCTS        347            PRECINCTS REPORTING       347      100    
+011DR02  25    REGISTRATION       305,945                                                      
+012CC02  26    U.S. REPRESENTATIVE          26TH DISTRICT                                      
+012VN02  26    VOTER NOMINATED                                                                 
+012BK02  26                                                                                    
+012CN02  26       JEFF GORELL            REP                                 1,596    56.42    
+012CN02  26       JULIA BROWNLEY         DEM                                 1,233    43.58    
+012BK02  26                                                                                    
+012PR02  26    TOTAL PRECINCTS          7            PRECINCTS REPORTING         7      100    
+012DR02  26    REGISTRATION         6,116                                                      
+013CC02  27    U.S. REPRESENTATIVE          27TH DISTRICT                                      
+013VN02  27    VOTER NOMINATED                                                                 
+013BK02  27                                                                                    
+013CN02  27       JACK ORSWELL           REP                                45,249    38.56    
+013CN02  27       JUDY CHU               DEM                                72,096    61.44    
+013BK02  27                                                                                    
+013PR02  27    TOTAL PRECINCTS        379            PRECINCTS REPORTING       379      100    
+013DR02  27    REGISTRATION       353,436                                                      
+014CC02  28    U.S. REPRESENTATIVE          28TH DISTRICT                                      
+014VN02  28    VOTER NOMINATED                                                                 
+014BK02  28                                                                                    
+014CN02  28       ADAM B SCHIFF          DEM                                91,996    76.50    
+014CN02  28       STEVE STOKES            NP                                28,268    23.50    
+014BK02  28                                                                                    
+014PR02  28    TOTAL PRECINCTS        387            PRECINCTS REPORTING       387      100    
+014DR02  28    REGISTRATION       397,372                                                      
+015CC02  29    U.S. REPRESENTATIVE          29TH DISTRICT                                      
+015VN02  29    VOTER NOMINATED                                                                 
+015BK02  29                                                                                    
+015CN02  29       WILLIAM O LEADER       REP                                17,045    25.39    
+015CN02  29       TONY CARDENAS          DEM                                50,096    74.61    
+015BK02  29                                                                                    
+015PR02  29    TOTAL PRECINCTS        273            PRECINCTS REPORTING       273      100    
+015DR02  29    REGISTRATION       278,433                                                      
+016CC02  30    U.S. REPRESENTATIVE          30TH DISTRICT                                      
+016VN02  30    VOTER NOMINATED                                                                 
+016BK02  30                                                                                    
+016CN02  30       BRAD SHERMAN           DEM                                86,301    65.74    
+016CN02  30       MARK S REED            REP                                44,977    34.26    
+016BK02  30                                                                                    
+016PR02  30    TOTAL PRECINCTS        361            PRECINCTS REPORTING       361      100    
+016DR02  30    REGISTRATION       402,644                                                      
+017CC02  32    U.S. REPRESENTATIVE          32ND DISTRICT                                      
+017VN02  32    VOTER NOMINATED                                                                 
+017BK02  32                                                                                    
+017CN02  32       GRACE F NAPOLITANO     DEM                                50,353    59.66    
+017CN02  32       ARTURO E ALAS          REP                                34,053    40.34    
+017BK02  32                                                                                    
+017PR02  32    TOTAL PRECINCTS        380            PRECINCTS REPORTING       380      100    
+017DR02  32    REGISTRATION       324,336                                                      
+018CC02  33    U.S. REPRESENTATIVE          33RD DISTRICT                                      
+018VN02  33    VOTER NOMINATED                                                                 
+018BK02  33                                                                                    
+018CN02  33       TED LIEU               DEM                               108,331    59.19    
+018CN02  33       ELAN CARR              REP                                74,700    40.81    
+018BK02  33                                                                                    
+018PR02  33    TOTAL PRECINCTS        469            PRECINCTS REPORTING       469      100    
+018DR02  33    REGISTRATION       465,393                                                      
+019CC02  34    U.S. REPRESENTATIVE          34TH DISTRICT                                      
+019VN02  34    VOTER NOMINATED                                                                 
+019BK02  34                                                                                    
+019CN02  34       XAVIER BECERRA         DEM                                44,697    72.54    
+019CN02  34       ADRIENNE N EDWARDS     DEM                                16,924    27.46    
+019BK02  34                                                                                    
+019PR02  34    TOTAL PRECINCTS        254            PRECINCTS REPORTING       254      100    
+019DR02  34    REGISTRATION       262,024                                                      
+020CC02  35    U.S. REPRESENTATIVE          35TH DISTRICT                                      
+020VN02  35    VOTER NOMINATED                                                                 
+020BK02  35                                                                                    
+020CN02  35       CHRISTINA GAGNIER      DEM                                 4,307    31.99    
+020CN02  35       NORMA J TORRES         DEM                                 9,156    68.01    
+020BK02  35                                                                                    
+020PR02  35    TOTAL PRECINCTS         59            PRECINCTS REPORTING        59      100    
+020DR02  35    REGISTRATION        59,054                                                      
+021CC02  37    U.S. REPRESENTATIVE          37TH DISTRICT                                      
+021VN02  37    VOTER NOMINATED                                                                 
+021BK02  37                                                                                    
+021CN02  37       KAREN BASS             DEM                                96,787    84.28    
+021CN02  37       R ADAM KING            REP                                18,051    15.72    
+021BK02  37                                                                                    
+021PR02  37    TOTAL PRECINCTS        381            PRECINCTS REPORTING       381      100    
+021DR02  37    REGISTRATION       385,868                                                      
+022CC02  38    U.S. REPRESENTATIVE          38TH DISTRICT                                      
+022VN02  38    VOTER NOMINATED                                                                 
+022BK02  38                                                                                    
+022CN02  38       LINDA T SANCHEZ        DEM                                56,680    59.68    
+022CN02  38       BENJAMIN CAMPOS        REP                                38,300    40.32    
+022BK02  38                                                                                    
+022PR02  38    TOTAL PRECINCTS        386            PRECINCTS REPORTING       386      100    
+022DR02  38    REGISTRATION       351,483                                                      
+023CC02  39    U.S. REPRESENTATIVE          39TH DISTRICT                                      
+023VN02  39    VOTER NOMINATED                                                                 
+023BK02  39                                                                                    
+023CN02  39       ED ROYCE               REP                                18,143    61.64    
+023CN02  39       PETER O ANDERSON       DEM                                11,291    38.36    
+023BK02  39                                                                                    
+023PR02  39    TOTAL PRECINCTS        117            PRECINCTS REPORTING       117      100    
+023DR02  39    REGISTRATION       106,039                                                      
+024CC02  40    U.S. REPRESENTATIVE          40TH DISTRICT                                      
+024VN02  40    VOTER NOMINATED                                                                 
+024BK02  40                                                                                    
+024CN02  40       DAVID SANCHEZ          DEM                                19,171    38.82    
+024CN02  40       L ROYBAL-ALLARD        DEM                                30,208    61.18    
+024BK02  40                                                                                    
+024PR02  40    TOTAL PRECINCTS        264            PRECINCTS REPORTING       264      100    
+024DR02  40    REGISTRATION       248,476                                                      
+025CC02  43    U.S. REPRESENTATIVE          43RD DISTRICT                                      
+025VN02  43    VOTER NOMINATED                                                                 
+025BK02  43                                                                                    
+025CN02  43       JOHN WOOD JR           REP                                28,521    29.04    
+025CN02  43       MAXINE WATERS          DEM                                69,681    70.96    
+025BK02  43                                                                                    
+025PR02  43    TOTAL PRECINCTS        353            PRECINCTS REPORTING       353      100    
+025DR02  43    REGISTRATION       349,015                                                      
+026CC02  44    U.S. REPRESENTATIVE          44TH DISTRICT                                      
+026VN02  44    VOTER NOMINATED                                                                 
+026BK02  44                                                                                    
+026CN02  44       JANICE HAHN            DEM                                59,670    86.65    
+026CN02  44       ADAM SHBEITA            PF                                 9,192    13.35    
+026BK02  44                                                                                    
+026PR02  44    TOTAL PRECINCTS        334            PRECINCTS REPORTING       334      100    
+026DR02  44    REGISTRATION       314,876                                                      
+027CC02  47    U.S. REPRESENTATIVE          47TH DISTRICT                                      
+027VN02  47    VOTER NOMINATED                                                                 
+027BK02  47                                                                                    
+027CN02  47       ALAN LOWENTHAL         DEM                                43,715    63.11    
+027CN02  47       ANDY WHALLON           REP                                25,548    36.89    
+027BK02  47                                                                                    
+027PR02  47    TOTAL PRECINCTS        231            PRECINCTS REPORTING       231      100    
+027DR02  47    REGISTRATION       239,426                                                      
+028CC03  18    STATE SENATOR                18TH DISTRICT                                      
+028VN03  18    VOTER NOMINATED                                                                 
+028BK03  18                                                                                    
+028CN03  18       BOB HERTZBERG          DEM                                79,495    70.17    
+028CN03  18       RICARDO A BENITEZ      REP                                33,794    29.83    
+028BK03  18                                                                                    
+028PR03  18    TOTAL PRECINCTS        393            PRECINCTS REPORTING       393      100    
+028DR03  18    REGISTRATION       419,834                                                      
+029CC03  20    STATE SENATOR                20TH DISTRICT                                      
+029VN03  20    VOTER NOMINATED                                                                 
+029BK03  20                                                                                    
+029CN03  20       CONNIE M LEYVA         DEM                                 9,605    68.61    
+029CN03  20       MATTHEW MUNSON         REP                                 4,395    31.39    
+029BK03  20                                                                                    
+029PR03  20    TOTAL PRECINCTS         61            PRECINCTS REPORTING        61      100    
+029DR03  20    REGISTRATION        59,316                                                      
+030CC03  22    STATE SENATOR                22ND DISTRICT                                      
+030VN03  22    VOTER NOMINATED                                                                 
+030BK03  22                                                                                    
+030CN03  22       ED HERNANDEZ           DEM                                63,570    64.84    
+030CN03  22       MARC RODRIGUEZ         REP                                34,468    35.16    
+030BK03  22                                                                                    
+030PR03  22    TOTAL PRECINCTS        449            PRECINCTS REPORTING       449      100    
+030DR03  22    REGISTRATION       406,025                                                      
+031CC03  24    STATE SENATOR                24TH DISTRICT                                      
+031VN03  24    VOTER NOMINATED                                                                 
+031BK03  24                                                                                    
+031CN03  24       PETER CHOI             DEM                                29,848    34.21    
+031CN03  24       KEVIN DE LEON          DEM                                57,412    65.79    
+031BK03  24                                                                                    
+031PR03  24    TOTAL PRECINCTS        351            PRECINCTS REPORTING       351      100    
+031DR03  24    REGISTRATION       362,551                                                      
+032CC03  26    STATE SENATOR                26TH DISTRICT                                      
+032VN03  26    VOTER NOMINATED                                                                 
+032BK03  26                                                                                    
+032CN03  26       BEN ALLEN              DEM                               122,901    60.34    
+032CN03  26       SANDRA FLUKE           DEM                                80,781    39.66    
+032BK03  26                                                                                    
+032PR03  26    TOTAL PRECINCTS        589            PRECINCTS REPORTING       589      100    
+032DR03  26    REGISTRATION       603,122                                                      
+033CC03  30    STATE SENATOR                30TH DISTRICT                                      
+033VN03  30    VOTER NOMINATED                                                                 
+033BK03  30                                                                                    
+033CN03  30       ISIDRO ARMENTA         DEM                                35,442    31.21    
+033CN03  30       HOLLY J MITCHELL       DEM                                78,115    68.79    
+033BK03  30                                                                                    
+033PR03  30    TOTAL PRECINCTS        461            PRECINCTS REPORTING       461      100    
+033DR03  30    REGISTRATION       457,052                                                      
+034CC03  32    STATE SENATOR                32ND DISTRICT                                      
+034VN03  32    VOTER NOMINATED                                                                 
+034BK03  32                                                                                    
+034CN03  32       MARIO A GUERRA         REP                                57,064    47.29    
+034CN03  32       TONY MENDOZA           DEM                                63,598    52.71    
+034BK03  32                                                                                    
+034PR03  32    TOTAL PRECINCTS        488            PRECINCTS REPORTING       488      100    
+034DR03  32    REGISTRATION       447,318                                                      
+035CC03  34    STATE SENATOR                34TH DISTRICT                                      
+035VN03  34    VOTER NOMINATED                                                                 
+035BK03  34                                                                                    
+035CN03  34       JOSE SOLORIO           DEM                                 8,279    44.21    
+035CN03  34       JANET NGUYEN           REP                                10,447    55.79    
+035BK03  34                                                                                    
+035PR03  34    TOTAL PRECINCTS         40            PRECINCTS REPORTING        40      100    
+035DR03  34    REGISTRATION        44,129                                                      
+036CC04  36    MEMBER OF THE ASSEMBLY       36TH DISTRICT                                      
+036VN04  36    VOTER NOMINATED                                                                 
+036BK04  36                                                                                    
+036CN04  36       STEVE FOX              DEM                                24,481    41.58    
+036CN04  36       TOM LACKEY             REP                                34,391    58.42    
+036BK04  36                                                                                    
+036PR04  36    TOTAL PRECINCTS        226            PRECINCTS REPORTING       226      100    
+036DR04  36    REGISTRATION       201,191                                                      
+037CC04  38    MEMBER OF THE ASSEMBLY       38TH DISTRICT                                      
+037VN04  38    VOTER NOMINATED                                                                 
+037BK04  38                                                                                    
+037CN04  38       SCOTT WILK             REP                                43,028    65.23    
+037CN04  38       JORGE S FUENTES        DEM                                22,940    34.77    
+037BK04  38                                                                                    
+037PR04  38    TOTAL PRECINCTS        212            PRECINCTS REPORTING       212      100    
+037DR04  38    REGISTRATION       192,990                                                      
+038CC04  39    MEMBER OF THE ASSEMBLY       39TH DISTRICT                                      
+038VN04  39    VOTER NOMINATED                                                                 
+038BK04  39                                                                                    
+038CN04  39       PATTY LOPEZ            DEM                                22,750    50.52    
+038CN04  39       RAUL BOCANEGRA         DEM                                22,284    49.48    
+038BK04  39                                                                                    
+038PR04  39    TOTAL PRECINCTS        219            PRECINCTS REPORTING       219      100    
+038DR04  39    REGISTRATION       201,781                                                      
+039CC04  41    MEMBER OF THE ASSEMBLY       41ST DISTRICT                                      
+039VN04  41    VOTER NOMINATED                                                                 
+039BK04  41                                                                                    
+039CN04  41       NATHANIEL TSAI         REP                                30,726    36.52    
+039CN04  41       CHRIS HOLDEN           DEM                                53,407    63.48    
+039BK04  41                                                                                    
+039PR04  41    TOTAL PRECINCTS        247            PRECINCTS REPORTING       247      100    
+039DR04  41    REGISTRATION       224,231                                                      
+040CC04  43    MEMBER OF THE ASSEMBLY       43RD DISTRICT                                      
+040VN04  43    VOTER NOMINATED                                                                 
+040BK04  43                                                                                    
+040CN04  43       TODD ROYAL             REP                                26,192    33.51    
+040CN04  43       MIKE GATTO             DEM                                51,971    66.49    
+040BK04  43                                                                                    
+040PR04  43    TOTAL PRECINCTS        245            PRECINCTS REPORTING       245      100    
+040DR04  43    REGISTRATION       259,020                                                      
+041CC04  44    MEMBER OF THE ASSEMBLY       44TH DISTRICT                                      
+041VN04  44    VOTER NOMINATED                                                                 
+041BK04  44                                                                                    
+041CN04  44       JACQUI IRWIN           DEM                                 1,305    46.51    
+041CN04  44       ROB MCCOY              REP                                 1,501    53.49    
+041BK04  44                                                                                    
+041PR04  44    TOTAL PRECINCTS          7            PRECINCTS REPORTING         7      100    
+041DR04  44    REGISTRATION         6,116                                                      
+042CC04  45    MEMBER OF THE ASSEMBLY       45TH DISTRICT                                      
+042VN04  45    VOTER NOMINATED                                                                 
+042BK04  45                                                                                    
+042CN04  45       MATT DABABNEH          DEM                                45,087    57.23    
+042CN04  45       SUSAN SHELLEY          REP                                33,696    42.77    
+042BK04  45                                                                                    
+042PR04  45    TOTAL PRECINCTS        228            PRECINCTS REPORTING       228      100    
+042DR04  45    REGISTRATION       252,029                                                      
+043CC04  46    MEMBER OF THE ASSEMBLY       46TH DISTRICT                                      
+043VN04  46    VOTER NOMINATED                                                                 
+043BK04  46                                                                                    
+043CN04  46       ADRIN NAZARIAN         DEM                                45,839    71.62    
+043CN04  46       ZACHARY TAYLOR         REP                                18,164    28.38    
+043BK04  46                                                                                    
+043PR04  46    TOTAL PRECINCTS        198            PRECINCTS REPORTING       198      100    
+043DR04  46    REGISTRATION       219,890                                                      
+044CC04  48    MEMBER OF THE ASSEMBLY       48TH DISTRICT                                      
+044VN04  48    VOTER NOMINATED                                                                 
+044BK04  48                                                                                    
+044CN04  48       ROGER HERNANDEZ        DEM                                30,131    54.37    
+044CN04  48       JOE M GARDNER          REP                                25,284    45.63    
+044BK04  48                                                                                    
+044PR04  48    TOTAL PRECINCTS        243            PRECINCTS REPORTING       243      100    
+044DR04  48    REGISTRATION       216,779                                                      
+045CC04  49    MEMBER OF THE ASSEMBLY       49TH DISTRICT                                      
+045VN04  49    VOTER NOMINATED                                                                 
+045BK04  49                                                                                    
+045CN04  49       ED CHAU                DEM                                33,030    61.50    
+045CN04  49       E TORRES SIEGRIST      REP                                20,678    38.50    
+045BK04  49                                                                                    
+045PR04  49    TOTAL PRECINCTS        212            PRECINCTS REPORTING       212      100    
+045DR04  49    REGISTRATION       205,158                                                      
+046CC04  50    MEMBER OF THE ASSEMBLY       50TH DISTRICT                                      
+046VN04  50    VOTER NOMINATED                                                                 
+046BK04  50                                                                                    
+046CN04  50       RICHARD BLOOM          DEM                                78,093    71.51    
+046CN04  50       BRADLY S TORGAN        REP                                31,113    28.49    
+046BK04  50                                                                                    
+046PR04  50    TOTAL PRECINCTS        314            PRECINCTS REPORTING       314      100    
+046DR04  50    REGISTRATION       309,634                                                      
+047CC04  51    MEMBER OF THE ASSEMBLY       51ST DISTRICT                                      
+047VN04  51    VOTER NOMINATED                                                                 
+047BK04  51                                                                                    
+047CN04  51       STEPHEN C SMITH        REP                                 8,277    16.38    
+047CN04  51       JIMMY GOMEZ            DEM                                42,261    83.62    
+047BK04  51                                                                                    
+047PR04  51    TOTAL PRECINCTS        190            PRECINCTS REPORTING       190      100    
+047DR04  51    REGISTRATION       199,249                                                      
+048CC04  52    MEMBER OF THE ASSEMBLY       52ND DISTRICT                                      
+048VN04  52    VOTER NOMINATED                                                                 
+048BK04  52                                                                                    
+048CN04  52       FREDDIE RODRIGUEZ      DEM                                 9,578    68.45    
+048CN04  52       DOROTHY F PINEDA       REP                                 4,414    31.55    
+048BK04  52                                                                                    
+048PR04  52    TOTAL PRECINCTS         61            PRECINCTS REPORTING        61      100    
+048DR04  52    REGISTRATION        59,316                                                      
+049CC04  53    MEMBER OF THE ASSEMBLY       53RD DISTRICT                                      
+049VN04  53    VOTER NOMINATED                                                                 
+049BK04  53                                                                                    
+049CN04  53       MIGUEL SANTIAGO        DEM                                20,472    63.53    
+049CN04  53       SANDRA MENDOZA         DEM                                11,753    36.47    
+049BK04  53                                                                                    
+049PR04  53    TOTAL PRECINCTS        155            PRECINCTS REPORTING       155      100    
+049DR04  53    REGISTRATION       151,347                                                      
+050CC04  54    MEMBER OF THE ASSEMBLY       54TH DISTRICT                                      
+050VN04  54    VOTER NOMINATED                                                                 
+050BK04  54                                                                                    
+050CN04  54       GLEN RATCLIFF          REP                                17,506    20.94    
+050CN04  54       S M RIDLEY THOMAS      DEM                                66,082    79.06    
+050BK04  54                                                                                    
+050PR04  54    TOTAL PRECINCTS        263            PRECINCTS REPORTING       263      100    
+050DR04  54    REGISTRATION       274,189                                                      
+051CC04  55    MEMBER OF THE ASSEMBLY       55TH DISTRICT                                      
+051VN04  55    VOTER NOMINATED                                                                 
+051BK04  55                                                                                    
+051CN04  55       GREGG D FRITCHLE       DEM                                10,186    44.65    
+051CN04  55       LING-LING CHANG        REP                                12,628    55.35    
+051BK04  55                                                                                    
+051PR04  55    TOTAL PRECINCTS        100            PRECINCTS REPORTING       100      100    
+051DR04  55    REGISTRATION        87,547                                                      
+052CC04  57    MEMBER OF THE ASSEMBLY       57TH DISTRICT                                      
+052VN04  57    VOTER NOMINATED                                                                 
+052BK04  57                                                                                    
+052CN04  57       IAN C CALDERON         DEM                                32,284    51.51    
+052CN04  57       RITA TOPALIAN          REP                                30,397    48.49    
+052BK04  57                                                                                    
+052PR04  57    TOTAL PRECINCTS        269            PRECINCTS REPORTING       269      100    
+052DR04  57    REGISTRATION       233,698                                                      
+053CC04  58    MEMBER OF THE ASSEMBLY       58TH DISTRICT                                      
+053VN04  58    VOTER NOMINATED                                                                 
+053BK04  58                                                                                    
+053CN04  58       CRISTINA GARCIA        DEM                                43,182      100    
+053BK04  58                                                                                    
+053PR04  58    TOTAL PRECINCTS        248            PRECINCTS REPORTING       248      100    
+053DR04  58    REGISTRATION       225,677                                                      
+054CC04  59    MEMBER OF THE ASSEMBLY       59TH DISTRICT                                      
+054VN04  59    VOTER NOMINATED                                                                 
+054BK04  59                                                                                    
+054CN04  59       R JONES-SAWYER         DEM                                28,493      100    
+054BK04  59                                                                                    
+054PR04  59    TOTAL PRECINCTS        180            PRECINCTS REPORTING       180      100    
+054DR04  59    REGISTRATION       168,462                                                      
+055CC04  62    MEMBER OF THE ASSEMBLY       62ND DISTRICT                                      
+055VN04  62    VOTER NOMINATED                                                                 
+055BK04  62                                                                                    
+055CN04  62       TED J GROSE            REP                                17,261    24.12    
+055CN04  62       AUTUMN BURKE           DEM                                54,304    75.88    
+055BK04  62                                                                                    
+055PR04  62    TOTAL PRECINCTS        262            PRECINCTS REPORTING       262      100    
+055DR04  62    REGISTRATION       246,691                                                      
+056CC04  63    MEMBER OF THE ASSEMBLY       63RD DISTRICT                                      
+056VN04  63    VOTER NOMINATED                                                                 
+056BK04  63                                                                                    
+056CN04  63       ANTHONY RENDON         DEM                                28,544    69.07    
+056CN04  63       ADAM J MILLER          REP                                12,781    30.93    
+056BK04  63                                                                                    
+056PR04  63    TOTAL PRECINCTS        200            PRECINCTS REPORTING       200      100    
+056DR04  63    REGISTRATION       191,585                                                      
+057CC04  64    MEMBER OF THE ASSEMBLY       64TH DISTRICT                                      
+057VN04  64    VOTER NOMINATED                                                                 
+057BK04  64                                                                                    
+057CN04  64       MIKE GIPSON            DEM                                30,041    63.57    
+057CN04  64       PROPHET L WALKER       DEM                                17,217    36.43    
+057BK04  64                                                                                    
+057PR04  64    TOTAL PRECINCTS        231            PRECINCTS REPORTING       231      100    
+057DR04  64    REGISTRATION       217,553                                                      
+058CC04  66    MEMBER OF THE ASSEMBLY       66TH DISTRICT                                      
+058VN04  66    VOTER NOMINATED                                                                 
+058BK04  66                                                                                    
+058CN04  66       DAVID HADLEY           REP                                54,401    50.33    
+058CN04  66       AL MURATSUCHI          DEM                                53,695    49.67    
+058BK04  66                                                                                    
+058PR04  66    TOTAL PRECINCTS        256            PRECINCTS REPORTING       256      100    
+058DR04  66    REGISTRATION       281,898                                                      
+059CC04  70    MEMBER OF THE ASSEMBLY       70TH DISTRICT                                      
+059VN04  70    VOTER NOMINATED                                                                 
+059BK04  70                                                                                    
+059CN04  70       PATRICK O'DONNELL      DEM                                48,978    63.83    
+059CN04  70       JOHN C GOYA            REP                                27,755    36.17    
+059BK04  70                                                                                    
+059PR04  70    TOTAL PRECINCTS        261            PRECINCTS REPORTING       261      100    
+059DR04  70    REGISTRATION       266,016                                                      
+060JC00  03    SUPREME COURT JUSTICES                                                          
+060BK00  03                                                                                    
+060JN00  03       ASSOCIATE JUSTICE       GOODWIN LIU           - YES      743,933    68.08    
+060JN00  03                                                     - NO       348,760    31.92    
+060BK00  03                                                                                    
+060PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+060DR00  03    REGISTRATION     4,892,047                                                      
+061JC00  03    SUPREME COURT JUSTICES                                                          
+061BK00  03                                                                                    
+061JN00  03       ASSOCIATE JUSTICE       M CUELLAR             - YES      754,792    69.85    
+061JN00  03                                                     - NO       325,752    30.15    
+061BK00  03                                                                                    
+061PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+061DR00  03    REGISTRATION     4,892,047                                                      
+062JC00  03    SUPREME COURT JUSTICES                                                          
+062BK00  03                                                                                    
+062JN00  03       ASSOCIATE JUSTICE       KATHRYN M WERDEGAR    - YES      779,275    73.65    
+062JN00  03                                                     - NO       278,766    26.35    
+062BK00  03                                                                                    
+062PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+062DR00  03    REGISTRATION     4,892,047                                                      
+063JC00  03    APPELLATE COURT JUSTICES                                                        
+063BK00  03                                                                                    
+063JN00  03       PRESIDING JUSTICE DIV 1 FRANCES ROTHSCHILD    - YES      749,631    71.66    
+063JN00  03                                                     - NO       296,503    28.34    
+063BK00  03                                                                                    
+063PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+063DR00  03    REGISTRATION     4,892,047                                                      
+064JC00  03    APPELLATE COURT JUSTICES                                                        
+064BK00  03                                                                                    
+064JN00  03       ASSOCIATE JUSTICE DIV 1 JEFFREY W JOHNSON     - YES      767,180    76.54    
+064JN00  03                                                     - NO       235,137    23.46    
+064BK00  03                                                                                    
+064PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+064DR00  03    REGISTRATION     4,892,047                                                      
+065JC00  03    APPELLATE COURT JUSTICES                                                        
+065BK00  03                                                                                    
+065JN00  03       ASSOCIATE JUSTICE DIV 2 BRIAN M HOFFSTADT     - YES      671,847    67.95    
+065JN00  03                                                     - NO       316,901    32.05    
+065BK00  03                                                                                    
+065PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+065DR00  03    REGISTRATION     4,892,047                                                      
+066JC00  03    APPELLATE COURT JUSTICES                                                        
+066BK00  03                                                                                    
+066JN00  03       PRESIDING JUSTICE DIV 3 LEE ANNE EDMON        - YES      704,826    71.24    
+066JN00  03                                                     - NO       284,535    28.76    
+066BK00  03                                                                                    
+066PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+066DR00  03    REGISTRATION     4,892,047                                                      
+067JC00  03    APPELLATE COURT JUSTICES                                                        
+067BK00  03                                                                                    
+067JN00  03       ASSOCIATE JUSTICE DIV 4 AUDREY B COLLINS      - YES      715,033    71.86    
+067JN00  03                                                     - NO       280,036    28.14    
+067BK00  03                                                                                    
+067PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+067DR00  03    REGISTRATION     4,892,047                                                      
+068JC00  03    APPELLATE COURT JUSTICES                                                        
+068BK00  03                                                                                    
+068JN00  03       ASSOCIATE JUSTICE DIV 4 NORA M MANELLA        - YES      761,166    76.11    
+068JN00  03                                                     - NO       238,952    23.89    
+068BK00  03                                                                                    
+068PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+068DR00  03    REGISTRATION     4,892,047                                                      
+069JC00  03    APPELLATE COURT JUSTICES                                                        
+069BK00  03                                                                                    
+069JN00  03       PRESIDING JUSTICE DIV 5 PAUL A TURNER         - YES      746,818    75.61    
+069JN00  03                                                     - NO       240,910    24.39    
+069BK00  03                                                                                    
+069PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+069DR00  03    REGISTRATION     4,892,047                                                      
+070JC00  03    APPELLATE COURT JUSTICES                                                        
+070BK00  03                                                                                    
+070JN00  03       ASSOCIATE JUSTICE DIV 6 KENNETH R YEGAN       - YES      717,877    73.24    
+070JN00  03                                                     - NO       262,235    26.76    
+070BK00  03                                                                                    
+070PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+070DR00  03    REGISTRATION     4,892,047                                                      
+071JC00  03    APPELLATE COURT JUSTICES                                                        
+071BK00  03                                                                                    
+071JN00  03       PRESIDING JUSTICE DIV 7 DENNIS M PERLUSS      - YES      675,198    68.51    
+071JN00  03                                                     - NO       310,403    31.49    
+071BK00  03                                                                                    
+071PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+071DR00  03    REGISTRATION     4,892,047                                                      
+072JC00  03    APPELLATE COURT JUSTICES                                                        
+072BK00  03                                                                                    
+072JN00  03       ASSOCIATE JUSTICE DIV 8 LAURENCE D RUBIN      - YES      716,709    71.31    
+072JN00  03                                                     - NO       288,335    28.69    
+072BK00  03                                                                                    
+072PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+072DR00  03    REGISTRATION     4,892,047                                                      
+073JC00  03    APPELLATE COURT JUSTICES                                                        
+073BK00  03                                                                                    
+073JN00  03       ASSOCIATE JUSTICE DIV 8 MADELEINE I FLIER     - YES      711,161    70.74    
+073JN00  03                                                     - NO       294,106    29.26    
+073BK00  03                                                                                    
+073PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+073DR00  03    REGISTRATION     4,892,047                                                      
+074CC00  03    SUPERINTENDENT OF            PUBLIC INSTRUCTION                                 
+074BK00  03                                                                                    
+074CN00  03       TOM TORLAKSON                                            628,498    50.61    
+074CN00  03       MARSHALL TUCK                                            613,313    49.39    
+074BK00  03                                                                                    
+074PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+074DR00  03    REGISTRATION     4,892,047                                                      
+075MC00  03    STATE MEASURE 1                                                                 
+075BK00  03                                                                                    
+075MT00  03          1 - WATER BOND                 - YES                  993,716    70.56    
+075MT00  03              (MAJORITY OF VOTES CAST)   - NO                   414,697    29.44    
+075BK00  03                                                                                    
+075PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+075DR00  03    REGISTRATION     4,892,047                                                      
+076MC00  03    STATE MEASURE 2                                                                 
+076BK00  03                                                                                    
+076MT00  03          2 - STATE BUDGET               - YES                  963,176    69.80    
+076MT00  03              (MAJORITY OF VOTES CAST)   - NO                   416,639    30.20    
+076BK00  03                                                                                    
+076PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+076DR00  03    REGISTRATION     4,892,047                                                      
+077MC00  03    STATE MEASURE 45                                                                
+077BK00  03                                                                                    
+077MT00  03         45 - HEALTHCARE INSURANCE       - YES                  621,279    44.33    
+077MT00  03              (MAJORITY OF VOTES CAST)   - NO                   780,058    55.67    
+077BK00  03                                                                                    
+077PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+077DR00  03    REGISTRATION     4,892,047                                                      
+078MC00  03    STATE MEASURE 46                                                                
+078BK00  03                                                                                    
+078MT00  03         46 - DRUG TESTING OF DOCTORS    - YES                  523,952    37.06    
+078MT00  03              (MAJORITY OF VOTES CAST)   - NO                   890,007    62.94    
+078BK00  03                                                                                    
+078PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+078DR00  03    REGISTRATION     4,892,047                                                      
+079MC00  03    STATE MEASURE 47                                                                
+079BK00  03                                                                                    
+079MT00  03         47 - CRIMINAL SENTENCES         - YES                  901,969    64.29    
+079MT00  03              (MAJORITY OF VOTES CAST)   - NO                   500,986    35.71    
+079BK00  03                                                                                    
+079PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+079DR00  03    REGISTRATION     4,892,047                                                      
+080MC00  03    STATE MEASURE 48                                                                
+080BK00  03                                                                                    
+080MT00  03         48 - INDIAN GAMING COMPACTS     - YES                  557,193    40.49    
+080MT00  03              (MAJORITY OF VOTES CAST)   - NO                   819,029    59.51    
+080BK00  03                                                                                    
+080PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+080DR00  03    REGISTRATION     4,892,047                                                      
+081MC00  03    COUNTY MEASURE P                                                                
+081BK00  03                                                                                    
+081MT00  03          P - PARCEL SPECIAL TAX LEVY    - YES                  862,224    62.89    
+081MT00  03              (2/3 OF VOTES CAST)        - NO                   508,672    37.11    
+081BK00  03                                                                                    
+081PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+081DR00  03    REGISTRATION     4,892,047                                                      
+082CC00  03    ASSESSOR                                                                        
+082BK00  03                                                                                    
+082CN00  03       JEFFREY PRANG                                            580,494    50.79    
+082CN00  03       JOHN MORRIS                                              562,424    49.21    
+082BK00  03                                                                                    
+082PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+082DR00  03    REGISTRATION     4,892,047                                                      
+083CC00  03    SHERIFF                                                                         
+083BK00  03                                                                                    
+083CN00  03       JIM MCDONNELL                                            920,655    74.83    
+083CN00  03       PAUL TANAKA                                              309,641    25.17    
+083BK00  03                                                                                    
+083PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+083DR00  03    REGISTRATION     4,892,047                                                      
+084CC05  03    SUPERVISOR-3RD DISTRICT                                                         
+084BK05  03                                                                                    
+084CN05  03       BOBBY SHRIVER                                            135,427    47.11    
+084CN05  03       SHEILA KUEHL                                             152,059    52.89    
+084BK05  03                                                                                    
+084PR05  03    TOTAL PRECINCTS        982            PRECINCTS REPORTING       982      100    
+084DR05  03    REGISTRATION     1,034,886                                                      
+085CC00  03    JUDGE-SUPERIOR COURT         OFFICE NO 61                                       
+085BK00  03                                                                                    
+085CN00  03       JACQUELINE H LEWIS                                       616,645    55.55    
+085CN00  03       DAYAN MATHAI                                             493,413    44.45    
+085BK00  03                                                                                    
+085PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+085DR00  03    REGISTRATION     4,892,047                                                      
+086CC00  03    JUDGE-SUPERIOR COURT         OFFICE NO 87                                       
+086BK00  03                                                                                    
+086CN00  03       ANDREW M STEIN                                           446,579    42.08    
+086CN00  03       TOM GRIEGO                                               614,648    57.92    
+086BK00  03                                                                                    
+086PR00  03    TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+086DR00  03    REGISTRATION     4,892,047                                                      
+087CC08  AL  1 ALHAMBRA CITY GENERAL MUNI   COUNCILMEMBER 1ST DISTRICT                         
+087BK08  AL  1                                                                                 
+087CN08  AL  1    STEPHEN K SHAM                                             5,255    51.82    
+087CN08  AL  1    ERIC SUNADA                                                4,886    48.18    
+087BK08  AL  1                                                                                 
+087PR08  AL  1 TOTAL PRECINCTS         40            PRECINCTS REPORTING        40      100    
+087DR08  AL  1 REGISTRATION        34,665                                                      
+088MC08  AT    ARTESIA CITY SPECIAL MUNI    MEASURE Y                                          
+088BK08  AT                                                                                    
+088MT08  AT          Y - UTILITY USER TAX           - YES                      791    38.23    
+088MT08  AT              (MAJORITY OF VOTES CAST)   - NO                     1,278    61.77    
+088BK08  AT                                                                                    
+088PR08  AT    TOTAL PRECINCTS          7            PRECINCTS REPORTING         7      100    
+088DR08  AT    REGISTRATION         7,455                                                      
+089MC08  CH    CLAREMONT CITY SPEC MUNI     MEASURE W                                          
+089BK08  CH                                                                                    
+089MT08  CH          W - WATER SYSTEM ACQUISITION   - YES                    7,596    71.98    
+089MT08  CH              (MAJORITY OF VOTES CAST)   - NO                     2,957    28.02    
+089BK08  CH                                                                                    
+089PR08  CH    TOTAL PRECINCTS         23            PRECINCTS REPORTING        23      100    
+089DR08  CH    REGISTRATION        22,405                                                      
+090CC08  DO  2 DOWNEY CITY GENERAL MUNI     COUNCILMEMBER 2ND DISTRICT                         
+090BK08  DO  2                                                                                 
+090CN08  DO  2    SEAN ASHTON                                                1,462    39.88    
+090CN08  DO  2    SHAHIRA A-MALEK                                              905    24.69    
+090CN08  DO  2    ROBERT KIEFER                                              1,299    35.43    
+090BK08  DO  2                                                                                 
+090PR08  DO  2 TOTAL PRECINCTS         15            PRECINCTS REPORTING        15      100    
+090DR08  DO  2 REGISTRATION        13,999                                                      
+091CC08  DO  4 DOWNEY CITY GENERAL MUNI     COUNCILMEMBER 4TH DISTRICT                         
+091BK08  DO  4                                                                                 
+091CN08  DO  4    FERNANDO VASQUEZ                                           3,394      100    
+091BK08  DO  4                                                                                 
+091PR08  DO  4 TOTAL PRECINCTS         16            PRECINCTS REPORTING        16      100    
+091DR08  DO  4 REGISTRATION        15,060                                                      
+092CC08  IN    INGLEWOOD CITY GEN MUNI      MAYOR                                              
+092BK08  IN                                                                                    
+092CN08  IN       MIKE STEVENS                                               1,489     9.41    
+092CN08  IN       JAMES T BUTTS JR                                          13,193    83.34    
+092CN08  IN       SANDIE CRISP                                                 416     2.63    
+092CN08  IN       GILBERT A MATHIEU                                            733     4.63    
+092BK08  IN                                                                                    
+092PR08  IN    TOTAL PRECINCTS         58            PRECINCTS REPORTING        58      100    
+092DR08  IN    REGISTRATION        55,611                                                      
+093MC08  MA    MALIBU CITY SPECIAL MUNI     MEASURE R                                          
+093BK08  MA                                                                                    
+093MT08  MA          R - COMMERCIAL PROPERTY PLANS  - YES                    2,698    59.58    
+093MT08  MA              (MAJORITY OF VOTES CAST)   - NO                     1,830    40.42    
+093BK08  MA                                                                                    
+093PR08  MA    TOTAL PRECINCTS         10            PRECINCTS REPORTING        10      100    
+093DR08  MA    REGISTRATION         9,155                                                      
+094MC08  NO    NORWALK CITY SPECIAL MUNI    MEASURE B                                          
+094BK08  NO                                                                                    
+094MT08  NO          B - UTILITY USER TAX           - YES                    7,545    70.19    
+094MT08  NO              (MAJORITY OF VOTES CAST)   - NO                     3,204    29.81    
+094BK08  NO                                                                                    
+094PR08  NO    TOTAL PRECINCTS         52            PRECINCTS REPORTING        52      100    
+094DR08  NO    REGISTRATION        48,066                                                      
+095CC08  PY  2 POMONA CITY GENERAL MUNI     COUNCILMEMBER 2ND DISTRICT                         
+095BK08  PY  2                                                                                 
+095CN08  PY  2    ADRIANA M ROBLEDO                                            819    56.84    
+095CN08  PY  2    TOMAS URSUA                                                  622    43.16    
+095BK08  PY  2                                                                                 
+095PR08  PY  2 TOTAL PRECINCTS          7            PRECINCTS REPORTING         7      100    
+095DR08  PY  2 REGISTRATION         7,766                                                      
+096CC08  PY  3 POMONA CITY GENERAL MUNI     COUNCILMEMBER 3RD DISTRICT                         
+096BK08  PY  3                                                                                 
+096CN08  PY  3    DIANE L LAWSON                                               260    17.88    
+096CN08  PY  3    CRISTINA CARRIZOSA                                           698    48.01    
+096CN08  PY  3    NANCY MATARRITA                                              496    34.11    
+096BK08  PY  3                                                                                 
+096PR08  PY  3 TOTAL PRECINCTS          7            PRECINCTS REPORTING         7      100    
+096DR08  PY  3 REGISTRATION         7,630                                                      
+097CC08  PY  5 POMONA CITY GENERAL MUNI     COUNCILMEMBER 5TH DISTRICT                         
+097BK08  PY  5                                                                                 
+097CN08  PY  5    JOSHUA HEREDIA                                               123     3.97    
+097CN08  PY  5    GABRIEL ROGERS                                               832    26.88    
+097CN08  PY  5    LUIS JORGE GRAJEDA                                           506    16.35    
+097CN08  PY  5    ALICIA MALONE                                                739    23.88    
+097CN08  PY  5    GINNA E ESCOBAR                                              895    28.92    
+097BK08  PY  5                                                                                 
+097PR08  PY  5 TOTAL PRECINCTS         12            PRECINCTS REPORTING        12      100    
+097DR08  PY  5 REGISTRATION        10,420                                                      
+098MC08  PY    POMONA CITY SPECIAL MUNI     MEASURE PPL                                        
+098BK08  PY                                                                                    
+098MT08  PY        PPL - LIBRARY PARCEL TAX         - YES                    6,829    49.61    
+098MT08  PY              (2/3 OF VOTES CAST)        - NO                     6,936    50.39    
+098BK08  PY                                                                                    
+098PR08  PY    TOTAL PRECINCTS         59            PRECINCTS REPORTING        59      100    
+098DR08  PY    REGISTRATION        59,054                                                      
+099MC08  RE    REDONDO BEACH CITY SPC MUN   MEASURE CT                                         
+099BK08  RE                                                                                    
+099MT08  RE         CT - CITY TREASURER DUTIES      - YES                    9,970    63.24    
+099MT08  RE              (MAJORITY OF VOTES CAST)   - NO                     5,796    36.76    
+099BK08  RE                                                                                    
+099PR08  RE    TOTAL PRECINCTS         38            PRECINCTS REPORTING        38      100    
+099DR08  RE    REGISTRATION        44,286                                                      
+100MC08  RE    REDONDO BEACH CITY SPC MUN   MEASURE CM                                         
+100BK08  RE                                                                                    
+100MT08  RE         CM - CITY OFFICES' TERM LIMITS  - YES                    5,244    33.33    
+100MT08  RE              (MAJORITY OF VOTES CAST)   - NO                    10,488    66.67    
+100BK08  RE                                                                                    
+100PR08  RE    TOTAL PRECINCTS         38            PRECINCTS REPORTING        38      100    
+100DR08  RE    REGISTRATION        44,286                                                      
+101MC08  RE    REDONDO BEACH CITY SPC MUN   MEASURE BE                                         
+101BK08  RE                                                                                    
+101MT08  RE         BE - BOARD OF EDUC TERM LIMITS  - YES                    5,521    35.74    
+101MT08  RE              (MAJORITY OF VOTES CAST)   - NO                     9,927    64.26    
+101BK08  RE                                                                                    
+101PR08  RE    TOTAL PRECINCTS         38            PRECINCTS REPORTING        38      100    
+101DR08  RE    REGISTRATION        44,286                                                      
+102MC08  SK    SANTA CLARITA CITY SPECIAL   MEASURE S                                          
+102BK08  SK                                                                                    
+102MT08  SK          S - CITY AND METRO AGREEMENT   - YES                   17,166    44.41    
+102MT08  SK              (MAJORITY OF VOTES CAST)   - NO                    21,488    55.59    
+102BK08  SK                                                                                    
+102PR08  SK    TOTAL PRECINCTS        116            PRECINCTS REPORTING       116      100    
+102DR08  SK    REGISTRATION       112,172                                                      
+103CC08  SM    SANTA MONICA CITY GEN MUNI   COUNCILMEMBER                                      
+103VF08  SM    VOTE FOR NO MORE THAN   3                                                       
+103BK08  SM                                                                                    
+103CN08  SM       SUE HIMMELRICH                                             9,262    15.60    
+103CN08  SM       JERRY RUBIN                                                1,635     2.75    
+103CN08  SM       PAM O'CONNOR                                               6,696    11.28    
+103CN08  SM       TERENCE LATER                                              1,874     3.16    
+103CN08  SM       FRANK GRUBER                                               5,222     8.80    
+103CN08  SM       PHIL BROCK                                                 5,854     9.86    
+103CN08  SM       NICK BOLES                                                 1,328     2.24    
+103CN08  SM       WHITNEY SCOTT BAIN                                         1,317     2.22    
+103CN08  SM       ZOE MUNTANER                                                 791     1.33    
+103CN08  SM       KEVIN MCKEOWN                                             10,138    17.08    
+103CN08  SM       RICHARD MCKINNON                                           4,890     8.24    
+103CN08  SM       JON MANN                                                   1,594     2.68    
+103CN08  SM       MICHAEL FEINSTEIN                                          3,729     6.28    
+103CN08  SM       JENNIFER KENNEDY                                           5,037     8.48    
+103BK08  SM                                                                                    
+103PR08  SM    TOTAL PRECINCTS         55            PRECINCTS REPORTING        55      100    
+103DR08  SM    REGISTRATION        64,625                                                      
+104CC08  SM    SANTA MONICA CITY GEN MUNI   RENT CONTROL BOARD                                 
+104VF08  SM    VOTE FOR NO MORE THAN   3                                                       
+104BK08  SM                                                                                    
+104CN08  SM       NICOLE PHILLIS                                             7,790    37.07    
+104CN08  SM       STEVE DURON                                                6,746    32.10    
+104CN08  SM       TODD FLORA                                                 6,480    30.83    
+104BK08  SM                                                                                    
+104PR08  SM    TOTAL PRECINCTS         55            PRECINCTS REPORTING        55      100    
+104DR08  SM    REGISTRATION        64,625                                                      
+105MC08  SM    SANTA MONICA CITY SPC MUNI   MEASURE D                                          
+105BK08  SM                                                                                    
+105MT08  SM          D - CITY AIRPORT OPERATIONS    - YES                   10,288    41.19    
+105MT08  SM              (MAJORITY OF VOTES CAST)   - NO                    14,688    58.81    
+105BK08  SM                                                                                    
+105PR08  SM    TOTAL PRECINCTS         55            PRECINCTS REPORTING        55      100    
+105DR08  SM    REGISTRATION        64,625                                                      
+106MC08  SM    SANTA MONICA CITY SPC MUNI   MEASURE FS                                         
+106BK08  SM                                                                                    
+106MT08  SM         FS - RENT CONTROL  AMENDMENT    - YES                   12,061    51.57    
+106MT08  SM              (MAJORITY OF VOTES CAST)   - NO                    11,325    48.43    
+106BK08  SM                                                                                    
+106PR08  SM    TOTAL PRECINCTS         55            PRECINCTS REPORTING        55      100    
+106DR08  SM    REGISTRATION        64,625                                                      
+107MC08  SM    SANTA MONICA CITY SPC MUNI   MEASURE H                                          
+107BK08  SM                                                                                    
+107MT08  SM          H - REAL ESTATE TRANSFER TAX   - YES                   10,364    42.50    
+107MT08  SM              (MAJORITY OF VOTES CAST)   - NO                    14,020    57.50    
+107BK08  SM                                                                                    
+107PR08  SM    TOTAL PRECINCTS         55            PRECINCTS REPORTING        55      100    
+107DR08  SM    REGISTRATION        64,625                                                      
+108MC08  SM    SANTA MONICA CITY SPC MUNI   MEASURE HH                                         
+108BK08  SM                                                                                    
+108MT08  SM         HH - AFFORDABLE HOUSING         - YES                   12,179    50.53    
+108MT08  SM              (ADVISORY VOTE ONLY)       - NO                    11,923    49.47    
+108BK08  SM                                                                                    
+108PR08  SM    TOTAL PRECINCTS         55            PRECINCTS REPORTING        55      100    
+108DR08  SM    REGISTRATION        64,625                                                      
+109MC08  SM    SANTA MONICA CITY SPC MUNI   MEASURE LC                                         
+109BK08  SM                                                                                    
+109MT08  SM         LC - AIRPORT LAND DEVELOPMENT   - YES                   15,434    60.45    
+109MT08  SM              (MAJORITY OF VOTES CAST)   - NO                    10,096    39.55    
+109BK08  SM                                                                                    
+109PR08  SM    TOTAL PRECINCTS         55            PRECINCTS REPORTING        55      100    
+109DR08  SM    REGISTRATION        64,625                                                      
+110MC11  01    ABC UNIFIED SCHOOL SPC       MEASURE AA                                         
+110BK11  01                                                                                    
+110MT11  01         AA - SCHOOL IMPROVEMENT BONDS   - YES                    7,591    43.95    
+110MT11  01              (55% OF VOTES CAST)        - NO                     9,679    56.05    
+110BK11  01                                                                                    
+110PR11  01    TOTAL PRECINCTS         63            PRECINCTS REPORTING        63      100    
+110DR11  01    REGISTRATION        56,501                                                      
+111CC10  01  3 CERRITOS COMMUNITY COLLEGE   GOV BD MEMBER TR AREA 3                            
+111BK10  01  3                                                                                 
+111CN10  01  3    JOHN PAUL DRAYER                                           3,678    61.40    
+111CN10  01  3    DAWN DUNTON                                                2,312    38.60    
+111BK10  01  3                                                                                 
+111PR10  01  3 TOTAL PRECINCTS         32            PRECINCTS REPORTING        32      100    
+111DR10  01  3 REGISTRATION        27,604                                                      
+112CC10  01  5 CERRITOS COMMUNITY COLLEGE   GOV BD MEMBER TR AREA 5                            
+112BK10  01  5                                                                                 
+112CN10  01  5    ARMIN REYES                                                4,433    43.97    
+112CN10  01  5    SHIN LIU                                                   5,650    56.03    
+112BK10  01  5                                                                                 
+112PR10  01  5 TOTAL PRECINCTS         39            PRECINCTS REPORTING        39      100    
+112DR10  01  5 REGISTRATION        35,417                                                      
+113CC10  01  7 CERRITOS COMMUNITY COLLEGE   GOV BD MEMBER TR AREA 7                            
+113BK10  01  7                                                                                 
+113CN10  01  7    ZURICH LEWIS                                               5,269    61.82    
+113CN10  01  7    ALAN BURTON                                                3,254    38.18    
+113BK10  01  7                                                                                 
+113PR10  01  7 TOTAL PRECINCTS         35            PRECINCTS REPORTING        35      100    
+113DR10  01  7 REGISTRATION        32,573                                                      
+114MC11  05    AZUSA UNIFIED SCHOOL SPC     MEASURE K                                          
+114BK11  05                                                                                    
+114MT11  05          K - SCHOOL IMPROVEMENT BONDS   - YES                    3,983    56.24    
+114MT11  05              (55% OF VOTES CAST)        - NO                     3,099    43.76    
+114BK11  05                                                                                    
+114PR11  05    TOTAL PRECINCTS         38            PRECINCTS REPORTING        38      100    
+114DR11  05    REGISTRATION        27,372                                                      
+115MC11  18    BASSETT UNIFIED SCH SPC      MEASURE V                                          
+115BK11  18                                                                                    
+115MT11  18          V - SCHOOL IMPROVEMENT BONDS   - YES                    1,616    62.42    
+115MT11  18              (55% OF VOTES CAST)        - NO                       973    37.58    
+115BK11  18                                                                                    
+115PR11  18    TOTAL PRECINCTS         17            PRECINCTS REPORTING        17      100    
+115DR11  18    REGISTRATION        11,641                                                      
+116CC10  69    VICTOR VALLEY COMM COLLEGE   GOVERNING BOARD MEMBER                             
+116VF10  69    VOTE FOR NO MORE THAN   3                                                       
+116BK10  69                                                                                    
+116CN10  69       DENNIS HENDERSON                                              13    19.12    
+116CN10  69       LORRIE A DENSON                                               13    19.12    
+116CN10  69       MARIANNE TORTORICI                                            13    19.12    
+116CN10  69       A L TURNER-MCCLAIN                                            15    22.06    
+116CN10  69       BRANDON WOOD                                                  14    20.59    
+116BK10  69                                                                                    
+116PR10  69    TOTAL PRECINCTS          5            PRECINCTS REPORTING         5      100    
+116DR10  69    REGISTRATION           131                                                      
+117MC10  11    COMPTON COMMUNITY COLLEGE    MEASURE C                                          
+117BK10  11                                                                                    
+117MT10  11          C - COLLEGE IMPROVEMENT BONDS  - YES                   20,209    78.39    
+117MT10  11              (55% OF VOTES CAST)        - NO                     5,570    21.61    
+117BK10  11                                                                                    
+117PR10  11    TOTAL PRECINCTS        140            PRECINCTS REPORTING       140      100    
+117DR10  11    REGISTRATION       128,969                                                      
+118CC12  70    FULLERTON JOINT UNION HIGH   GOVERNING BOARD MEMBER                             
+118VF12  70    VOTE FOR NO MORE THAN   3                                                       
+118BK12  70                                                                                    
+118CN12  70       ROBERT N HATHAWAY                                          1,794    21.29    
+118CN12  70       ROBERT A SINGER                                            1,600    18.98    
+118CN12  70       HO JEONG LIM                                                 491     5.83    
+118CN12  70       MJ NOOR                                                      960    11.39    
+118CN12  70       ZINA B GLEASON                                               792     9.40    
+118CN12  70       MARILYN BUCHI                                              1,536    18.22    
+118CN12  70       JOANNE FAWLEY                                              1,255    14.89    
+118BK12  70                                                                                    
+118PR12  70    TOTAL PRECINCTS         15            PRECINCTS REPORTING        15      100    
+118DR12  70    REGISTRATION        12,080                                                      
+119MC11  03    DOWNEY UNIFIED SCH SPC       MEASURE O                                          
+119BK11  03                                                                                    
+119MT11  03          O - SCHOOL IMPROVEMENT BONDS   - YES                   10,093    61.87    
+119MT11  03              (55% OF VOTES CAST)        - NO                     6,221    38.13    
+119BK11  03                                                                                    
+119PR11  03    TOTAL PRECINCTS         70            PRECINCTS REPORTING        70      100    
+119DR11  03    REGISTRATION        60,179                                                      
+120MC13  65    EL MONTE SCHOOL SPECIAL      MEASURE M                                          
+120BK13  65                                                                                    
+120MT13  65          M - SCHOOL IMPROVEMENT BONDS   - YES                    4,614    67.09    
+120MT13  65              (55% OF VOTES CAST)        - NO                     2,263    32.91    
+120BK13  65                                                                                    
+120PR13  65    TOTAL PRECINCTS         38            PRECINCTS REPORTING        38      100    
+120DR13  65    REGISTRATION        30,866                                                      
+121MC12  70    FULLERTON JNT UNION HI SPC   MEASURE I                                          
+121BK12  70                                                                                    
+121MT12  70          I - SCHOOL IMPROVEMENT BONDS   - YES                    2,158    55.26    
+121MT12  70              (55% OF VOTES CAST)        - NO                     1,747    44.74    
+121BK12  70                                                                                    
+121PR12  70    TOTAL PRECINCTS         15            PRECINCTS REPORTING        15      100    
+121DR12  70    REGISTRATION        12,080                                                      
+122MC13  73    LOS NIETOS SCHOOL SPECIAL    MEASURE E                                          
+122BK13  73                                                                                    
+122MT13  73          E - ELEM SCHOOL IMPRV BONDS    - YES                    1,300    77.11    
+122MT13  73              (55% OF VOTES CAST)        - NO                       386    22.89    
+122BK13  73                                                                                    
+122PR13  73    TOTAL PRECINCTS          9            PRECINCTS REPORTING         9      100    
+122DR13  73    REGISTRATION         7,658                                                      
+123MC13  73    LOS NIETOS SCHOOL SPECIAL    MEASURE N                                          
+123BK13  73                                                                                    
+123MT13  73          N - MIDDLE SCHOOL IMPRV BONDS  - YES                    1,285    77.04    
+123MT13  73              (55% OF VOTES CAST)        - NO                       383    22.96    
+123BK13  73                                                                                    
+123PR13  73    TOTAL PRECINCTS          9            PRECINCTS REPORTING         9      100    
+123DR13  73    REGISTRATION         7,658                                                      
+124MC10  70    NO ORANGE CO COMM COLL SP    MEASURE J                                          
+124BK10  70                                                                                    
+124MT10  70          J - COLLEGE IMPROVEMENT BONDS  - YES                    2,029    51.41    
+124MT10  70              (55% OF VOTES CAST)        - NO                     1,918    48.59    
+124BK10  70                                                                                    
+124PR10  70    TOTAL PRECINCTS         16            PRECINCTS REPORTING        16      100    
+124DR10  70    REGISTRATION        12,273                                                      
+125MC11  04    NORWALK-LA MIRADA USD SPC    MEASURE G                                          
+125BK11  04                                                                                    
+125MT11  04          G - SCHOOL IMPROVEMENT BONDS   - YES                    8,940    57.39    
+125MT11  04              (55% OF VOTES CAST)        - NO                     6,638    42.61    
+125BK11  04                                                                                    
+125PR11  04    TOTAL PRECINCTS         61            PRECINCTS REPORTING        61      100    
+125DR11  04    REGISTRATION        60,395                                                      
+126MC13  67    ROSEMEAD SCHOOL SPECIAL      MEASURE RS                                         
+126BK13  67                                                                                    
+126MT13  67         RS - SCHOOL IMPROVEMENT BONDS   - YES                    1,635    71.62    
+126MT13  67              (55% OF VOTES CAST)        - NO                       648    28.38    
+126BK13  67                                                                                    
+126PR13  67    TOTAL PRECINCTS         14            PRECINCTS REPORTING        14      100    
+126DR13  67    REGISTRATION        11,210                                                      
+127CC10  34    SANTA MONICA COMM COLLEGE    BOARD OF TRUSTEES                                  
+127VF10  34    VOTE FOR NO MORE THAN   4                                                       
+127BK10  34                                                                                    
+127CN10  34       BARRY A SNELL                                             11,804    16.53    
+127CN10  34       MARIA LOYA                                                 9,242    12.95    
+127CN10  34       LOUISE JAFFE                                              14,447    20.24    
+127CN10  34       NANCY GREENSTEIN                                          14,604    20.46    
+127CN10  34       ANDREW WALZER                                             11,114    15.57    
+127CN10  34       DENNIS C W FRISCH                                         10,177    14.26    
+127BK10  34                                                                                    
+127PR10  34    TOTAL PRECINCTS         74            PRECINCTS REPORTING        74      100    
+127DR10  34    REGISTRATION        77,155                                                      
+128CC11  34    SANTA MONICA-MALIBU UN SCH   BOARD OF EDUCATION                                 
+128VF11  34    VOTE FOR NO MORE THAN   4                                                       
+128BK11  34                                                                                    
+128CN11  34       LAURIE LIEBERMAN                                          15,247    20.75    
+128CN11  34       DHUN MAY                                                   5,169     7.03    
+128CN11  34       RALPH MECHUR                                              11,522    15.68    
+128CN11  34       OSCAR DE LA TORRE                                         11,990    16.32    
+128CN11  34       R TAHVILDARAN-JESSWEIN                                    12,277    16.71    
+128CN11  34       CRAIG FOSTER                                              12,126    16.50    
+128CN11  34       PATTY FINER                                                5,148     7.01    
+128BK11  34                                                                                    
+128PR11  34    TOTAL PRECINCTS         75            PRECINCTS REPORTING        75      100    
+128DR11  34    REGISTRATION        77,238                                                      
+129MC40  SU    SAUGUS UNION FAC. IMPROVE    MEASURE EE                                         
+129BK40  SU                                                                                    
+129MT40  SU         EE - SCHOOL IMPROVEMENT BONDS   - YES                   11,878    58.37    
+129MT40  SU              (55% OF VOTES CAST)        - NO                     8,473    41.63    
+129BK40  SU                                                                                    
+129PR40  SU    TOTAL PRECINCTS         68            PRECINCTS REPORTING        68      100    
+129DR40  SU    REGISTRATION        59,263                                                      
+130MC11  69    SNOWLINE JOINT UNIF SCH SP   MEASURE L                                          
+130BK11  69                                                                                    
+130MT11  69          L - SCHOOL IMPROVEMENT BONDS   - YES                       18    36.00    
+130MT11  69              (55% OF VOTES CAST)        - NO                        32    64.00    
+130BK11  69                                                                                    
+130PR11  69    TOTAL PRECINCTS          5            PRECINCTS REPORTING         5      100    
+130DR11  69    REGISTRATION           131                                                      
+131MC11  37    TORRANCE UNIFIED SCH SPC     MEASURE T                                          
+131BK11  37                                                                                    
+131MT11  37          T - SCHOOL IMPROVEMENT BONDS   - YES                   21,424    66.71    
+131MT11  37              (55% OF VOTES CAST)        - NO                    10,689    33.29    
+131BK11  37                                                                                    
+131PR11  37    TOTAL PRECINCTS         78            PRECINCTS REPORTING        78      100    
+131DR11  37    REGISTRATION        84,385                                                      
+132MC11  37    TORRANCE UNIFIED SCH SPC     MEASURE U                                          
+132BK11  37                                                                                    
+132MT11  37          U - SCHOOL IMPROVEMENT BONDS   - YES                   19,877    62.09    
+132MT11  37              (55% OF VOTES CAST)        - NO                    12,138    37.91    
+132BK11  37                                                                                    
+132PR11  37    TOTAL PRECINCTS         78            PRECINCTS REPORTING        78      100    
+132DR11  37    REGISTRATION        84,385                                                      
+133MC13  41    HERMOSA BEACH CITY SCH SPC   MEASURE Q                                          
+133BK13  41                                                                                    
+133MT13  41          Q - SCHOOL IMPROVEMENT BONDS   - YES                    3,283    54.47    
+133MT13  41              (55% OF VOTES CAST)        - NO                     2,744    45.53    
+133BK13  41                                                                                    
+133PR13  41    TOTAL PRECINCTS         12            PRECINCTS REPORTING        12      100    
+133DR13  41    REGISTRATION        13,628                                                      
+134CC14  AV    ANTELOPE VALLEY HEALTH CR    BOARD OF DIRECTORS                                 
+134VF14  AV    VOTE FOR NO MORE THAN   2                                                       
+134BK14  AV                                                                                    
+134CN14  AV       MUKUND SHAH                                               34,133    42.84    
+134CN14  AV       MICHAEL P RIVES                                           14,786    18.56    
+134CN14  AV       DON V PARAZO                                              24,292    30.49    
+134CN14  AV       ROE LEER                                                   6,468     8.12    
+134BK14  AV                                                                                    
+134PR14  AV    TOTAL PRECINCTS        195            PRECINCTS REPORTING       195      100    
+134DR14  AV    REGISTRATION       192,733                                                      
+135CC14  BC    BEACH CITIES HEALTH          BOARD OF DIRECTORS                                 
+135VF14  BC    VOTE FOR NO MORE THAN   2                                                       
+135BK14  BC                                                                                    
+135CN14  BC       MICHELLE A BHOLAT                                         13,184    34.22    
+135CN14  BC       NOEL LEE CHUN                                             12,711    32.99    
+135CN14  BC       JOANNE Z EDGERTON                                         12,633    32.79    
+135BK14  BC                                                                                    
+135PR14  BC    TOTAL PRECINCTS         73            PRECINCTS REPORTING        73      100    
+135DR14  BC    REGISTRATION        82,789                                                      
+136MC23  AL    ALTADENA LIBRARY SPC         MEASURE A                                          
+136BK23  AL                                                                                    
+136MT23  AL          A - LIBRARY PARCEL TAX         - YES                   10,113    85.52    
+136MT23  AL              (2/3 OF VOTES CAST)        - NO                     1,712    14.48    
+136BK23  AL                                                                                    
+136PR23  AL    TOTAL PRECINCTS         31            PRECINCTS REPORTING        31      100    
+136DR23  AL    REGISTRATION        28,711                                                      
+137CC19  AV  1 ANTELOPE VLY EAST KERN WTR   BOARD OF DIRECTORS DIV 1                           
+137BK19  AV  1                                                                                 
+137CN19  AV  1    SHELLEY SORSABAL                                           2,518    54.75    
+137CN19  AV  1    CHARLIE O'LOUGHLIN                                         2,081    45.25    
+137BK19  AV  1                                                                                 
+137PR19  AV  1 TOTAL PRECINCTS         22            PRECINCTS REPORTING        22      100    
+137DR19  AV  1 REGISTRATION        16,825                                                      
+138CC19  CL    CASTAIC LAKE WATER AGENCY    BD OF DIRECTORS AT LARGE                           
+138VF19  CL    VOTE FOR NO MORE THAN   2                                                       
+138BK19  CL                                                                                    
+138CN19  CL       TOM CAMPBELL                                              28,288    45.47    
+138CN19  CL       GARY MARTIN                                               23,285    37.43    
+138CN19  CL       STACY L FORTNER                                           10,644    17.11    
+138BK19  CL                                                                                    
+138PR19  CL    TOTAL PRECINCTS        163            PRECINCTS REPORTING       163      100    
+138DR19  CL    REGISTRATION       142,971                                                      
+139CC19  CL  1 CASTAIC LAKE WATER AGENCY    BOARD OF DIRECTORS DIV 1                           
+139BK19  CL  1                                                                                 
+139CN19  CL  1    STEVEN A BROOKS                                            4,812    43.56    
+139CN19  CL  1    ED COLLEY                                                  6,234    56.44    
+139BK19  CL  1                                                                                 
+139PR19  CL  1 TOTAL PRECINCTS         60            PRECINCTS REPORTING        60      100    
+139DR19  CL  1 REGISTRATION        46,639                                                      
+140CC19  CL  2 CASTAIC LAKE WATER AGENCY    BOARD OF DIRECTORS DIV 2                           
+140BK19  CL  2                                                                                 
+140CN19  CL  2    STEPHEN P DANIELS                                          3,631    28.96    
+140CN19  CL  2    ROBERT J DIPRIMIO                                          8,907    71.04    
+140BK19  CL  2                                                                                 
+140PR19  CL  2 TOTAL PRECINCTS         49            PRECINCTS REPORTING        49      100    
+140DR19  CL  2 REGISTRATION        48,982                                                      
+141CC17  CB  2 CENTRAL BASIN MUNI WATER     BOARD OF DIRECTORS DIV 2                           
+141BK17  CB  2                                                                                 
+141CN17  CB  2    NOEL A JAIMES                                              5,468    13.93    
+141CN17  CB  2    L HILARY BARBA                                             4,765    12.14    
+141CN17  CB  2    JAMES E BECERRA                                            7,134    18.18    
+141CN17  CB  2    ROBERT O APODACA                                          12,581    32.06    
+141CN17  CB  2    TOM MALKASIAN                                              9,300    23.70    
+141BK17  CB  2                                                                                 
+141PR17  CB  2 TOTAL PRECINCTS        185            PRECINCTS REPORTING       185      100    
+141DR17  CB  2 REGISTRATION       168,556                                                      
+142CC17  CB  3 CENTRAL BASIN MUNI WATER     BOARD OF DIRECTORS DIV 3                           
+142BK17  CB  3                                                                                 
+142CN17  CB  3    C J SALGADO                                                4,288    22.73    
+142CN17  CB  3    ELBA ROMO                                                  4,548    24.10    
+142CN17  CB  3    MARIO GOMEZ                                                2,135    11.32    
+142CN17  CB  3    J GARDEA-STINNETT                                          2,310    12.24    
+142CN17  CB  3    ARTURO CHACON                                              4,931    26.13    
+142CN17  CB  3    ANTHONY FELIX JR                                             656     3.48    
+142BK17  CB  3                                                                                 
+142PR17  CB  3 TOTAL PRECINCTS        112            PRECINCTS REPORTING       112      100    
+142DR17  CB  3 REGISTRATION       101,855                                                      
+143CC17  LV  2 LAS VIRGENES MUNI WATER      BOARD OF DIRECTORS DIV 2                           
+143BK17  LV  2                                                                                 
+143CN17  LV  2    GLEN D PETERSON                                            1,457    59.40    
+143CN17  LV  2    HUGH WAHLER                                                  996    40.60    
+143BK17  LV  2                                                                                 
+143PR17  LV  2 TOTAL PRECINCTS         12            PRECINCTS REPORTING        12      100    
+143DR17  LV  2 REGISTRATION         8,108                                                      
+144CC17  LV  3 LAS VIRGENES MUNI WATER      BOARD OF DIRECTORS DIV 3                           
+144BK17  LV  3                                                                                 
+144CN17  LV  3    LEE RENGER                                                 2,012    59.23    
+144CN17  LV  3    MICHAEL B WILK                                             1,385    40.77    
+144BK17  LV  3                                                                                 
+144PR17  LV  3 TOTAL PRECINCTS         12            PRECINCTS REPORTING        12      100    
+144DR17  LV  3 REGISTRATION         9,503                                                      
+145CC17  LV  5 LAS VIRGENES MUNI WATER      BOARD OF DIRECTORS DIV 5                           
+145BK17  LV  5                                                                                 
+145CN17  LV  5    BARRY STEINHARDT                                           1,671    43.48    
+145CN17  LV  5    JAY MARK LEWITT                                            2,172    56.52    
+145BK17  LV  5                                                                                 
+145PR17  LV  5 TOTAL PRECINCTS          8            PRECINCTS REPORTING         8      100    
+145DR17  LV  5 REGISTRATION         9,801                                                      
+146CC17  US  5 UPPER SAN GABRIEL VLY WTR    BOARD OF DIRECTORS DIV 5                           
+146BK17  US  5                                                                                 
+146CN17  US  5    M LOZANO                                                   4,275    32.88    
+146CN17  US  5    BRYAN URIAS                                                8,727    67.12    
+146BK17  US  5                                                                                 
+146PR17  US  5 TOTAL PRECINCTS         72            PRECINCTS REPORTING        72      100    
+146DR17  US  5 REGISTRATION        65,959                                                      
+147CC18  WR  1 WATER REPLENISH OF SO CAL    BOARD OF DIRECTORS DIV 1                           
+147BK18  WR  1                                                                                 
+147CN18  WR  1    JOHNNIE ROBERTS JR                                         5,889     8.77    
+147CN18  WR  1    JAMES T LAW                                                6,680     9.95    
+147CN18  WR  1    DANIELA CALDERON                                          12,303    18.33    
+147CN18  WR  1    W H MURRAY JR                                             39,109    58.26    
+147CN18  WR  1    MERVIN EVANS                                               3,145     4.69    
+147BK18  WR  1                                                                                 
+147PR18  WR  1 TOTAL PRECINCTS        337            PRECINCTS REPORTING       337      100    
+147DR18  WR  1 REGISTRATION       332,800                                                      
+148CC18  WR  3 WATER REPLENISH OF SO CAL    BOARD OF DIRECTORS DIV 3                           
+148BK18  WR  3                                                                                 
+148CN18  WR  3    GERRIE SCHIPSKE                                           20,968    21.58    
+148CN18  WR  3    TONIA REYES URANGA                                        12,459    12.82    
+148CN18  WR  3    JOHN ALLEN                                                31,229    32.13    
+148CN18  WR  3    LARRY S ANDRE                                              7,046     7.25    
+148CN18  WR  3    LYNN V DYMALLY                                            17,377    17.88    
+148CN18  WR  3    MASON B INOCENTES                                          8,106     8.34    
+148BK18  WR  3                                                                                 
+148PR18  WR  3 TOTAL PRECINCTS        407            PRECINCTS REPORTING       407      100    
+148DR18  WR  3 REGISTRATION       410,621                                                      
+149CC18  WR  4 WATER REPLENISH OF SO CAL    BOARD OF DIRECTORS DIV 4                           
+149BK18  WR  4                                                                                 
+149CN18  WR  4    GERARDO RODRIGUEZ                                         19,696    38.16    
+149CN18  WR  4    SERGIO J CALDERON                                         31,917    61.84    
+149BK18  WR  4                                                                                 
+149PR18  WR  4 TOTAL PRECINCTS        298            PRECINCTS REPORTING       298      100    
+149DR18  WR  4 REGISTRATION       273,815                                                      
+150CC17  WB  1 WEST BASIN MUNICIPAL WATER   BOARD OF DIRECTORS DIV 1                           
+150BK17  WB  1                                                                                 
+150CN17  WB  1    CARL E SOUTHWELL                                           2,955     9.26    
+150CN17  WB  1    MONICA D COOPER                                            3,206    10.05    
+150CN17  WB  1    ANTHONY M MISETICH                                         8,906    27.92    
+150CN17  WB  1    MICHAEL MITOMA                                             4,229    13.26    
+150CN17  WB  1    HAROLD WILLIAMS                                           12,601    39.51    
+150BK17  WB  1                                                                                 
+150PR17  WB  1 TOTAL PRECINCTS        116            PRECINCTS REPORTING       116      100    
+150DR17  WB  1 REGISTRATION       107,143                                                      
+151CC17  WB  2 WEST BASIN MUNICIPAL WATER   BOARD OF DIRECTORS DIV 2                           
+151BK17  WB  2                                                                                 
+151CN17  WB  2    DARIUS A LEEVY                                             1,949     8.49    
+151CN17  WB  2    ANALILIA JOYA                                              2,394    10.43    
+151CN17  WB  2    GLORIA GRAY                                               17,692    77.10    
+151CN17  WB  2    MICHAEL A AMOS                                               912     3.97    
+151BK17  WB  2                                                                                 
+151PR17  WB  2 TOTAL PRECINCTS         98            PRECINCTS REPORTING        98      100    
+151DR17  WB  2 REGISTRATION        92,000                                                      
+152CC17  WB  4 WEST BASIN MUNICIPAL WATER   BOARD OF DIRECTORS DIV 4                           
+152BK17  WB  4                                                                                 
+152CN17  WB  4    SCOTT HOUSTON                                             14,571    45.40    
+152CN17  WB  4    STEPHEN MURRAY                                             7,045    21.95    
+152CN17  WB  4    JEFF EBENSTEIN                                            10,480    32.65    
+152BK17  WB  4                                                                                 
+152PR17  WB  4 TOTAL PRECINCTS        132            PRECINCTS REPORTING       132      100    
+152DR17  WB  4 REGISTRATION       113,461                                                      
+153PRSTAT      ELECTION STATISTICS                                                             
+153BKSTAT                                                                                      
+153PRSTAT      TOTAL PRECINCTS      5,027            PRECINCTS REPORTING     5,027      100    
+153DRSTAT      REGISTRATION     4,892,047                                                      
+153BKSTAT                                                                                      
+153BCSTAT                                                   VOTE BY MAIL   577,023             
+153BCSTAT                                           BALLOTS CAST/TURNOUT 1,518,835    31.05    
+999EF0014      1203                                                                            
