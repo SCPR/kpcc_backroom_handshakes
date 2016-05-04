@@ -66,3 +66,4 @@ SCRATCHPAD.md
 ballot_box/data_dump/*.zip
 ballot_box/data_dump/sos_latest/*.xml
 ballot_box/data_dump/lac_latest/*.txt
+development.yml
