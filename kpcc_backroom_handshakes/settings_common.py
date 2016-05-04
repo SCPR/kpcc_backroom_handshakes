@@ -9,6 +9,15 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 import os
+import yaml
+
+CONFIG_PATH = "%s_CONFIG_PATH" % ("kpcc_backroom_handshakes".upper())
+
+CONFIG_FILE = os.environ.setdefault(CONFIG_PATH, "./development.yml")
+
+CONFIG = yaml.load(open(CONFIG_FILE))
+
+DEBUG = CONFIG.get("debug", False)
 
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
