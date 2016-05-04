@@ -173,5 +173,15 @@ def bootstrap():
                 local("python manage.py createsuperuser")
                 run()
 
+def syncstart():
+    # check if requirements need update
+    requirements()
+    # try migrate
+    migrate()
+    # load data fixtures
+    load_ballot_box()
+    run()
+    # any new dependencies/apps the rest of the team may need?
+
 def __env_cmd(cmd):
     return env.bin_root + cmd
