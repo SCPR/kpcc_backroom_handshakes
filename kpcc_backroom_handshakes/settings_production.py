@@ -9,11 +9,12 @@ from pytz import timezone
 import yaml
 
 CONFIG_PATH = "%s_CONFIG_PATH" % ("kpcc_backroom_handshakes".upper())
+
 CONFIG_FILE = os.environ.setdefault(CONFIG_PATH, "./development.yml")
+
 CONFIG = yaml.load(open(CONFIG_FILE))
 
 DEBUG = CONFIG.get("debug", False)
-TEMPLATE_DEBUG = DEBUG
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
