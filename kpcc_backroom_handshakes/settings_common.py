@@ -48,14 +48,15 @@ STATICFILES_FINDERS = (
 
 TEMPLATES = [
     {
-        "TEMPLATE_DEBUG": "DEBUG",
+        # "TEMPLATE_DEBUG": "DEBUG",
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             # insert your TEMPLATE_DIRS here
-            # (os.path.join(SITE_ROOT, "templates"),)
+            os.path.join(SITE_ROOT, "templates")
         ],
         "APP_DIRS": True,
         "OPTIONS": {
+            "debug": DEBUG,
             "context_processors": [
                 # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
                 # list if you haven't customized them:
