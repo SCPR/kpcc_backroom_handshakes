@@ -41,11 +41,16 @@ logging.basicConfig(
 data functions
 """
 
-def load_results_sources():
+def dump_ballot_box():
     """
     shortcut for base manage.py function to run the dev server
     """
-    local("python manage.py loaddata ballot_box/fixtures/sources.json")
+    local("py manage.py dumpdata ballot_box > ballot_box/fixtures/data.json")
+
+def load_ballot_box():
+    """
+    """
+    local("python manage.py loaddata ballot_box/fixtures/data.json")
 
 """
 development functions
