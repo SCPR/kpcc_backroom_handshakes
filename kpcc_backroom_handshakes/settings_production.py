@@ -6,15 +6,6 @@ from os.path import expanduser
 from kpcc_backroom_handshakes.settings_common import *
 import pytz
 from pytz import timezone
-import yaml
-
-CONFIG_PATH = "%s_CONFIG_PATH" % ("kpcc_backroom_handshakes".upper())
-
-CONFIG_FILE = os.environ.setdefault(CONFIG_PATH, "./development.yml")
-
-CONFIG = yaml.load(open(CONFIG_FILE))
-
-DEBUG = CONFIG.get("debug", False)
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
