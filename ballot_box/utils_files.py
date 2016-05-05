@@ -19,57 +19,9 @@ class Retriever(object):
     """
 
     list_of_expected_sos_files = [
-        'X14GG530v7.xml',
-        'X14GG510v7.xml',
-        # 'X14GG510_0200v7.xml',
-        # 'X14GG510_0300v7.xml',
-        # 'X14GG510_0400v7.xml',
-        # 'X14GG510_0500v7.xml',
-        # 'X14GG510_0600v7.xml',
-        # 'X14GG510_0700v7.xml',
-        # 'X14GG510_0800v7.xml',
-        # 'X14GG510_0900v7.xml',
-        # 'X14GG510_1100v7.xml',
-        # 'X14GG510_1200v7.xml',
-        # 'X14GG510_1300v7.xml',
-        # 'X14GG510_1400v7.xml',
-        # 'X14GG510_1500v7.xml',
-        # 'X14GG510_1600v7.xml',
-        # 'X14GG510_1900v7.xml'
+        "X14GG530v7.xml",
+        "X14GG510v7.xml",
     ]
-
-    # def setUp(self):
-    #     """
-    #     setup some variables for our tests
-    #     """
-
-    #     self.data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
-
-    #     self.date_object = datetime.datetime.now()
-
-    #     self.date_string = self.date_object.strftime("%Y_%m_%d_%H_%M_%S")
-
-    #     self.sources =ResultSource.objects.all()
-
-
-    # def test_a_download_chain(self):
-    #     """
-    #     initiate a series of functions based on a list of data sources that will eventually be defined in the database
-    #     """
-    #     logger.debug("running file download tests")
-    #     for item in self.sources:
-    #         if item.source_active == True:
-    #             item.file_name = "%s_%s_%s_results%s" % (self.data_directory, self.date_string, item.source_short, item.source_type)
-    #             self.Test_successful_response_from_url(item)
-    #             self.Test_successful_save_results(item)
-    #             if item.source_type == ".zip":
-    #                 self.Test_found_files_in_zipfile(item)
-    #             self.Test_copy_timestamped_file_as_latest(item)
-    #             self.Test_create_directory_for_latest_file(item)
-    #             self.Test_move_latest_files_to_latest_directory(item)
-    #             self.Test_archive_downloaded_file(item)
-    #             self.Test_unzip_latest_file(item)
-
 
     def _successful_save_results(self, item):
         """
