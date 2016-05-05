@@ -74,7 +74,7 @@ class BuildLacResults(object):
         """
         latest = "%s_latest" % (item.source_short)
 
-        latest_path = os.path.join(data_directory, latest)        
+        latest_path = os.path.join(data_directory, latest)
 
         contest_path = os.path.join(latest_path, item.source_files)
 
