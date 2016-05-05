@@ -36,7 +36,7 @@ class Retriever(object):
             logger.error(exception)
             raise
 
-
+    # REFACTOR FUNCTION TO ACCOUNT FOR MULTIPLE FILE TYPES
     def _found_files_in_zipfile(self, item):
         """
         compare files in a zipfile with a list of expected files
