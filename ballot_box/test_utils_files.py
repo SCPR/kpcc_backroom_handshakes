@@ -27,10 +27,7 @@ class TestFileRetrival(TestCase):
 
         self.data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
-        self.list_of_expected_sos_files = [
-            "X14GG530v7.xml",
-            "X14GG510v7.xml",
-        ]
+        self.list_of_expected_files = []
 
         self.date_object = datetime.datetime.now()
 
@@ -45,6 +42,7 @@ class TestFileRetrival(TestCase):
         """
         logger.debug("running file download tests")
         for item in self.sources:
+            self.list_of_expected_files = item.source_files.split(",")
             if item.source_active == True:
                 item.file_name = "%s_%s_%s_results%s" % (self.data_directory, self.date_string, item.source_short, item.source_type)
                 self.Test_successful_save_results(item)
@@ -79,8 +77,8 @@ class TestFileRetrival(TestCase):
         """
         with zipfile.ZipFile(item.file_name) as zip:
             files = zipfile.ZipFile.namelist(zip)
-            self.assertEquals(set(files), set(self.list_of_expected_sos_files))
-            self.assertEquals(len(files), len(self.list_of_expected_sos_files))
+            for item in self.list_of_expected_files:
+                self.assertEquals(item.strip() in set(files), True)
             logger.debug("Success!")
 
 

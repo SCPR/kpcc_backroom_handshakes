@@ -18,10 +18,7 @@ class Retriever(object):
 
     """
 
-    list_of_expected_sos_files = [
-        "X14GG530v7.xml",
-        "X14GG510v7.xml",
-    ]
+    list_of_expected_files = []
 
     def _successful_save_results(self, item):
         """
@@ -47,11 +44,9 @@ class Retriever(object):
         try:
             with zipfile.ZipFile(item.file_name) as zip:
                 files = zipfile.ZipFile.namelist(zip)
-                if set(files) == set(self.list_of_expected_sos_files):
-                    logger.debug("File names match")
-                if len(files) == len(self.list_of_expected_sos_files):
-                    logger.debug("File quantities match")
-            logger.debug("Success!")
+                for item in self.list_of_expected_files:
+                    if item.strip() in set(files) == True:
+                        logger.debug("Success!")
         except Exception, exception:
             logger.error(exception)
             raise
