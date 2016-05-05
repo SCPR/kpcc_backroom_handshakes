@@ -38,7 +38,7 @@ class BuildSosResults(object):
         """
         item = self.src[0]
         item.file_name = "%s_%s_%s_results%s" % (self.data_directory, self.date_string, item.source_short, item.source_type)
-        # self.get_results_file(item, self.data_directory)
+        self.get_results_file(item, self.data_directory)
         self.parse_results_file(item, self.data_directory)
 
 
@@ -81,8 +81,6 @@ class BuildSosResults(object):
         contest_path = os.path.join(latest_path, self.contest_xml)
 
         reporting_path = os.path.join(latest_path, self.reporting_xml)
-
-        prop_path = os.path.join(latest_path, self.prop_xml)
 
         soup = BeautifulSoup(open(contest_path), "xml")
 
