@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
 
-class BuildLACResults(object):
+class BuildLacResults(object):
     """
     scaffolding to ingest secretary of state election results
     """
@@ -23,13 +23,13 @@ class BuildLACResults(object):
 
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
-    data_file = "internet.dat"
+    contest_file = "internet.dat"
 
     date_object = datetime.datetime.now()
 
     date_string = date_object.strftime("%Y_%m_%d_%H_%M_%S")
 
-    src = ResultSource.objects.filter(source_short="sos", source_active=True)
+    src = ResultSource.objects.filter(source_short="lac", source_active=True)
 
     def _init(self, *args, **kwargs):
         """
@@ -48,7 +48,7 @@ class BuildLACResults(object):
         self.retrieve._successful_save_results(item)
 
         # compare files in a zipfile with a list of expected files
-        self.retrieve._found_files_in_zipfile(item)
+        # self.retrieve._found_files_in_zipfile(item)
 
         # create timestamped version of a file deemed latest
         self.retrieve._copy_timestamped_file_as_latest(item, self.data_directory)
@@ -67,18 +67,20 @@ class BuildLACResults(object):
         self.retrieve._archive_downloaded_file(item, self.data_directory)
 
         # if the item is a zipfile extract the files
-        self.retrieve._unzip_latest_file(item, self.data_directory)
+        # self.retrieve._unzip_latest_file(item, self.data_directory)
 
     def parse_results_file(self, item, data_directory):
         """
         """
         latest = "%s_latest" % (item.source_short)
 
-        latest_path = os.path.join(data_directory, latest)
-        print item
+        latest_path = os.path.join(data_directory, latest)        
 
+        contest_path = os.path.join(latest_path, item.source_files)
+
+        with open(contest_path, "wb") as yahoo:
 
 if __name__ == '__main__':
-    task_run = BuildLACResults()
+    task_run = BuildLacResults()
     task_run._init()
     print "\nTask finished at %s\n" % str(datetime.datetime.now())
