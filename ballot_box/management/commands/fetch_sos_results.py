@@ -5,7 +5,7 @@ import datetime
 import logging
 from ballot_box.manager_sos_results import BuildSosResults
 
-logger = logging.getLogger("cali_water_reports")
+logger = logging.getLogger("kpcc_backroom_handshakes")
 
 class Command(BaseCommand):
     help = "Begin request to secretary of state for latest election results"
