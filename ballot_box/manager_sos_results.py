@@ -25,9 +25,7 @@ class BuildSosResults(object):
 
     contest_xml = "X14GG510v7.xml"
 
-    # reporting_xml = "X14GG530v7.xml"
-
-    # prop_xml = "X14GG510_1900v7.xml"
+    reporting_xml = "X14GG530v7.xml"
 
     date_object = datetime.datetime.now()
 
