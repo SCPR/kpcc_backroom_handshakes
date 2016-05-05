@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from kpcc_backroom_handshakes.custom_fields import ListField
 import logging
 
 class ResultSource(models.Model):
@@ -13,6 +14,7 @@ class ResultSource(models.Model):
     source_election_date = models.DateTimeField("Date of election for this source", null=True, blank=True)
     source_active = models.BooleanField("Active data source?", default=False)
     source_type = models.CharField("Ext of file or type of source", max_length=255, null=False, blank=False)
+    source_files = ListField("Results Files We Want", null=True, blank=True)
     source_created = models.DateTimeField("Date Created", auto_now_add=True)
     source_modified = models.DateTimeField("Date Modified", auto_now=True)
 

@@ -45,7 +45,7 @@ def dump_ballot_box():
     """
     shortcut for base manage.py function to run the dev server
     """
-    local("py manage.py dumpdata ballot_box > ballot_box/fixtures/data.json")
+    local("python manage.py dumpdata ballot_box > ballot_box/fixtures/data.json")
 
 def load_ballot_box():
     """
