@@ -1,3 +1,14 @@
+##     Universal record fields:
+
+All records start with `page sequence` and `record type`, so you can identify and decide which schema to use based on that.
+
+__CSV Schema: Universal__
+```
+column,start,length
+page_sequence,0,3
+record_type,3,2
+```
+
 ##     Election Title record:
 
 _Record code: "ET"_
@@ -26,6 +37,16 @@ _Record code: "ET"_
 000ET1215      Department of Registrar-Recorder/County Clerk
 000ET1215      Semi-Official Election Returns
 000ET1215      June 4, 1996 - Test Election
+```
+
+__CSV schema: ET__
+
+```
+column,start,length
+page_sequence,0,3
+record_type,3,2
+election_Id,5,4
+election_text,15,53
 ```
 
 ##     Time & Date record:
@@ -57,6 +78,17 @@ __Example:__
 000TD1215      AS OF 17:15 04/07/1998
 ```
 
+__CSV Schema: TD__
+
+```
+column,start,length
+page sequence,0,3
+record type,3,2
+election Id,5,4
+time,15,5
+date,21,10
+```
+
 ##     Election Statistics record:
 
 _Record code: "ST"_
@@ -83,6 +115,17 @@ __Example:__
 
 ```
 001STSTAT      COUNTYWIDE STATISTICS        PRIMARY ELECTION
+```
+
+__CSV Schema: ST__
+
+```
+column,start,length
+page sequence,0,3
+record type,3,2
+election Id,5,4
+statistical text,15,26
+statistical text continued,44,26
 ```
 
 ##     Candidate Contest record:
@@ -115,6 +158,20 @@ __Example:__
 010CCCD  29    U.S. REPRESENTATIVE          29TH DISTRICT
 ```
 
+__CSV Schema: CC__
+
+```
+column,start,length
+page sequence,0,3
+record type,3,2
+contest Id,5,4
+district,9,2
+division,11,3
+party code,14,1
+contest title,15,26
+contest title continued,44,26
+```
+
 ##     Measure Contest record:
 
 _Record code: "MC"_
@@ -143,6 +200,19 @@ __Example:__
 
 ```
 032MCCM        COUNTY MEASURE
+```
+
+__CSV Schema: MC__
+
+```
+column,start,length
+page sequence,0,3
+record type,3,2
+contest Id,5,4
+district,9,2
+division,11,3
+contest title,15,26
+contest title continued,44,26
 ```
 
 ##     Judicial Contest record:
@@ -175,6 +245,18 @@ __Example:__
 030JCAC        APPELLATE COURT JUSTICES
 ```
 
+__CSV Schema: JC__
+```
+column,start,length
+page sequence,0,3
+record type,3,2
+contest Id,5,4
+district,9,2
+division,11,3
+contest title,15,26
+contest title continued,44,26
+```
+
 ##     Party record:
 
 _Record code: "PT"_
@@ -204,6 +286,18 @@ __Example:__
 022PTSD  17   3REPUBLICAN
 ```
 
+__CSV Schema: PT__
+```
+column,start,length
+page sequence,0,3
+record type,3,2
+contest Id,5,4
+district,9,2
+division,11,3
+party code,14,1
+party name,15,26
+```
+
 ##     Vote For record:
 
 _Record code: "VF"_
@@ -228,6 +322,19 @@ __Format:__
       page sequence: 3 digits
 
 __Example: N/A__
+
+__CSV Schema: VF__
+```
+column,start,length
+page sequence,0,3
+record type,3,2
+contest Id,5,4
+district,9,2
+division,11,3
+party code,14,1
+vote for text,15,22
+vote for number,37,3
+```
 
 ##     Candidate Name record:
 
@@ -266,6 +373,21 @@ __Example:__
 
 ```
 033CNDA           GIL GARCETTI                                           Z,ZZZ,ZZ9   ZZ9.99
+```
+
+__CSV Schema: CN__
+```
+column,start,length
+page_sequence,0,3
+record_type,3,2
+contest_Id,5,4
+district,9,2
+division,11,3
+party_code,14,1
+candidate_name,18,18
+party_short,41,3
+votes,73,9
+percent_of_vote,85,6
 ```
 
 ##     Measure text record:
@@ -307,6 +429,20 @@ __Example:__
 ```
 054MTCITYAL          A - CHARTER-SCH DIST REORG    - YES                 Z,ZZZ,ZZ9   ZZ9.99
 054MTCITYAL                                        - NO                  Z,ZZZ,ZZ9   ZZ9.99
+```
+
+__CSV Schema: MT__
+```
+column,start,length
+page_sequence,0,3
+record_type,3,2
+contest_Id,5,4
+district,9,2
+division,11,3
+measure_Id,18,4
+measure_text,25,32
+votes,73,9
+percent_of_vote,85,6
 ```
 
 ##     Judicial Name record:
@@ -352,6 +488,21 @@ __Example:__
 029JNSC                                                         - NO     Z,ZZZ,ZZ9   ZZ9.99
 ```
 
+__CSV Schema: JN__
+```
+column,start,length
+page_sequence,0,3
+record_type,3,2
+contest_Id,5,4
+district,9,2
+division,11,3
+judicial_text,18,26
+judicial_name,45,18
+voting_rule,66,3
+votes,73,9
+percent_of_vote,85,6
+```
+
 ##     Precinct Reporting record:
 
 _Record code: "PR"_
@@ -392,6 +543,22 @@ __Example:__
 030PRAC        TOTAL PRECINCTS      Z,ZZ9            PRECINCTS REPORTING     Z,ZZ9   ZZ9.99
 ```
 
+__CSV Schema: PR__
+```
+column,start,length
+page_sequence,0,3
+record_type,3,2
+contest_Id,5,4
+district,9,2
+division,11,3
+party_code,14,1
+total_precinct_text,15,20
+total_precincts,36,5
+precincts_reporting_text,53,20
+precincts_reporting,77,5
+percent_precincts_reporting,85,6
+```
+
 ##     District Registration record:
 
 _Record code: "DR"_
@@ -419,6 +586,19 @@ __Example:__
 
 ```
 032DRCM        REGISTRATION     Z,ZZZ,ZZ9
+```
+
+__CSV Schema: DR__
+```
+column,start,length
+page_sequence,0,3
+record_type,3,2
+contest_Id,5,4
+district,9,2
+division,11,3
+party code,14,1
+registration text,15,16
+registration,32,9
 ```
 
 ##     Party Statistics record:
@@ -462,6 +642,21 @@ __Example:__
 001PSSTAT                       Z,ZZZ,ZZ9   REPUBLICAN                   Z,ZZZ,ZZ9   ZZ9.99
 ```
 
+__CSV Schema: PS__
+```
+column,start,length
+page_sequence,0,3
+record_type,3,2
+contest_Id,5,4
+district,9,2
+division,11,3
+party_code,14,1
+registration,32,9
+party_name,44,26
+ballots_cast,72,9
+percent_turnout,84,6
+```
+
 ##     Absentee Ballots Cast record:
 
 _Record code: "AB"_
@@ -495,6 +690,19 @@ __Example:__
 
 ```
 001ABSTAT                                                 ABSENTEE TOTAL Z,ZZZ,ZZ9
+```
+
+__CSV Schema: AB__
+```
+column,start,length
+page_sequence,0,3
+record_type,3,2
+contest_Id,5,4
+district,9,2
+division,11,3
+party_code,14,1
+absentee_total_text,58,14
+absentee_total,73,9
 ```
 
 ##     Ballots Cast record:
@@ -533,6 +741,20 @@ __Example:__
 
 ```
 001BCSTAT                                           BALLOTS CAST/TURNOUT Z,ZZZ,ZZ9   ZZ9.99
+```
+
+__CSV Schema: BC__
+```
+column,start,length
+page_sequence,0,3
+record_type,3,2
+contest_Id,5,4
+district,9,2
+division,11,3
+party_code,14,1
+ballots_cast_text,52,20
+ballots_cast,73,9
+percent_turnout,85,6
 ```
 
 ##     Blank record:
