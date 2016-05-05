@@ -30,21 +30,21 @@ class TestFileRetrival(TestCase):
         self.list_of_expected_sos_files = [
             'X14GG530v7.xml',
             'X14GG510v7.xml',
-            'X14GG510_0200v7.xml',
-            'X14GG510_0300v7.xml',
-            'X14GG510_0400v7.xml',
-            'X14GG510_0500v7.xml',
-            'X14GG510_0600v7.xml',
-            'X14GG510_0700v7.xml',
-            'X14GG510_0800v7.xml',
-            'X14GG510_0900v7.xml',
-            'X14GG510_1100v7.xml',
-            'X14GG510_1200v7.xml',
-            'X14GG510_1300v7.xml',
-            'X14GG510_1400v7.xml',
-            'X14GG510_1500v7.xml',
-            'X14GG510_1600v7.xml',
-            'X14GG510_1900v7.xml'
+            # 'X14GG510_0200v7.xml',
+            # 'X14GG510_0300v7.xml',
+            # 'X14GG510_0400v7.xml',
+            # 'X14GG510_0500v7.xml',
+            # 'X14GG510_0600v7.xml',
+            # 'X14GG510_0700v7.xml',
+            # 'X14GG510_0800v7.xml',
+            # 'X14GG510_0900v7.xml',
+            # 'X14GG510_1100v7.xml',
+            # 'X14GG510_1200v7.xml',
+            # 'X14GG510_1300v7.xml',
+            # 'X14GG510_1400v7.xml',
+            # 'X14GG510_1500v7.xml',
+            # 'X14GG510_1600v7.xml',
+            # 'X14GG510_1900v7.xml'
         ]
 
         self.date_object = datetime.datetime.now()
@@ -163,7 +163,8 @@ class TestFileRetrival(TestCase):
             file_latest = os.path.join(working, os.path.basename(item.file_latest))
             with zipfile.ZipFile(file_latest) as zip:
                 self.assertIsNone(zipfile.ZipFile.testzip(zip))
-                zip.extractall(working)
+                zip.extract("X14GG510v7.xml", working)
+                zip.extract("X14GG530v7.xml", working)
             os.remove(file_latest)
             file_exists = os.path.isfile(file_latest)
             self.assertEquals(file_exists, False)
