@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
 from kpcc_backroom_handshakes.custom_fields import ListField
-import logging
 
 class ResultSource(models.Model):
     """
