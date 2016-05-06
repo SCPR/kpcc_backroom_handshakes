@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from ballot_box.utils_files import Retriever
 from ballot_box.models import ResultSource
+from ballot_box.lac_schemas import *
 import logging
 import time
 import datetime
@@ -78,7 +79,46 @@ class BuildLacResults(object):
 
         contest_path = os.path.join(latest_path, item.source_files)
 
-        with open(contest_path, "wb") as yahoo:
+        def get_race_ids_from(rows):
+            """ loop through file and try to parse out race ids """
+            list_of_race_ids = []
+            for result in rows:
+                race_id = result[:3]
+                record_type = result[3:5]
+                if race_id == "000" or record_type == "EF":
+                    pass
+                else:
+                    list_of_race_ids.append(race_id)
+            set_of_race_ids = set(list_of_race_ids)
+            race_ids = list(set_of_race_ids)
+            print "\t* Race ids compiled"
+            return race_ids
+
+        rows = []
+
+        # Get data from file
+        with open(contest_path, "r") as f:    
+            for line in f:
+                record_type = line[3:5]
+                if record_type == "EF":
+                    break
+                rows.append(line)
+
+        race_ids = get_race_ids_from(rows)
+        print race_ids
+        for line in rows:
+            record_type = line[3:5]
+            #if record_type = 
+            #parsed = self._result_parser.parse_line(line)
+        # print f
+
+
+    #     def get_race_ids_from(file):
+    #     def get_data_for_a_race(race_ids, file):
+    #     def evaluate_result_types(id, file, race_data_list):
+    #     def evaluate_supreme_court_races(file, id):
+    #     def evaluate_ballot_measures(file, id):
+
 
 if __name__ == '__main__':
     task_run = BuildLacResults()

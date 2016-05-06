@@ -1,6 +1,22 @@
-##     Universal record fields:
+##     Overview of records:
 
-All records start with `page sequence` and `record type`, so you can identify and decide which schema to use based on that.
+All records start with `page sequence` and `record type`. The `page sequence` separates individual contests and other election metadata. `record type` will indicate how to parse.
+
+__page sequence 000:__
+
+* contains Election Title (ET) and Time and Date (TD) records
+
+__page sequence 001:__
+
+* contains Election Statistics (ST) and Party Statistics (PS)
+
+__page sequence ###:__
+
+Most other page sequences should represent individual contests.
+
+__page sequence 999:__
+
+* end of file marker
 
 __CSV Schema: Universal__
 ```
