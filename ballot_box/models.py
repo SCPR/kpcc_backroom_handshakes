@@ -23,7 +23,7 @@ class Election(models.Model):
         default = PRIMARY,
     )
 
-    unique_id = models.CharField("Election ID", max_length=255, null=True, blank=True)
+    electionid = models.CharField("Election ID", max_length=255, null=True, blank=True)
     test_results = models.BooleanField("Are These Test Results", default=False)
     live_results = models.BooleanField("Are These Live Results", default=False)
     election_date = models.DateField("Date of the Election", null=True, blank=True)
@@ -38,13 +38,13 @@ class Election(models.Model):
 
 
     def __unicode__(self):
-        return self.unique_id
+        return self.electionid
 
 
     def save(self, *args, **kwargs):
-        if not self.unique_id:
+        if not self.electionid:
             self.election_date_str = self.election_date.strftime("%Y-%m-%d")
-            self.unique_id = "%s-%s" % (self.type.lower(), self.election_date_str)
+            self.electionid = "%s-%s" % (self.type.lower(), self.election_date_str)
         super(Election, self).save(*args, **kwargs)
 
 
