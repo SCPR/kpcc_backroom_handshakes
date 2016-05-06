@@ -8,7 +8,7 @@ For our purposes the macro unit of data.
 
 * **type**: The type of election
     - Example: "Primary", "General", "Special"
-* **unique_id**: Created from the type of election and the date of the election
+* **electionid**: Created from type of election & the date of election
     - Example: primary-2016-06-07
 * **test_results**: Are These Test Results
     - Example: True/False
@@ -31,12 +31,12 @@ For our purposes the macro unit of data.
 
 ----
 
-Result Source
+ResultSource
 -------------
 
-Describes a source of data for election results
+Describes a source of election results data
 
-* **election** = ForeignKey to an upcoming election
+* **election**: ForeignKey to an Election
     - Example: primary-2016-06-07
 * **source_name**: Name of data source
     - Example: Secretary of State
@@ -64,55 +64,56 @@ Race
 
 Xxxxxxxxxxxxxxxx
 
-Schema:
-    * election - foreign key
-    * source - foreign key
-    * id: Xxxxx
-        - Example Value: Xxxxx
-    * unique_id: Xxxxx
-        - Example Value: Xxxxx
-    * type: Xxxxx
-        - Example Value: office, initiative
-    * electiondate: Xxxxx
-        - Example Value: Xxxxx
-    * statepostal: Xxxxx
-        - Example Value: Xxxxx
-    * statename: Xxxxx
-        - Example Value: Xxxxx
-    * test: Xxxxx
-        - Example Value: Xxxxx
-    * raceid: Xxxxx
-        - Example Value: Xxxxx
-    * racetype: Xxxxx
-        - Example Value: Xxxxx
-    * racetypeid: Xxxxx
-        - Example Value: Xxxxx
-    * officeid: Xxxxx
-        - Example Value: Xxxxx
-    * officename: Xxxxx
-        - Example Value: Xxxxx
-    * party: Xxxxx
-        - Example Value: Xxxxx
-    * seatname: Xxxxx
-        - Example Value: Xxxxx
-    * description: Xxxxx
-        - Example Value: Xxxxx
-    * seatnum: Xxxxx
-        - Example Value: Xxxxx
-    * uncontested: Xxxxx
-        - Example Value: Xxxxx
-    * lastupdated: Xxxxx
-        - Example Value: Xxxxx
-    * initialization_data: Xxxxx
-        - Example Value: Xxxxx
-    * national: Xxxxx
-        - Example Value: Xxxxx
-    * candidates: Xxxxx
-        - Example Value: Xxxxx
-    * reportingunits: Xxxxx
-        - Example Value: Xxxxx
-    * is_ballot_measure: Xxxxx
-        - Example Value: Xxxxx
+* **Office vs. Seat?**
+
+----
+
+* **election**: ForeignKey to an Election
+    - Example: primary-2016-06-07
+* **resultsource**: ForeignKey to a ResultSource
+* **raceid**:
+* **racetype**:
+* **party**:
+* **officeid**:
+    - Example: us_house_dist_8
+* **officename**:
+    - Example: U.S. House of Representatives District 8
+* ~~**seatname**:~~
+* ~~**seatnum**:~~
+* **description**:
+* **uncontested**:
+    - Example: True/False
+* **national**:
+    - Example: True/False
+* **statewide**:
+    - Example: True/False
+* **is_ballot_measure**:
+    - Example: True/False
+* **is_judicial**:
+    - Example: True/False
+* **is_runoff**:
+    - Example: True/False
+
+* **candidates**:
+
+* **reportingunits**:
+
+* **created**: Date and time a record was created
+    - Example: 2016-06-08 03:00:00.000000
+* **modified**: Date and time a record was modified
+    - Example: 2016-06-08 03:00:00.000000
+
+
+
+
+
+
+
+
+
+
+
+
 
 Candidate
 ---------
