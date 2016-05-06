@@ -29,4 +29,3 @@ SQLAlchemy==1.0.12
 sqlparse==0.1.19
 twitter==1.15.0
 xlrd==0.9.4
-xmltodict==0.10.1
