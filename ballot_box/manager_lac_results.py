@@ -17,7 +17,7 @@ logger = logging.getLogger("kpcc_backroom_handshakes")
 
 class BuildLacResults(object):
     """
-    scaffolding to ingest secretary of state election results
+    scaffolding to ingest LA County registrar election results
     """
 
     retrieve = Retriever()
@@ -79,8 +79,19 @@ class BuildLacResults(object):
 
         contest_path = os.path.join(latest_path, item.source_files)
 
+        rows = []
+
+        # Fetch data rows from file
+        def retrieve_data():
+            with open(contest_path, "r") as f:    
+                for line in f:
+                    record_type = line[3:5]
+                    if record_type == "EF":
+                        break
+                    rows.append(line)
+
         def get_race_ids_from(rows):
-            """ loop through file and try to parse out race ids """
+            """ loop through data and try to parse out race ids """
             list_of_race_ids = []
             for result in rows:
                 race_id = result[:3]
@@ -94,26 +105,19 @@ class BuildLacResults(object):
             print "\t* Race ids compiled"
             return race_ids
 
-        rows = []
+        def return_structured_data():
+            retrieve_data()
+            print rows
+            race_ids = get_race_ids_from(rows)
+            print race_ids
 
-        # Get data from file
-        with open(contest_path, "r") as f:    
-            for line in f:
-                record_type = line[3:5]
-                if record_type == "EF":
-                    break
-                rows.append(line)
-
-        race_ids = get_race_ids_from(rows)
-        print race_ids
-        for line in rows:
-            record_type = line[3:5]
+        return_structured_data()
+        # for line in rows:
+        #     record_type = line[3:5]
             #if record_type = 
             #parsed = self._result_parser.parse_line(line)
         # print f
 
-
-    #     def get_race_ids_from(file):
     #     def get_data_for_a_race(race_ids, file):
     #     def evaluate_result_types(id, file, race_data_list):
     #     def evaluate_supreme_court_races(file, id):
