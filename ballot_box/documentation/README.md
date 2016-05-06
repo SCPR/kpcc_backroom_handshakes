@@ -6,29 +6,28 @@ Election
 
 For our purposes the macro unit of data.
 
-Schema:
-    * id: Xxxxx
-        - Example Value: Xxxxx
-    * unique_id: Xxxxx
-        - Example Value: Xxxxx
-    * type: Xxxxx
-        - Example Value: primary, general, special
-    * testresults: Xxxxx
-        - Example Value: Xxxxx
-    * liveresults: Xxxxx
-        - Example Value: Xxxxx
-    * electiondate: Xxxxx
-        - Example Value: Xxxxx
-    * national: Xxxxx
-        - Example Value: Xxxxx
-    * parsed_json: Xxxxx
-        - Example Value: Xxxxx
-    * next_request: Xxxxx
-        - Example Value: Xxxxx
-    * datafile: Xxxxx
-        - Example Value: Xxxxx
-    * resultslevel: Xxxxx
-        - Example Value: Xxxxx
+* **type**: The type of election
+    - Example: "Primary", "General", "Special"
+* **unique_id**: Created from the type of election and the date of the election
+    - Example: primary-2016-06-07
+* **test_results**: Are These Test Results
+    - Example: True/False
+* **live_results**: Are These Live Results
+    - Example: True/False
+* **election_date**: Date of the Election
+    - Example: 2016-06-07
+* **poll_close_at**: Date and time time the polls close
+    - Example: 2016-06-08 03:00:00.000000
+* **national**: Is this a National Election?
+    - Example: True/False
+* ~~parsed_json~~
+* ~~next_request~~
+* ~~datafile~~
+* ~~results_level~~
+* **created**: Date and time a record was created
+    - Example: 2016-06-08 03:00:00.000000
+* **modified**: Date and time a record was modified
+    - Example: 2016-06-08 03:00:00.000000
 
 Race
 -----
@@ -36,6 +35,8 @@ Race
 Xxxxxxxxxxxxxxxx
 
 Schema:
+    * election - foreign key
+    * source - foreign key
     * id: Xxxxx
         - Example Value: Xxxxx
     * unique_id: Xxxxx
