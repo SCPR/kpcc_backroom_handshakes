@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='resultsource',
             name='source_election_date',
-            field=models.DateTimeField(blank=True, null=True, verbose_name='Date of election for this source'),
+            field=models.DateField(blank=True, null=True, verbose_name='Date of election for this source'),
         ),
     ]
