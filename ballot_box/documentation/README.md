@@ -29,6 +29,36 @@ For our purposes the macro unit of data.
 * **modified**: Date and time a record was modified
     - Example: 2016-06-08 03:00:00.000000
 
+----
+
+Result Source
+-------------
+
+Describes a source of data for election results
+
+* **election** = ForeignKey to an upcoming election
+    - Example: primary-2016-06-07
+* **source_name**: Name of data source
+    - Example: Secretary of State
+* **source_short**: Shortname of data source
+    - Example: sos
+* **source_slug**: Slugged data source
+    - Example: secretary-of-state
+* **source_url**: URL to data source
+    - Example: http://cms.cdn.sos.ca.gov/media/14GG/X14GGv7.zip
+* **source_active**: Active data source
+    - Example: True/False
+* **source_type**: Ext of file or type of source
+    - Example: .zip
+* **source_files**: Results Files We Want
+    - Example: When applicable, comma-separated list of the target files
+* **source_created**: Date and time a record was created
+    - Example: 2016-06-08 03:00:00.000000
+* **source_modified**: Date and time a record was modified
+    - Example: 2016-06-08 03:00:00.000000
+
+----
+
 Race
 -----
 
