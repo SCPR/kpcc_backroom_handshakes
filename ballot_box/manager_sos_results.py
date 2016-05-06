@@ -23,9 +23,9 @@ class BuildSosResults(object):
 
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
-    contest_xml = "X14GG510v7.xml"
+    # contest_xml = "X14GG510v7.xml"
 
-    reporting_xml = "X14GG530v7.xml"
+    # reporting_xml = "X14GG530v7.xml"
 
     date_object = datetime.datetime.now()
 
@@ -78,9 +78,7 @@ class BuildSosResults(object):
 
         latest_path = os.path.join(data_directory, latest)
 
-        contest_path = os.path.join(latest_path, self.contest_xml)
-
-        reporting_path = os.path.join(latest_path, self.reporting_xml)
+        contest_path = os.path.join(latest_path, item.source_files)
 
         soup = BeautifulSoup(open(contest_path), "xml")
 

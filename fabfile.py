@@ -43,14 +43,22 @@ data functions
 
 def dump_ballot_box():
     """
-    shortcut for base manage.py function to run the dev server
+    shortcut to dump data from ballot box as fixtures
     """
     local("python manage.py dumpdata ballot_box > ballot_box/fixtures/data.json")
 
 def load_ballot_box():
     """
+    shortcut to load ballot box data fixtures
     """
     local("python manage.py loaddata ballot_box/fixtures/data.json")
+
+def fetch_sos():
+    """
+    shortcut for running the management command to fetch sos results
+    """
+    local("python manage.py fetch_sos_results")
+
 
 """
 development functions
