@@ -24,3 +24,49 @@ class ResultSource(models.Model):
 
     def save(self, *args, **kwargs):
         super(ResultSource, self).save(*args, **kwargs)
+
+
+class Election(models.Model):
+    """
+    describes an election that will have results we want to capture
+    """
+    PRIMARY = "Primary"
+    GENERAL = "General"
+    SPECIAL = "Special"
+
+    ELECTION_TYPE_CHOICES = (
+        (PRIMARY, "Primary"),
+        (GENERAL, "General"),
+        (SPECIAL, "Special"),
+    )
+
+    type = models.CharField(
+        "Type of Election",
+        max_length=255,
+        choices = ELECTION_TYPE_CHOICES,
+        default = PRIMARY,
+    )
+
+    unique_id = models.CharField("Election ID", max_length=255, null=True, blank=True)
+    test_results = models.BooleanField("Are These Test Results", default=False)
+    live_results = models.BooleanField("Are These Live Results", default=False)
+    election_date = models.DateField("Date of the Election", null=True, blank=True)
+    poll_close_at = models.DateTimeField("Time the Polls Close", null=True, blank=True)
+    national = models.BooleanField("Is this a National Election?", default=False)
+    # parsed_json
+    # next_request
+    # datafile
+    # results_level
+    created = models.DateTimeField("Date Created", auto_now_add=True)
+    modified = models.DateTimeField("Date Modified", auto_now=True)
+
+
+    def __unicode__(self):
+        return self.type
+
+
+    def save(self, *args, **kwargs):
+        if not self.unique_id:
+            self.election_date_str = self.election_date.strftime("%Y-%m-%d")
+            self.unique_id = "%s-%s" % (self.type.lower(), self.election_date_str)
+        super(Election, self).save(*args, **kwargs)
