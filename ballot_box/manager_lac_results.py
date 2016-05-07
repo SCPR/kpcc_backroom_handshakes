@@ -79,7 +79,12 @@ class BuildLacResults(object):
 
         contest_path = os.path.join(latest_path, item.source_files)
 
+        # Create list to store raw data in memory
         rows = []
+
+        # Create lists to collect processed race and candidate dictionaries
+        #race_list = []
+        #candidate_list = []
 
         # Fetch data rows from file
         def retrieve_data():
@@ -90,13 +95,14 @@ class BuildLacResults(object):
                         break
                     rows.append(line)
 
+        # Identify races within raw data
         def get_race_ids_from(rows):
             """ loop through data and try to parse out race ids """
             list_of_race_ids = []
             for result in rows:
                 race_id = result[:3]
                 record_type = result[3:5]
-                if race_id == "000" or record_type == "EF":
+                if record_type == "EF":
                     pass
                 else:
                     list_of_race_ids.append(race_id)
@@ -105,11 +111,244 @@ class BuildLacResults(object):
             print "\t* Race ids compiled"
             return race_ids
 
+        # Group raw data by race
+        def collate_races():
+            race_ids = get_race_ids_from(rows)
+            races = {}
+            for rid in race_ids:
+                race = fetch_records_for_race(rid)
+                races[rid] = race
+            return races
+
+        def fetch_records_for_race(rid):
+            race_rows = []
+            for row in rows:
+                if row[:3] == rid:
+                    race_rows.append(row)
+                else:
+                    pass
+            return race_rows
+
+        # Separate election stats from individual races
+        def evaluate_and_process_races():
+            races = collate_races()
+            contest_list = []
+            candidate_list = []
+            measure_list = []
+            judicial_list = []
+            for r in races:
+                
+                # Identify and process overall election stats
+                if r == "000":
+                    process_election_stats(races[r])
+                
+                else:
+                    records = objectify_race_records(races[r])
+                    recall = check_if_recall(records)
+                    if recall:
+                        pass
+                    else:
+                        contest = compile_results(records)
+                        contest_list.append(contest['contest_details'])
+                        for measure in contest['measures']:
+                            measure_list.append(measure)
+                        for candidate in contest['candidates']:
+                            candidate_list.append(candidate)
+                        for judge in contest['judges']:
+                            judicial_list.append(judge)
+            print contest_list
+
+                #race = process_race(races[r])
+                #race_package.append(race)
+
+        # Parse records and return as set of objects
+        def objectify_race_records(race):
+            race_package = []
+            for r in range(0,len(race)-1):
+                record_type = race[r][3:5]
+                if record_type == 'CC':
+                    parser = CC_parser()
+                    record = parser.parse_line(race[r])
+                    race_package.append(record)
+
+                elif record_type == 'MC':
+                    parser = MC_parser()
+                    record = parser.parse_line(race[r])
+                    race_package.append(record)
+
+                elif record_type == 'JC':
+                    parser = JC_parser()
+                    record = parser.parse_line(race[r])
+                    race_package.append(record)
+                
+                elif record_type == 'CN':
+                    parser = CN_parser()
+                    record = parser.parse_line(race[r])
+                    race_package.append(record)
+
+                elif record_type == 'MT':
+                    parser = MT_parser()
+                    record = parser.parse_line(race[r])
+                    combined_record = {}
+                    if 'YES' in record['measure_text']:
+                        record2 = parser.parse_line(race[r+1])
+                        combined_record['record_type'] = record['record_type']
+                        combined_record['contest_id'] = record['contest_id']
+                        combined_record['district'] = record['district']
+                        combined_record['division'] = record['division']
+                        combined_record['measure_id'] = record['measure_id']
+                        combined_record['measure_text'] = record['measure_text']
+                        combined_record['yes_votes'] = record['votes']
+                        combined_record['yes_percent'] = record['percent_of_vote']
+                        combined_record['no_votes'] = record2['votes']
+                        combined_record['no_percent'] = record2['percent_of_vote']
+                        race_package.append(combined_record)
+                    else:
+                        pass
+
+                elif record_type == 'JN':
+                    parser = JN_parser()
+                    record = parser.parse_line(race[r])
+                    combined_record = {}
+                    if 'YES' in record['voting_rule']:
+                        record2 = parser.parse_line(race[r+1])
+                        combined_record['record_type'] = record['record_type']
+                        combined_record['contest_id'] = record['contest_id']
+                        combined_record['district'] = record['district']
+                        combined_record['division'] = record['division']
+                        combined_record['judicial_text'] = record['judicial_text']
+                        combined_record['judicial_name'] = record['judicial_name']
+                        combined_record['voting_rule'] = record['voting_rule']
+                        combined_record['yes_votes'] = record['votes']
+                        combined_record['yes_percent'] = record['percent_of_vote']
+                        combined_record['no_votes'] = record2['votes']
+                        combined_record['no_percent'] = record2['percent_of_vote']
+                        race_package.append(combined_record)
+                    else:
+                        pass
+
+                elif record_type == 'PR':
+                    parser = PR_parser()
+                    record = parser.parse_line(race[r])
+                    race_package.append(record)
+
+                elif record_type == 'DR':
+                    parser = DR_parser()
+                    record = parser.parse_line(race[r])
+                    race_package.append(record)
+            return race_package
+
+        def check_if_recall(records):
+            recall = False
+            for r in records:
+                if r['record_type'] == "MT" and "RECALL" in r['measure_text']:
+                    recall = True
+            return recall
+
+        def compile_results(records):
+            contest_dictionary = {}
+            measure_list = []
+            candidate_list = []
+            judicial_list = []
+            for record in records:
+                if record['record_type'] == 'CC':
+                    contest_dictionary['contest_id'] = record['contest_id']
+                    contest_dictionary['district'] = record['district']
+                    contest_dictionary['division'] = record['division']
+                    contest_dictionary['party_code'] = record['party_code']
+                    contest_dictionary['contest_title'] = record['contest_title']
+                    contest_dictionary['contest_title_cont'] = record['contest_title_cont']
+                    contest_dictionary['is_ballot_measure'] = False
+                    contest_dictionary['is_judicial_contest'] = False
+
+                elif record['record_type'] == 'MC':
+                    contest_dictionary['contest_id'] = record['contest_id']
+                    contest_dictionary['district'] = record['district']
+                    contest_dictionary['division'] = record['division']
+                    contest_dictionary['contest_title'] = record['contest_title']
+                    contest_dictionary['contest_title_cont'] = record['contest_title_cont']
+                    contest_dictionary['is_ballot_measure'] = True
+                    contest_dictionary['is_judicial_contest'] = False
+
+                elif record['record_type'] == 'JC':
+                    contest_dictionary['contest_id'] = record['contest_id']
+                    contest_dictionary['district'] = record['district']
+                    contest_dictionary['division'] = record['division']
+                    contest_dictionary['contest_title'] = record['contest_title']
+                    contest_dictionary['contest_title_cont'] = record['contest_title_cont']
+                    contest_dictionary['is_ballot_measure'] = False
+                    contest_dictionary['is_judicial_contest'] = True
+                
+                elif record['record_type'] == 'CN':
+                    candidate_dictionary = {}
+                    candidate_dictionary['contest_id'] = record['contest_id']
+                    candidate_dictionary['district'] = record['district']
+                    candidate_dictionary['division'] = record['division']
+                    candidate_dictionary['party_code'] = record['party_code']
+                    candidate_dictionary['candidate_name'] = record['candidate_name']
+                    candidate_dictionary['party_short'] = record['party_short']
+                    candidate_dictionary['votes'] = record['votes']
+                    candidate_dictionary['percent_of_vote'] = record['percent_of_vote']
+                    candidate_list.append(candidate_dictionary)
+
+                elif record['record_type'] == 'MT':
+                    measure_dictionary = {}
+                    measure_dictionary['contest_id'] = record['contest_id']
+                    measure_dictionary['district'] = record['district']
+                    measure_dictionary['division'] = record['division']
+                    measure_dictionary['measure_id'] = record['measure_id']
+                    measure_dictionary['measure_text'] = record['measure_text'].replace('- YES','').strip()
+                    measure_dictionary['yes_votes'] = record['yes_votes']
+                    measure_dictionary['yes_percent'] = record['yes_percent']
+                    measure_dictionary['no_votes'] = record['no_votes']
+                    measure_dictionary['no_percent'] = record['no_percent']
+                    measure_list.append(measure_dictionary)
+
+                elif record['record_type'] == 'JN':
+                    judge_dictionary = {}
+                    judge_dictionary['record_type'] = record['record_type']
+                    judge_dictionary['contest_id'] = record['contest_id']
+                    judge_dictionary['district'] = record['district']
+                    judge_dictionary['division'] = record['division']
+                    judge_dictionary['judicial_text'] = record['judicial_text']
+                    judge_dictionary['judicial_name'] = record['judicial_name']
+                    judge_dictionary['voting_rule'] = record['voting_rule']
+                    judge_dictionary['yes_votes'] = record['yes_votes']
+                    judge_dictionary['yes_percent'] = record['no_percent']
+                    judge_dictionary['no_votes'] = record['no_votes']
+                    judge_dictionary['no_percent'] = record['no_percent']
+                    judicial_list.append(judge_dictionary)
+
+                elif record['record_type'] == 'PR':
+                    """ Removed party code - not sure it's needed under top two primaries """
+                    #contest_dictionary['party_code'] = record['party_code']
+                    contest_dictionary['total_precinct_text'] = record['total_precinct_text']
+                    contest_dictionary['total_precincts'] = record['total_precincts']
+                    contest_dictionary['precincts_reporting_text'] = record['precincts_reporting_text']
+                    contest_dictionary['precincts_reporting'] = record['precincts_reporting']
+                    contest_dictionary['percent_precincts_reporting'] = record['percent_precincts_reporting']
+
+                elif record['record_type'] == 'DR':
+                    """ Removed party code - not sure it's needed under top two primaries """
+                    #contest_dictionary['party_code'] = record['party_code']
+                    contest_dictionary['registration'] = record['registration']
+
+            contest_package = {'contest_details':contest_dictionary,'candidates':candidate_list,'measures':measure_list,'judges':judicial_list}
+            return contest_package
+        
+        def printfile(data):
+            with open ("%s/ballot_box/data_dump/lac_latest/internet.dat" % (settings.BASE_DIR), "w+") as f:
+                for d in data:
+                    f.write(str(d) + '\n')
+        
+        def process_election_stats(rawstats):
+            pass
+
         def return_structured_data():
             retrieve_data()
-            print rows
-            race_ids = get_race_ids_from(rows)
-            print race_ids
+            evaluate_and_process_races()
+            #print rows
+            #print race_ids
 
         return_structured_data()
         # for line in rows:
