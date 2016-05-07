@@ -1,3 +1,27 @@
+## Contact
+
+Brenda Duran, PIO
+562-462-2726 or 562-462-2648
+BDuran@rrcc.lacounty.gov
+mediainfo@rrcc.lacounty.gov
+
+## Raw data results page
+
+http://rrcc.co.la.ca.us/elect/downrslt.html-ssi?
+
+## Data file name and URL
+
+__file:__ internet.dat
+__URL:__ http://rrcc.co.la.ca.us/results/internet.dat
+
+## What's covered? 
+
+* County does not cover all cities
+
+## Test data schedule?
+
+* Test data should be available by 5/6 or 5/9. No dry runs with updating data; just the static file to test with.
+
 ##     Overview of records:
 
 All records start with `page sequence` and `record type`. The `page sequence` separates individual contests and other election metadata. `record type` will indicate how to parse.
@@ -10,22 +34,21 @@ __page sequence 001:__
 
 * contains Election Statistics (ST) and Party Statistics (PS)
 
-__page sequence ###:__
+__page sequence XXX:__
 
 Most other page sequences should represent individual contests.
 
 __page sequence 999:__
 
-* end of file marker
+* record used to indicate end of file
 
-__CSV Schema: Universal__
+__Fixed-width Schema: Universal__
 ```
-column,start,length
 page_sequence,0,3
 record_type,3,2
 ```
 
-##     Election Title record:
+###     Election Title record:
 
 _Record code: "ET"_
 
@@ -55,17 +78,16 @@ _Record code: "ET"_
 000ET1215      June 4, 1996 - Test Election
 ```
 
-__CSV schema: ET__
+__Fixed-width schema: ET__
 
 ```
-column,start,length
 page_sequence,0,3
 record_type,3,2
 election_Id,5,4
 election_text,15,53
 ```
 
-##     Time & Date record:
+###     Time & Date record:
 
 _Record code: "TD"_
 
@@ -94,10 +116,9 @@ __Example:__
 000TD1215      AS OF 17:15 04/07/1998
 ```
 
-__CSV Schema: TD__
+__Fixed-width Schema: TD__
 
 ```
-column,start,length
 page sequence,0,3
 record type,3,2
 election Id,5,4
@@ -105,7 +126,7 @@ time,15,5
 date,21,10
 ```
 
-##     Election Statistics record:
+###     Election Statistics record:
 
 _Record code: "ST"_
 
@@ -133,10 +154,9 @@ __Example:__
 001STSTAT      COUNTYWIDE STATISTICS        PRIMARY ELECTION
 ```
 
-__CSV Schema: ST__
+__Fixed-width Schema: ST__
 
 ```
-column,start,length
 page sequence,0,3
 record type,3,2
 election Id,5,4
@@ -144,7 +164,7 @@ statistical text,15,26
 statistical text continued,44,26
 ```
 
-##     Candidate Contest record:
+###     Candidate Contest record:
 
 _Record code: "CC"_
 
@@ -174,10 +194,9 @@ __Example:__
 010CCCD  29    U.S. REPRESENTATIVE          29TH DISTRICT
 ```
 
-__CSV Schema: CC__
+__Fixed-width Schema: CC__
 
 ```
-column,start,length
 page sequence,0,3
 record type,3,2
 contest Id,5,4
@@ -188,7 +207,7 @@ contest title,15,26
 contest title continued,44,26
 ```
 
-##     Measure Contest record:
+###     Measure Contest record:
 
 _Record code: "MC"_
 
@@ -218,10 +237,9 @@ __Example:__
 032MCCM        COUNTY MEASURE
 ```
 
-__CSV Schema: MC__
+__Fixed-width Schema: MC__
 
 ```
-column,start,length
 page sequence,0,3
 record type,3,2
 contest Id,5,4
@@ -231,7 +249,7 @@ contest title,15,26
 contest title continued,44,26
 ```
 
-##     Judicial Contest record:
+###     Judicial Contest record:
 
 _Record code: "JC"_
 
@@ -261,9 +279,8 @@ __Example:__
 030JCAC        APPELLATE COURT JUSTICES
 ```
 
-__CSV Schema: JC__
+__Fixed-width Schema: JC__
 ```
-column,start,length
 page sequence,0,3
 record type,3,2
 contest Id,5,4
@@ -273,7 +290,7 @@ contest title,15,26
 contest title continued,44,26
 ```
 
-##     Party record:
+###     Party record:
 
 _Record code: "PT"_
 
@@ -302,9 +319,8 @@ __Example:__
 022PTSD  17   3REPUBLICAN
 ```
 
-__CSV Schema: PT__
+__Fixed-width Schema: PT__
 ```
-column,start,length
 page sequence,0,3
 record type,3,2
 contest Id,5,4
@@ -314,7 +330,7 @@ party code,14,1
 party name,15,26
 ```
 
-##     Vote For record:
+###     Vote For record:
 
 _Record code: "VF"_
 
@@ -339,9 +355,8 @@ __Format:__
 
 __Example: N/A__
 
-__CSV Schema: VF__
+__Fixed-width Schema: VF__
 ```
-column,start,length
 page sequence,0,3
 record type,3,2
 contest Id,5,4
@@ -352,7 +367,7 @@ vote for text,15,22
 vote for number,37,3
 ```
 
-##     Candidate Name record:
+###     Candidate Name record:
 
 _Record code: "CN"_
 
@@ -391,9 +406,8 @@ __Example:__
 033CNDA           GIL GARCETTI                                           Z,ZZZ,ZZ9   ZZ9.99
 ```
 
-__CSV Schema: CN__
+__Fixed-width Schema: CN__
 ```
-column,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -406,7 +420,7 @@ votes,73,9
 percent_of_vote,85,6
 ```
 
-##     Measure text record:
+###     Measure text record:
 
 _Record code: "MT"_
 
@@ -447,9 +461,8 @@ __Example:__
 054MTCITYAL                                        - NO                  Z,ZZZ,ZZ9   ZZ9.99
 ```
 
-__CSV Schema: MT__
+__Fixed-width Schema: MT__
 ```
-column,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -461,7 +474,7 @@ votes,73,9
 percent_of_vote,85,6
 ```
 
-##     Judicial Name record:
+###     Judicial Name record:
 
 _Record code: "JN"_
 
@@ -504,9 +517,8 @@ __Example:__
 029JNSC                                                         - NO     Z,ZZZ,ZZ9   ZZ9.99
 ```
 
-__CSV Schema: JN__
+__Fixed-width Schema: JN__
 ```
-column,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -519,7 +531,7 @@ votes,73,9
 percent_of_vote,85,6
 ```
 
-##     Precinct Reporting record:
+###     Precinct Reporting record:
 
 _Record code: "PR"_
 
@@ -559,9 +571,8 @@ __Example:__
 030PRAC        TOTAL PRECINCTS      Z,ZZ9            PRECINCTS REPORTING     Z,ZZ9   ZZ9.99
 ```
 
-__CSV Schema: PR__
+__Fixed-width Schema: PR__
 ```
-column,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -575,7 +586,7 @@ precincts_reporting,77,5
 percent_precincts_reporting,85,6
 ```
 
-##     District Registration record:
+###     District Registration record:
 
 _Record code: "DR"_
 
@@ -604,9 +615,8 @@ __Example:__
 032DRCM        REGISTRATION     Z,ZZZ,ZZ9
 ```
 
-__CSV Schema: DR__
+__Fixed-width Schema: DR__
 ```
-column,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -617,7 +627,7 @@ registration text,15,16
 registration,32,9
 ```
 
-##     Party Statistics record:
+###     Party Statistics record:
 
 _Record code: "PS"_
 
@@ -658,9 +668,8 @@ __Example:__
 001PSSTAT                       Z,ZZZ,ZZ9   REPUBLICAN                   Z,ZZZ,ZZ9   ZZ9.99
 ```
 
-__CSV Schema: PS__
+__Fixed-width Schema: PS__
 ```
-column,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -673,7 +682,7 @@ ballots_cast,72,9
 percent_turnout,84,6
 ```
 
-##     Absentee Ballots Cast record:
+###     Absentee Ballots Cast record:
 
 _Record code: "AB"_
 
@@ -708,9 +717,8 @@ __Example:__
 001ABSTAT                                                 ABSENTEE TOTAL Z,ZZZ,ZZ9
 ```
 
-__CSV Schema: AB__
+__Fixed-width Schema: AB__
 ```
-column,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -721,7 +729,7 @@ absentee_total_text,58,14
 absentee_total,73,9
 ```
 
-##     Ballots Cast record:
+###     Ballots Cast record:
 
 _Record code: "BC"_
 
@@ -759,9 +767,8 @@ __Example:__
 001BCSTAT                                           BALLOTS CAST/TURNOUT Z,ZZZ,ZZ9   ZZ9.99
 ```
 
-__CSV Schema: BC__
+__Fixed-width Schema: BC__
 ```
-column,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -773,7 +780,7 @@ ballots_cast,73,9
 percent_turnout,85,6
 ```
 
-##     Blank record:
+###     Blank record:
 
 _Record code: "BK"_
 
@@ -799,7 +806,7 @@ __Example:__
 007BKCD  26
 ```
 
-##     End of File record:
+###     End of File record:
 
 _Record code: "EF"_
 
