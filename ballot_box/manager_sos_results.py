@@ -23,10 +23,6 @@ class BuildSosResults(object):
 
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
-    # contest_xml = "X14GG510v7.xml"
-
-    # reporting_xml = "X14GG530v7.xml"
-
     date_object = datetime.datetime.now()
 
     date_string = date_object.strftime("%Y_%m_%d_%H_%M_%S")
@@ -49,9 +45,6 @@ class BuildSosResults(object):
         # download the latest results file
         self.retrieve._successful_save_results(item)
 
-        # compare files in a zipfile with a list of expected files
-        self.retrieve._found_files_in_zipfile(item)
-
         # create timestamped version of a file deemed latest
         self.retrieve._copy_timestamped_file_as_latest(item, self.data_directory)
 
@@ -68,6 +61,9 @@ class BuildSosResults(object):
         # move timestamped zipfile to archives
         self.retrieve._archive_downloaded_file(item, self.data_directory)
 
+        # compare files in a zipfile with a list of expected files
+        self.retrieve._found_required_files(item, self.data_directory)
+
         # if the item is a zipfile extract the files
         self.retrieve._unzip_latest_file(item, self.data_directory)
 
@@ -78,7 +74,7 @@ class BuildSosResults(object):
 
         latest_path = os.path.join(data_directory, latest)
 
-        contest_path = os.path.join(latest_path, item.source_files)
+        contest_path = os.path.join(latest_path, "X14GG510v7.xml")
 
         soup = BeautifulSoup(open(contest_path), "xml")
 
