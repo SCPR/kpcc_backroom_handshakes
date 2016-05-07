@@ -1,8 +1,11 @@
 ## Contact
 
 Brenda Duran, PIO
+
 562-462-2726 or 562-462-2648
+
 BDuran@rrcc.lacounty.gov
+
 mediainfo@rrcc.lacounty.gov
 
 ## Raw data results page
@@ -12,6 +15,7 @@ http://rrcc.co.la.ca.us/elect/downrslt.html-ssi?
 ## Data file name and URL
 
 __file:__ internet.dat
+
 __URL:__ http://rrcc.co.la.ca.us/results/internet.dat
 
 ## What's covered? 
@@ -44,6 +48,7 @@ __page sequence 999:__
 
 __Fixed-width Schema: Universal__
 ```
+field,start,length
 page_sequence,0,3
 record_type,3,2
 ```
@@ -81,6 +86,7 @@ _Record code: "ET"_
 __Fixed-width schema: ET__
 
 ```
+field,start,length
 page_sequence,0,3
 record_type,3,2
 election_Id,5,4
@@ -408,6 +414,7 @@ __Example:__
 
 __Fixed-width Schema: CN__
 ```
+field,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -463,6 +470,7 @@ __Example:__
 
 __Fixed-width Schema: MT__
 ```
+field,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -519,6 +527,7 @@ __Example:__
 
 __Fixed-width Schema: JN__
 ```
+field,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -573,6 +582,7 @@ __Example:__
 
 __Fixed-width Schema: PR__
 ```
+field,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -617,6 +627,7 @@ __Example:__
 
 __Fixed-width Schema: DR__
 ```
+field,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -670,6 +681,7 @@ __Example:__
 
 __Fixed-width Schema: PS__
 ```
+field,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -719,6 +731,7 @@ __Example:__
 
 __Fixed-width Schema: AB__
 ```
+field,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
@@ -769,6 +782,7 @@ __Example:__
 
 __Fixed-width Schema: BC__
 ```
+field,start,length
 page_sequence,0,3
 record_type,3,2
 contest_Id,5,4
