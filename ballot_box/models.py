@@ -127,3 +127,39 @@ class Contest(models.Model):
     def save(self, *args, **kwargs):
         # election + contesttype + contestname = contestid?
         super(Contest, self).save(*args, **kwargs)
+
+
+class Candidate(models.Model):
+    """
+    describes a person running for office
+    """
+    contest = models.ForeignKey(Contest)
+    candidateid = models.CharField(
+        "Candidate ID", max_length=255, null=False, blank=False)
+    ballotorder = models.IntegerField(
+        "Numerical Position On The Ballot", null=True, blank=True)
+    firstname = models.CharField(
+        "Candidate's First Name", max_length=255, null=False, blank=False)
+    lastname = models.CharField(
+        "Candidate's Last Name", max_length=255, null=False, blank=False)
+    fullname = models.CharField(
+        "Candidate's Last Name", max_length=255, null=False, blank=False)
+    party = models.CharField(
+        "Candidate's Political Party", max_length=255, null=True, blank=True)
+    incumbent = models.BooleanField(
+        "Is Candidate An Incumbent?", default=False)
+    votecount = models.IntegerField(
+        "Number Of Votes Received", null=True, blank=True)
+    votepct = models.FloatField(
+        "Percent Of Votes Received", null=True, blank=True)
+    created = models.DateTimeField("Date Created", auto_now_add=True)
+    modified = models.DateTimeField("Date Modified", auto_now=True)
+
+    def __unicode__(self):
+        self.fullname = "%s %s" % (self.firstname, self.lastname)
+        return self.fullname
+
+    def save(self, *args, **kwargs):
+        if not self.fullname:
+            self.fullname = "%s %s" % (self.firstname, self.lastname)
+        super(Candidate, self).save(*args, **kwargs)
