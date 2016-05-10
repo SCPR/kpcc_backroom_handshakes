@@ -77,21 +77,3 @@ class ResultSource(models.Model):
     def save(self, *args, **kwargs):
         super(ResultSource, self).save(*args, **kwargs)
 
-
-class Office(models.Model):
-    """
-    describes the thing that a candidate is campaigning for
-    """
-    name = models.CharField("Name Of The Office",
-                            max_length=255, null=False, blank=False)
-    slug = models.SlugField("Slugged Data Soure",
-                            unique=True, max_length=255, null=True, blank=True)
-    active = models.BooleanField("Is This Office Active?", default=False)
-    created = models.DateTimeField("Date Created", auto_now_add=True)
-    modified = models.DateTimeField("Date Modified", auto_now=True)
-
-    def __unicode__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        super(Office, self).save(*args, **kwargs)
