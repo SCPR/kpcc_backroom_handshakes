@@ -163,3 +163,35 @@ class Candidate(models.Model):
         if not self.fullname:
             self.fullname = "%s %s" % (self.firstname, self.lastname)
         super(Candidate, self).save(*args, **kwargs)
+
+
+class BallotMeasure(models.Model):
+    """
+    describes a measure that can be voted on
+    """
+    contest = models.ForeignKey(Contest)
+    measureid = models.CharField(
+        "Candidate ID", max_length=255, null=False, blank=False)
+    ballotorder = models.IntegerField(
+        "Numerical Position On The Ballot", null=True, blank=True)
+    name = models.CharField(
+        "Name of Ballot Measure", max_length=255, null=False, blank=False)
+    description = models.TextField(
+        "Description Of Ballot Measure", null=True, blank=True)
+    yescount = models.IntegerField(
+        "Number Of Yes Votes Received", null=True, blank=True)
+    yespct = models.FloatField(
+        "Percent Of Yes Votes Received", null=True, blank=True)
+    nocount = models.IntegerField(
+        "Number Of Yes Votes Received", null=True, blank=True)
+    nopct = models.FloatField(
+        "Percent Of Yes Votes Received", null=True, blank=True)
+    created = models.DateTimeField("Date Created", auto_now_add=True)
+    modified = models.DateTimeField("Date Modified", auto_now=True)
+
+    def __unicode__(self):
+        self.fullname = "%s %s" % (self.firstname, self.lastname)
+        return self.fullname
+
+    def save(self, *args, **kwargs):
+        super(BallotMeasure, self).save(*args, **kwargs)
