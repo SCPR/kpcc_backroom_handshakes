@@ -136,19 +136,28 @@ class BuildLacResults(object):
             candidate_list = []
             measure_list = []
             judicial_list = []
+
             for r in races:
-                
+                records = objectify_records(races[r])
+
                 # Identify and process overall election stats
                 if r == "000":
-                    process_election_stats(races[r])
-                
+                    stats = objectify_records(races['001'])
+                    election_info = compile_election_stats(records,stats)
+                    #print election_info
+
+                elif r == "001":
+                    pass
+
+                # Process individual contest and candidate info
                 else:
-                    records = objectify_race_records(races[r])
                     recall = check_if_recall(records)
                     if recall:
+                        """ In future, may want to parse and return these results, but simply flag
+                        as a recall to handle differently."""
                         pass
                     else:
-                        contest = compile_results(records)
+                        contest = compile_contest_results(records)
                         contest_list.append(contest['contest_details'])
                         for measure in contest['measures']:
                             measure_list.append(measure)
@@ -156,17 +165,35 @@ class BuildLacResults(object):
                             candidate_list.append(candidate)
                         for judge in contest['judges']:
                             judicial_list.append(judge)
-            print contest_list
+            #print contest_list
 
                 #race = process_race(races[r])
                 #race_package.append(race)
 
         # Parse records and return as set of objects
-        def objectify_race_records(race):
+        def objectify_records(race):
+            """ Vote For (VF), Party Title (PT) and Party Statistics (PS) records are not 
+            yet represented in our data models and are not being parsed. Also, Party Stats 
+            in 2016 appear to have been recoded (PC). """
             race_package = []
             for r in range(0,len(race)-1):
                 record_type = race[r][3:5]
-                if record_type == 'CC':
+                if record_type == 'ET':
+                    parser = ET_parser()
+                    record = parser.parse_line(race[r])
+                    race_package.append(record)
+
+                elif record_type == 'TD':
+                    parser = TD_parser()
+                    record = parser.parse_line(race[r])
+                    race_package.append(record)
+
+                elif record_type == 'ST':
+                    parser = ST_parser()
+                    record = parser.parse_line(race[r])
+                    race_package.append(record)
+
+                elif record_type == 'CC':
                     parser = CC_parser()
                     record = parser.parse_line(race[r])
                     race_package.append(record)
@@ -236,6 +263,16 @@ class BuildLacResults(object):
                     parser = DR_parser()
                     record = parser.parse_line(race[r])
                     race_package.append(record)
+
+                elif record_type == 'AB':
+                    parser = AB_parser()
+                    record = parser.parse_line(race[r])
+                    race_package.append(record)
+
+                elif record_type == 'BC':
+                    parser = BC_parser()
+                    record = parser.parse_line(race[r])
+                    race_package.append(record)
             return race_package
 
         def check_if_recall(records):
@@ -245,13 +282,52 @@ class BuildLacResults(object):
                     recall = True
             return recall
 
-        def compile_results(records):
+        def compile_election_stats(title,stats):
+            election_info = {'description': ''}
+            for record in title:
+                if election_info['description'] == '':
+                    election_info['description'] = record['election_text']
+                else:
+                    election_info['description'] = election_info['description'] + ' | ' + record['election_text']
+            for record in stats:
+                if record['record_type'] == 'TD':
+                    election_info['election_id'] = record['election_id']
+                    election_info['time'] = record['time']
+                    election_info['date'] = record['date']
+
+                elif record['record_type'] == 'ST':
+                    election_info['statistical_text'] = record['statistical_text']
+                    election_info['statistical_text_cont'] = record['statistical_text_cont']
+
+                elif record['record_type'] == 'AB':
+                    election_info['absentee_total_text'] = record['absentee_total_text']
+                    election_info['absentee_total'] = record['absentee_total']
+
+                elif record['record_type'] == 'BC':
+                    election_info['ballots_cast_text'] = record['ballots_cast_text']
+                    election_info['ballots_cast'] = record['ballots_cast']
+                    election_info['percent_turnout'] = record['percent_turnout']
+
+                elif record['record_type'] == 'PR':
+                    election_info['total_precinct_text'] = record['total_precinct_text']
+                    election_info['total_precincts'] = record['total_precincts']
+                    election_info['precincts_reporting_text'] = record['precincts_reporting_text']
+                    election_info['precincts_reporting'] = record['precincts_reporting']
+                    election_info['percent_precincts_reporting'] = record['percent_precincts_reporting']
+
+                elif record['record_type'] == 'DR':
+                    election_info['registration'] = record['registration']
+            print election_info
+            return election_info
+
+        def compile_contest_results(records):
             contest_dictionary = {}
             measure_list = []
             candidate_list = []
             judicial_list = []
             for record in records:
                 if record['record_type'] == 'CC':
+                    contest_dictionary['page_sequence'] = record['page_sequence']
                     contest_dictionary['contest_id'] = record['contest_id']
                     contest_dictionary['district'] = record['district']
                     contest_dictionary['division'] = record['division']
@@ -262,6 +338,7 @@ class BuildLacResults(object):
                     contest_dictionary['is_judicial_contest'] = False
 
                 elif record['record_type'] == 'MC':
+                    contest_dictionary['page_sequence'] = record['page_sequence']
                     contest_dictionary['contest_id'] = record['contest_id']
                     contest_dictionary['district'] = record['district']
                     contest_dictionary['division'] = record['division']
@@ -271,6 +348,7 @@ class BuildLacResults(object):
                     contest_dictionary['is_judicial_contest'] = False
 
                 elif record['record_type'] == 'JC':
+                    contest_dictionary['page_sequence'] = record['page_sequence']
                     contest_dictionary['contest_id'] = record['contest_id']
                     contest_dictionary['district'] = record['district']
                     contest_dictionary['division'] = record['division']
@@ -340,9 +418,6 @@ class BuildLacResults(object):
             with open ("%s/ballot_box/data_dump/lac_latest/internet.dat" % (settings.BASE_DIR), "w+") as f:
                 for d in data:
                     f.write(str(d) + '\n')
-        
-        def process_election_stats(rawstats):
-            pass
 
         def return_structured_data():
             retrieve_data()
