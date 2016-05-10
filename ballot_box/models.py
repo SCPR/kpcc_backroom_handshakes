@@ -230,3 +230,39 @@ class JudicialCandidate(models.Model):
         if not self.fullname:
             self.fullname = "%s %s" % (self.firstname, self.lastname)
         super(JudicialCandidate, self).save(*args, **kwargs)
+
+
+class ReportingUnit(models.Model):
+    """
+    describes an entity that contains precincts and reports voting results
+    """
+    election = models.ForeignKey(Election)
+    contest = models.ForeignKey(Contest)
+    reportingunitname = models.CharField("Name Of The Reporing Entity", max_length=255, null=False, blank=False)
+    reportingunitslug = models.SlugField(
+        "Slug Of The Reporing Entity", db_index=True, unique=True, max_length=255, null=True, blank=True)
+    # delegatecount
+    # winner
+    # fipscode
+    precinctstotal = models.IntegerField(
+        "Total Number Of Precincts", null=True, blank=True)
+    precinctsreporting = models.IntegerField(
+        "Number Of Precincts That Have Reported Votes", null=True, blank=True)
+    precinctsreportingpct = models.FloatField(
+        "Percent Of Precincts Reporting", null=True, blank=True)
+    votersregistered = models.FloatField(
+        "Number of Registered Voters", null=True, blank=True)
+    votersturnout = models.FloatField(
+        "Percent Of Registered Voters Who Cast Ballots", null=True, blank=True)
+    statename = models.CharField("Name Of The Reporing Entity's State", max_length=255, null=False, blank=False)
+    statepostal = models.CharField("Postal Code Of The Reporing Entity's State", max_length=2, null=False, blank=False)
+    description = models.TextField(
+        "Description Of Ballot Measure", null=True, blank=True)
+    created = models.DateTimeField("Date Created", auto_now_add=True)
+    modified = models.DateTimeField("Date Modified", auto_now=True)
+
+    def __unicode__(self):
+        return self.reportingunitname
+
+    def save(self, *args, **kwargs):
+        super(ReportingUnit, self).save(*args, **kwargs)
