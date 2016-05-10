@@ -95,3 +95,35 @@ class Office(models.Model):
 
     def save(self, *args, **kwargs):
         super(Office, self).save(*args, **kwargs)
+
+
+class Contest(models.Model):
+    """
+    describes the thing that the electorate is casting votes for
+    """
+    election = models.ForeignKey(Election)
+    resultsource = models.ForeignKey(ResultSource)
+    contesttype = models.ForeignKey(Office)
+    contestid = models.CharField(
+        "Contest ID", max_length=255, null=False, blank=False)
+    contestname = models.CharField(
+        "Proper Reference To This Contest", max_length=255, null=False, blank=False)
+    seatnum = models.IntegerField(
+        "Number of district or seat up for grabs", null=True, blank=True)
+    contestdescription = models.TextField(
+        "Description Of This Contest", null=True, blank=True)
+    is_uncontested = models.BooleanField("Uncontested Contest?", default=False)
+    is_national = models.BooleanField("National Contest?", default=False)
+    is_statewide = models.BooleanField("Statewide Contest?", default=False)
+    is_ballot_measure = models.BooleanField("Is A Measure?", default=False)
+    is_judicial = models.BooleanField("Is Judicial Contest?", default=False)
+    is_runoff = models.BooleanField("Is A Runoff Contest?", default=False)
+    created = models.DateTimeField("Date Created", auto_now_add=True)
+    modified = models.DateTimeField("Date Modified", auto_now=True)
+
+    def __unicode__(self):
+        return self.electionid
+
+    def save(self, *args, **kwargs):
+        # election + contesttype + contestname = contestid?
+        super(Contest, self).save(*args, **kwargs)
