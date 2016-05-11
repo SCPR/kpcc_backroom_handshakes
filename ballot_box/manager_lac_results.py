@@ -17,9 +17,7 @@ logger = logging.getLogger("kpcc_backroom_handshakes")
 
 
 class BuildLacResults(object):
-    """
-    scaffolding to ingest LA County registrar election results
-    """
+    """Scaffolding to ingest LA County registrar election results."""
 
     retrieve = Retriever()
 
@@ -80,15 +78,11 @@ class BuildLacResults(object):
 
         contest_path = os.path.join(latest_path, item.source_files)
 
-        # Create list to store raw data in memory
+        # Create list to store raw data
         rows = []
 
-        # Create lists to collect processed race and candidate dictionaries
-        #race_list = []
-        #candidate_list = []
-
-        # Fetch data rows from file
         def retrieve_data():
+            """Fetches data rows from file and stores in a list."""
             with open(contest_path, "r") as f:    
                 for line in f:
                     record_type = line[3:5]
@@ -96,9 +90,10 @@ class BuildLacResults(object):
                         break
                     rows.append(line)
 
-        # Identify races within raw data
         def get_race_ids_from(rows):
-            """ loop through data and try to parse out race ids """
+            """Returns index of races using page sequence (one contest or statistical set
+            per page).
+            """
             list_of_race_ids = []
             for result in rows:
                 race_id = result[:3]
@@ -112,8 +107,8 @@ class BuildLacResults(object):
             print "\t* Race ids compiled"
             return race_ids
 
-        # Group raw data by race
         def collate_races():
+            """Groups all records into a dictionary indexed by race_id."""
             race_ids = get_race_ids_from(rows)
             races = {}
             for rid in race_ids:
@@ -122,6 +117,7 @@ class BuildLacResults(object):
             return races
 
         def fetch_records_for_race(rid):
+            """Pulls all records for a specific contest or stats set."""
             race_rows = []
             for row in rows:
                 if row[:3] == rid:
@@ -130,8 +126,8 @@ class BuildLacResults(object):
                     pass
             return race_rows
 
-        # Separate election stats from individual races
         def evaluate_and_process_races():
+            """This is the primary function handling the parsing."""
             races = collate_races()
             contest_list = []
             candidate_list = []
@@ -153,6 +149,10 @@ class BuildLacResults(object):
                 # Process individual contest and candidate info
                 else:
                     skip = check_if_recall_or_nonpartisan(records)
+                    """Checks to see if this is a recall contest or a nonpartisan contest. For now,
+                    it's unclear how to store or display these contests. In future, however, we may
+                    want to parse and return their results.
+                    """
                     if skip:
                         pass
                     else:
@@ -165,13 +165,15 @@ class BuildLacResults(object):
                         for judge in contest['judges']:
                             judicial_list.append(judge)
 
-            printreport(election_info,contest_list,measure_list,candidate_list,judicial_list)
+            #printreport(election_info,contest_list,measure_list,candidate_list,judicial_list)
 
         # Parse records and return as set of objects
         def objectify_records(race):
-            """ Vote For (VF) and Party Statistics (PS) records are not yet represented
-            in our data models and are not being parsed. Also, Party Stats in 2016 appear
-            to have been recoded (PC). """
+            """Parses each record and returns everything as a list of dictionaries. 
+            NOTE: Party Statistics (PS) records are not yet represented in our models 
+            and are not being parsed. Also, Party Stats in 2016 appear to have been 
+            recoded (PC).
+            """
             race_package = []
             for r in range(0,len(race)):
                 record_type = race[r][3:5]
@@ -299,7 +301,8 @@ class BuildLacResults(object):
         def check_if_recall_or_nonpartisan(records):
             """ Check to see if this is a recall contest or a nonpartisan contest. For now,
             it's unclear how to store or display these contests. In future, however, we may
-            want to parse and return their results.  """
+            want to parse and return their results.
+            """
             recall = False
             nonpartisan = False
             for r in records:
@@ -313,6 +316,7 @@ class BuildLacResults(object):
                 return False
 
         def compile_election_stats(title,stats):
+            """Fetches records that contain overall election title and stats."""
             election_info = {'description': ''}
             for record in title:
                 if record['record_type'] == 'ET':
@@ -353,6 +357,9 @@ class BuildLacResults(object):
             return election_info
 
         def compile_contest_results(records):
+            """Fetches records for each contest and returns overall contest info, candidates, 
+            measures, etc.
+            """
             contest_dictionary = {}
             measure_list = []
             candidate_list = []
@@ -436,8 +443,6 @@ class BuildLacResults(object):
                     judicial_list.append(judge_dictionary)
 
                 elif record['record_type'] == 'PR':
-                    """ Removed party code - not sure it's needed under top two primaries """
-                    #contest_dictionary['party_code'] = record['party_code']
                     contest_dictionary['total_precinct_text'] = record['total_precinct_text']
                     contest_dictionary['total_precincts'] = record['total_precincts']
                     contest_dictionary['precincts_reporting_text'] = record['precincts_reporting_text']
@@ -445,8 +450,6 @@ class BuildLacResults(object):
                     contest_dictionary['percent_precincts_reporting'] = record['percent_precincts_reporting']
 
                 elif record['record_type'] == 'DR':
-                    """ Removed party code - not sure it's needed under top two primaries """
-                    #contest_dictionary['party_code'] = record['party_code']
                     contest_dictionary['registration'] = record['registration']
 
                 elif record['record_type'] == 'VF':
@@ -457,19 +460,14 @@ class BuildLacResults(object):
             return contest_package
         
         def printreport(election_info,contest_list,measure_list,candidate_list,judicial_list):
+            """Prints human readable report of all candidates, contests, measures, and some 
+            basic election stats. Activate by un-commenting call in evaluate_and_process_races().
+            """
             with open ("%s/ballot_box/data_dump/lac_latest/lac_latest_report.md" % (settings.BASE_DIR), "w+") as f:
                 election_desc = election_info['description'].split(' | ')
                 for d in election_desc:
                     f.write(d + '\n')
                 f.write('\n\n')
-                # f.write('Last updated: ' + election_info['date'] + ' ' + election_info['time'] + '\n')
-                # f.write('Precincts reporting: ' + election_info['percent_precincts_reporting'] + '\n')
-                # f.write('Total precincts: ' + election_info['total_precincts'] + '\n')
-                # f.write('Turnout: ' + election_info['percent_turnout'] + '\n')
-                # f.write('Registered voters: ' + election_info['registration'] + '\n')
-                # f.write('Vote by mail ballots: ' + election_info['vote_by_mail_ballots'] + '\n')
-                # f.write('Total ballots cast: ' + election_info['ballots_cast'] + '\n')
-                # f.write('\n\n')
 
                 f.write('## BY THE NUMBERS\n\n')
                 f.write('__No. of contests:__ ' + str(len(contest_list)) + '\n\n')
@@ -515,23 +513,11 @@ class BuildLacResults(object):
                     f.write('N/A\n')
 
         def return_structured_data():
+            """Triggers data retrieval and parsing."""
             retrieve_data()
             evaluate_and_process_races()
-            #print rows
-            #print race_ids
 
         return_structured_data()
-        # for line in rows:
-        #     record_type = line[3:5]
-            #if record_type = 
-            #parsed = self._result_parser.parse_line(line)
-        # print f
-
-    #     def get_data_for_a_race(race_ids, file):
-    #     def evaluate_result_types(id, file, race_data_list):
-    #     def evaluate_supreme_court_races(file, id):
-    #     def evaluate_ballot_measures(file, id):
-
 
 if __name__ == '__main__':
     task_run = BuildLacResults()
