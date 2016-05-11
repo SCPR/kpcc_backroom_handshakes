@@ -1,7 +1,9 @@
 from __future__ import unicode_literals
 from django.db import models
 from kpcc_backroom_handshakes.custom_fields import ListField
+import logging
 
+logger = logging.getLogger("kpcc_backroom_handshakes")
 
 class Election(models.Model):
     """
@@ -47,8 +49,7 @@ class Election(models.Model):
     def save(self, *args, **kwargs):
         if not self.electionid:
             self.election_date_str = self.election_date.strftime("%Y-%m-%d")
-            self.electionid = "%s-%s" % (self.type.lower(),
-                                         self.election_date_str)
+            self.electionid = "%s-%s" % (self.type.lower(), self.election_date_str)
         super(Election, self).save(*args, **kwargs)
 
 
@@ -84,7 +85,7 @@ class Office(models.Model):
     """
     name = models.CharField("Name Of The Office",
                             max_length=255, null=False, blank=False)
-    slug = models.SlugField("Slugged Data Soure",
+    slug = models.SlugField("Slug Of The Office",
                             unique=True, max_length=255, null=True, blank=True)
     active = models.BooleanField("Is This Office Active?", default=False)
     created = models.DateTimeField("Date Created", auto_now_add=True)
@@ -105,7 +106,7 @@ class Contest(models.Model):
     resultsource = models.ForeignKey(ResultSource)
     contesttype = models.ForeignKey(Office)
     contestid = models.CharField(
-        "Contest ID", max_length=255, null=False, blank=False)
+        "Contest ID", max_length=255, null=True, blank=True)
     contestname = models.CharField(
         "Proper Reference To This Contest", max_length=255, null=False, blank=False)
     seatnum = models.IntegerField(
@@ -238,7 +239,8 @@ class ReportingUnit(models.Model):
     """
     election = models.ForeignKey(Election)
     contest = models.ForeignKey(Contest)
-    reportingunitname = models.CharField("Name Of The Reporing Entity", max_length=255, null=False, blank=False)
+    reportingunitname = models.CharField(
+        "Name Of The Reporing Entity", max_length=255, null=False, blank=False)
     reportingunitslug = models.SlugField(
         "Slug Of The Reporing Entity", db_index=True, unique=True, max_length=255, null=True, blank=True)
     # delegatecount
@@ -254,8 +256,10 @@ class ReportingUnit(models.Model):
         "Number of Registered Voters", null=True, blank=True)
     votersturnout = models.FloatField(
         "Percent Of Registered Voters Who Cast Ballots", null=True, blank=True)
-    statename = models.CharField("Name Of The Reporing Entity's State", max_length=255, null=False, blank=False)
-    statepostal = models.CharField("Postal Code Of The Reporing Entity's State", max_length=2, null=False, blank=False)
+    statename = models.CharField(
+        "Name Of The Reporing Entity's State", max_length=255, null=False, blank=False)
+    statepostal = models.CharField(
+        "Postal Code Of The Reporing Entity's State", max_length=2, null=False, blank=False)
     description = models.TextField(
         "Description Of Ballot Measure", null=True, blank=True)
     created = models.DateTimeField("Date Created", auto_now_add=True)
