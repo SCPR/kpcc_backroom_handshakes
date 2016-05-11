@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
-
+#print dir(logger)
 
 class BuildLacResults(object):
     """Scaffolding to ingest LA County registrar election results."""
@@ -126,7 +126,7 @@ class BuildLacResults(object):
                     for judge in contest['judges']:
                         judicial_list.append(judge)
 
-        process.printreport(election_info, contest_list, measure_list, candidate_list, judicial_list)
+        process.prettyprint(election_info, contest_list, measure_list, candidate_list, judicial_list)
 
 
 class LacProcessMethods(object):
@@ -549,6 +549,44 @@ class LacProcessMethods(object):
             else:
                 f.write('N/A\n')
 
+    def prettyprint(self, election_info, contest_list, measure_list, candidate_list, judicial_list):
+        """Prints human readable, detailed layout of all candidates, contests, measures, and 
+        election stats. Activate by un-commenting call in evaluate_and_process_races().
+        """
+        report = ''
+        report += '## election_info\n\n'
+        for i in election_info:
+            report += i + ': ' + election_info[i] + '\n'
+        report += '\n\n\n\n'
+
+        report += '## contest_list\n\n'
+        for contest in (sorted(contest_list, key=operator.itemgetter('page_sequence'))):
+            for c in contest:
+                report += c + ': ' + str(contest[c]) + '\n'
+            report += '\n\n'
+        report += '\n\n\n\n'
+
+        report += '## measure_list\n\n'
+        for measure in (sorted(measure_list, key=operator.itemgetter('measure_id'))):
+            for m in measure:
+                report += m + ': ' + str(measure[m]) + '\n'
+            report += '\n\n'
+        report += '\n\n\n\n'
+
+        report += '## candidate_list\n\n'
+        for candidate in (sorted(candidate_list, key=operator.itemgetter('candidate_name'))):
+            for c in candidate:
+                report += c + ': ' + str(candidate[c]) + '\n'
+            report += '\n\n'
+        report += '\n\n\n\n'
+
+        # report += '## JUDICIAL APPOINTEES\n\n'
+        # if len(judicial_list) > 0:
+        #     for judge in (sorted(judicial_list, key=operator.itemgetter('judicial_name'))):
+        #         report = report + '* ' + judge['judicial_name'] + ' - ' + judge['judicial_text'] + '\n'
+        # else:
+        #     report += 'N/A\n'
+        print report
 
 if __name__ == '__main__':
     task_run = BuildLacResults()

@@ -8,15 +8,17 @@ BDuran@rrcc.lacounty.gov
 
 mediainfo@rrcc.lacounty.gov
 
-## Raw data results page
+## Archived data results page
 
 http://rrcc.co.la.ca.us/elect/downrslt.html-ssi?
 
 ## Data file name and URL
 
-__file:__ internet.dat
+__file:__ 1237jun16.ets
 
-__URL:__ http://rrcc.co.la.ca.us/results/internet.dat
+__URL:__ http://rrcc.co.la.ca.us/results/1237jun16.ets
+
+_(Not available yet)_
 
 ## What's covered? 
 
