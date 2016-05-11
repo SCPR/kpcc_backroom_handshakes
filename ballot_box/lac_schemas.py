@@ -47,14 +47,14 @@ class FixedWidthParser(object):
 # ==============
 # format is (index, length, opt:transform=int)
 
-class ET_record(FixedWidthParser):
+class ET_parser(FixedWidthParser):
     # Election Title record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
     election_id = FixedWidthField(5, 4)
     election_text = FixedWidthField(15, 53)
 
-class TD_record(FixedWidthParser):
+class TD_parser(FixedWidthParser):
     # Time and Date record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
@@ -62,15 +62,16 @@ class TD_record(FixedWidthParser):
     time = FixedWidthField(15, 5)
     date = FixedWidthField(21, 10)
 
-class ST_record(FixedWidthParser):
+class ST_parser(FixedWidthParser):
     # Election Statistics record
+    """ LAC doesn't appear to be using this in 2016 election. """
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
     election_id = FixedWidthField(5, 4)
     statistical_text = FixedWidthField(15, 26)
     statistical_text_cont = FixedWidthField(44, 26)
 
-class CC_record(FixedWidthParser):
+class CC_parser(FixedWidthParser):
     # Candidate Contest record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
@@ -81,7 +82,7 @@ class CC_record(FixedWidthParser):
     contest_title = FixedWidthField(15, 26)
     contest_title_cont = FixedWidthField(44, 26)
 
-class MC_record(FixedWidthParser):
+class MC_parser(FixedWidthParser):
     # Measure Contest record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
@@ -91,7 +92,7 @@ class MC_record(FixedWidthParser):
     contest_title = FixedWidthField(15, 26)
     contest_title_cont = FixedWidthField(44, 26)
 
-class JC_record(FixedWidthParser):
+class JC_parser(FixedWidthParser):
     # Judicial Contest record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
@@ -100,10 +101,10 @@ class JC_record(FixedWidthParser):
     division = FixedWidthField(11, 3)
     contest_title = FixedWidthField(15, 26)
     contest_title_cont = FixedWidthField(44, 26)
-    page_sequence = FixedWidthField(0, 3)
 
-class PT_record(FixedWidthParser):
+class PT_parser(FixedWidthParser):
     # Party Title record
+    """ THIS MAY BE OBSOLETE UNDER NEW TOP TWO PRIMARY SYSTEM. CONSIDER REMOVING"""
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
     contest_id = FixedWidthField(5, 4)
@@ -112,7 +113,7 @@ class PT_record(FixedWidthParser):
     party_code = FixedWidthField(14, 1)
     party_name = FixedWidthField(15, 26)
 
-class VF_record(FixedWidthParser):
+class VF_parser(FixedWidthParser):
     # Vote For record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
@@ -123,7 +124,7 @@ class VF_record(FixedWidthParser):
     vote_for_text = FixedWidthField(15, 22)
     vote_for_number = FixedWidthField(37, 3)
 
-class CN_record(FixedWidthParser):
+class CN_parser(FixedWidthParser):
     # Candidate Name record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
@@ -136,7 +137,7 @@ class CN_record(FixedWidthParser):
     votes = FixedWidthField(73, 9)
     percent_of_vote = FixedWidthField(85, 6)
 
-class MT_record(FixedWidthParser):
+class MT_parser(FixedWidthParser):
     # Measure Text record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
@@ -148,7 +149,7 @@ class MT_record(FixedWidthParser):
     votes = FixedWidthField(73, 9)
     percent_of_vote = FixedWidthField(85, 6)
 
-class JN_record(FixedWidthParser):
+class JN_parser(FixedWidthParser):
     # Judge Name record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
@@ -161,7 +162,7 @@ class JN_record(FixedWidthParser):
     votes = FixedWidthField(73, 9)
     percent_of_vote = FixedWidthField(85, 6)
 
-class PR_record(FixedWidthParser):
+class PR_parser(FixedWidthParser):
     # Precinct Reporting record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
@@ -175,7 +176,7 @@ class PR_record(FixedWidthParser):
     precincts_reporting = FixedWidthField(77, 5)
     percent_precincts_reporting = FixedWidthField(85, 6)
 
-class DR_record(FixedWidthParser):
+class DR_parser(FixedWidthParser):
     # District Registration record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
@@ -186,7 +187,7 @@ class DR_record(FixedWidthParser):
     registration_text = FixedWidthField(15, 16)
     registration = FixedWidthField(32, 9)
 
-class PS_record(FixedWidthParser):
+class PS_parser(FixedWidthParser):
     # Party Statistical record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
@@ -199,7 +200,7 @@ class PS_record(FixedWidthParser):
     ballots_cast = FixedWidthField(72, 9)
     percent_turnout = FixedWidthField(84, 6)
 
-class AB_record(FixedWidthParser):
+class AB_parser(FixedWidthParser):
     # Absentee Ballots Cast record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
@@ -210,7 +211,7 @@ class AB_record(FixedWidthParser):
     absentee_total_text = FixedWidthField(58, 14)
     absentee_total = FixedWidthField(73, 9)
 
-class BC_record(FixedWidthParser):
+class BC_parser(FixedWidthParser):
     # Ballots Cast record
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
