@@ -23,10 +23,6 @@ class BuildSosResults(object):
 
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
-    # contest_xml = "X14GG510v7.xml"
-
-    # reporting_xml = "X14GG530v7.xml"
-
     date_object = datetime.datetime.now()
 
     date_string = date_object.strftime("%Y_%m_%d_%H_%M_%S")
@@ -37,10 +33,10 @@ class BuildSosResults(object):
         """
         """
         item = self.src[0]
-        item.file_name = "%s_%s_%s_results%s" % (self.data_directory, self.date_string, item.source_short, item.source_type)
-        self.get_results_file(item, self.data_directory)
+        item.file_name = "%s_%s_%s_results%s" % (
+            self.data_directory, self.date_string, item.source_short, item.source_type)
+        # self.get_results_file(item, self.data_directory)
         self.parse_results_file(item, self.data_directory)
-
 
     def get_results_file(self, item, data_directory):
         """
@@ -49,24 +45,27 @@ class BuildSosResults(object):
         # download the latest results file
         self.retrieve._successful_save_results(item)
 
-        # compare files in a zipfile with a list of expected files
-        self.retrieve._found_files_in_zipfile(item)
-
         # create timestamped version of a file deemed latest
-        self.retrieve._copy_timestamped_file_as_latest(item, self.data_directory)
+        self.retrieve._copy_timestamped_file_as_latest(
+            item, self.data_directory)
 
         # save path to timestamped version of a filein the db
         """
         """
 
         # move latest files to a working directory
-        self.retrieve._create_directory_for_latest_file(item, self.data_directory)
+        self.retrieve._create_directory_for_latest_file(
+            item, self.data_directory)
 
         # move timestamped file to working directory as latest
-        self.retrieve._move_latest_files_to_latest_directory(item, self.data_directory)
+        self.retrieve._move_latest_files_to_latest_directory(
+            item, self.data_directory)
 
         # move timestamped zipfile to archives
         self.retrieve._archive_downloaded_file(item, self.data_directory)
+
+        # compare files in a zipfile with a list of expected files
+        self.retrieve._found_required_files(item, self.data_directory)
 
         # if the item is a zipfile extract the files
         self.retrieve._unzip_latest_file(item, self.data_directory)
@@ -74,11 +73,14 @@ class BuildSosResults(object):
     def parse_results_file(self, item, data_directory):
         """
         """
+
+        output = {}
+
         latest = "%s_latest" % (item.source_short)
 
         latest_path = os.path.join(data_directory, latest)
 
-        contest_path = os.path.join(latest_path, item.source_files)
+        contest_path = os.path.join(latest_path, "X14GG510v7.xml")
 
         soup = BeautifulSoup(open(contest_path), "xml")
 
@@ -90,64 +92,69 @@ class BuildSosResults(object):
                 """
                 this is a judicial candidate
                 """
-                print "*** %s ***" % race.ContestName.string
                 results = race.find("TotalVotes")
-                print "%s" % results.find(attrs={"Id": "PR"}).string
-                print "%s" % results.find(attrs={"Id": "TP"}).string
-                print "%s" % results.find(attrs={"Id": "RT"}).string
-                print "%s" % results.find(attrs={"Id": "PYV"}).string
-                print "%s" % results.find(attrs={"Id": "PNV"}).string
-                for candidate in results.find_all("Selection"):
-                    print "\t%s" % candidate.Candidate.ProposalItem.attrs["ReferendumOptionIdentifier"]
-                    print "\t%s" % candidate.ValidVotes.string
-                    print "\n"
+                output["contestname"] = race.ContestName.string
+                output["precincts_reporting"] = results.find(
+                    attrs={"Id": "PR"}).string
+                output["total_precincts"] = results.find(
+                    attrs={"Id": "TP"}).string
+                output["report_type"] = results.find(attrs={"Id": "RT"}).string
+                output["yescount"] = results.find_all(
+                    "Selection")[0].ValidVotes.string
+                output["yespct"] = results.find(attrs={"Id": "PYV"}).string
+                output["nocount"] = results.find_all(
+                    "Selection")[1].ValidVotes.string
+                output["nopct"] = results.find(attrs={"Id": "PNV"}).string
 
-            elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "150":
-                """
-                this is a judicial candidate
-                """
-                print "*** %s ***" % race.ContestName.string
-                results = race.find("TotalVotes")
-                print "%s" % results.find(attrs={"Id": "PR"}).string
-                print "%s" % results.find(attrs={"Id": "TP"}).string
-                print "%s" % results.find(attrs={"Id": "RT"}).string
-                print "%s" % results.find(attrs={"Id": "PYV"}).string
-                print "%s" % results.find(attrs={"Id": "PNV"}).string
-                for candidate in results.find_all("Selection"):
-                    print "\t%s" % candidate.Candidate.ProposalItem.attrs["ReferendumOptionIdentifier"]
-                    print "\t%s" % candidate.ValidVotes.string
-                    print "\n"
 
-            elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "190":
-                """
-                this is a prop
-                """
-                print "*** %s ***" % race.ContestName.string
-                results = race.find("TotalVotes")
-                print "%s" % results.find(attrs={"Id": "PR"}).string
-                print "%s" % results.find(attrs={"Id": "TP"}).string
-                print "%s" % results.find(attrs={"Id": "RT"}).string
-                print "%s" % results.find(attrs={"Id": "PYV"}).string
-                print "%s" % results.find(attrs={"Id": "PNV"}).string
-                for candidate in results.find_all("Selection"):
-                    print "\t%s" % candidate.Candidate.ProposalItem.attrs["ReferendumOptionIdentifier"]
-                    print "\t%s" % candidate.ValidVotes.string
-                    print "\n"
-            else:
-                """
-                this is a non-judicial candidate
-                """
-                print "*** %s ***" % race.ContestName.string
-                results = race.find("TotalVotes")
-                print "%s" % results.find(attrs={"Id": "PR"}).string
-                print "%s" % results.find(attrs={"Id": "TP"}).string
-                print "%s" % results.find(attrs={"Id": "RT"}).string
-                for candidate in results.find_all("Selection"):
-                    print "\t%s" % candidate.AffiliationIdentifier.RegisteredName.string
-                    print "\t%s" % candidate.Candidate.CandidateFullName.PersonFullName.string
-                    print "\t%s" % candidate.ValidVotes.string
-                    print "\t%s" % candidate.CountMetric.string
-                    print "\n"
+
+
+            # elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "150":
+            #     """
+            #     this is a judicial candidate
+            #     """
+            #     print "*** %s ***" % race.ContestName.string
+            #     results = race.find("TotalVotes")
+            #     print "%s" % results.find(attrs={"Id": "PR"}).string
+            #     print "%s" % results.find(attrs={"Id": "TP"}).string
+            #     print "%s" % results.find(attrs={"Id": "RT"}).string
+            #     print "%s" % results.find(attrs={"Id": "PYV"}).string
+            #     print "%s" % results.find(attrs={"Id": "PNV"}).string
+            #     for candidate in results.find_all("Selection"):
+            #         print "\t%s" % candidate.Candidate.ProposalItem.attrs["ReferendumOptionIdentifier"]
+            #         print "\t%s" % candidate.ValidVotes.string
+            #         print "\n"
+
+            # elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "190":
+            #     """
+            #     this is a prop
+            #     """
+            #     print "*** %s ***" % race.ContestName.string
+            #     results = race.find("TotalVotes")
+            #     print "%s" % results.find(attrs={"Id": "PR"}).string
+            #     print "%s" % results.find(attrs={"Id": "TP"}).string
+            #     print "%s" % results.find(attrs={"Id": "RT"}).string
+            #     print "%s" % results.find(attrs={"Id": "PYV"}).string
+            #     print "%s" % results.find(attrs={"Id": "PNV"}).string
+            #     for candidate in results.find_all("Selection"):
+            #         print "\t%s" % candidate.Candidate.ProposalItem.attrs["ReferendumOptionIdentifier"]
+            #         print "\t%s" % candidate.ValidVotes.string
+            #         print "\n"
+            # else:
+            #     """
+            #     this is a non-judicial candidate
+            #     """
+            #     print "*** %s ***" % race.ContestName.string
+            #     results = race.find("TotalVotes")
+            #     print "%s" % results.find(attrs={"Id": "PR"}).string
+            #     print "%s" % results.find(attrs={"Id": "TP"}).string
+            #     print "%s" % results.find(attrs={"Id": "RT"}).string
+            #     for candidate in results.find_all("Selection"):
+            #         print "\t%s" % candidate.AffiliationIdentifier.RegisteredName.string
+            #         print "\t%s" % candidate.Candidate.CandidateFullName.PersonFullName.string
+            #         print "\t%s" % candidate.ValidVotes.string
+            #         print "\t%s" % candidate.CountMetric.string
+            #         print "\n"
 
 
 if __name__ == '__main__':
