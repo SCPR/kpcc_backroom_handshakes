@@ -64,6 +64,7 @@ class TD_parser(FixedWidthParser):
 
 class ST_parser(FixedWidthParser):
     # Election Statistics record
+    """ LAC doesn't appear to be using this in 2016 election. """
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
     election_id = FixedWidthField(5, 4)
