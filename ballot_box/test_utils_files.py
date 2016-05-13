@@ -27,7 +27,6 @@ class TestFileRetrival(TestCase):
         """
         setup some variables for our tests
         """
-
         self.data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
         self.list_of_expected_files = []
