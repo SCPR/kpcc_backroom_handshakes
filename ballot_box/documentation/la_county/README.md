@@ -1,32 +1,45 @@
-## Contact
+Los Angeles County Election Night Data-Feed Information
+========================================================
+
+* [Contact](#contact)
+* [Raw data results page](#raw-data-results-page)
+* [Data file name and URL](#data-file-name-and-url)
+* [What's covered](#whats-covered)
+* [Test data schedule](#test-data-schedule)
+* [Overview of records](#overview-of-records)
+
+Contact
+-------
 
 Brenda Duran, PIO
-
 562-462-2726 or 562-462-2648
-
 BDuran@rrcc.lacounty.gov
-
 mediainfo@rrcc.lacounty.gov
 
-## Raw data results page
+Raw data results page
+---------------------
 
 http://rrcc.co.la.ca.us/elect/downrslt.html-ssi?
 
-## Data file name and URL
+Data file name and URL
+----------------------
 
 __file:__ internet.dat
 
 __URL:__ http://rrcc.co.la.ca.us/results/internet.dat
 
-## What's covered? 
+What's covered
+---------------
 
 * County does not cover all cities
 
-## Test data schedule?
+Test data schedule
+-------------------
 
 * Test data should be available by 5/6 or 5/9. No dry runs with updating data; just the static file to test with.
 
-##     Overview of records:
+Overview of records
+--------------------
 
 All records start with `page sequence` and `record type`. The `page sequence` separates individual contests and other election metadata. `record type` will indicate how to parse.
 
@@ -53,7 +66,7 @@ page_sequence,0,3
 record_type,3,2
 ```
 
-###     Election Title record:
+### Election Title record:
 
 _Record code: "ET"_
 
@@ -93,7 +106,7 @@ election_Id,5,4
 election_text,15,53
 ```
 
-###     Time & Date record:
+### Time & Date record:
 
 _Record code: "TD"_
 
@@ -132,7 +145,7 @@ time,15,5
 date,21,10
 ```
 
-###     Election Statistics record:
+### Election Statistics record:
 
 _Record code: "ST"_
 
@@ -170,7 +183,7 @@ statistical text,15,26
 statistical text continued,44,26
 ```
 
-###     Candidate Contest record:
+### Candidate Contest record:
 
 _Record code: "CC"_
 
@@ -213,7 +226,7 @@ contest title,15,26
 contest title continued,44,26
 ```
 
-###     Measure Contest record:
+### Measure Contest record:
 
 _Record code: "MC"_
 
@@ -255,7 +268,7 @@ contest title,15,26
 contest title continued,44,26
 ```
 
-###     Judicial Contest record:
+### Judicial Contest record:
 
 _Record code: "JC"_
 
@@ -296,7 +309,7 @@ contest title,15,26
 contest title continued,44,26
 ```
 
-###     Party record:
+### Party record:
 
 _Record code: "PT"_
 
@@ -336,7 +349,7 @@ party code,14,1
 party name,15,26
 ```
 
-###     Vote For record:
+### Vote For record:
 
 _Record code: "VF"_
 
@@ -373,7 +386,7 @@ vote for text,15,22
 vote for number,37,3
 ```
 
-###     Candidate Name record:
+### Candidate Name record:
 
 _Record code: "CN"_
 
@@ -381,7 +394,7 @@ _Record code: "CN"_
 
 __Format:__
 
-                  1             2         3          4           5         6         7   
+                  1             2         3          4           5         6         7
       123 45 6789 01 234 5 678 901234567890123456 78901 234 56789012345678901234567890123
      |---|--|----|--|---|-|---|------------------|-----|---|-----------------------------|
       ^   ^  ^    ^  ^   ^     ^                  ^     ^   ^
@@ -427,7 +440,7 @@ votes,73,9
 percent_of_vote,85,6
 ```
 
-###     Measure text record:
+### Measure text record:
 
 _Record code: "MT"_
 
@@ -482,7 +495,7 @@ votes,73,9
 percent_of_vote,85,6
 ```
 
-###     Judicial Name record:
+### Judicial Name record:
 
 _Record code: "JN"_
 
@@ -540,7 +553,7 @@ votes,73,9
 percent_of_vote,85,6
 ```
 
-###     Precinct Reporting record:
+### Precinct Reporting record:
 
 _Record code: "PR"_
 
@@ -548,10 +561,10 @@ _Record code: "PR"_
 
 __Format:__
 
-                  1            2         3           4          5   
+                  1            2         3           4          5
       123 45 6789 01 234 5 67890123456789012345 6 78901 234567890123
      |---|--|----|--|---|-|--------------------|-|-----|------------|
-      ^   ^  ^    ^  ^   ^ ^                   ^  ^     ^           
+      ^   ^  ^    ^  ^   ^ ^                   ^  ^     ^
       |   |  |    |  |   | |                   |  |     filler: 12 characters
       |   |  |    |  |   | |                   |  total precincts: 5 characters "Z,ZZ9"
       |   |  |    |  |   | |                   filler: 1 characters
@@ -596,7 +609,7 @@ precincts_reporting,77,5
 percent_precincts_reporting,85,6
 ```
 
-###     District Registration record:
+### District Registration record:
 
 _Record code: "DR"_
 
@@ -638,7 +651,7 @@ registration text,15,16
 registration,32,9
 ```
 
-###     Party Statistics record:
+### Party Statistics record:
 
 _Record code: "PS"_
 
@@ -694,7 +707,7 @@ ballots_cast,72,9
 percent_turnout,84,6
 ```
 
-###     Absentee Ballots Cast record:
+### Absentee Ballots Cast record:
 
 _Record code: "AB"_
 
@@ -703,9 +716,9 @@ _Record code: "AB"_
 __Format:__
 
                   1            2         3         4         5
-      123 45 6789 01 234 5 6789012345678901234567890123456789012345678 
+      123 45 6789 01 234 5 6789012345678901234567890123456789012345678
      |---|--|----|--|---|-|-------------------------------------------|
-      ^   ^  ^    ^  ^   ^ ^                                           
+      ^   ^  ^    ^  ^   ^ ^
       |   |  |    |  |   | filler: 43 characters
       |   |  |    |  |   party code: 1 character
       |   |  |    |  division: 3 characters
@@ -742,7 +755,7 @@ absentee_total_text,58,14
 absentee_total,73,9
 ```
 
-###     Ballots Cast record:
+### Ballots Cast record:
 
 _Record code: "BC"_
 
@@ -751,10 +764,10 @@ _Record code: "BC"_
 
 __Format:__
 
-                  1            2         3         4         5  
+                  1            2         3         4         5
       123 45 6789 01 234 5 6789012345678901234567890123456789012
      |---|--|----|--|---|-|-------------------------------------|
-      ^   ^  ^    ^  ^   ^ ^                                    
+      ^   ^  ^    ^  ^   ^ ^
       |   |  |    |  |   | filler: 37 characters
       |   |  |    |  |   party code: 1 character
       |   |  |    |  division: 3 characters
@@ -794,7 +807,7 @@ ballots_cast,73,9
 percent_turnout,85,6
 ```
 
-###     Blank record:
+### Blank record:
 
 _Record code: "BK"_
 
@@ -820,7 +833,7 @@ __Example:__
 007BKCD  26
 ```
 
-###     End of File record:
+### End of File record:
 
 _Record code: "EF"_
 
