@@ -16,6 +16,8 @@ import zipfile
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
 # create your tests here
+
+
 class TestFileRetrival(TestCase):
     """
     a series of reusable methods we'll need for downloading and moving files
@@ -37,7 +39,6 @@ class TestFileRetrival(TestCase):
 
         self.sources = ResultSource.objects.all()
 
-
     def test_a_download_chain(self):
         """
         initiate a series of functions based on a list of data sources that will eventually be defined in the database
@@ -46,11 +47,8 @@ class TestFileRetrival(TestCase):
         for item in self.sources:
             self.list_of_expected_files = item.source_files.split(",")
             if item.source_active == True:
-
-                item.file_name = "%s_%s_%s_results%s" % (self.data_directory, self.date_string, item.source_short, item.source_type)
-
-                # item.file_name = "%s_%s_%s" % (self.data_directory, item.source_short, os.path.basename(item.source_url))
-
+                item.file_name = "%s_%s_%s_results%s" % (
+                    self.data_directory, self.date_string, item.source_short, item.source_type)
                 self.Test_successful_save_results(item)
                 self.Test_copy_timestamped_file_as_latest(item)
                 self.Test_create_directory_for_latest_file(item)
@@ -58,7 +56,6 @@ class TestFileRetrival(TestCase):
                 self.Test_archive_downloaded_file(item)
                 self.Test_found_required_files(item)
                 self.Test_unzip_latest_file(item)
-
 
     def Test_successful_save_results(self, item):
         """
@@ -127,17 +124,16 @@ class TestFileRetrival(TestCase):
             logger.error("Your file doesn't exist")
             raise Exception
 
-
     def Test_copy_timestamped_file_as_latest(self, item):
         """
         create timestamped version of a file deemed latest
         """
-        item.file_latest = "%s%s_latest%s" % (self.data_directory, item.source_short, item.source_type)
+        item.file_latest = "%s%s_latest%s" % (
+            self.data_directory, item.source_short, item.source_type)
         shutil.copyfile(item.file_name, item.file_latest)
         file_exists = os.path.isfile(item.file_latest)
         self.assertEquals(file_exists, True)
         logger.debug("Success!")
-
 
     def Test_create_directory_for_latest_file(self, item):
         """
@@ -150,7 +146,6 @@ class TestFileRetrival(TestCase):
         except OSError as exception:
             if exception.errno != errno.EEXIST:
                 raise
-
 
     def Test_move_latest_files_to_latest_directory(self, item):
         """
@@ -166,7 +161,6 @@ class TestFileRetrival(TestCase):
         self.assertEquals(file_exists, False)
         logger.debug("Success!")
 
-
     def Test_archive_downloaded_file(self, item):
         """
         move timestamped zipfile to archives
@@ -181,7 +175,6 @@ class TestFileRetrival(TestCase):
         file_exists = os.path.isfile(item.file_name)
         self.assertEquals(file_exists, False)
         logger.debug("Success!")
-
 
     def Test_found_required_files(self, item):
         """
@@ -201,12 +194,12 @@ class TestFileRetrival(TestCase):
         else:
             try:
                 for file in self.list_of_expected_files:
-                    self.assertEquals(file.strip(), os.path.basename(item.file_latest))
+                    self.assertEquals(
+                        file.strip(), os.path.basename(item.file_latest))
                     logger.debug("Success: %s exists" % (file.strip()))
             except Exception, exception:
                 logger.error(exception)
                 raise
-
 
     def Test_unzip_latest_file(self, item):
         """
@@ -214,7 +207,8 @@ class TestFileRetrival(TestCase):
         """
         if item.source_type == ".zip":
             working = "%s%s_latest" % (self.data_directory, item.source_short)
-            file_latest = os.path.join(working, os.path.basename(item.file_latest))
+            file_latest = os.path.join(
+                working, os.path.basename(item.file_latest))
             with zipfile.ZipFile(file_latest) as zip:
                 self.assertIsNone(zipfile.ZipFile.testzip(zip))
                 for file in self.list_of_expected_files:
