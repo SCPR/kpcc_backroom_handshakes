@@ -15,6 +15,7 @@ import zipfile
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
+
 class Retriever(object):
     """
     a series of reusable methods we'll need for downloading and moving files
@@ -22,8 +23,6 @@ class Retriever(object):
     if you change something in here you're gonna want to change something in the test_utils_files script as well
 
     """
-
-    list_of_expected_files = []
 
     def _successful_save_results(self, item):
         """
@@ -75,13 +74,13 @@ class Retriever(object):
             logger.error("Your file doesn't exist")
             raise Exception
 
-
     def _copy_timestamped_file_as_latest(self, item, data_directory):
         """
         create timestamped version of a file deemed latest
         """
         try:
-            item.file_latest = "%s%s_latest%s" % (data_directory, item.source_short, item.source_type)
+            item.file_latest = "%s%s_latest%s" % (
+                data_directory, item.source_short, item.source_type)
             shutil.copyfile(item.file_name, item.file_latest)
             file_exists = os.path.isfile(item.file_latest)
             if file_exists == True:
@@ -89,7 +88,6 @@ class Retriever(object):
         except Exception, exception:
             logger.error(exception)
             raise
-
 
     def _create_directory_for_latest_file(self, item, data_directory):
         """
@@ -103,7 +101,6 @@ class Retriever(object):
             if exception.errno != errno.EEXIST:
                 raise
 
-
     def _move_latest_files_to_latest_directory(self, item, data_directory):
         """
         move timestamped file to working directory as latest
@@ -116,7 +113,6 @@ class Retriever(object):
         working_exists = os.path.isfile(working)
         if latest_exists == True and working_exists == False:
             logger.debug("Success!")
-
 
     def _archive_downloaded_file(self, item, data_directory):
         """
@@ -133,7 +129,6 @@ class Retriever(object):
         if file_exists == False:
             logger.debug("Success!")
 
-
     def _found_required_files(self, item, data_directory):
         """
         compare files in a zipfile with a list of expected files
@@ -144,20 +139,25 @@ class Retriever(object):
             try:
                 with zipfile.ZipFile(latest) as zip:
                     files = zipfile.ZipFile.namelist(zip)
-                    for file in self.list_of_expected_files:
-                        self.assertEquals(file.strip() in set(files), True)
-                        logger.debug("Success: %s exists" % (file.strip()))
+                    for file in item.source_files.split(","):
+                        file = file.strip()
+                        if file in set(files):
+                            logger.debug("Success: %s exists" % (file))
+                        else:
+                            logger.error("Failure: %s does not exist" % (file))
             except Exception, exception:
                 logger.error(exception)
         else:
             try:
-                for file in self.list_of_expected_files:
-                    self.assertEquals(file.strip(), os.path.basename(item.file_latest))
-                    logger.debug("Success: %s exists" % (file.strip()))
+                for file in item.source_files.split(","):
+                    file = file.strip()
+                    if file == os.path.basename(item.file_latest):
+                        logger.debug("Success: %s exists" % (file))
+                    else:
+                        logger.error("Failure: %s does not exist" % (file))
             except Exception, exception:
                 logger.error(exception)
                 raise
-
 
     def _unzip_latest_file(self, item, data_directory):
         """
@@ -165,16 +165,21 @@ class Retriever(object):
         """
         if item.source_type == ".zip":
             working = "%s%s_latest" % (data_directory, item.source_short)
-            file_latest = os.path.join(working, os.path.basename(item.file_latest))
+            file_latest = os.path.join(
+                working, os.path.basename(item.file_latest))
             with zipfile.ZipFile(file_latest) as zip:
                 if zipfile.ZipFile.testzip(zip) == None:
-                    for file in self.list_of_expected_files:
+                    for file in item.source_files.split(","):
                         file = file.strip()
                         zip.extract(file, working)
-                        file_exists = os.path.isfile(os.path.join(working, file))
+                        file_exists = os.path.isfile(
+                            os.path.join(working, file))
                         if file_exists == True:
-                            logger.debug("Success!")
+                            logger.debug("Success: %s exists" % (file))
+                        else:
+                            logger.error("Failure: %s does not exist" % (file))
                 os.remove(file_latest)
                 file_exists = os.path.isfile(file_latest)
                 if file_exists == False:
-                    logger.debug("Success!")
+                    logger.debug("%s successfully removed" %
+                                 (os.path.basename(item.file_latest)))
