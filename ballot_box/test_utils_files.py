@@ -31,8 +31,6 @@ class TestFileRetrival(TestCase):
         """
         self.data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
-        self.list_of_expected_files = []
-
         self.date_object = datetime.datetime.now()
 
         self.date_string = self.date_object.strftime("%Y_%m_%d_%H_%M_%S")
@@ -45,7 +43,6 @@ class TestFileRetrival(TestCase):
         """
         logger.debug("running file download tests")
         for item in self.sources:
-            self.list_of_expected_files = item.source_files.split(",")
             if item.source_active == True:
                 item.file_name = "%s_%s_%s_results%s" % (
                     self.data_directory, self.date_string, item.source_short, item.source_type)
@@ -186,17 +183,18 @@ class TestFileRetrival(TestCase):
             try:
                 with zipfile.ZipFile(latest) as zip:
                     files = zipfile.ZipFile.namelist(zip)
-                    for file in self.list_of_expected_files:
-                        self.assertEquals(file.strip() in set(files), True)
-                        logger.debug("Success: %s exists" % (file.strip()))
+                    for file in item.source_files.split(","):
+                        file = file.strip()
+                        self.assertEquals(file in set(files), True)
+                        logger.debug("Success: %s exists" % (file))
             except Exception, exception:
                 logger.error(exception)
         else:
             try:
-                for file in self.list_of_expected_files:
-                    self.assertEquals(
-                        file.strip(), os.path.basename(item.file_latest))
-                    logger.debug("Success: %s exists" % (file.strip()))
+                for file in item.source_files.split(","):
+                    file = file.strip()
+                    self.assertEquals(file, os.path.basename(item.file_latest))
+                    logger.debug("Success: %s exists" % (file))
             except Exception, exception:
                 logger.error(exception)
                 raise
@@ -211,7 +209,7 @@ class TestFileRetrival(TestCase):
                 working, os.path.basename(item.file_latest))
             with zipfile.ZipFile(file_latest) as zip:
                 self.assertIsNone(zipfile.ZipFile.testzip(zip))
-                for file in self.list_of_expected_files:
+                for file in item.source_files.split(","):
                     file = file.strip()
                     zip.extract(file, working)
                     file_exists = os.path.isfile(os.path.join(working, file))
@@ -219,4 +217,5 @@ class TestFileRetrival(TestCase):
             os.remove(file_latest)
             file_exists = os.path.isfile(file_latest)
             self.assertEquals(file_exists, False)
-            logger.debug("Success!")
+            logger.debug("%s successfully removed" %
+                         (os.path.basename(item.file_latest)))
