@@ -35,7 +35,7 @@ class BuildSosResults(object):
         item = self.src[0]
         item.file_name = "%s_%s_%s_results%s" % (
             self.data_directory, self.date_string, item.source_short, item.source_type)
-        # self.get_results_file(item, self.data_directory)
+        self.get_results_file(item, self.data_directory)
         self.parse_results_file(item, self.data_directory)
 
     def get_results_file(self, item, data_directory):
