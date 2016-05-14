@@ -13,8 +13,8 @@ Let's share a little bit about this project...
 Data Sources
 ============
 
-* California Secretary of State Election Night Data-Feed Information
-* Los Angeles County Election Night Data-Feed Information
+* [California Secretary of State Election Night Data-Feed Information](calif_secretary_of_state)
+* [Los Angeles County Election Night Data-Feed Information](la_county)
 
 Modeling The Data
 =================
