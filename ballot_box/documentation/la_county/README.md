@@ -11,10 +11,10 @@ Los Angeles County Election Night Data-Feed Information
 Contact
 -------
 
-Brenda Duran, PIO
-562-462-2726 or 562-462-2648
-BDuran@rrcc.lacounty.gov
-mediainfo@rrcc.lacounty.gov
+Brenda Duran, PIO    
+562-462-2726 or 562-462-2648    
+BDuran@rrcc.lacounty.gov    
+mediainfo@rrcc.lacounty.gov    
 
 Raw data results page
 ---------------------
