@@ -29,7 +29,6 @@ class TestFileRetrival(TestCase):
         """
         setup some variables for our tests
         """
-        self.data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
         self.date_object = datetime.datetime.now()
 
@@ -42,19 +41,21 @@ class TestFileRetrival(TestCase):
         initiate a series of functions based on a list of data sources that will eventually be defined in the database
         """
         logger.debug("running file download tests")
-        for item in self.sources:
-            if item.source_active == True:
-                item.file_name = "%s_%s_%s_results%s" % (
-                    self.data_directory, self.date_string, item.source_short, item.source_type)
-                self.Test_successful_save_results(item)
-                self.Test_copy_timestamped_file_as_latest(item)
-                self.Test_create_directory_for_latest_file(item)
-                self.Test_move_latest_files_to_latest_directory(item)
-                self.Test_archive_downloaded_file(item)
-                self.Test_found_required_files(item)
-                self.Test_unzip_latest_file(item)
 
-    def Test_successful_save_results(self, item):
+        data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
+
+        for src in self.sources:
+            if src.source_active == True:
+                self.Test_request_results_and_save(src, data_directory)
+                self.Test_create_directory_for_latest_file(src, data_directory)
+                self.Test_copy_timestamped_file_to_latest(src, data_directory)
+                self.Test_archive_downloaded_file(src, data_directory)
+                self.Test_found_required_files(src, data_directory)
+                self.Test_unzip_latest_file(src, data_directory)
+            else:
+                pass
+
+    def Test_request_results_and_save(self, src, data_directory):
         """
         can i take the response from url can and write it to a timestamped version of the a file that should work no matter the file. it's  based on the file_ext specified in a config dict
         """
@@ -80,7 +81,7 @@ class TestFileRetrival(TestCase):
         )
         session.mount("http://", HTTPAdapter(max_retries=retries))
         response = session.get(
-            item.source_url,
+            src.source_url,
             headers=settings.REQUEST_HEADERS,
             timeout=10,
             allow_redirects=False
@@ -91,131 +92,130 @@ class TestFileRetrival(TestCase):
             self.assertIsNotNone(response.content)
         except requests.exceptions.ConnectionError as exception:
             # incorrect domain
-            logger.error("%s: %s" % (exception, item.source_url))
+            logger.error("%s: %s" % (exception, src.source_url))
             raise
         except requests.exceptions.Timeout as exception:
             # maybe set up for a retry, or continue in a retry loop
-            logger.error("%s: %s" % (exception, item.source_url))
+            logger.error("%s: %s" % (exception, src.source_url))
             raise
         except requests.exceptions.TooManyRedirects as exception:
             # tell the user their url was bad and try a different one
-            logger.error("%s: %s" % (exception, item.source_url))
+            logger.error("%s: %s" % (exception, src.source_url))
             raise
         except requests.exceptions.RequestException as exception:
             # catastrophic error and bail
-            logger.error("%s: %s" % (exception, item.source_url))
+            logger.error("%s: %s" % (exception, src.source_url))
             sys.exit(1)
-        with open(item.file_name, "wb") as output:
+        this_file = os.path.basename(src.source_url)
+        this_file = "_%s_%s_%s" % (
+            self.date_string, src.source_short, this_file)
+        self.file_name = os.path.join(data_directory, this_file)
+        with open(self.file_name, "wb") as output:
             output.write(response.content)
-        file_exists = os.path.isfile(item.file_name)
-        file_has_size = os.path.getsize(item.file_name)
+        file_exists = os.path.isfile(self.file_name)
+        file_has_size = os.path.getsize(self.file_name)
         self.assertEquals(file_exists, True)
         if file_exists == True:
+            logger.debug("Success! %s exists" % (self.file_name))
             self.assertTrue(file_has_size > 0)
             if file_has_size > 0:
-                logger.debug("Success!")
+                logger.debug("Success! %s is valid" % (self.file_name))
             else:
-                logger.error("Your file has zero data")
+                logger.debug("Failure! %s isn't valid" % (self.file_name))
                 raise Exception
         else:
-            logger.error("Your file doesn't exist")
+            logger.debug("Failure! %s doesn't exist" % (self.file_name))
             raise Exception
 
-    def Test_copy_timestamped_file_as_latest(self, item):
-        """
-        create timestamped version of a file deemed latest
-        """
-        item.file_latest = "%s%s_latest%s" % (
-            self.data_directory, item.source_short, item.source_type)
-        shutil.copyfile(item.file_name, item.file_latest)
-        file_exists = os.path.isfile(item.file_latest)
-        self.assertEquals(file_exists, True)
-        logger.debug("Success!")
-
-    def Test_create_directory_for_latest_file(self, item):
+    def Test_create_directory_for_latest_file(self, src, data_directory):
         """
         move latest files to a working directory
         """
-        working = "%s%s_latest" % (self.data_directory, item.source_short)
+        latest_directory = "%s%s_latest" % (data_directory, src.source_short)
         try:
-            os.makedirs(working)
+            os.makedirs(latest_directory)
             logger.debug("Success!")
         except OSError as exception:
             if exception.errno != errno.EEXIST:
                 raise
 
-    def Test_move_latest_files_to_latest_directory(self, item):
+    def Test_copy_timestamped_file_to_latest(self, src, data_directory):
         """
-        move timestamped file to working directory as latest
+        create timestamped version of a file deemed latest
         """
-        working = "%s%s_latest" % (self.data_directory, item.source_short)
-        latest = os.path.join(working, os.path.basename(item.file_latest))
-        shutil.copy(item.file_latest, working)
-        os.remove(item.file_latest)
-        file_exists = os.path.isfile(latest)
-        self.assertEquals(file_exists, True)
-        file_exists = os.path.isfile(working)
-        self.assertEquals(file_exists, False)
-        logger.debug("Success!")
+        latest_directory = "%s%s_latest" % (data_directory, src.source_short)
+        this_file = "%s%s" % (src.source_slug, src.source_type)
+        latest_path = os.path.join(latest_directory, this_file)
+        try:
+            shutil.copyfile(self.file_name, latest_path)
+            file_exists = os.path.isfile(latest_path)
+            self.assertEquals(file_exists, True)
+            logger.debug("Success! %s exists" % (self.file_name))
+        except Exception, exception:
+            logger.error(exception)
+            raise
 
-    def Test_archive_downloaded_file(self, item):
+    def Test_archive_downloaded_file(self, src, data_directory):
         """
         move timestamped zipfile to archives
         """
-        archives = "%s_archived_files" % (self.data_directory)
+        archives = "%s_archived_files" % (data_directory)
         try:
             os.makedirs(archives)
         except OSError as exception:
             if exception.errno != errno.EEXIST:
                 raise
-        shutil.move(item.file_name, archives)
-        file_exists = os.path.isfile(item.file_name)
+        shutil.move(self.file_name, archives)
+        file_exists = os.path.isfile(self.file_name)
         self.assertEquals(file_exists, False)
-        logger.debug("Success!")
+        logger.debug("Success! %s exists" % (self.file_name))
 
-    def Test_found_required_files(self, item):
+    def Test_found_required_files(self, src, data_directory):
         """
         compare files in a zipfile with a list of expected files
         """
-        working = "%s%s_latest" % (self.data_directory, item.source_short)
-        latest = os.path.join(working, os.path.basename(item.file_latest))
-        if item.source_type == ".zip":
+        latest_directory = "%s%s_latest" % (data_directory, src.source_short)
+        this_file = "%s%s" % (src.source_slug, src.source_type)
+        latest_path = os.path.join(latest_directory, this_file)
+        if src.source_type == ".zip":
             try:
-                with zipfile.ZipFile(latest) as zip:
+                with zipfile.ZipFile(latest_path) as zip:
                     files = zipfile.ZipFile.namelist(zip)
-                    for file in item.source_files.split(","):
-                        file = file.strip()
+                    for file in src.source_files.split(", "):
                         self.assertEquals(file in set(files), True)
                         logger.debug("Success: %s exists" % (file))
             except Exception, exception:
                 logger.error(exception)
         else:
             try:
-                for file in item.source_files.split(","):
-                    file = file.strip()
-                    self.assertEquals(file, os.path.basename(item.file_latest))
+                for file in src.source_files.split(", "):
+                    self.assertEquals(file, os.path.basename(latest_path))
                     logger.debug("Success: %s exists" % (file))
             except Exception, exception:
                 logger.error(exception)
                 raise
 
-    def Test_unzip_latest_file(self, item):
+    def Test_unzip_latest_file(self, src, data_directory):
         """
-        if the item is a zipfile can I extract the files?
+        if the src is a zipfile can I extract the files?
         """
-        if item.source_type == ".zip":
-            working = "%s%s_latest" % (self.data_directory, item.source_short)
-            file_latest = os.path.join(
-                working, os.path.basename(item.file_latest))
-            with zipfile.ZipFile(file_latest) as zip:
+        if src.source_type == ".zip":
+            latest_directory = "%s%s_latest" % (
+                data_directory, src.source_short)
+            this_file = "%s%s" % (src.source_slug, src.source_type)
+            latest_path = os.path.join(latest_directory, this_file)
+            with zipfile.ZipFile(latest_path) as zip:
                 self.assertIsNone(zipfile.ZipFile.testzip(zip))
-                for file in item.source_files.split(","):
-                    file = file.strip()
-                    zip.extract(file, working)
-                    file_exists = os.path.isfile(os.path.join(working, file))
+                for file in src.source_files.split(", "):
+                    zip.extract(file,             latest_directory)
+                    file_exists = os.path.isfile(
+                        os.path.join(latest_directory, file))
                     self.assertEquals(file_exists, True)
-            os.remove(file_latest)
-            file_exists = os.path.isfile(file_latest)
+                    logger.debug("Success: %s exists" % (file))
+            os.remove(latest_path)
+            file_exists = os.path.isfile(latest_path)
             self.assertEquals(file_exists, False)
             logger.debug("%s successfully removed" %
-                         (os.path.basename(item.file_latest)))
+                         (os.path.basename(latest_path)))
+        else:
+            pass
