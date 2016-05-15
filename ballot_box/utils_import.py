@@ -4,12 +4,14 @@
 from __future__ import division
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.timezone import localtime
 from ballot_box.models import *
 import logging
 import time
 import datetime
 import os.path
 import shutil
+import pytz
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
@@ -126,3 +128,30 @@ class Saver(object):
             logger.debug("%s exists" % (candidate["candidateid"]))
         else:
             logger.debug("%s created" % (candidate["candidateid"]))
+
+    def _eval_timestamps(self, file_time, database_time):
+        """
+        """
+        fttz = localtime(file_time).tzinfo
+        dbtz = localtime(database_time).tzinfo
+        if fttz == None and dbtz == None:
+            raise Exception
+        elif fttz == None:
+            raise Exception
+        elif dbtz == None:
+            raise Exception
+        else:
+            if fttz._tzname == "PDT":
+                if file_time > database_time:
+                    return True
+                else:
+                    return False
+            else:
+                raise Exception
+
+    def _update_result_timestamps(self, src, file_timestamp):
+        """
+        """
+        obj = ResultSource.objects.get(source_slug=src.source_slug)
+        obj.source_latest = file_timestamp
+        obj.save(update_fields=["source_latest"])
