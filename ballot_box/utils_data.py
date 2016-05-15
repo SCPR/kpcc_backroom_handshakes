@@ -10,6 +10,7 @@ import time
 import datetime
 import shutil
 import re
+from delorean import Delorean
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
@@ -39,6 +40,7 @@ class Framer(object):
         self.contest["is_ballot_measure"] = None
         self.contest["is_judicial"] = None
         self.contest["is_runoff"] = None
+        self.contest["reporttype"] = None
         self.contest["precinctstotal"] = None
         self.contest["precinctsreporting"] = None
         self.contest["precinctsreportingpct"] = None
@@ -148,8 +150,6 @@ class Framer(object):
     def _find_nth(self, haystack, needle, n):
         start = haystack.find(needle)
         while start >= 0 and n > 1:
-            start = haystack.find(needle, start+1)
+            start = haystack.find(needle, start + 1)
             n -= 1
         return start
-
-
