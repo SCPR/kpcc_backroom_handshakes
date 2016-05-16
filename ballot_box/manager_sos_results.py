@@ -88,7 +88,7 @@ class BuildSosResults(object):
                         this is a judicial candidate
                         """
                         this_type = "judicial"
-                        contestname = unicode(race.ContestName.contents[0])
+                        contestname = unicode(" ".join(race.ContestName.stripped_strings))
                         officename_idx = frame._find_nth(contestname, " - ", 1)
                         officename = unicode(contestname[:officename_idx])
                         fullname_idx = frame._find_nth(
@@ -174,7 +174,7 @@ class BuildSosResults(object):
                         this is a judicial candidate
                         """
                         this_type = "judicial"
-                        contestname = unicode(race.ContestName.contents[0])
+                        contestname = unicode(" ".join(race.ContestName.stripped_strings))
                         officename_idx = frame._find_nth(contestname, " - ", 2)
                         officename = unicode(
                             contestname[:officename_idx].replace(" - ", " "))
@@ -261,7 +261,7 @@ class BuildSosResults(object):
                         this is a measure
                         """
                         this_type = "measure"
-                        contestname = unicode(race.ContestName.contents[0])
+                        contestname = unicode(" ".join(race.ContestName.stripped_strings))
                         officename = frame._concat(
                             "Measure",
                             contestname,
@@ -347,12 +347,7 @@ class BuildSosResults(object):
                         this is a non-judicial candidate
                         """
                         this_type = "candidate"
-                        contestname = unicode(race.ContestName.contents[0])
-
-                        # need to strip out the <br/> tag gere I think...
-
-                        logger.debug(contestname)
-
+                        contestname = unicode(" ".join(race.ContestName.stripped_strings))
                         officename_idx = frame._find_nth(contestname, " - ", 1)
                         officename = unicode(contestname[:officename_idx])
                         level_idx = frame._find_nth(contestname, " - ", 1) + 3
