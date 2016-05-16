@@ -1,16 +1,26 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from django.test import TestCase
 from django.conf import settings
+import os.path
+import errno
 import logging
 import time
 import datetime
+import shutil
+import re
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
 # create your tests here
+
+
 class TestDataManipulation(TestCase):
     """
     a series of reusable methods we'll need for manipulating election results
     """
+
     def setUp(self):
         self.list_of_potential_ints = [
             "This Could",
@@ -47,8 +57,14 @@ class TestDataManipulation(TestCase):
             {"nonstring": "none"}
         ]
 
+        self.list_of_unicode_strings = [
+            u"Kathryn Mickle Werdegar",
+            u"Goodwin Liu",
+            u"Mariano-Florentino Cuéllar",
+            u"Christopher Lawrence Keller",
+        ]
 
-    def test_can_convert_str_to_num(self):
+    def test_can_str_to_num(self):
         """
         given a value can it be converted to an int
         http://stackoverflow.com/a/16464365
@@ -100,3 +116,11 @@ class TestDataManipulation(TestCase):
             self.assertEqual(status.has_key("convert"), True)
             self.assertEqual(status.has_key("value"), True)
         logger.debug("Success!")
+
+    def test_can_create_slug(self):
+        logger.debug("given an unicode string it can be slugged")
+        for uni in self.list_of_unicode_strings:
+            self.assertIsInstance(uni, unicode)
+            value = uni.lower().strip().replace(" ", "-")
+            number_of_spaces = value.count(" ")
+            self.assertEqual(number_of_spaces, 0)
