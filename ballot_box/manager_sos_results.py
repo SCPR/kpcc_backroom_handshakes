@@ -434,7 +434,7 @@ class BuildSosResults(object):
                             saver.make_candidate(
                                 frame.contest, frame.candidate)
                 os.remove(latest_path)
-
+                logger.info("@chrislkeller we've finished processing sos results")
 
 if __name__ == '__main__':
     task_run = BuildSosResults()
