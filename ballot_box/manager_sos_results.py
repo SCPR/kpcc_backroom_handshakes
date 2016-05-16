@@ -73,11 +73,11 @@ class BuildSosResults(object):
             update_this = saver._eval_timestamps(
                 file_timestamp, src.source_latest)
             if update_this == False:
-                logger.debug(
-                    "we have newer data in the database so let's delete these files")
+                logger.info(
+                    "@chrislkeller we have newer data in the database so let's delete these files")
                 os.remove(latest_path)
             else:
-                logger.debug("Updating timestamps in the database")
+                logger.info("@chrislkeller we're updating timestamps in the database")
                 saver._update_result_timestamps(src, file_timestamp)
                 races = soup.find_all("Contest")
                 for race in races:
