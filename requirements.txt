@@ -1,7 +1,9 @@
+Babel==2.3.4
 beautifulsoup4==4.4.1
 boto==2.40.0
 csvkit==0.9.1
 dbf==0.94.3
+Delorean==0.6.0
 Django==1.9
 django-admin-bootstrapped==2.5.7
 django-bakery==0.8.2
@@ -10,6 +12,7 @@ django-mass-edit==2.6
 django-tastypie==0.13.3
 ecdsa==0.13
 Fabric==1.11.1
+humanize==0.5.1
 jdcal==1.2
 latimes-calculate==0.3.1
 lxml==3.6.0
@@ -28,4 +31,5 @@ six==1.10.0
 SQLAlchemy==1.0.12
 sqlparse==0.1.19
 twitter==1.15.0
+tzlocal==1.2.2
 xlrd==0.9.4

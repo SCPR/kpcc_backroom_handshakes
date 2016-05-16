@@ -1,5 +1,25 @@
+Ballot Box
+==========
+
+* [About](#about)
+* [Modeling The Data](#modeling-the-data)
+* [Data Sources](#data-sources)
+
+About
+======
+
+Let's share a little bit about this project...
+
+Data Sources
+============
+
+* [California Secretary of State Election Night Data-Feed Information](calif_secretary_of_state)
+* [Los Angeles County Election Night Data-Feed Information](la_county)
+
 Modeling The Data
 =================
+
+Xxxxxxxxx xxx xxxxx
 
 Election
 ---------
@@ -20,16 +40,10 @@ Describes the macro unit of data for a single election
     - Example: 2016-06-08 03:00:00.000000
 * **national**: Is this a National Election?
     - Example: True/False
-* ~~parsed_json~~
-* ~~next_request~~
-* ~~datafile~~
-* ~~results_level~~
 * **created**: Date and time a record was created
     - Example: 2016-06-08 03:00:00.000000
 * **modified**: Date and time a record was modified
     - Example: 2016-06-08 03:00:00.000000
-
-----
 
 ResultSource
 -------------
@@ -50,14 +64,12 @@ Describes a source of election results data
     - Example: True/False
 * **source_type**: Ext of file or type of source
     - Example: .zip
-* **source_files**: Results Files We Want
-    - Example: When applicable, comma-separated list of the target files
+* **source_files**: When applicable, comma-separated list of the target files
+    - Example: "X14GG510v7.xml"
 * **source_created**: Date and time a record was created
     - Example: 2016-06-08 03:00:00.000000
 * **source_modified**: Date and time a record was modified
     - Example: 2016-06-08 03:00:00.000000
-
-----
 
 Contest
 -------
@@ -68,23 +80,21 @@ Describes the contests that make up an election ballot
     - Example: primary-2016-06-07
 * **resultsource**: ForeignKey to a ResultSource
     - Example: secretary-of-state
-* **contesttype**: Level of race
-    - Example: statewide, congressional district, city council district,
-
-* **contestid**: Created from type of race & the electionid
-    - Example: congressional-primary-2016-06-07
-* **officeid**:
-    - Example: us_house_dist_8
-
+* **office**: ForeignKey to an Office
+    - Example: Attorney General
+* **contestid**: election id, data source, office name & seat number
+    - Example: primary-2016-06-07-sos-statewide-attorney-general-0000
 * **contestname**:
     - Example: U.S. House of Representatives District 8
 * **seatnum**: Number of district or seat up for grabs
     - Example: 8
-* **uncontested**: Is this an uncontested race?
+* **contestdescription**: Provides space for user-facing description
+    - Example: Currently None
+* **is_uncontested**: Is this an uncontested race?
     - Example: True/False
-* **national**: Is this a National Race?
+* **is_national**: Is this a National Race?
     - Example: True/False
-* **statewide**: Is this a Statewide Race?
+* **is_statewide**: Is this a Statewide Race?
     - Example: True/False
 * **is_ballot_measure**: Is this a ballot measure, proposition or initiative?
     - Example: True/False
@@ -92,8 +102,16 @@ Describes the contests that make up an election ballot
     - Example: True/False
 * **is_runoff**: Is this a runoff race?
     - Example: True/False
-* ~~**candidates**:~~
-* ~~**reportingunits**:~~
+* **precinctstotal**: Total Number Of Precincts
+    - Example: 5800
+* **precinctsreporting**: Number Of Precincts Reporting Votes
+    - Example: 500
+* **precinctsreportingpct**: Percent Of Precincts Reporting
+    - Example: 0.0862
+* **votersregistered**: Number of Registered Voters
+    - Example: 100
+* **votersturnout**: Percent Voters Who Cast Ballots
+    - Example: 0.43
 * **created**: Date and time a record was created
     - Example: 2016-06-08 03:00:00.000000
 * **modified**: Date and time a record was modified
@@ -105,59 +123,78 @@ Candidate
 ---------
 
 * **contest**: ForeignKey to an Contest
-* **candidateid**:
-* **ballotorder**:
-* **first**:
-* **last**:
-* **party**:
-* **incumbent**:
-* **votecount**:
-* **votepct**:
+* **candidateid**: candidate name, election id, data source, office name & seat number
+- Example: kamala-d-harris-primary-2016-06-07-sos-statewide-attorney-general-0000
+* **ballotorder**: Numerical Position On The Ballot
+    - Example: Currently None
+* **first**: Candidate's First Name
+    - Example: Kamala
+* **last**: Candidate's Last Name
+    - Example: Harris
+* **fullname**: Candidate's Full Name
+    - Example: Kamala Harris
+* **party**: Candidate's Political Party
+    - Example: Democrat
+* **incumbent**: Is Candidate An Incumbent?
+    - Example: True/False
+* **votecount**: Votes Received
+    - Example: 100
+* **votepct**: Percent Of Total Votes
+    - Example:  0.43
 * **created**: Date and time a record was created
     - Example: 2016-06-08 03:00:00.000000
 * **modified**: Date and time a record was modified
     - Example: 2016-06-08 03:00:00.000000
-
-----
 
 BallotMeasure
 -------------
 
 * **contest**: ForeignKey to an Contest
+    - Example: Criminal Sentences, Misdemeanor Penalties
 * **measureid**:
-* **ballotorder**:
-* **description**:
-* **yescount**:
-* **yespct**:
-* **nocount**:
-* **nopct**:
+    - Example: criminal-sentences,-misdemeanor-penalties-primary-2016-06-07-sos-california-measure-criminal-sentences,-misdemeanor-penalties-0047
+* **ballotorder**: Numerical Position On The Ballot
+    - Example: Currently None
+* **fullname**: Name of Ballot Measure
+    - Example: Criminal Sentences, Misdemeanor Penalties
+* **description**: Provides space for user-facing description of ballot measure
+    - Example: Currently None
+* **yescount**: Number Of Yes Votes Received
+    - Example: 118
+* **yespct**: Percent Of Yes Votes Received
+    - Example: 0.7375
+* **nocount**: Number Of Yes Votes Received
+    - Example: 42
+* **nopct**: Percent Of Yes Votes Received
+    - Example: 0.2625
 * **created**: Date and time a record was created
     - Example: 2016-06-08 03:00:00.000000
 * **modified**: Date and time a record was modified
     - Example: 2016-06-08 03:00:00.000000
 
-----
-
-ReportingUnit
+JudicialCandidate
 -------------
 
-* **election**: ForeignKey to an Election
-    - Example: primary-2016-06-07
-* **contest**: ForeignKey to a Contest
-    - Example: primary-2016-06-07
-* **reportingunitid**:
-* **reportingunitname**:
-* **delegatecount**:
-* **winner**:
-* **fipscode**:
-* **precinctstotal**:
-* **precinctsreporting**:
-* **precinctsreportingpct**:
-* **votersregistered**:
-* **votersturnout**:
-* **statepostal**:
-* **statename**:
-* **description**:
+* **contest**: ForeignKey to an Contest
+    - Example: Supreme Court Justice
+* **judgeid**: fullname, contestid
+    - Example: goodwin-liu-primary-2016-06-07-sos-california-supreme-court-justice-0002
+* **ballotorder**: Numerical Position On The Ballot
+    - Example: Currently None
+* **first**: Candidate's First Name
+    - Example: Kamala
+* **last**: Candidate's Last Name
+    - Example: Harris
+* **fullname**: Candidate's Full Name
+    - Example: Kamala Kamala
+* **yescount**: Number Of Yes Votes Received
+    - Example: 118
+* **yespct**: Percent Of Yes Votes Received
+    - Example: 0.7375
+* **nocount**: Number Of Yes Votes Received
+    - Example: 42
+* **nopct**: Percent Of Yes Votes Received
+    - Example: 0.2625
 * **created**: Date and time a record was created
     - Example: 2016-06-08 03:00:00.000000
 * **modified**: Date and time a record was modified

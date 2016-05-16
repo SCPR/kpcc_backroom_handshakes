@@ -184,6 +184,8 @@ class LacProcessMethods(object):
         race_package = []
         for r in range(0, len(race)):
             record_type = race[r][3:5]
+
+            # https://stackoverflow.com/questions/3951840/python-how-to-invoke-an-function-on-an-object-dynamically-by-name
             if record_type == 'ET':
                 parser = ET_parser()
                 record = parser.parse_line(race[r])
