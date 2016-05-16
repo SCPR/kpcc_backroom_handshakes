@@ -106,51 +106,6 @@ INSTALLED_APPS = (
     "django.contrib.admindocs",
 )
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-
-LOGGING = {
-    "version": 1,
-
-    "disable_existing_loggers": True,
-
-    "formatters": {
-        "verbose": {
-            "format" : "\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s",
-            "datefmt" : "%d/%b/%Y %H:%M:%S"
-        },
-        "simple": {
-            "format": "\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s"
-        },
-    },
-
-    "handlers": {
-        "console": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "simple"
-        },
-
-        #"file": {
-            #"level": "DEBUG",
-            #"class": "logging.FileHandler",
-            #"filename": "mysite.log",
-            #"formatter": "verbose"
-        #},
-    },
-
-    "loggers": {
-        "kpcc_backroom_handshakes": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-            "propagate": False,
-        },
-    }
-}
-
 # TEST_RUNNER = "django.test.simple.DjangoTestSuiteRunner"
 
 AUTH_PROFILE_MODULE = "create_user.UserProfile"
