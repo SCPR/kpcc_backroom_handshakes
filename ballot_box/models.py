@@ -119,6 +119,8 @@ class Contest(models.Model):
     is_ballot_measure = models.BooleanField("Is A Measure?", default=False)
     is_judicial = models.BooleanField("Is Judicial Contest?", default=False)
     is_runoff = models.BooleanField("Is A Runoff Contest?", default=False)
+    is_display_priority = models.BooleanField("Display this race?", default=False)
+    is_homepage_priority = models.BooleanField("Display race on homepage?", default=False)
     reporttype = models.CharField(
         "Status of Results", max_length=255, null=True, blank=True)
     precinctstotal = models.IntegerField(

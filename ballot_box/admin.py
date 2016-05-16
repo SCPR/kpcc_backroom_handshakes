@@ -90,17 +90,26 @@ class ContestAdmin(admin.ModelAdmin):
 
     list_display = (
         "contestname",
+        "is_display_priority",
+        "is_homepage_priority",
         "get_candidate_count",
         "precinctsreporting",
         "votersturnout",
         "resultsource",
     )
 
-    list_filter = ("contestname",)
+    list_filter = (
+        "contestname",
+        "is_display_priority",
+        "is_homepage_priority"
+    )
 
     search_fields = ("contestname",)
 
-    ordering = ("contestname",)
+    ordering = (
+        "contestname",
+        "is_display_priority",
+    )
 
     save_on_top = True
 
