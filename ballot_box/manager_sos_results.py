@@ -348,6 +348,9 @@ class BuildSosResults(object):
                         """
                         this_type = "candidate"
                         contestname = unicode(race.ContestName.contents[0])
+
+                        # need to strip out the <br/> tag gere I think...
+
                         logger.debug(contestname)
 
                         officename_idx = frame._find_nth(contestname, " - ", 1)
