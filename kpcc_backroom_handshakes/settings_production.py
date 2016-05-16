@@ -34,6 +34,9 @@ TWITTER_ACCESS_TOKEN_SECRET  = CONFIG["api"]["twitter"]["access_token_secret"]
 LOCAL_TWITTER_TIMEZONE = pytz.timezone("US/Pacific")
 TWITTER_TIMEZONE = timezone("UTC")
 
+SLACK_TOKEN = CONFIG["api"]["slack"]["token"]
+SLACK_API_KEY = CONFIG["api"]["slack"]["api_key"]
+
 # maplight api key
 MAP_LIGHT_API_KEY = CONFIG["api"]["maplight"]["api_key"]
 
@@ -60,9 +63,9 @@ if "email" in CONFIG:
     EMAIL_PORT = CONFIG["email"]["port"]
     EMAIL_USE_TLS = CONFIG["email"]["use_tls"]
 
-#CACHE_MIDDLEWARE_ALIAS = 'default'
+#CACHE_MIDDLEWARE_ALIAS = "default"
 #CACHE_MIDDLEWARE_SECONDS = (60 * 5)
-#CACHE_MIDDLEWARE_KEY_PREFIX = ''
+#CACHE_MIDDLEWARE_KEY_PREFIX = ""
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -107,8 +110,8 @@ else:
 #     }
 
 #     CACHES = {
-#         'default': {
-#             'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+#         "default": {
+#             "BACKEND": "django.core.cache.backends.dummy.DummyCache",
 #         }
 #     }
 
@@ -168,3 +171,89 @@ STATICFILES_DIRS = (
 #     BUILD_DIR = CONFIG["build"]["build_dir"]
 #     BAKERY_VIEWS = tuple(CONFIG["build"]["views"])
 #     URL_PATH = ""
+
+
+# A sample logging configuration. The only tangible logging
+# performed by this configuration is to send an email to
+# the site admins on every HTTP 500 error when DEBUG=False.
+# See http://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
+
+LOGGING = {
+    "version": 1,
+
+    "disable_existing_loggers": True,
+
+    "filters": {
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse"
+        }
+    },
+
+    "formatters": {
+        "verbose": {
+            "format" : "\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s",
+            "datefmt" : "%d/%b/%Y %H:%M:%S"
+        },
+        "simple": {
+            "format": "\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s"
+        },
+    },
+
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "simple"
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler"
+        },
+        "slack-error": {
+            "level": "ERROR",
+            "api_key": SLACK_API_KEY,
+            "username": "ElexLogger",
+            "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
+            "class": "slacker_log_handler.SlackerLogHandler",
+            "channel": "#logging-2016-election"
+        },
+        "slack-debug": {
+            "level": "DEBUG",
+            "username": "ElexLogger",
+            "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
+            "api_key": SLACK_API_KEY,
+            "class": "slacker_log_handler.SlackerLogHandler",
+            "channel": "#logging-2016-election"
+        },
+        "slack-info": {
+            "level": "INFO",
+            "username": "ElexLogger",
+            "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
+            "api_key": SLACK_API_KEY,
+            "class": "slacker_log_handler.SlackerLogHandler",
+            "channel": "#logging-2016-election"
+        },
+        #"file": {
+            #"level": "DEBUG",
+            #"class": "logging.FileHandler",
+            #"filename": "mysite.log",
+            #"formatter": "verbose"
+        #},
+    },
+
+    "loggers": {
+        "kpcc_backroom_handshakes": {
+            "handlers": [
+                "console",
+                "mail_admins",
+                "slack-error",
+                #"slack-debug",
+                "slack-info"
+            ],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    }
+}
