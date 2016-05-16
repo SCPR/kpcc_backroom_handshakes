@@ -28,6 +28,8 @@ PyYAML==3.11
 redis==2.10.5
 requests==2.9.1
 six==1.10.0
+slacker==0.9.9
+slacker-log-handler==1.2.0
 SQLAlchemy==1.0.12
 sqlparse==0.1.19
 twitter==1.15.0
