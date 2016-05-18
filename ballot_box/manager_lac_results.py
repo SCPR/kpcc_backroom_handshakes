@@ -136,8 +136,8 @@ class BuildLacResults(object):
             file_timestamp = localtime(file_timestamp)
             update_this = saver._eval_timestamps(
                 file_timestamp, src.source_latest)
-            if update_this == False:
-                """ switch back to 'false' after import function works """
+            if update_this == True:
+                """ switch back to 'false' after update_this works and you have a live data source """
                 logger.debug(
                     "We have newer data in the database so let's delete these files.")
                 # os.remove(latest_path)
