@@ -1,6 +1,7 @@
 from __future__ import division
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.timezone import localtime
 from ballot_box.utils_files import Retriever
 from ballot_box.utils_data import Framer
 from ballot_box.utils_import import Saver
@@ -77,7 +78,7 @@ class BuildSosResults(object):
                     "@chrislkeller we have newer data in the database so let's delete these files")
                 os.remove(latest_path)
             else:
-                logger.info("@chrislkeller we're updating timestamps in the database")
+                logger.info("@chrislkeller we have new data to save and we'll update timestamps in the database")
                 saver._update_result_timestamps(src, file_timestamp)
                 races = soup.find_all("Contest")
                 for race in races:
@@ -291,7 +292,7 @@ class BuildSosResults(object):
                         frame.contest["is_national"] = False
                         frame.contest["is_statewide"] = True
                         frame.contest["level"] = "california"
-                        frame.contest["is_ballot_measure"] = False
+                        frame.contest["is_ballot_measure"] = True
                         frame.contest["is_judicial"] = True
                         frame.contest["is_runoff"] = False
                         frame.contest["reporttype"] = reporttype
