@@ -68,7 +68,7 @@ class CandidateAdmin(admin.ModelAdmin):
         # "precincts_reporting_pct",
     )
 
-    list_filter = ("fullname",)
+    list_filter = ("contest",)
 
     search_fields = ("fullname",)
 
