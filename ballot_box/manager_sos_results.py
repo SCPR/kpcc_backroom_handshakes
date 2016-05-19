@@ -96,18 +96,18 @@ class BuildSosResults(object):
                             contestname, " - ", 1) + 3
                         fullname = unicode(contestname[fullname_idx:])
                         level = None
-                        seatnum = unicode(
+                        seatnum = frame._to_num(
                             race.ContestIdentifier.attrs["IdNumber"][-4:])
                         precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
                         precinctsreport = r.find(
                             attrs={"Id": "PR"}).contents[0]
                         reporttype = r.find(attrs={"Id": "RT"}).contents[0]
-                        yescount = r.find_all("Selection")[
-                            0].ValidVotes.contents[0]
-                        yespct = r.find(attrs={"Id": "PYV"}).contents[0]
-                        nocount = r.find_all("Selection")[
-                            1].ValidVotes.contents[0]
-                        nopct = r.find(attrs={"Id": "PNV"}).contents[0]
+                        yescount = frame._to_num(r.find_all("Selection")[
+                            0].ValidVotes.contents[0])
+                        yespct = frame._to_num(r.find(attrs={"Id": "PYV"}).contents[0])
+                        nocount = frame._to_num(r.find_all("Selection")[
+                            1].ValidVotes.contents[0])
+                        nopct = frame._to_num(r.find(attrs={"Id": "PNV"}).contents[0])
                         frame.office["officename"] = officename
                         frame.office["officeslug"] = frame._slug(officename)
                         frame.office["active"] = True
@@ -183,18 +183,17 @@ class BuildSosResults(object):
                             contestname, " - ", 2) + 3
                         fullname = unicode(contestname[fullname_idx:])
                         level = None
-                        seatnum = unicode(
-                            race.ContestIdentifier.attrs["IdNumber"][-4:])
+                        seatnum = frame._to_num(race.ContestIdentifier.attrs["IdNumber"][-4:])
                         precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
                         precinctsreport = r.find(
                             attrs={"Id": "PR"}).contents[0]
                         reporttype = r.find(attrs={"Id": "RT"}).contents[0]
-                        yescount = r.find_all("Selection")[
-                            0].ValidVotes.contents[0]
-                        yespct = r.find(attrs={"Id": "PYV"}).contents[0]
-                        nocount = r.find_all("Selection")[
-                            1].ValidVotes.contents[0]
-                        nopct = r.find(attrs={"Id": "PNV"}).contents[0]
+                        yescount = frame._to_num(r.find_all("Selection")[
+                            0].ValidVotes.contents[0])
+                        yespct = frame._to_num(r.find(attrs={"Id": "PYV"}).contents[0])
+                        nocount = frame._to_num(r.find_all("Selection")[
+                            1].ValidVotes.contents[0])
+                        nopct = frame._to_num(r.find(attrs={"Id": "PNV"}).contents[0])
                         frame.office["officename"] = officename
                         frame.office["officeslug"] = frame._slug(officename)
                         frame.office["active"] = True
@@ -270,18 +269,17 @@ class BuildSosResults(object):
                         )
                         fullname = unicode(race.ContestName.contents[0])
                         level = None
-                        seatnum = unicode(
-                            race.ContestIdentifier.attrs["IdNumber"][-4:])
+                        seatnum = frame._to_num(race.ContestIdentifier.attrs["IdNumber"][-4:])
                         precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
                         precinctsreport = r.find(
                             attrs={"Id": "PR"}).contents[0]
                         reporttype = r.find(attrs={"Id": "RT"}).contents[0]
-                        yescount = r.find_all("Selection")[
-                            0].ValidVotes.contents[0]
-                        yespct = r.find(attrs={"Id": "PYV"}).contents[0]
-                        nocount = r.find_all("Selection")[
-                            1].ValidVotes.contents[0]
-                        nopct = r.find(attrs={"Id": "PNV"}).contents[0]
+                        yescount = frame._to_num(r.find_all("Selection")[
+                            0].ValidVotes.contents[0])
+                        yespct = frame._to_num(r.find(attrs={"Id": "PYV"}).contents[0])
+                        nocount = frame._to_num(r.find_all("Selection")[
+                            1].ValidVotes.contents[0])
+                        nopct = frame._to_num(r.find(attrs={"Id": "PNV"}).contents[0])
                         frame.office["officename"] = officename
                         frame.office["officeslug"] = frame._slug(officename)
                         frame.office["active"] = True
@@ -354,8 +352,7 @@ class BuildSosResults(object):
                         level_idx = frame._find_nth(contestname, " - ", 1) + 3
                         level = unicode(contestname[level_idx:].replace(
                             " Results", "").lower())
-                        seatnum = unicode(
-                            race.ContestIdentifier.attrs["IdNumber"][-4:])
+                        seatnum = frame._to_num(race.ContestIdentifier.attrs["IdNumber"][-4:])
                         precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
                         precinctsreport = r.find(
                             attrs={"Id": "PR"}).contents[0]
@@ -413,8 +410,8 @@ class BuildSosResults(object):
                                 candidate.AffiliationIdentifier.RegisteredName.contents[0])
                             if party == "Democratic":
                                 party = "Democrat"
-                            votecount = candidate.ValidVotes.contents[0]
-                            votepct = candidate.CountMetric.contents[0]
+                            votecount = frame._to_num(candidate.ValidVotes.contents[0])
+                            votepct = frame._to_num(candidate.CountMetric.contents[0])
                             frame.candidate["ballotorder"] = None
                             frame.candidate["firstname"] = None
                             frame.candidate["lastname"] = None
@@ -424,9 +421,9 @@ class BuildSosResults(object):
                             frame.candidate["party"] = party
                             frame.candidate["incumbent"] = False
                             frame.candidate[
-                                "votecount"] = candidate.ValidVotes.contents[0]
+                                "votecount"] = votecount
                             frame.candidate[
-                                "votepct"] = candidate.CountMetric.contents[0]
+                                "votepct"] = votepct
                             frame.candidate["candidateid"] = frame._concat(
                                 frame.candidate["candidateslug"],
                                 frame.contest["contestid"],
