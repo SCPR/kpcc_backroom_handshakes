@@ -23,23 +23,23 @@ class Saver(object):
     def make_office(self, office):
         """
         """
-        obj, created = Office.objects.get_or_create(
+        obj, created = Office.objects.update_or_create(
             slug=office["officeslug"],
             defaults={
                 "name": office["officename"],
                 "active": office["active"]
             }
         )
-        if not created:
-            logger.debug("%s exists" % (office["officeslug"]))
-        else:
+        if created:
             logger.debug("%s created" % (office["officeslug"]))
+        else:
+            logger.debug("%s exists but we updated figures" % (office["officeslug"]))
 
     def make_contest(self, office, contest):
         """
         """
         this_office = Office.objects.get(name=office["officename"])
-        obj, created = this_office.contest_set.get_or_create(
+        obj, created = this_office.contest_set.update_or_create(
             election_id=contest["election_id"],
             resultsource_id=contest["resultsource_id"],
             contestid=contest["contestid"],
@@ -59,16 +59,16 @@ class Saver(object):
                 "votersturnout": contest["votersturnout"],
             }
         )
-        if not created:
-            logger.debug("%s exists" % (contest["contestid"]))
-        else:
+        if created:
             logger.debug("%s created" % (contest["contestid"]))
+        else:
+            logger.debug("%s exists but we updated figures" % (contest["contestid"]))
 
     def make_judicial(self, contest, judicial):
         """
         """
         this_contest = Contest.objects.get(contestid=contest["contestid"])
-        obj, created = this_contest.judicialcandidate_set.get_or_create(
+        obj, created = this_contest.judicialcandidate_set.update_or_create(
             judgeid=judicial["judgeid"],
             defaults={
                 "ballotorder": judicial["ballotorder"],
@@ -81,16 +81,16 @@ class Saver(object):
                 "nopct": judicial["nopct"],
             }
         )
-        if not created:
-            logger.debug("%s exists" % (judicial["judgeid"]))
-        else:
+        if created:
             logger.debug("%s created" % (judicial["judgeid"]))
+        else:
+            logger.debug("%s exists but we updated figures" % (judicial["judgeid"]))
 
     def make_measure(self, contest, measure):
         """
         """
         this_contest = Contest.objects.get(contestid=contest["contestid"])
-        obj, created = this_contest.ballotmeasure_set.get_or_create(
+        obj, created = this_contest.ballotmeasure_set.update_or_create(
             measureid=measure["measureid"],
             defaults={
                 "ballotorder": measure["ballotorder"],
@@ -102,16 +102,17 @@ class Saver(object):
                 "nopct": measure["nopct"],
             }
         )
-        if not created:
-            logger.debug("%s exists" % (measure["measureid"]))
-        else:
+        if created:
             logger.debug("%s created" % (measure["measureid"]))
+        else:
+            logger.debug("%s exists but we updated figures" %
+                         (measure["measureid"]))
 
     def make_candidate(self, contest, candidate):
         """
         """
         this_contest = Contest.objects.get(contestid=contest["contestid"])
-        obj, created = this_contest.candidate_set.get_or_create(
+        obj, created = this_contest.candidate_set.update_or_create(
             candidateid=candidate["candidateid"],
             defaults={
                 "ballotorder": candidate["ballotorder"],
@@ -124,10 +125,11 @@ class Saver(object):
                 "votepct": candidate["votepct"],
             }
         )
-        if not created:
-            logger.debug("%s exists" % (candidate["candidateid"]))
-        else:
+        if created:
             logger.debug("%s created" % (candidate["candidateid"]))
+        else:
+            logger.debug("%s exists but we updated figures" %
+                         (candidate["candidateid"]))
 
     def _eval_timestamps(self, file_time, database_time):
         """
