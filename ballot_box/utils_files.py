@@ -87,12 +87,13 @@ class Retriever(object):
 
     def _create_directory_for_latest_file(self, src, data_directory):
         """
-        move latest files to a latest directory
+        move latest files to a working directory
         """
         latest_directory = "%s%s_latest" % (data_directory, src.source_short)
         dir_exists = os.path.isdir(latest_directory)
-        if dir_exists == False:
-            logger.info("Skipping because %s already exists" % (latest_directory))
+        if dir_exists == True:
+            logger.info("Skipping because %s already exists" %
+                        (latest_directory))
         else:
             try:
                 os.makedirs(latest_directory)
