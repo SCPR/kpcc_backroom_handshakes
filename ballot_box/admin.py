@@ -16,7 +16,7 @@ class BallotMeasureAdmin(admin.ModelAdmin):
     def get_source(self, obj):
         return obj.contest.resultsource
     get_source.short_description = "Data Source"
-    get_source.admin_order_field = 'candidate__contest'
+    get_source.admin_order_field = "contest__resultsource"
 
     def precincts_reporting_pct(self, obj):
         return obj.contest.precinctsreportingpct
@@ -45,12 +45,12 @@ class CandidateAdmin(admin.ModelAdmin):
     def get_source(self, obj):
         return obj.contest.resultsource
     get_source.short_description = "Data Source"
-    get_source.admin_order_field = "candidate__contest"
+    get_source.admin_order_field = "contest__resultsource"
 
     def precincts_reporting_pct(self, obj):
         return obj.contest.precinctsreportingpct
     precincts_reporting_pct.short_description = "Pct Precincts Reporting"
-    precincts_reporting_pct.admin_order_field = "candidate__contest"
+    precincts_reporting_pct.admin_order_field = "contest__candidate"
 
     list_display = (
         "fullname",
@@ -145,7 +145,7 @@ class JudicialCandidateAdmin(admin.ModelAdmin):
     def get_source(self, obj):
         return obj.contest.resultsource
     get_source.short_description = "Data Source"
-    get_source.admin_order_field = "judicialcandidate__contest"
+    get_source.admin_order_field = "contest__resultsource"
 
     def precincts_reporting_pct(self, obj):
         return obj.contest.precinctsreportingpct
