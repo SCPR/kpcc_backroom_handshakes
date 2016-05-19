@@ -147,9 +147,11 @@ class Retriever(object):
                     files = zipfile.ZipFile.namelist(zip)
                     for file in src.source_files.split(", "):
                         if file in set(files):
-                            logger.info("Success: %s exists in the zipfile" % (file))
+                            logger.info(
+                                "Success: %s exists in the zipfile" % (file))
                         else:
-                            logger.error("Failure: %s does not exist in the zipfile" % (file))
+                            logger.error(
+                                "Failure: %s does not exist in the zipfile" % (file))
             except Exception, exception:
                 logger.error(exception)
         else:
@@ -179,13 +181,15 @@ class Retriever(object):
                         file_exists = os.path.isfile(
                             os.path.join(latest_directory, file))
                         if file_exists == True:
-                            logger.info("Success: %s has been extracted from the zipfile" % (file))
+                            logger.info(
+                                "Success: %s has been extracted from the zipfile" % (file))
                         else:
-                            logger.error("Failure: %s has not been extracted from the zipfile" % (file))
+                            logger.error(
+                                "Failure: %s has not been extracted from the zipfile" % (file))
                 os.remove(latest_path)
                 file_exists = os.path.isfile(latest_path)
                 if file_exists == False:
                     logger.info("%s successfully processed" %
-                                 (os.path.basename(latest_path)))
+                                (os.path.basename(latest_path)))
         else:
             pass
