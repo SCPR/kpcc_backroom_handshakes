@@ -141,8 +141,10 @@ class Framer(object):
     def _calc_pct(self, dividend, divisor):
         """
         """
-        if dividend is not None and divisor is not None:
-            output = dividend / divisor
+        dividend = self._to_num(dividend)
+        divisor = self._to_num(divisor)
+        if dividend["change"] == True and divisor["change"] == True:
+            output = dividend["value"] / divisor["value"]
         else:
             output = False
         return output
