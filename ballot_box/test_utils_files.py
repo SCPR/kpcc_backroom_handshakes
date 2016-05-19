@@ -132,12 +132,16 @@ class TestFileRetrival(TestCase):
         move latest files to a working directory
         """
         latest_directory = "%s%s_latest" % (data_directory, src.source_short)
-        try:
-            os.makedirs(latest_directory)
-            logger.debug("Success!")
-        except OSError as exception:
-            if exception.errno != errno.EEXIST:
-                raise
+        dir_exists = os.path.isdir(latest_directory)
+        if dir_exists == True:
+            logger.info("Skipping because %s already exists" % (latest_directory))
+        else:
+            try:
+                os.makedirs(latest_directory)
+                logger.info("Success! We created %s" % (latest_directory))
+            except OSError as exception:
+                if exception.errno != errno.EEXIST:
+                    raise
 
     def Test_copy_timestamped_file_to_latest(self, src, data_directory):
         """
