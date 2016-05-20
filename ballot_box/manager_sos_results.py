@@ -96,18 +96,17 @@ class BuildSosResults(object):
                             contestname, " - ", 1) + 3
                         fullname = unicode(contestname[fullname_idx:])
                         level = None
-                        seatnum = frame._to_num(
-                            race.ContestIdentifier.attrs["IdNumber"][-4:])
+                        seatnum = None
                         precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
                         precinctsreport = r.find(
                             attrs={"Id": "PR"}).contents[0]
                         reporttype = r.find(attrs={"Id": "RT"}).contents[0]
                         yescount = frame._to_num(r.find_all("Selection")[
-                            0].ValidVotes.contents[0])
-                        yespct = frame._to_num(r.find(attrs={"Id": "PYV"}).contents[0])
+                            0].ValidVotes.contents[0])["value"]
+                        yespct = frame._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
                         nocount = frame._to_num(r.find_all("Selection")[
-                            1].ValidVotes.contents[0])
-                        nopct = frame._to_num(r.find(attrs={"Id": "PNV"}).contents[0])
+                            1].ValidVotes.contents[0])["value"]
+                        nopct = frame._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
                         frame.office["officename"] = officename
                         frame.office["officeslug"] = frame._slug(officename)
                         frame.office["active"] = True
@@ -121,14 +120,14 @@ class BuildSosResults(object):
                         frame.contest["is_ballot_measure"] = False
                         frame.contest["is_judicial"] = True
                         frame.contest["is_runoff"] = False
-                        frame.contest["reporttype"] = reporttype
-                        if frame._to_num(precinctstotal)["change"] == True:
+                        frame.contest["reporttype"] = None
+                        if frame._to_num(precinctstotal)["convert"] == True:
                             pt = frame._to_num(precinctstotal)["value"]
                             frame.contest["precinctstotal"] = pt
                         else:
                             frame.contest["precinctstotal"] = None
                             raise Exception("precinctstotal is not a number")
-                        if frame._to_num(precinctsreport)["change"] == True:
+                        if frame._to_num(precinctsreport)["convert"] == True:
                             pr = frame._to_num(precinctsreport)["value"]
                             frame.contest["precinctsreporting"] = pr
                         else:
@@ -139,8 +138,8 @@ class BuildSosResults(object):
                             frame.contest["precinctsreporting"],
                             frame.contest["precinctstotal"]
                         )
-                        frame.contest["votersregistered"] = None
-                        frame.contest["votersturnout"] = None
+                        frame.contest["votersregistered"] = frame._to_num(None)["value"]
+                        frame.contest["votersturnout"] = frame._to_num(None)["value"]
                         frame.contest["contestname"] = frame.office[
                             "officename"]
                         frame.contest["contestdescription"] = None
@@ -183,17 +182,17 @@ class BuildSosResults(object):
                             contestname, " - ", 2) + 3
                         fullname = unicode(contestname[fullname_idx:])
                         level = None
-                        seatnum = frame._to_num(race.ContestIdentifier.attrs["IdNumber"][-4:])
+                        seatnum = None
                         precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
                         precinctsreport = r.find(
                             attrs={"Id": "PR"}).contents[0]
                         reporttype = r.find(attrs={"Id": "RT"}).contents[0]
                         yescount = frame._to_num(r.find_all("Selection")[
-                            0].ValidVotes.contents[0])
-                        yespct = frame._to_num(r.find(attrs={"Id": "PYV"}).contents[0])
+                            0].ValidVotes.contents[0])["value"]
+                        yespct = frame._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
                         nocount = frame._to_num(r.find_all("Selection")[
-                            1].ValidVotes.contents[0])
-                        nopct = frame._to_num(r.find(attrs={"Id": "PNV"}).contents[0])
+                            1].ValidVotes.contents[0])["value"]
+                        nopct = frame._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
                         frame.office["officename"] = officename
                         frame.office["officeslug"] = frame._slug(officename)
                         frame.office["active"] = True
@@ -207,14 +206,14 @@ class BuildSosResults(object):
                         frame.contest["is_ballot_measure"] = False
                         frame.contest["is_judicial"] = True
                         frame.contest["is_runoff"] = False
-                        frame.contest["reporttype"] = reporttype
-                        if frame._to_num(precinctstotal)["change"] == True:
+                        frame.contest["reporttype"] = None
+                        if frame._to_num(precinctstotal)["convert"] == True:
                             pt = frame._to_num(precinctstotal)["value"]
                             frame.contest["precinctstotal"] = pt
                         else:
                             frame.contest["precinctstotal"] = None
                             raise Exception("precinctstotal is not a number")
-                        if frame._to_num(precinctsreport)["change"] == True:
+                        if frame._to_num(precinctsreport)["convert"] == True:
                             pr = frame._to_num(precinctsreport)["value"]
                             frame.contest["precinctsreporting"] = pr
                         else:
@@ -225,8 +224,8 @@ class BuildSosResults(object):
                             frame.contest["precinctsreporting"],
                             frame.contest["precinctstotal"]
                         )
-                        frame.contest["votersregistered"] = None
-                        frame.contest["votersturnout"] = None
+                        frame.contest["votersregistered"] = frame._to_num(None)["value"]
+                        frame.contest["votersturnout"] = frame._to_num(None)["value"]
                         frame.contest["contestname"] = frame.office[
                             "officename"]
                         frame.contest["contestdescription"] = None
@@ -269,17 +268,17 @@ class BuildSosResults(object):
                         )
                         fullname = unicode(race.ContestName.contents[0])
                         level = None
-                        seatnum = frame._to_num(race.ContestIdentifier.attrs["IdNumber"][-4:])
+                        seatnum = None
                         precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
                         precinctsreport = r.find(
                             attrs={"Id": "PR"}).contents[0]
                         reporttype = r.find(attrs={"Id": "RT"}).contents[0]
                         yescount = frame._to_num(r.find_all("Selection")[
-                            0].ValidVotes.contents[0])
-                        yespct = frame._to_num(r.find(attrs={"Id": "PYV"}).contents[0])
+                            0].ValidVotes.contents[0])["value"]
+                        yespct = frame._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
                         nocount = frame._to_num(r.find_all("Selection")[
-                            1].ValidVotes.contents[0])
-                        nopct = frame._to_num(r.find(attrs={"Id": "PNV"}).contents[0])
+                            1].ValidVotes.contents[0])["value"]
+                        nopct = frame._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
                         frame.office["officename"] = officename
                         frame.office["officeslug"] = frame._slug(officename)
                         frame.office["active"] = True
@@ -293,14 +292,14 @@ class BuildSosResults(object):
                         frame.contest["is_ballot_measure"] = True
                         frame.contest["is_judicial"] = True
                         frame.contest["is_runoff"] = False
-                        frame.contest["reporttype"] = reporttype
-                        if frame._to_num(precinctstotal)["change"] == True:
+                        frame.contest["reporttype"] = None
+                        if frame._to_num(precinctstotal)["convert"] == True:
                             pt = frame._to_num(precinctstotal)["value"]
                             frame.contest["precinctstotal"] = pt
                         else:
                             frame.contest["precinctstotal"] = None
                             raise Exception("precinctstotal is not a number")
-                        if frame._to_num(precinctsreport)["change"] == True:
+                        if frame._to_num(precinctsreport)["convert"] == True:
                             pr = frame._to_num(precinctsreport)["value"]
                             frame.contest["precinctsreporting"] = pr
                         else:
@@ -311,8 +310,8 @@ class BuildSosResults(object):
                             frame.contest["precinctsreporting"],
                             frame.contest["precinctstotal"]
                         )
-                        frame.contest["votersregistered"] = None
-                        frame.contest["votersturnout"] = None
+                        frame.contest["votersregistered"] = frame._to_num(None)["value"]
+                        frame.contest["votersturnout"] = frame._to_num(None)["value"]
                         frame.contest["contestname"] = frame.office[
                             "officename"]
                         frame.contest["contestdescription"] = None
@@ -340,7 +339,6 @@ class BuildSosResults(object):
                         saver.make_office(frame.office)
                         saver.make_contest(frame.office, frame.contest)
                         saver.make_measure(frame.contest, frame.measure)
-
                     else:
                         """
                         this is a non-judicial candidate
@@ -352,7 +350,7 @@ class BuildSosResults(object):
                         level_idx = frame._find_nth(contestname, " - ", 1) + 3
                         level = unicode(contestname[level_idx:].replace(
                             " Results", "").lower())
-                        seatnum = frame._to_num(race.ContestIdentifier.attrs["IdNumber"][-4:])
+                        seatnum = None
                         precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
                         precinctsreport = r.find(
                             attrs={"Id": "PR"}).contents[0]
@@ -370,14 +368,15 @@ class BuildSosResults(object):
                         frame.contest["is_ballot_measure"] = False
                         frame.contest["is_judicial"] = True
                         frame.contest["is_runoff"] = False
-                        frame.contest["reporttype"] = reporttype
-                        if frame._to_num(precinctstotal)["change"] == True:
+                        frame.contest["reporttype"] = None
+                        if frame._to_num(precinctstotal)["convert"] == True:
                             pt = frame._to_num(precinctstotal)["value"]
                             frame.contest["precinctstotal"] = pt
                         else:
                             frame.contest["precinctstotal"] = None
                             raise Exception("precinctstotal is not a number")
-                        if frame._to_num(precinctsreport)["change"] == True:
+
+                        if frame._to_num(precinctsreport)["convert"] == True:
                             pr = frame._to_num(precinctsreport)["value"]
                             frame.contest["precinctsreporting"] = pr
                         else:
@@ -388,8 +387,8 @@ class BuildSosResults(object):
                             frame.contest["precinctsreporting"],
                             frame.contest["precinctstotal"]
                         )
-                        frame.contest["votersregistered"] = None
-                        frame.contest["votersturnout"] = None
+                        frame.contest["votersregistered"] = frame._to_num(None)["value"]
+                        frame.contest["votersturnout"] = frame._to_num(None)["value"]
                         frame.contest["contestname"] = frame.office[
                             "officename"]
                         frame.contest["contestdescription"] = None
@@ -410,8 +409,8 @@ class BuildSosResults(object):
                                 candidate.AffiliationIdentifier.RegisteredName.contents[0])
                             if party == "Democratic":
                                 party = "Democrat"
-                            votecount = frame._to_num(candidate.ValidVotes.contents[0])
-                            votepct = frame._to_num(candidate.CountMetric.contents[0])
+                            votecount = frame._to_num(candidate.ValidVotes.contents[0])["value"]
+                            votepct = frame._to_num(candidate.CountMetric.contents[0])["value"]
                             frame.candidate["ballotorder"] = None
                             frame.candidate["firstname"] = None
                             frame.candidate["lastname"] = None
