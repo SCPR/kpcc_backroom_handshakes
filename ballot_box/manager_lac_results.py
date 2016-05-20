@@ -17,12 +17,13 @@ import re
 from bs4 import BeautifulSoup
 from delorean import parse
 
-
 logger = logging.getLogger("kpcc_backroom_handshakes")
-#print dir(logger)
+
 
 class BuildLacResults(object):
-    """Scaffolding to ingest LA County registrar election results."""
+    """
+    scaffolding to ingest la county registrar election results
+    """
 
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
@@ -78,7 +79,8 @@ class BuildLacResults(object):
 
         race_ids = process.get_race_ids_from(rows)
 
-        election_package = process.collate_and_fetch_records_for_race(race_ids, rows)
+        election_package = process.collate_and_fetch_records_for_race(
+            race_ids, rows)
 
         races = election_package[0]
 
@@ -103,7 +105,7 @@ class BuildLacResults(object):
             file_timestamp = localtime(file_timestamp)
             update_this = saver._eval_timestamps(
                 file_timestamp, src.source_latest)
-            update_this = True # delete after update_this works and you have a live data source
+            update_this = True  # delete after update_this works and you have a live data source
             if update_this == False:
                 logger.debug(
                     "We have newer data in the database so let's delete these files.")
@@ -128,10 +130,11 @@ class BuildLacResults(object):
                         pass
                     else:
                         contest = process.compile_contest_results(records)
-                        process.update_database(contest,election,src)
+                        process.update_database(contest, election, src)
 
         else:
-            logger.debug('No file timestamp was found. Unable to determine whether this data is newer than what we already have.')
+            logger.debug(
+                'No file timestamp was found. Unable to determine whether this data is newer than what we already have.')
 
 
 class LacProcessMethods(object):
@@ -170,7 +173,7 @@ class LacProcessMethods(object):
 
     def collate_and_fetch_records_for_race(self, race_ids, rows):
         races = {}
-        election_info = {"title":[], "stats":[]}
+        election_info = {"title": [], "stats": []}
         title_rid = None
         stats_rid = None
         for row in rows:
@@ -356,12 +359,14 @@ class LacProcessMethods(object):
             elif record['record_type'] == 'AB':
                 election_info['absentee_total_text'] = record[
                     'absentee_total_text']
-                election_info['absentee_total'] = record['absentee_total'].replace(',','')
+                election_info['absentee_total'] = record[
+                    'absentee_total'].replace(',', '')
 
             elif record['record_type'] == 'BC':
                 election_info['vote_by_mail_ballots'] = record[
-                    'vote_by_mail_ballots'].replace(',','')
-                election_info['ballots_cast'] = record['ballots_cast'].replace(',','')
+                    'vote_by_mail_ballots'].replace(',', '')
+                election_info['ballots_cast'] = record[
+                    'ballots_cast'].replace(',', '')
                 election_info['percent_turnout'] = record['percent_turnout']
 
             elif record['record_type'] == 'PR':
@@ -371,11 +376,11 @@ class LacProcessMethods(object):
                     election_info['total_precinct_text'] = record[
                         'total_precinct_text']
                     election_info['total_precincts'] = record[
-                        'total_precincts'].replace(',','')
+                        'total_precincts'].replace(',', '')
                     election_info['precincts_reporting_text'] = record[
                         'precincts_reporting_text']
                     election_info['precincts_reporting'] = record[
-                        'precincts_reporting'].replace(',','')
+                        'precincts_reporting'].replace(',', '')
                     election_info['percent_precincts_reporting'] = record[
                         'percent_precincts_reporting']
 
@@ -440,7 +445,7 @@ class LacProcessMethods(object):
                 candidate[
                     'candidate_name'] = record['candidate_name']
                 candidate['party_short'] = record['party_short']
-                candidate['votes'] = record['votes'].replace(',','')
+                candidate['votes'] = record['votes'].replace(',', '')
                 candidate['percent_of_vote'] = record[
                     'percent_of_vote']
                 candidates.append(candidate)
@@ -454,9 +459,9 @@ class LacProcessMethods(object):
                 measure['measure_id'] = record['measure_id']
                 measure['measure_text'] = record[
                     'measure_text'].replace('- YES', '').strip()
-                measure['yes_votes'] = record['yes_votes'].replace(',','')
+                measure['yes_votes'] = record['yes_votes'].replace(',', '')
                 measure['yes_percent'] = record['yes_percent']
-                measure['no_votes'] = record['no_votes'].replace(',','')
+                measure['no_votes'] = record['no_votes'].replace(',', '')
                 measure['no_percent'] = record['no_percent']
                 measures.append(measure)
 
@@ -469,9 +474,11 @@ class LacProcessMethods(object):
                 judge_candidate['judicial_text'] = record['judicial_text']
                 judge_candidate['judicial_name'] = record['judicial_name']
                 judge_candidate['voting_rule'] = record['voting_rule']
-                judge_candidate['yes_votes'] = record['yes_votes'].replace(',','')
-                judge_candidate['yes_percent'] = record['no_percent']
-                judge_candidate['no_votes'] = record['no_votes'].replace(',','')
+                judge_candidate['yes_votes'] = record[
+                    'yes_votes'].replace(',', '')
+                judge_candidate['yes_percent'] = record['yes_percent']
+                judge_candidate['no_votes'] = record[
+                    'no_votes'].replace(',', '')
                 judge_candidate['no_percent'] = record['no_percent']
                 judge_candidates.append(judge_candidate)
 
@@ -479,16 +486,17 @@ class LacProcessMethods(object):
                 contest['total_precinct_text'] = record[
                     'total_precinct_text']
                 contest['total_precincts'] = record[
-                    'total_precincts'].replace(',','')
+                    'total_precincts'].replace(',', '')
                 contest['precincts_reporting_text'] = record[
                     'precincts_reporting_text']
                 contest['precincts_reporting'] = record[
-                    'precincts_reporting'].replace(',','')
+                    'precincts_reporting'].replace(',', '')
                 contest['percent_precincts_reporting'] = record[
                     'percent_precincts_reporting']
 
             elif record['record_type'] == 'DR':
-                contest['registration'] = record['registration'].replace(',','')
+                contest['registration'] = record[
+                    'registration'].replace(',', '')
 
             elif record['record_type'] == 'VF':
                 contest['vote_for_text'] = record['vote_for_text']
@@ -510,7 +518,8 @@ class LacProcessMethods(object):
 
         if contest['is_judicial_contest']:
             """ This is a judicial appointee """
-            contestname = (contest['contest_title'] + ' ' + contest['contest_title_cont']).title()
+            contestname = (contest['contest_title'] +
+                           ' ' + contest['contest_title_cont']).title()
             officename = contestname
             frame.office["officename"] = officename
             frame.office["officeslug"] = frame._slug(officename)
@@ -544,7 +553,8 @@ class LacProcessMethods(object):
                 frame.contest["precinctstotal"]
             )
             if frame._to_num(contest['registration'])["convert"] == True:
-                frame.contest["votersregistered"] = frame._to_num(contest['registration'])["value"]
+                frame.contest["votersregistered"] = frame._to_num(
+                    contest['registration'])["value"]
             else:
                 frame.contest["votersregistered"] = None
                 raise Exception(
@@ -606,7 +616,8 @@ class LacProcessMethods(object):
             """ This is a ballot measure """
             contestname = (contest['contest_title']).title()
             if contest['contest_title_cont']:
-                fullname = (contest['contest_title_cont']).replace("MEASURE","Measure")
+                fullname = (contest['contest_title_cont']
+                            ).replace("MEASURE", "Measure")
             else:
                 fullname = (contest['contest_title']).title()
                 contestname = (contest['contest_title']).title()
@@ -647,7 +658,8 @@ class LacProcessMethods(object):
                 frame.contest["precinctstotal"]
             )
             if frame._to_num(contest['registration'])["convert"] == True:
-                frame.contest["votersregistered"] = frame._to_num(contest['registration'])["value"]
+                frame.contest["votersregistered"] = frame._to_num(
+                    contest['registration'])["value"]
             else:
                 frame.contest["votersregistered"] = None
                 raise Exception(
@@ -704,19 +716,26 @@ class LacProcessMethods(object):
         else:
             """ This is a candidate for elected office """
             if contest['contest_title'] == "MEMBER OF THE ASSEMBLY":
-                contestname = "State Assembly Member District " + contest['district'].lstrip("0")
+                contestname = "State Assembly Member District " + \
+                    contest['district'].lstrip("0")
             elif "SUPERVISOR" in contest['contest_title']:
-                contestname = "Supervisor District " + contest['district'].lstrip("0")
+                contestname = "Supervisor District " + \
+                    contest['district'].lstrip("0")
             elif "U.S. REPRESENTATIVE" in contest['contest_title']:
-                contestname = "U.S. House of Representatives District " + contest['district'].lstrip("0")
+                contestname = "U.S. House of Representatives District " + \
+                    contest['district'].lstrip("0")
             elif "DELEGATES" in contest['contest_title']:
-                contestname = "Presidential Primary Delegates - CD" + contest['district'].lstrip("0")
+                contestname = "Presidential Primary Delegates - CD" + \
+                    contest['district'].lstrip("0")
             elif "STATE SENATOR" in contest['contest_title']:
-                contestname = "State Senate District " + contest['district'].lstrip("0")
+                contestname = "State Senate District " + \
+                    contest['district'].lstrip("0")
             elif "PARTY COUNTY COMMITTEE" in contest['contest_title']:
-                contestname = contest['party_name'].capitalize() + ' Party County Committee District ' + contest['district'].lstrip("0")
+                contestname = contest['party_name'].capitalize(
+                ) + ' Party County Committee District ' + contest['district'].lstrip("0")
             else:
-                contestname = contest['contest_title'].title() + ' ' + contest['contest_title_cont'].title()
+                contestname = contest['contest_title'].title(
+                ) + ' ' + contest['contest_title_cont'].title()
             officename = contestname
             if "U.S." in contest['contest_title'] or "STATE" in contest['contest_title']:
                 level = "california"
@@ -767,7 +786,8 @@ class LacProcessMethods(object):
                 frame.contest["precinctstotal"]
             )
             if frame._to_num(contest['registration'])["convert"] == True:
-                frame.contest["votersregistered"] = frame._to_num(contest['registration'])["value"]
+                frame.contest["votersregistered"] = frame._to_num(
+                    contest['registration'])["value"]
             else:
                 frame.contest["votersregistered"] = None
                 raise Exception(
@@ -776,7 +796,8 @@ class LacProcessMethods(object):
             frame.contest["contestname"] = frame.office[
                 "officename"]
             try:
-                frame.contest["contestdescription"] = contest['vote_for_text'].capitalize() + ' ' + contest['vote_for_number']
+                frame.contest["contestdescription"] = contest[
+                    'vote_for_text'].capitalize() + ' ' + contest['vote_for_number']
             except:
                 frame.contest["contestdescription"] = None
             frame.contest["contestid"] = frame._concat(
@@ -806,13 +827,15 @@ class LacProcessMethods(object):
                 frame.candidate["party"] = party
                 frame.candidate["incumbent"] = False
                 if frame._to_num(candidate['votes'])["convert"] == True:
-                    frame.candidate["votecount"] = frame._to_num(candidate['votes'])["value"]
+                    frame.candidate["votecount"] = frame._to_num(candidate['votes'])[
+                        "value"]
                 else:
                     frame.candidate["votecount"] = None
                     raise Exception(
                         "votecount is not a number")
                 if frame._to_num(candidate['percent_of_vote'])["convert"] == True:
-                    frame.candidate["votepct"] = frame._to_num(candidate['percent_of_vote'])["value"]
+                    frame.candidate["votepct"] = frame._to_num(
+                        candidate['percent_of_vote'])["value"]
                 else:
                     frame.candidate["votepct"] = None
                     raise Exception(

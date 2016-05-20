@@ -267,9 +267,9 @@ class JudicialCandidate(models.Model):
     yespct = models.FloatField(
         "Percent Of Yes Votes Received", null=True, blank=True)
     nocount = models.IntegerField(
-        "Number Of Yes Votes Received", null=True, blank=True)
+        "Number Of No Votes Received", null=True, blank=True)
     nopct = models.FloatField(
-        "Percent Of Yes Votes Received", null=True, blank=True)
+        "Percent Of No Votes Received", null=True, blank=True)
     poss_error = models.BooleanField("Possible Error", default=False)
     created = models.DateTimeField("Date Created", auto_now_add=True)
     modified = models.DateTimeField("Date Modified", auto_now=True)
