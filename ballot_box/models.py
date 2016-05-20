@@ -1,9 +1,18 @@
+from __future__ import division
 from __future__ import unicode_literals
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.db.models import Sum
 from kpcc_backroom_handshakes.custom_fields import ListField
+from ballot_box.utils_data import Framer
+
 import logging
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
+
+framer = Framer()
+
 
 class Election(models.Model):
     """
@@ -36,10 +45,6 @@ class Election(models.Model):
         "Time the Polls Close", null=True, blank=True)
     national = models.BooleanField(
         "Is this a National Election?", default=False)
-    # parsed_json
-    # next_request
-    # datafile
-    # results_level
     created = models.DateTimeField("Date Created", auto_now_add=True)
     modified = models.DateTimeField("Date Modified", auto_now=True)
 
@@ -47,9 +52,10 @@ class Election(models.Model):
         return self.electionid
 
     def save(self, *args, **kwargs):
-        # if not self.electionid:
-        #     self.election_date_str = self.election_date.strftime("%Y-%m-%d")
-        #     self.electionid = "%s-%s" % (self.type.lower(), self.election_date_str)
+        # if self.pk is None and not self.electionid:
+            # create self.electionid
+        # elif not self.electionid:
+            # create self.electionid
         super(Election, self).save(*args, **kwargs)
 
 
@@ -63,14 +69,22 @@ class ResultSource(models.Model):
     source_short = models.CharField("Shortname Of Data Source", max_length=5)
     source_slug = models.SlugField(
         "Slugged Data Soure", db_index=True, unique=True, max_length=255, null=True, blank=True)
-    source_url = models.URLField("Url To Data Source", max_length=1024, null=True, blank=True)
+    source_url = models.URLField(
+        "Url To Data Source", max_length=1024, null=True, blank=True)
     source_active = models.BooleanField("Active Data Source?", default=False)
     source_type = models.CharField(
         "Ext Of File Or Type Of Source", max_length=255, null=False, blank=False)
     source_files = ListField("Results Files We Want", null=True, blank=True)
-    source_latest = models.DateTimeField("Latest Results From", null=True, blank=True)
+    source_latest = models.DateTimeField(
+        "Latest Results From", null=True, blank=True)
     source_created = models.DateTimeField("Date Created", auto_now_add=True)
     source_modified = models.DateTimeField("Date Modified", auto_now=True)
+
+    # parsed_json
+    # next_request
+    # datafile
+    # results_level
+
 
     def __unicode__(self):
         return self.source_name
@@ -88,6 +102,7 @@ class Office(models.Model):
     slug = models.SlugField("Slug Of The Office",
                             unique=True, max_length=255, null=True, blank=True)
     active = models.BooleanField("Is This Office Active?", default=False)
+    poss_error = models.BooleanField("Possible Error", default=False)
     created = models.DateTimeField("Date Created", auto_now_add=True)
     modified = models.DateTimeField("Date Modified", auto_now=True)
 
@@ -119,8 +134,10 @@ class Contest(models.Model):
     is_ballot_measure = models.BooleanField("Is A Measure?", default=False)
     is_judicial = models.BooleanField("Is Judicial Contest?", default=False)
     is_runoff = models.BooleanField("Is A Runoff Contest?", default=False)
-    is_display_priority = models.BooleanField("Interested In This Race?", default=False)
-    is_homepage_priority = models.BooleanField("Feature This Race?", default=False)
+    is_display_priority = models.BooleanField(
+        "Interested In This Race?", default=False)
+    is_homepage_priority = models.BooleanField(
+        "Feature This Race?", default=False)
     reporttype = models.CharField(
         "Status of Results", max_length=255, null=True, blank=True)
     precinctstotal = models.IntegerField(
@@ -129,10 +146,11 @@ class Contest(models.Model):
         "Number Of Precincts Reporting Votes", null=True, blank=True)
     precinctsreportingpct = models.FloatField(
         "Percent Of Precincts Reporting", null=True, blank=True)
-    votersregistered = models.FloatField(
-        "Number of Registered Voters", null=True, blank=True)
+    votersregistered = models.IntegerField(
+        "Number of Registered Voters", null=True, blank=True, default=0)
     votersturnout = models.FloatField(
         "Percent Voters Who Cast Ballots", null=True, blank=True)
+    poss_error = models.BooleanField("Possible Error", default=False)
     created = models.DateTimeField("Date Created", auto_now_add=True)
     modified = models.DateTimeField("Date Modified", auto_now=True)
 
@@ -141,9 +159,9 @@ class Contest(models.Model):
 
     def save(self, *args, **kwargs):
         # if self.pk is None and not self.contestid:
-        #     self.contestid = "%s-%s" % (self.election.electionid, self.office.slug)
+            # create self.contestid
         # elif not self.contestid:
-        #     self.contestid = "%s-%s" % (self.election.electionid, self.office.slug)
+            # create self.contestid
         super(Contest, self).save(*args, **kwargs)
 
 
@@ -170,6 +188,7 @@ class Candidate(models.Model):
         "Votes Received", null=True, blank=True)
     votepct = models.FloatField(
         "Percent Of Total Votes", null=True, blank=True)
+    poss_error = models.BooleanField("Possible Error", default=False)
     created = models.DateTimeField("Date Created", auto_now_add=True)
     modified = models.DateTimeField("Date Modified", auto_now=True)
 
@@ -177,14 +196,18 @@ class Candidate(models.Model):
         return self.fullname
 
     def save(self, *args, **kwargs):
-        # if self.pk is None and not self.fullname:
-        #     self.fullname = "%s %s" % (self.firstname, self.lastname)
-        #     self.slugname = "%s-%s" % (self.firstname.lower(), self.lastname.lower())
-        #     self.candidateid = "%s-%s" % (self.contest.contestid, self.slugname)
-        # elif not self.fullname:
-        #     self.fullname = "%s %s" % (self.firstname, self.lastname)
-        #     self.slugname = "%s-%s" % (self.firstname.lower(), self.lastname.lower())
-        #     self.candidateid = "%s-%s" % (self.contest.contestid, self.slugname)
+        # if self.pk is None and not self.candidateid:
+            # create self.candidateid
+        # elif not self.candidateid:
+            # create self.candidateid
+
+        # if self.votepct is None:
+        #     candidates = self.contest.candidate_set.all()
+        #     tvs = candidates.aggregate(Sum("votecount"))["votecount__sum"]
+        #     if framer._calc_pct(self.votecount, tvs):
+        #         self.votepct = framer._calc_pct(self.votecount, tvs)
+        #     else:
+        #         self.votepct = None
         super(Candidate, self).save(*args, **kwargs)
 
 
@@ -206,9 +229,10 @@ class BallotMeasure(models.Model):
     yespct = models.FloatField(
         "Percent Of Yes Votes Received", null=True, blank=True)
     nocount = models.IntegerField(
-        "Number Of Yes Votes Received", null=True, blank=True)
+        "Number Of No Votes Received", null=True, blank=True)
     nopct = models.FloatField(
-        "Percent Of Yes Votes Received", null=True, blank=True)
+        "Percent Of No Votes Received", null=True, blank=True)
+    poss_error = models.BooleanField("Possible Error", default=False)
     created = models.DateTimeField("Date Created", auto_now_add=True)
     modified = models.DateTimeField("Date Modified", auto_now=True)
 
@@ -216,6 +240,10 @@ class BallotMeasure(models.Model):
         return self.fullname
 
     def save(self, *args, **kwargs):
+        # if self.pk is None and not self.measureid:
+            # create self.measureid
+        # elif not self.measureid:
+            # create self.measureid
         super(BallotMeasure, self).save(*args, **kwargs)
 
 
@@ -242,6 +270,7 @@ class JudicialCandidate(models.Model):
         "Number Of Yes Votes Received", null=True, blank=True)
     nopct = models.FloatField(
         "Percent Of Yes Votes Received", null=True, blank=True)
+    poss_error = models.BooleanField("Possible Error", default=False)
     created = models.DateTimeField("Date Created", auto_now_add=True)
     modified = models.DateTimeField("Date Modified", auto_now=True)
 
@@ -249,51 +278,23 @@ class JudicialCandidate(models.Model):
         return self.fullname
 
     def save(self, *args, **kwargs):
-        if self.pk is None and not self.judgeid:
-            self.fullname = "%s %s" % (self.firstname, self.lastname)
-            self.slugname = "%s-%s" % (self.firstname.lower(), self.lastname.lower())
-            self.judgeid = "%s-%s" % (self.contest.contestid, self.slugname)
-        elif not self.judgeid:
-            self.fullname = "%s %s" % (self.firstname, self.lastname)
-            self.slugname = "%s-%s" % (self.firstname.lower(), self.lastname.lower())
-            self.judgeid = "%s-%s" % (self.contest.contestid, self.slugname)
+        # if self.pk is None and not self.judgeid:
+            # create self.judgeid
+        # elif not self.judgeid:
+            # create self.judgeid
         super(JudicialCandidate, self).save(*args, **kwargs)
 
 
-# class ReportingUnit(models.Model):
-#     """
-#     describes an entity that contains precincts and reports voting results
-#     """
-#     election = models.ForeignKey(Election)
-#     contest = models.ForeignKey(Contest)
-#     reportingunitname = models.CharField(
-#         "Name Of The Reporing Entity", max_length=255, null=False, blank=False)
-#     reportingunitslug = models.SlugField(
-#         "Slug Of The Reporing Entity", db_index=True, unique=True, max_length=255, null=True, blank=True)
-#     # delegatecount
-#     # winner
-#     # fipscode
-#     precinctstotal = models.IntegerField(
-#         "Total Number Of Precincts", null=True, blank=True)
-#     precinctsreporting = models.IntegerField(
-#         "Number Of Precincts That Have Reported Votes", null=True, blank=True)
-#     precinctsreportingpct = models.FloatField(
-#         "Percent Of Precincts Reporting", null=True, blank=True)
-#     votersregistered = models.FloatField(
-#         "Number of Registered Voters", null=True, blank=True)
-#     votersturnout = models.FloatField(
-#         "Percent Of Registered Voters Who Cast Ballots", null=True, blank=True)
-#     statename = models.CharField(
-#         "Name Of The Reporing Entity's State", max_length=255, null=False, blank=False)
-#     statepostal = models.CharField(
-#         "Postal Code Of The Reporing Entity's State", max_length=2, null=False, blank=False)
-#     description = models.TextField(
-#         "Description Of Ballot Measure", null=True, blank=True)
-#     created = models.DateTimeField("Date Created", auto_now_add=True)
-#     modified = models.DateTimeField("Date Modified", auto_now=True)
-
-#     def __unicode__(self):
-#         return self.reportingunitname
-
-#     def save(self, *args, **kwargs):
-#         super(ReportingUnit, self).save(*args, **kwargs)
+    @receiver(post_save, sender=Candidate)
+    def post_save(sender, update_fields, **kwargs):
+        instance = kwargs.get("instance")
+        created = kwargs.get("created")
+        if created == False:
+            candidates = instance.contest.candidate_set.all()
+            tvs = candidates.aggregate(Sum("votecount"))["votecount__sum"]
+            for candidate in candidates:
+                if framer._calc_pct(candidate.votecount, tvs):
+                    votepct = framer._calc_pct(candidate.votecount, tvs)
+                    Candidate.objects.filter(id=candidate.id).update(votepct=votepct)
+                else:
+                    Candidate.objects.filter(id=candidate.id).update(votepct=None, poss_error=True)

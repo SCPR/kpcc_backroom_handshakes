@@ -11,15 +11,19 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 import yaml
 
+SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+
+PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
+
 CONFIG_PATH = "%s_CONFIG_PATH" % ("kpcc_backroom_handshakes".upper())
 
 CONFIG_FILE = os.environ.setdefault(CONFIG_PATH, "./development.yml")
 
-CONFIG = yaml.load(open(CONFIG_FILE))
+CONFIG_YML = os.path.join(PROJECT_PATH, "development.yml")
+
+CONFIG = yaml.load(open(CONFIG_YML))
 
 DEBUG = CONFIG.get("debug", False)
-
-SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
 ADMINS = (
     ("", ""),
@@ -105,51 +109,6 @@ INSTALLED_APPS = (
     "django.contrib.admin",
     "django.contrib.admindocs",
 )
-
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-
-LOGGING = {
-    "version": 1,
-
-    "disable_existing_loggers": True,
-
-    "formatters": {
-        "verbose": {
-            "format" : "\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s",
-            "datefmt" : "%d/%b/%Y %H:%M:%S"
-        },
-        "simple": {
-            "format": "\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s"
-        },
-    },
-
-    "handlers": {
-        "console": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "simple"
-        },
-
-        #"file": {
-            #"level": "DEBUG",
-            #"class": "logging.FileHandler",
-            #"filename": "mysite.log",
-            #"formatter": "verbose"
-        #},
-    },
-
-    "loggers": {
-        "kpcc_backroom_handshakes": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-            "propagate": False,
-        },
-    }
-}
 
 # TEST_RUNNER = "django.test.simple.DjangoTestSuiteRunner"
 
