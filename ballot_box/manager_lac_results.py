@@ -103,7 +103,7 @@ class BuildLacResults(object):
             file_timestamp = localtime(file_timestamp)
             update_this = saver._eval_timestamps(
                 file_timestamp, src.source_latest)
-            update_this = True # delete after update_this works and you have a live data source
+            update_this = True # delete after update_this works and you have a live data source 
             if update_this == False:
                 logger.debug(
                     "We have newer data in the database so let's delete these files.")
@@ -507,7 +507,7 @@ class LacProcessMethods(object):
         candidates = contest_package['candidates']
         measures = contest_package['measures']
         judges = contest_package['judges']
-
+        
         if contest['is_judicial_contest']:
             """ This is a judicial appointee """
             contestname = (contest['contest_title'] + ' ' + contest['contest_title_cont']).title()
@@ -882,7 +882,7 @@ class LacProcessMethods(object):
                 f.write('N/A\n')
 
     def prettyprint(self, election_info, contest_list, measure_list, candidate_list, judicial_list):
-        """Prints human readable, detailed layout of all candidates, contests, measures, and
+        """Prints human readable, detailed layout of all candidates, contests, measures, and 
         election stats. Activate by un-commenting call in evaluate_and_process_races().
         """
         report = ''
