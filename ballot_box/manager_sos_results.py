@@ -82,7 +82,7 @@ class BuildSosResults(object):
                 saver._update_result_timestamps(src, file_timestamp)
                 races = soup.find_all("Contest")
                 for race in races:
-                    frame = Framer()
+                    framer = Framer()
                     r = race.find("TotalVotes")
                     if race.ContestIdentifier.attrs["IdNumber"][0:3] == "140":
                         """
@@ -90,9 +90,9 @@ class BuildSosResults(object):
                         """
                         this_type = "judicial"
                         contestname = unicode(" ".join(race.ContestName.stripped_strings))
-                        officename_idx = frame._find_nth(contestname, " - ", 1)
+                        officename_idx = framer._find_nth(contestname, " - ", 1)
                         officename = unicode(contestname[:officename_idx])
-                        fullname_idx = frame._find_nth(
+                        fullname_idx = framer._find_nth(
                             contestname, " - ", 1) + 3
                         fullname = unicode(contestname[fullname_idx:])
                         level = None
@@ -101,73 +101,73 @@ class BuildSosResults(object):
                         precinctsreport = r.find(
                             attrs={"Id": "PR"}).contents[0]
                         reporttype = r.find(attrs={"Id": "RT"}).contents[0]
-                        yescount = frame._to_num(r.find_all("Selection")[
+                        yescount = framer._to_num(r.find_all("Selection")[
                             0].ValidVotes.contents[0])["value"]
-                        yespct = frame._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
-                        nocount = frame._to_num(r.find_all("Selection")[
+                        yespct = framer._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
+                        nocount = framer._to_num(r.find_all("Selection")[
                             1].ValidVotes.contents[0])["value"]
-                        nopct = frame._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
-                        frame.office["officename"] = officename
-                        frame.office["officeslug"] = frame._slug(officename)
-                        frame.office["active"] = True
-                        frame.contest["election_id"] = election.id
-                        frame.contest["resultsource_id"] = src.id
-                        frame.contest["seatnum"] = seatnum
-                        frame.contest["is_uncontested"] = False
-                        frame.contest["is_national"] = False
-                        frame.contest["is_statewide"] = True
-                        frame.contest["level"] = "california"
-                        frame.contest["is_ballot_measure"] = False
-                        frame.contest["is_judicial"] = True
-                        frame.contest["is_runoff"] = False
-                        frame.contest["reporttype"] = None
-                        if frame._to_num(precinctstotal)["convert"] == True:
-                            pt = frame._to_num(precinctstotal)["value"]
-                            frame.contest["precinctstotal"] = pt
+                        nopct = framer._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
+                        framer.office["officename"] = officename
+                        framer.office["officeslug"] = framer._slug(officename)
+                        framer.office["active"] = True
+                        framer.contest["election_id"] = election.id
+                        framer.contest["resultsource_id"] = src.id
+                        framer.contest["seatnum"] = seatnum
+                        framer.contest["is_uncontested"] = False
+                        framer.contest["is_national"] = False
+                        framer.contest["is_statewide"] = True
+                        framer.contest["level"] = "california"
+                        framer.contest["is_ballot_measure"] = False
+                        framer.contest["is_judicial"] = True
+                        framer.contest["is_runoff"] = False
+                        framer.contest["reporttype"] = None
+                        if framer._to_num(precinctstotal)["convert"] == True:
+                            pt = framer._to_num(precinctstotal)["value"]
+                            framer.contest["precinctstotal"] = pt
                         else:
-                            frame.contest["precinctstotal"] = None
+                            framer.contest["precinctstotal"] = None
                             raise Exception("precinctstotal is not a number")
-                        if frame._to_num(precinctsreport)["convert"] == True:
-                            pr = frame._to_num(precinctsreport)["value"]
-                            frame.contest["precinctsreporting"] = pr
+                        if framer._to_num(precinctsreport)["convert"] == True:
+                            pr = framer._to_num(precinctsreport)["value"]
+                            framer.contest["precinctsreporting"] = pr
                         else:
-                            frame.contest["precinctsreporting"] = None
+                            framer.contest["precinctsreporting"] = None
                             raise Exception(
                                 "precinctsreporting is not a number")
-                        frame.contest["precinctsreportingpct"] = frame._calc_pct(
-                            frame.contest["precinctsreporting"],
-                            frame.contest["precinctstotal"]
+                        framer.contest["precinctsreportingpct"] = framer._calc_pct(
+                            framer.contest["precinctsreporting"],
+                            framer.contest["precinctstotal"]
                         )
-                        frame.contest["votersregistered"] = frame._to_num(None)["value"]
-                        frame.contest["votersturnout"] = frame._to_num(None)["value"]
-                        frame.contest["contestname"] = frame.office[
+                        framer.contest["votersregistered"] = framer._to_num(None)["value"]
+                        framer.contest["votersturnout"] = framer._to_num(None)["value"]
+                        framer.contest["contestname"] = framer.office[
                             "officename"]
-                        frame.contest["contestdescription"] = None
-                        frame.contest["contestid"] = frame._concat(
+                        framer.contest["contestdescription"] = None
+                        framer.contest["contestid"] = framer._concat(
                             election.electionid,
                             src.source_short,
-                            frame.contest["level"],
-                            frame.office["officeslug"],
-                            frame.contest["seatnum"],
+                            framer.contest["level"],
+                            framer.office["officeslug"],
+                            framer.contest["seatnum"],
                             delimiter="-"
                         )
-                        frame.judicial["ballotorder"] = None
-                        frame.judicial["firstname"] = None
-                        frame.judicial["lastname"] = None
-                        frame.judicial["fullname"] = fullname
-                        frame.judicial["judicialslug"] = frame._slug(fullname)
-                        frame.judicial["yescount"] = yescount
-                        frame.judicial["yespct"] = yespct
-                        frame.judicial["nocount"] = nocount
-                        frame.judicial["nopct"] = nopct
-                        frame.judicial["judgeid"] = frame._concat(
-                            frame.judicial["judicialslug"],
-                            frame.contest["contestid"],
+                        framer.judicial["ballotorder"] = None
+                        framer.judicial["firstname"] = None
+                        framer.judicial["lastname"] = None
+                        framer.judicial["fullname"] = fullname
+                        framer.judicial["judicialslug"] = framer._slug(fullname)
+                        framer.judicial["yescount"] = yescount
+                        framer.judicial["yespct"] = yespct
+                        framer.judicial["nocount"] = nocount
+                        framer.judicial["nopct"] = nopct
+                        framer.judicial["judgeid"] = framer._concat(
+                            framer.judicial["judicialslug"],
+                            framer.contest["contestid"],
                             delimiter="-"
                         )
-                        saver.make_office(frame.office)
-                        saver.make_contest(frame.office, frame.contest)
-                        saver.make_judicial(frame.contest, frame.judicial)
+                        saver.make_office(framer.office)
+                        saver.make_contest(framer.office, framer.contest)
+                        saver.make_judicial(framer.contest, framer.judicial)
 
                     elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "150":
                         """
@@ -175,10 +175,10 @@ class BuildSosResults(object):
                         """
                         this_type = "judicial"
                         contestname = unicode(" ".join(race.ContestName.stripped_strings))
-                        officename_idx = frame._find_nth(contestname, " - ", 2)
+                        officename_idx = framer._find_nth(contestname, " - ", 2)
                         officename = unicode(
                             contestname[:officename_idx].replace(" - ", " "))
-                        fullname_idx = frame._find_nth(
+                        fullname_idx = framer._find_nth(
                             contestname, " - ", 2) + 3
                         fullname = unicode(contestname[fullname_idx:])
                         level = None
@@ -187,73 +187,73 @@ class BuildSosResults(object):
                         precinctsreport = r.find(
                             attrs={"Id": "PR"}).contents[0]
                         reporttype = r.find(attrs={"Id": "RT"}).contents[0]
-                        yescount = frame._to_num(r.find_all("Selection")[
+                        yescount = framer._to_num(r.find_all("Selection")[
                             0].ValidVotes.contents[0])["value"]
-                        yespct = frame._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
-                        nocount = frame._to_num(r.find_all("Selection")[
+                        yespct = framer._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
+                        nocount = framer._to_num(r.find_all("Selection")[
                             1].ValidVotes.contents[0])["value"]
-                        nopct = frame._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
-                        frame.office["officename"] = officename
-                        frame.office["officeslug"] = frame._slug(officename)
-                        frame.office["active"] = True
-                        frame.contest["election_id"] = election.id
-                        frame.contest["resultsource_id"] = src.id
-                        frame.contest["seatnum"] = seatnum
-                        frame.contest["is_uncontested"] = False
-                        frame.contest["is_national"] = False
-                        frame.contest["is_statewide"] = True
-                        frame.contest["level"] = "california"
-                        frame.contest["is_ballot_measure"] = False
-                        frame.contest["is_judicial"] = True
-                        frame.contest["is_runoff"] = False
-                        frame.contest["reporttype"] = None
-                        if frame._to_num(precinctstotal)["convert"] == True:
-                            pt = frame._to_num(precinctstotal)["value"]
-                            frame.contest["precinctstotal"] = pt
+                        nopct = framer._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
+                        framer.office["officename"] = officename
+                        framer.office["officeslug"] = framer._slug(officename)
+                        framer.office["active"] = True
+                        framer.contest["election_id"] = election.id
+                        framer.contest["resultsource_id"] = src.id
+                        framer.contest["seatnum"] = seatnum
+                        framer.contest["is_uncontested"] = False
+                        framer.contest["is_national"] = False
+                        framer.contest["is_statewide"] = True
+                        framer.contest["level"] = "california"
+                        framer.contest["is_ballot_measure"] = False
+                        framer.contest["is_judicial"] = True
+                        framer.contest["is_runoff"] = False
+                        framer.contest["reporttype"] = None
+                        if framer._to_num(precinctstotal)["convert"] == True:
+                            pt = framer._to_num(precinctstotal)["value"]
+                            framer.contest["precinctstotal"] = pt
                         else:
-                            frame.contest["precinctstotal"] = None
+                            framer.contest["precinctstotal"] = None
                             raise Exception("precinctstotal is not a number")
-                        if frame._to_num(precinctsreport)["convert"] == True:
-                            pr = frame._to_num(precinctsreport)["value"]
-                            frame.contest["precinctsreporting"] = pr
+                        if framer._to_num(precinctsreport)["convert"] == True:
+                            pr = framer._to_num(precinctsreport)["value"]
+                            framer.contest["precinctsreporting"] = pr
                         else:
-                            frame.contest["precinctsreporting"] = None
+                            framer.contest["precinctsreporting"] = None
                             raise Exception(
                                 "precinctsreporting is not a number")
-                        frame.contest["precinctsreportingpct"] = frame._calc_pct(
-                            frame.contest["precinctsreporting"],
-                            frame.contest["precinctstotal"]
+                        framer.contest["precinctsreportingpct"] = framer._calc_pct(
+                            framer.contest["precinctsreporting"],
+                            framer.contest["precinctstotal"]
                         )
-                        frame.contest["votersregistered"] = frame._to_num(None)["value"]
-                        frame.contest["votersturnout"] = frame._to_num(None)["value"]
-                        frame.contest["contestname"] = frame.office[
+                        framer.contest["votersregistered"] = framer._to_num(None)["value"]
+                        framer.contest["votersturnout"] = framer._to_num(None)["value"]
+                        framer.contest["contestname"] = framer.office[
                             "officename"]
-                        frame.contest["contestdescription"] = None
-                        frame.contest["contestid"] = frame._concat(
+                        framer.contest["contestdescription"] = None
+                        framer.contest["contestid"] = framer._concat(
                             election.electionid,
                             src.source_short,
-                            frame.contest["level"],
-                            frame.office["officeslug"],
-                            frame.contest["seatnum"],
+                            framer.contest["level"],
+                            framer.office["officeslug"],
+                            framer.contest["seatnum"],
                             delimiter="-"
                         )
-                        frame.judicial["ballotorder"] = None
-                        frame.judicial["firstname"] = None
-                        frame.judicial["lastname"] = None
-                        frame.judicial["fullname"] = fullname
-                        frame.judicial["judicialslug"] = frame._slug(fullname)
-                        frame.judicial["yescount"] = yescount
-                        frame.judicial["yespct"] = yespct
-                        frame.judicial["nocount"] = nocount
-                        frame.judicial["nopct"] = nopct
-                        frame.judicial["judgeid"] = frame._concat(
-                            frame.judicial["judicialslug"],
-                            frame.contest["contestid"],
+                        framer.judicial["ballotorder"] = None
+                        framer.judicial["firstname"] = None
+                        framer.judicial["lastname"] = None
+                        framer.judicial["fullname"] = fullname
+                        framer.judicial["judicialslug"] = framer._slug(fullname)
+                        framer.judicial["yescount"] = yescount
+                        framer.judicial["yespct"] = yespct
+                        framer.judicial["nocount"] = nocount
+                        framer.judicial["nopct"] = nopct
+                        framer.judicial["judgeid"] = framer._concat(
+                            framer.judicial["judicialslug"],
+                            framer.contest["contestid"],
                             delimiter="-"
                         )
-                        saver.make_office(frame.office)
-                        saver.make_contest(frame.office, frame.contest)
-                        saver.make_judicial(frame.contest, frame.judicial)
+                        saver.make_office(framer.office)
+                        saver.make_contest(framer.office, framer.contest)
+                        saver.make_judicial(framer.contest, framer.judicial)
 
                     elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "190":
                         """
@@ -261,7 +261,7 @@ class BuildSosResults(object):
                         """
                         this_type = "measure"
                         contestname = unicode(" ".join(race.ContestName.stripped_strings))
-                        officename = frame._concat(
+                        officename = framer._concat(
                             "Measure",
                             contestname,
                             delimiter="-",
@@ -273,81 +273,81 @@ class BuildSosResults(object):
                         precinctsreport = r.find(
                             attrs={"Id": "PR"}).contents[0]
                         reporttype = r.find(attrs={"Id": "RT"}).contents[0]
-                        yescount = frame._to_num(r.find_all("Selection")[
+                        yescount = framer._to_num(r.find_all("Selection")[
                             0].ValidVotes.contents[0])["value"]
-                        yespct = frame._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
-                        nocount = frame._to_num(r.find_all("Selection")[
+                        yespct = framer._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
+                        nocount = framer._to_num(r.find_all("Selection")[
                             1].ValidVotes.contents[0])["value"]
-                        nopct = frame._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
-                        frame.office["officename"] = officename
-                        frame.office["officeslug"] = frame._slug(officename)
-                        frame.office["active"] = True
-                        frame.contest["election_id"] = election.id
-                        frame.contest["resultsource_id"] = src.id
-                        frame.contest["seatnum"] = seatnum
-                        frame.contest["is_uncontested"] = False
-                        frame.contest["is_national"] = False
-                        frame.contest["is_statewide"] = True
-                        frame.contest["level"] = "california"
-                        frame.contest["is_ballot_measure"] = True
-                        frame.contest["is_judicial"] = True
-                        frame.contest["is_runoff"] = False
-                        frame.contest["reporttype"] = None
-                        if frame._to_num(precinctstotal)["convert"] == True:
-                            pt = frame._to_num(precinctstotal)["value"]
-                            frame.contest["precinctstotal"] = pt
+                        nopct = framer._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
+                        framer.office["officename"] = officename
+                        framer.office["officeslug"] = framer._slug(officename)
+                        framer.office["active"] = True
+                        framer.contest["election_id"] = election.id
+                        framer.contest["resultsource_id"] = src.id
+                        framer.contest["seatnum"] = seatnum
+                        framer.contest["is_uncontested"] = False
+                        framer.contest["is_national"] = False
+                        framer.contest["is_statewide"] = True
+                        framer.contest["level"] = "california"
+                        framer.contest["is_ballot_measure"] = True
+                        framer.contest["is_judicial"] = True
+                        framer.contest["is_runoff"] = False
+                        framer.contest["reporttype"] = None
+                        if framer._to_num(precinctstotal)["convert"] == True:
+                            pt = framer._to_num(precinctstotal)["value"]
+                            framer.contest["precinctstotal"] = pt
                         else:
-                            frame.contest["precinctstotal"] = None
+                            framer.contest["precinctstotal"] = None
                             raise Exception("precinctstotal is not a number")
-                        if frame._to_num(precinctsreport)["convert"] == True:
-                            pr = frame._to_num(precinctsreport)["value"]
-                            frame.contest["precinctsreporting"] = pr
+                        if framer._to_num(precinctsreport)["convert"] == True:
+                            pr = framer._to_num(precinctsreport)["value"]
+                            framer.contest["precinctsreporting"] = pr
                         else:
-                            frame.contest["precinctsreporting"] = None
+                            framer.contest["precinctsreporting"] = None
                             raise Exception(
                                 "precinctsreporting is not a number")
-                        frame.contest["precinctsreportingpct"] = frame._calc_pct(
-                            frame.contest["precinctsreporting"],
-                            frame.contest["precinctstotal"]
+                        framer.contest["precinctsreportingpct"] = framer._calc_pct(
+                            framer.contest["precinctsreporting"],
+                            framer.contest["precinctstotal"]
                         )
-                        frame.contest["votersregistered"] = frame._to_num(None)["value"]
-                        frame.contest["votersturnout"] = frame._to_num(None)["value"]
-                        frame.contest["contestname"] = frame.office[
+                        framer.contest["votersregistered"] = framer._to_num(None)["value"]
+                        framer.contest["votersturnout"] = framer._to_num(None)["value"]
+                        framer.contest["contestname"] = framer.office[
                             "officename"]
-                        frame.contest["contestdescription"] = None
-                        frame.contest["contestid"] = frame._concat(
+                        framer.contest["contestdescription"] = None
+                        framer.contest["contestid"] = framer._concat(
                             election.electionid,
                             src.source_short,
-                            frame.contest["level"],
-                            frame.office["officeslug"],
-                            frame.contest["seatnum"],
+                            framer.contest["level"],
+                            framer.office["officeslug"],
+                            framer.contest["seatnum"],
                             delimiter="-"
                         )
-                        frame.measure["ballotorder"] = None
-                        frame.measure["fullname"] = fullname
-                        frame.measure["measureslug"] = frame._slug(fullname)
-                        frame.measure["description"] = None
-                        frame.measure["yescount"] = yescount
-                        frame.measure["yespct"] = yespct
-                        frame.measure["nocount"] = nocount
-                        frame.measure["nopct"] = nopct
-                        frame.measure["measureid"] = frame._concat(
-                            frame.measure["measureslug"],
-                            frame.contest["contestid"],
+                        framer.measure["ballotorder"] = None
+                        framer.measure["fullname"] = fullname
+                        framer.measure["measureslug"] = framer._slug(fullname)
+                        framer.measure["description"] = None
+                        framer.measure["yescount"] = yescount
+                        framer.measure["yespct"] = yespct
+                        framer.measure["nocount"] = nocount
+                        framer.measure["nopct"] = nopct
+                        framer.measure["measureid"] = framer._concat(
+                            framer.measure["measureslug"],
+                            framer.contest["contestid"],
                             delimiter="-"
                         )
-                        saver.make_office(frame.office)
-                        saver.make_contest(frame.office, frame.contest)
-                        saver.make_measure(frame.contest, frame.measure)
+                        saver.make_office(framer.office)
+                        saver.make_contest(framer.office, framer.contest)
+                        saver.make_measure(framer.contest, framer.measure)
                     else:
                         """
                         this is a non-judicial candidate
                         """
                         this_type = "candidate"
                         contestname = unicode(" ".join(race.ContestName.stripped_strings))
-                        officename_idx = frame._find_nth(contestname, " - ", 1)
+                        officename_idx = framer._find_nth(contestname, " - ", 1)
                         officename = unicode(contestname[:officename_idx])
-                        level_idx = frame._find_nth(contestname, " - ", 1) + 3
+                        level_idx = framer._find_nth(contestname, " - ", 1) + 3
                         level = unicode(contestname[level_idx:].replace(
                             " Results", "").lower())
                         seatnum = None
@@ -355,53 +355,53 @@ class BuildSosResults(object):
                         precinctsreport = r.find(
                             attrs={"Id": "PR"}).contents[0]
                         reporttype = r.find(attrs={"Id": "RT"}).contents[0]
-                        frame.office["officename"] = officename
-                        frame.office["officeslug"] = frame._slug(officename)
-                        frame.office["active"] = True
-                        frame.contest["election_id"] = election.id
-                        frame.contest["resultsource_id"] = src.id
-                        frame.contest["seatnum"] = seatnum
-                        frame.contest["is_uncontested"] = False
-                        frame.contest["is_national"] = False
-                        frame.contest["is_statewide"] = True
-                        frame.contest["level"] = level
-                        frame.contest["is_ballot_measure"] = False
-                        frame.contest["is_judicial"] = True
-                        frame.contest["is_runoff"] = False
-                        frame.contest["reporttype"] = None
-                        if frame._to_num(precinctstotal)["convert"] == True:
-                            pt = frame._to_num(precinctstotal)["value"]
-                            frame.contest["precinctstotal"] = pt
+                        framer.office["officename"] = officename
+                        framer.office["officeslug"] = framer._slug(officename)
+                        framer.office["active"] = True
+                        framer.contest["election_id"] = election.id
+                        framer.contest["resultsource_id"] = src.id
+                        framer.contest["seatnum"] = seatnum
+                        framer.contest["is_uncontested"] = False
+                        framer.contest["is_national"] = False
+                        framer.contest["is_statewide"] = True
+                        framer.contest["level"] = level
+                        framer.contest["is_ballot_measure"] = False
+                        framer.contest["is_judicial"] = True
+                        framer.contest["is_runoff"] = False
+                        framer.contest["reporttype"] = None
+                        if framer._to_num(precinctstotal)["convert"] == True:
+                            pt = framer._to_num(precinctstotal)["value"]
+                            framer.contest["precinctstotal"] = pt
                         else:
-                            frame.contest["precinctstotal"] = None
+                            framer.contest["precinctstotal"] = None
                             raise Exception("precinctstotal is not a number")
 
-                        if frame._to_num(precinctsreport)["convert"] == True:
-                            pr = frame._to_num(precinctsreport)["value"]
-                            frame.contest["precinctsreporting"] = pr
+                        if framer._to_num(precinctsreport)["convert"] == True:
+                            pr = framer._to_num(precinctsreport)["value"]
+                            framer.contest["precinctsreporting"] = pr
                         else:
-                            frame.contest["precinctsreporting"] = None
+                            framer.contest["precinctsreporting"] = None
                             raise Exception(
                                 "precinctsreporting is not a number")
-                        frame.contest["precinctsreportingpct"] = frame._calc_pct(
-                            frame.contest["precinctsreporting"],
-                            frame.contest["precinctstotal"]
+                        framer.contest["precinctsreportingpct"] = framer._calc_pct(
+                            framer.contest["precinctsreporting"],
+                            framer.contest["precinctstotal"]
                         )
-                        frame.contest["votersregistered"] = frame._to_num(None)["value"]
-                        frame.contest["votersturnout"] = frame._to_num(None)["value"]
-                        frame.contest["contestname"] = frame.office[
+                        framer.contest["votersregistered"] = framer._to_num(None)["value"]
+                        framer.contest["votersturnout"] = framer._to_num(None)["value"]
+                        framer.contest["contestname"] = framer.office[
                             "officename"]
-                        frame.contest["contestdescription"] = None
-                        frame.contest["contestid"] = frame._concat(
+                        framer.contest["contestdescription"] = None
+                        framer.contest["contestid"] = framer._concat(
                             election.electionid,
                             src.source_short,
-                            frame.contest["level"],
-                            frame.office["officeslug"],
-                            frame.contest["seatnum"],
+                            framer.contest["level"],
+                            framer.office["officeslug"],
+                            framer.contest["seatnum"],
                             delimiter="-"
                         )
-                        saver.make_office(frame.office)
-                        saver.make_contest(frame.office, frame.contest)
+                        saver.make_office(framer.office)
+                        saver.make_contest(framer.office, framer.contest)
                         for candidate in r.find_all("Selection"):
                             fullname = unicode(
                                 candidate.Candidate.CandidateFullName.PersonFullName.contents[0])
@@ -409,27 +409,27 @@ class BuildSosResults(object):
                                 candidate.AffiliationIdentifier.RegisteredName.contents[0])
                             if party == "Democratic":
                                 party = "Democrat"
-                            votecount = frame._to_num(candidate.ValidVotes.contents[0])["value"]
-                            votepct = frame._to_num(candidate.CountMetric.contents[0])["value"]
-                            frame.candidate["ballotorder"] = None
-                            frame.candidate["firstname"] = None
-                            frame.candidate["lastname"] = None
-                            frame.candidate["fullname"] = fullname
-                            frame.candidate[
-                                "candidateslug"] = frame._slug(fullname)
-                            frame.candidate["party"] = party
-                            frame.candidate["incumbent"] = False
-                            frame.candidate[
+                            votecount = framer._to_num(candidate.ValidVotes.contents[0])["value"]
+                            votepct = framer._to_num(candidate.CountMetric.contents[0])["value"]
+                            framer.candidate["ballotorder"] = None
+                            framer.candidate["firstname"] = None
+                            framer.candidate["lastname"] = None
+                            framer.candidate["fullname"] = fullname
+                            framer.candidate[
+                                "candidateslug"] = framer._slug(fullname)
+                            framer.candidate["party"] = party
+                            framer.candidate["incumbent"] = False
+                            framer.candidate[
                                 "votecount"] = votecount
-                            frame.candidate[
+                            framer.candidate[
                                 "votepct"] = votepct
-                            frame.candidate["candidateid"] = frame._concat(
-                                frame.candidate["candidateslug"],
-                                frame.contest["contestid"],
+                            framer.candidate["candidateid"] = framer._concat(
+                                framer.candidate["candidateslug"],
+                                framer.contest["contestid"],
                                 delimiter="-"
                             )
                             saver.make_candidate(
-                                frame.contest, frame.candidate)
+                                framer.contest, framer.candidate)
                 os.remove(latest_path)
                 logger.info("@chrislkeller we've finished processing sos results")
 
