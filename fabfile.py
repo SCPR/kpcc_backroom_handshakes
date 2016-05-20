@@ -17,7 +17,8 @@ from fabric.context_managers import lcd
 from fabric.colors import green
 from fabric.contrib import django
 
-os.environ["DJANGO_SETTINGS_MODULE"] = "kpcc_backroom_handshakes.settings_production"
+os.environ[
+    "DJANGO_SETTINGS_MODULE"] = "kpcc_backroom_handshakes.settings_production"
 
 from django.conf import settings
 
@@ -33,7 +34,7 @@ CONFIG = yaml.load(open(CONFIG_FILE))
 
 logger = logging.getLogger("root")
 logging.basicConfig(
-    format = "\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s",
+    format="\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s",
     level=logging.DEBUG
 )
 
@@ -41,17 +42,20 @@ logging.basicConfig(
 data functions
 """
 
+
 def dump_ballot_box():
     """
     shortcut to dump data from ballot box as fixtures
     """
     local("python manage.py dumpdata ballot_box > ballot_box/fixtures/data.json")
 
+
 def load_ballot_box():
     """
     shortcut to load ballot box data fixtures
     """
     local("python manage.py loaddata ballot_box/fixtures/data.json")
+
 
 def fetch_sos():
     """
@@ -60,9 +64,17 @@ def fetch_sos():
     local("python manage.py fetch_sos_results")
 
 
+def fetch_lac():
+    """
+    shortcut for running the management command to fetch sos results
+    """
+    local("python manage.py fetch_lac_results")
+
+
 """
 development functions
 """
+
 
 def run():
     """
@@ -70,11 +82,13 @@ def run():
     """
     local("python manage.py runserver")
 
+
 def make():
     """
     shortcut for base manage.py function to sync the dev database
     """
     local("python manage.py makemigrations")
+
 
 def migrate():
     """
@@ -82,11 +96,13 @@ def migrate():
     """
     local("python manage.py migrate")
 
+
 def superuser():
     """
     shortcut for base manage.py function to create a superuser
     """
     local("python manage.py createsuperuser")
+
 
 def test():
     """
@@ -98,12 +114,16 @@ def test():
 bootstrapping functions
 """
 
+
 def rename_files():
     """
     shortcut to install requirements from repository's requirements.txt
     """
-    os.rename("kpcc_backroom_handshakes/settings_common.py.template", "kpcc_backroom_handshakes/settings_common.py")
-    os.rename("kpcc_backroom_handshakes/settings_production.py.template", "kpcc_backroom_handshakes/settings_production.py")
+    os.rename("kpcc_backroom_handshakes/settings_common.py.template",
+              "kpcc_backroom_handshakes/settings_common.py")
+    os.rename("kpcc_backroom_handshakes/settings_production.py.template",
+              "kpcc_backroom_handshakes/settings_production.py")
+
 
 def requirements():
     """
@@ -111,16 +131,18 @@ def requirements():
     """
     local("pip install -r requirements.txt")
 
+
 def create_db():
     connection = None
     db_config = CONFIG["database"]
-    logger.debug("Creating %s database for %s django project" % (db_config["database"], env.project_name))
+    logger.debug("Creating %s database for %s django project" %
+                 (db_config["database"], env.project_name))
     create_statement = "CREATE DATABASE %s" % (db_config["database"])
     try:
         connection = MySQLdb.connect(
-            host = db_config["host"],
-            user = db_config["username"],
-            passwd = db_config["password"]
+            host=db_config["host"],
+            user=db_config["username"],
+            passwd=db_config["password"]
         )
         cursor = connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(create_statement)
@@ -132,6 +154,7 @@ def create_db():
         if connection:
             connection.close()
 
+
 def makesecret(length=50, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'):
     """
     generates secret key for use in django settings
@@ -140,14 +163,18 @@ def makesecret(length=50, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789!@#
     key = ''.join(random.choice(allowed_chars) for i in range(length))
     print 'SECRET_KEY = "%s"' % key
 
+
 def build():
     local("python manage.py build")
+
 
 def buildserver():
     local("python manage.py buildserver")
 
+
 def move():
     local("python manage.py move_baked_files")
+
 
 def commit(message='updates'):
     with lcd(settings.DEPLOY_DIR):
@@ -158,6 +185,7 @@ def commit(message='updates'):
             print(green("Nothing new to commit.", bold=False))
         local("git push")
 
+
 def deploy():
     data()
     time.sleep(5)
@@ -166,6 +194,7 @@ def deploy():
     local("python manage.py move_baked_files")
     time.sleep(5)
     commit()
+
 
 def bootstrap():
     with prefix("WORKON_HOME=$HOME/.virtualenvs"):
@@ -181,6 +210,7 @@ def bootstrap():
                 local("python manage.py createsuperuser")
                 run()
 
+
 def syncstart():
     # check if requirements need update
     requirements()
@@ -190,6 +220,7 @@ def syncstart():
     load_ballot_box()
     run()
     # any new dependencies/apps the rest of the team may need?
+
 
 def __env_cmd(cmd):
     return env.bin_root + cmd
