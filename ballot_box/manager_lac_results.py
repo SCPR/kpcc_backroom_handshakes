@@ -24,31 +24,21 @@ logger = logging.getLogger("kpcc_backroom_handshakes")
 class BuildLacResults(object):
     """Scaffolding to ingest LA County registrar election results."""
 
-    # retrieve = Retriever()
-
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
-    #contest_file = "internet.dat"
-
-    date_object = datetime.datetime.now()
-
-    date_string = date_object.strftime("%Y_%m_%d_%H_%M_%S")
-
-    src = ResultSource.objects.filter(source_short="lac", source_active=True)
+    sources = ResultSource.objects.filter(
+        source_short="lac", source_active=True)
 
     def _init(self, *args, **kwargs):
         """
         """
-        item = self.src[0]
-        item.file_name = "%s_%s_%s_results%s" % (
-            self.data_directory, self.date_string, item.source_short, item.source_type)
-        # self.get_results_file(item, self.data_directory)
-        self.parse_results_file(item, self.data_directory)
+        for src in self.sources:
+            self.get_results_file(src, self.data_directory)
+            self.parse_results_file(src, self.data_directory)
 
     def get_results_file(self, src, data_directory):
         """
         """
-
         retrieve = Retriever()
 
         # download the latest results file
@@ -69,36 +59,6 @@ class BuildLacResults(object):
         # if the item is a zipfile extract the files
         retrieve._unzip_latest_file(src, data_directory)
 
-        # # download the latest results file
-        # self.retrieve._successful_save_results(item)
-
-        # # compare files in a zipfile with a list of expected files
-        # # self.retrieve._found_files_in_zipfile(item)
-
-        # # create timestamped version of a file deemed latest
-        # self.retrieve._copy_timestamped_file_as_latest(
-        #     item, self.data_directory)
-
-        # # save path to timestamped version of a file in the db
-        # """
-        # """
-
-        # # move latest files to a working directory
-        # self.retrieve._create_directory_for_latest_file(
-        #     item, self.data_directory)
-
-        # # move timestamped file to working directory as latest
-        # self.retrieve._move_latest_files_to_latest_directory(
-        #     item, self.data_directory)
-
-        # # move timestamped zipfile to archives
-        # self.retrieve._archive_downloaded_file(item, self.data_directory)
-
-        # # if the item is a zipfile extract the files
-        # # self.retrieve._unzip_latest_file(item, self.data_directory)
-
-
-
     def parse_results_file(self, src, data_directory):
         """
         """
@@ -118,16 +78,22 @@ class BuildLacResults(object):
 
         race_ids = process.get_race_ids_from(rows)
 
-        races = process.collate_and_fetch_records_for_race(race_ids, rows)
+        election_package = process.collate_and_fetch_records_for_race(race_ids, rows)
+
+        races = election_package[0]
+
+        election_title = election_package[1]["title"]
+
+        election_stats = election_package[1]["stats"]
 
         file_timestring = None
 
         file_timestamp = None
 
-        for r in races['000']:
-            if r[3:5] == 'TD':
+        for t in election_title:
+            if t[3:5] == 'TD':
                 parser = TD_parser()
-                parsed = parser.parse_line(r)
+                parsed = parser.parse_line(t)
                 timestring = parsed['date'] + ' ' + parsed['time']
                 file_timestring = timestring
 
@@ -136,8 +102,8 @@ class BuildLacResults(object):
             file_timestamp = localtime(file_timestamp)
             update_this = saver._eval_timestamps(
                 file_timestamp, src.source_latest)
-            if update_this == True:
-                """ switch back to 'false' after update_this works and you have a live data source """
+            update_this = True # delete after update_this works and you have a live data source 
+            if update_this == False:
                 logger.debug(
                     "We have newer data in the database so let's delete these files.")
                 # os.remove(latest_path)
@@ -145,45 +111,23 @@ class BuildLacResults(object):
                 logger.debug("Updating timestamps in the database")
                 saver._update_result_timestamps(src, file_timestamp)
 
-                contest_list = []
+                # identify and process overall election stats
+                title = process.dictify_records_and_return(election_title)
+                stats = process.dictify_records_and_return(election_stats)
+                election_info = process.compile_election_stats(title, stats)
 
-                candidate_list = []
-
-                measure_list = []
-
-                judicial_list = []
-
-                election_info = {}
-
+                # process and import each race
                 for r in races:
-
                     records = process.dictify_records_and_return(races[r])
-
-                    # identify and process overall election stats
-                    if r == '000':
-                        stats = process.dictify_records_and_return(races['145'])
-                        election_info = process.compile_election_stats(records, stats)
-                    elif r == '145':
+                    """
+                    checks to see if this is a recall contest or a nonpartisan contest. for now, it's unclear how to store or display these contests. in future, however, we may want to parse and return their results.
+                    """
+                    skip = process.check_if_recall_or_nonpartisan(records)
+                    if skip:
                         pass
                     else:
-                        """
-                        checks to see if this is a recall contest or a nonpartisan contest. for now, it's unclear how to store or display these contests. in future, however, we may want to parse and return their results.
-                        """
-                        skip = process.check_if_recall_or_nonpartisan(records)
-                        if skip:
-                            pass
-                        else:
-                            contest = process.compile_contest_results(records)
-                            process.update_database(contest,election,src)
-                            contest_list.append(contest['contest_details'])
-                            for measure in contest['measures']:
-                                measure_list.append(measure)
-                            for candidate in contest['candidates']:
-                                candidate_list.append(candidate)
-                            for judge in contest['judges']:
-                                judicial_list.append(judge)
-
-                # process.prettyprint(election_info, contest_list, measure_list, candidate_list, judicial_list)        
+                        contest = process.compile_contest_results(records)
+                        process.update_database(contest,election,src)
 
         else:
             logger.debug('No file timestamp was found. Unable to determine whether this data is newer than what we already have.')
@@ -225,15 +169,34 @@ class LacProcessMethods(object):
 
     def collate_and_fetch_records_for_race(self, race_ids, rows):
         races = {}
+        election_info = {"title":[], "stats":[]}
+        title_rid = None
+        stats_rid = None
+        for row in rows:
+            if row[3:5] == "ET" or row[3:5] == "TD":
+                election_info["title"].append(row)
+                if title_rid == None:
+                    title_rid = row[:3]
+            elif row[5:9] == "STAT":
+                election_info["stats"].append(row)
+                if stats_rid == None:
+                    stats_rid = row[:3]
+            else:
+                pass
+
         for rid in race_ids:
-            race_rows = []
-            for row in rows:
-                if row[:3] == rid:
-                    race_rows.append(row)
-                else:
-                    pass
-            races[rid] = race_rows
-        return races
+            if rid == title_rid or rid == stats_rid:
+                pass
+            else:
+                race_rows = []
+                for row in rows:
+                    if row[:3] == rid:
+                        race_rows.append(row)
+                    else:
+                        pass
+                races[rid] = race_rows
+        print "\t* Races collated"
+        return [races, election_info]
 
     def dictify_records_and_return(self, race):
         """Parses each record and returns everything as a list of dictionaries.
@@ -545,13 +508,13 @@ class LacProcessMethods(object):
         judges = contest_package['judges']
         
         if contest['is_judicial_contest']:
-            """ This is a judicial candidate """
+            """ This is a judicial appointee """
 
             for judge in judges:
                 pass
 
         elif contest['is_ballot_measure']:
-            """ This is a judicial appointee """
+            """ This is a ballot measure """
             contestname = (contest['contest_title']).title()
             if contest['contest_title_cont']:
                 fullname = (contest['contest_title_cont']).replace("MEASURE","Measure")
@@ -578,13 +541,13 @@ class LacProcessMethods(object):
             frame.contest["is_judicial"] = False
             frame.contest["is_runoff"] = False
             frame.contest["reporttype"] = None
-            if frame._to_num(contest['total_precincts'])["change"] == True:
+            if frame._to_num(contest['total_precincts'])["convert"] == True:
                 pt = frame._to_num(contest['total_precincts'])["value"]
                 frame.contest["precinctstotal"] = pt
             else:
                 frame.contest["precinctstotal"] = None
                 raise Exception("precinctstotal is not a number")
-            if frame._to_num(contest['precincts_reporting'])["change"] == True:
+            if frame._to_num(contest['precincts_reporting'])["convert"] == True:
                 pr = frame._to_num(contest['precincts_reporting'])["value"]
                 frame.contest["precinctsreporting"] = pr
             else:
@@ -613,25 +576,25 @@ class LacProcessMethods(object):
                 frame.measure["fullname"] = fullname
                 frame.measure["measureslug"] = frame._slug(fullname)
                 frame.measure["description"] = measure['measure_text'].title()
-                if frame._to_num(measure['yes_votes'])["change"] == True:
+                if frame._to_num(measure['yes_votes'])["convert"] == True:
                     yescount = frame._to_num(measure['yes_votes'])["value"]
                     frame.measure["yescount"] = yescount
                 else:
                     frame.measure["yescount"] = None
                     raise Exception("yescount is not a number")
-                if frame._to_num(measure['yes_percent'])["change"] == True:
+                if frame._to_num(measure['yes_percent'])["convert"] == True:
                     yespct = frame._to_num(measure['yes_percent'])["value"]
                     frame.measure["yespct"] = yespct
                 else:
                     frame.measure["yespct"] = None
                     raise Exception("yespct is not a number")
-                if frame._to_num(measure['no_votes'])["change"] == True:
+                if frame._to_num(measure['no_votes'])["convert"] == True:
                     nocount = frame._to_num(measure['no_votes'])["value"]
                     frame.measure["nocount"] = nocount
                 else:
                     frame.measure["nocount"] = None
                     raise Exception("nocount is not a number")
-                if frame._to_num(measure['no_percent'])["change"] == True:
+                if frame._to_num(measure['no_percent'])["convert"] == True:
                     nopct = frame._to_num(measure['no_percent'])["value"]
                     frame.measure["nopct"] = nopct
                 else:
@@ -671,7 +634,7 @@ class LacProcessMethods(object):
             frame.contest["seatnum"] = "1010101"
             # district = contest['district'].lstrip('0')
             # logger.debug(district)
-            # if frame._to_num(district)["change"] == True:
+            # if frame._to_num(district)["convert"] == True:
             #     # seatnum = frame._to_num(district)["value"]
             #     logger.debug(contest)
             #     frame.contest["seatnum"] = district
@@ -692,13 +655,13 @@ class LacProcessMethods(object):
             frame.contest["is_judicial"] = False
             frame.contest["is_runoff"] = False
             frame.contest["reporttype"] = None
-            if frame._to_num(contest['total_precincts'])["change"] == True:
+            if frame._to_num(contest['total_precincts'])["convert"] == True:
                 pt = frame._to_num(contest['total_precincts'])["value"]
                 frame.contest["precinctstotal"] = pt
             else:
                 frame.contest["precinctstotal"] = None
                 raise Exception("precinctstotal is not a number")
-            if frame._to_num(contest['precincts_reporting'])["change"] == True:
+            if frame._to_num(contest['precincts_reporting'])["convert"] == True:
                 pr = frame._to_num(contest['precincts_reporting'])["value"]
                 frame.contest["precinctsreporting"] = pr
             else:
@@ -728,8 +691,8 @@ class LacProcessMethods(object):
             saver.make_office(frame.office)
             saver.make_contest(frame.office, frame.contest)
             for candidate in candidates:
-                logger.debug(contest)
-                logger.debug(candidate)
+                # logger.debug(contest)
+                # logger.debug(candidate)
                 fullname = candidate['candidate_name'].title()
                 party = candidate['party_short']
                 if party == "REP":
@@ -744,7 +707,12 @@ class LacProcessMethods(object):
                 frame.candidate["party"] = party
                 frame.candidate["incumbent"] = False
                 frame.candidate["votecount"] = candidate['votes']
-                frame.candidate["votepct"] = candidate['percent_of_vote']
+
+                if frame._to_num(candidate['percent_of_vote'])["convert"] == True:
+                    frame.candidate["votepct"] = frame._to_num(candidate['percent_of_vote'])["value"]
+                else:
+                    frame.candidate["votepct"] = None
+
                 frame.candidate["candidateid"] = frame._concat(
                     frame.candidate["candidateslug"],
                     frame.contest["contestid"],
