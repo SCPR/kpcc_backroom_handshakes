@@ -144,7 +144,7 @@ class Saver(object):
         elif dbtz == None:
             raise Exception
         else:
-            if fttz._tzname == "PDT":
+            if fttz._tzname == "PDT" or fttz._tzname == "PST":
                 if file_time > database_time:
                     return True
                 else:
