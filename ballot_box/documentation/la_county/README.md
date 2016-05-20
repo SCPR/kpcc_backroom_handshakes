@@ -12,7 +12,8 @@ Contact
 -------
 
 Brenda Duran, PIO
-562-462-2726 or 562-462-2648
+562-462-2726 or 562-462-2648 (office)
+562-229-6304 (cell)
 BDuran@rrcc.lacounty.gov
 mediainfo@rrcc.lacounty.gov
 
