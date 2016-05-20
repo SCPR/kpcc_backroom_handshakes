@@ -94,9 +94,10 @@ class BuildLacResults(object):
             if t[3:5] == 'TD':
                 parser = TD_parser()
                 parsed = parser.parse_line(t)
+                logger.debug(parsed)
                 timestring = parsed['date'] + ' ' + parsed['time']
                 file_timestring = timestring
-
+        # logger.debug(file_timestring)
         if file_timestring:
             file_timestamp = parse(file_timestring, dayfirst=False).datetime
             file_timestamp = localtime(file_timestamp)
@@ -509,9 +510,92 @@ class LacProcessMethods(object):
         
         if contest['is_judicial_contest']:
             """ This is a judicial appointee """
+            contestname = (contest['contest_title'] + ' ' + contest['contest_title_cont']).title()
+            officename = contestname
+            frame.office["officename"] = officename
+            frame.office["officeslug"] = frame._slug(officename)
+            frame.office["active"] = True
+            frame.contest["election_id"] = election.id
+            frame.contest["resultsource_id"] = src.id
+            frame.contest["seatnum"] = None
+            frame.contest["is_uncontested"] = False
+            frame.contest["is_national"] = False
+            frame.contest["is_statewide"] = True
+            frame.contest["level"] = "california"
+            # need to determine appropriate level
+            frame.contest["is_ballot_measure"] = False
+            frame.contest["is_judicial"] = True
+            frame.contest["is_runoff"] = False
+            frame.contest["reporttype"] = None
+            if frame._to_num(contest['total_precincts'])["convert"] == True:
+                pt = frame._to_num(contest['total_precincts'])["value"]
+                frame.contest["precinctstotal"] = pt
+            else:
+                frame.contest["precinctstotal"] = None
+                raise Exception("precinctstotal is not a number")
+            if frame._to_num(contest['precincts_reporting'])["convert"] == True:
+                pr = frame._to_num(contest['precincts_reporting'])["value"]
+                frame.contest["precinctsreporting"] = pr
+            else:
+                frame.contest["precinctsreporting"] = None
+                raise Exception("precinctsreporting is not a number")
+            frame.contest["precinctsreportingpct"] = frame._calc_pct(
+                frame.contest["precinctsreporting"],
+                frame.contest["precinctstotal"]
+            )
+            frame.contest["votersregistered"] = contest['registration']
+            frame.contest["votersturnout"] = None
+            frame.contest["contestname"] = frame.office["officename"]
+            frame.contest["contestdescription"] = None
+            frame.contest["contestid"] = frame._concat(
+                election.electionid,
+                src.source_short,
+                frame.contest["level"],
+                frame.office["officeslug"],
+                delimiter="-"
+            )
+            saver.make_office(frame.office)
+            saver.make_contest(frame.office, frame.contest)
 
             for judge in judges:
-                pass
+                fullname = judge["judicial_name"]
+                frame.judicial["firstname"] = None
+                frame.judicial["lastname"] = None
+                frame.judicial["ballotorder"] = None
+                frame.judicial["fullname"] = fullname
+                frame.judicial["judicialslug"] = frame._slug(fullname)
+                frame.judicial["description"] = judge['judicial_text'].title()
+                logger.debug(judge['yes_votes'])
+                if frame._to_num(judge['yes_votes'])["convert"] == True:
+                    yescount = frame._to_num(judge['yes_votes'])["value"]
+                    frame.judicial["yescount"] = yescount
+                else:
+                    frame.judicial["yescount"] = None
+                    raise Exception("yescount is not a number")
+                if frame._to_num(judge['yes_percent'])["convert"] == True:
+                    yespct = frame._to_num(judge['yes_percent'])["value"]
+                    frame.judicial["yespct"] = yespct
+                else:
+                    frame.judicial["yespct"] = None
+                    raise Exception("yespct is not a number")
+                if frame._to_num(judge['no_votes'])["convert"] == True:
+                    nocount = frame._to_num(judge['no_votes'])["value"]
+                    frame.judicial["nocount"] = nocount
+                else:
+                    frame.judicial["nocount"] = None
+                    raise Exception("nocount is not a number")
+                if frame._to_num(judge['no_percent'])["convert"] == True:
+                    nopct = frame._to_num(judge['no_percent'])["value"]
+                    frame.judicial["nopct"] = nopct
+                else:
+                    frame.judicial["nopct"] = None
+                    raise Exception("nopct is not a number")
+                frame.judicial["judgeid"] = frame._concat(
+                    frame.judicial["judicialslug"],
+                    frame.contest["contestid"],
+                    delimiter="-"
+                )
+                saver.make_judicial(frame.contest, frame.judicial)
 
         elif contest['is_ballot_measure']:
             """ This is a ballot measure """
@@ -526,7 +610,7 @@ class LacProcessMethods(object):
                 contestname,
                 delimiter="-",
             )
-            level = None
+            # level = None
             frame.office["officename"] = officename
             frame.office["officeslug"] = frame._slug(officename)
             frame.office["active"] = True
