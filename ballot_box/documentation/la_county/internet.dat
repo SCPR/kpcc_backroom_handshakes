@@ -34,17 +34,17 @@
 029DRSC        REGISTRATION     2,493,039
 030JCAC        APPELLATE COURT JUSTICES
 030BKAC
-030JNAC           ASSOCIATE JUSTICE DIV 1    WILLIAM MASTERSON  - YES    Z,ZZZ,ZZ9   ZZ9.99
-030JNAC                                                         - NO     Z,ZZZ,ZZ9   ZZ9.99
+030JNAC           ASSOCIATE JUSTICE DIV 1    WILLIAM MASTERSON  - YES      429,039    46.29
+030JNSC                                                         - NO       629,039    53.27
 030BKAC
-030JNAC           ASSOCIATE JUSTICE DIV 1    REUBEN A ORTEGA    - YES    Z,ZZZ,ZZ9   ZZ9.99
-030JNAC                                                         - NO     Z,ZZZ,ZZ9   ZZ9.99
+030JNAC           ASSOCIATE JUSTICE DIV 1    REUBEN A ORTEGA    - YES      429,039    46.29
+030JNSC                                                         - NO       629,039    53.27
 030BKAC
-030JNAC           PRESIDING JUSTICE DIV 2    ROGER W BOREN      - YES    Z,ZZZ,ZZ9   ZZ9.99
-030JNAC                                                         - NO     Z,ZZZ,ZZ9   ZZ9.99
+030JNAC           PRESIDING JUSTICE DIV 2    ROGER W BOREN      - YES      429,039    46.29
+030JNSC                                                         - NO       629,039    53.27
 030BKAC
-030JNAC           ASSOCIATE JUSTICE DIV 2    MICHAEL G NOTT     - YES    Z,ZZZ,ZZ9   ZZ9.99
-030JNAC                                                         - NO     Z,ZZZ,ZZ9   ZZ9.99
+030JNAC           ASSOCIATE JUSTICE DIV 2    MICHAEL G NOTT     - YES      429,039    46.29
+030JNSC                                                         - NO       629,039    53.27
 030BKAC
 030PRAC        TOTAL PRECINCTS        689            PRECINCTS REPORTING       580    89.99
 030DRAC        REGISTRATION     2,493,039
