@@ -16,12 +16,19 @@ class BallotMeasureAdmin(admin.ModelAdmin):
     def get_source(self, obj):
         return obj.contest.resultsource
     get_source.short_description = "Data Source"
-    get_source.admin_order_field = 'candidate__contest'
+    # get_source.admin_order_field = "contest__resultsource"
+
+    # def get_total_votes(self, obj):
+    #     candidates = obj.contest.candidate_set.all()
+    #     vote_total = candidates.aggregate(Sum("votecount"))["votecount__sum"]
+    #     return vote_total
+    # get_total_votes.short_description = "Total Votes in Contest"
+    # get_total_votes.admin_order_field = "votecount"
 
     def precincts_reporting_pct(self, obj):
         return obj.contest.precinctsreportingpct
     precincts_reporting_pct.short_description = "Precincts Reporting"
-    precincts_reporting_pct.admin_order_field = 'candidate__contest'
+    # precincts_reporting_pct.admin_order_field = 'candidate__contest'
 
     list_display = (
         "fullname",
@@ -45,17 +52,25 @@ class CandidateAdmin(admin.ModelAdmin):
     def get_source(self, obj):
         return obj.contest.resultsource
     get_source.short_description = "Data Source"
-    get_source.admin_order_field = "candidate__contest"
+    get_source.admin_order_field = "contest__resultsource"
+
+    def get_total_votes(self, obj):
+        candidates = obj.contest.candidate_set.all()
+        vote_total = candidates.aggregate(Sum("votecount"))["votecount__sum"]
+        return vote_total
+    get_total_votes.short_description = "Total Votes in Contest"
+    # get_total_votes.admin_order_field = "votecount"
 
     def precincts_reporting_pct(self, obj):
         return obj.contest.precinctsreportingpct
     precincts_reporting_pct.short_description = "Pct Precincts Reporting"
-    precincts_reporting_pct.admin_order_field = "candidate__contest"
+    # precincts_reporting_pct.admin_order_field = "contest__candidate"
 
     list_display = (
         "fullname",
         "votecount",
         "votepct",
+        "get_total_votes",
         "precincts_reporting_pct",
         "party",
         "contest",
@@ -68,7 +83,7 @@ class CandidateAdmin(admin.ModelAdmin):
         # "precincts_reporting_pct",
     )
 
-    list_filter = ("fullname",)
+    list_filter = ("contest",)
 
     search_fields = ("fullname",)
 
@@ -86,7 +101,7 @@ class ContestAdmin(admin.ModelAdmin):
         return obj.candidate_set.count()
 
     get_candidate_count.short_description = "Number of Candidates"
-    get_candidate_count.admin_order_field = "candidate__contest"
+    # get_candidate_count.admin_order_field = "candidate__contest"
 
     list_display = (
         "contestname",
@@ -121,7 +136,7 @@ class ElectionAdmin(admin.ModelAdmin):
     def get_contest_count(self, obj):
         return obj.contest_set.count()
     get_contest_count.short_description = "Number of Races"
-    get_contest_count.admin_order_field = "contest__election"
+    # get_contest_count.admin_order_field = "contest__election"
 
     list_display = (
         "type",
@@ -145,12 +160,19 @@ class JudicialCandidateAdmin(admin.ModelAdmin):
     def get_source(self, obj):
         return obj.contest.resultsource
     get_source.short_description = "Data Source"
-    get_source.admin_order_field = "judicialcandidate__contest"
+    # get_source.admin_order_field = "contest__resultsource"
+
+    # def get_total_votes(self, obj):
+    #     candidates = obj.contest.candidate_set.all()
+    #     vote_total = candidates.aggregate(Sum("votecount"))["votecount__sum"]
+    #     return vote_total
+    # get_total_votes.short_description = "Total Votes in Contest"
+    # get_total_votes.admin_order_field = "votecount"
 
     def precincts_reporting_pct(self, obj):
         return obj.contest.precinctsreportingpct
     precincts_reporting_pct.short_description = "Precincts Reporting"
-    precincts_reporting_pct.admin_order_field = "judicialcandidate__contest"
+    # precincts_reporting_pct.admin_order_field = "judicialcandidate__contest"
 
     list_display = (
         "fullname",
@@ -185,13 +207,6 @@ class OfficeAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         "slug": ("name",)
     }
-
-
-# class ReportingUnitAdmin(admin.ModelAdmin):
-#     save_on_top = True
-#     prepopulated_fields = {
-#         "reportingunitslug": ("reportingunitname",)
-#     }
 
 
 class ResultSourceAdmin(admin.ModelAdmin):

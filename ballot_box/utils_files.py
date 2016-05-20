@@ -49,7 +49,7 @@ class Retriever(object):
         )
         try:
             response.raise_for_status()
-            logger.debug("Success! %s responded" % (src.source_url))
+            logger.info("Success! %s responded with a file" % (src.source_url))
         except requests.exceptions.ConnectionError as exception:
             # incorrect domain
             logger.error("%s: %s" % (exception, src.source_url))
@@ -75,27 +75,32 @@ class Retriever(object):
         file_exists = os.path.isfile(self.file_name)
         file_has_size = os.path.getsize(self.file_name)
         if file_exists == True:
-            logger.debug("Success! %s exists" % (self.file_name))
+            logger.info("Success! %s downloaded" % (this_file))
             if file_has_size > 0:
-                logger.debug("Success! %s is valid" % (self.file_name))
+                logger.info("Success! %s is a valid file" % (this_file))
             else:
-                logger.debug("Failure! %s isn't valid" % (self.file_name))
+                logger.error("Failure! %s isn't valid" % (self.file_name))
                 raise Exception
         else:
-            logger.debug("Failure! %s doesn't exist" % (self.file_name))
+            logger.error("Failure! %s doesn't exist" % (self.file_name))
             raise Exception
 
     def _create_directory_for_latest_file(self, src, data_directory):
         """
-        move latest files to a latest directory
+        move latest files to a working directory
         """
         latest_directory = "%s%s_latest" % (data_directory, src.source_short)
-        try:
-            os.makedirs(latest_directory)
-            logger.debug("Success!")
-        except OSError as exception:
-            if exception.errno != errno.EEXIST:
-                raise
+        dir_exists = os.path.isdir(latest_directory)
+        if dir_exists == True:
+            logger.info("Skipping because %s already exists" %
+                        (latest_directory))
+        else:
+            try:
+                os.makedirs(latest_directory)
+                logger.info("Success! We created %s" % (latest_directory))
+            except OSError as exception:
+                if exception.errno != errno.EEXIST:
+                    raise
 
     def _copy_timestamped_file_to_latest(self, src, data_directory):
         """
@@ -108,7 +113,7 @@ class Retriever(object):
             shutil.copyfile(self.file_name, latest_path)
             file_exists = os.path.isfile(latest_path)
             if file_exists == True:
-                logger.debug("Success!")
+                logger.info("Success! %s is ready to parse" % (this_file))
         except Exception, exception:
             logger.error(exception)
             raise
@@ -118,6 +123,7 @@ class Retriever(object):
         move timestamped zipfile to archives
         """
         archives = "%s_archived_files" % (data_directory)
+        this_file = os.path.basename(self.file_name)
         try:
             os.makedirs(archives)
         except OSError as exception:
@@ -126,7 +132,7 @@ class Retriever(object):
         shutil.move(self.file_name, archives)
         file_exists = os.path.isfile(self.file_name)
         if file_exists == False:
-            logger.debug("Success!")
+            logger.info("Success! %s is archived" % (this_file))
 
     def _found_required_files(self, src, data_directory):
         """
@@ -141,16 +147,18 @@ class Retriever(object):
                     files = zipfile.ZipFile.namelist(zip)
                     for file in src.source_files.split(", "):
                         if file in set(files):
-                            logger.debug("Success: %s exists" % (file))
+                            logger.info(
+                                "Success: %s exists in the zipfile" % (file))
                         else:
-                            logger.error("Failure: %s does not exist" % (file))
+                            logger.error(
+                                "Failure: %s does not exist in the zipfile" % (file))
             except Exception, exception:
                 logger.error(exception)
         else:
             try:
                 for file in src.source_files.split(", "):
                     if file == os.path.basename(latest_path):
-                        logger.debug("Success: %s exists" % (file))
+                        logger.info("Success: %s exists" % (file))
                     else:
                         logger.error("Failure: %s does not exist" % (file))
             except Exception, exception:
@@ -173,13 +181,15 @@ class Retriever(object):
                         file_exists = os.path.isfile(
                             os.path.join(latest_directory, file))
                         if file_exists == True:
-                            logger.debug("Success: %s exists" % (file))
+                            logger.info(
+                                "Success: %s has been extracted from the zipfile" % (file))
                         else:
-                            logger.error("Failure: %s does not exist" % (file))
+                            logger.error(
+                                "Failure: %s has not been extracted from the zipfile" % (file))
                 os.remove(latest_path)
                 file_exists = os.path.isfile(latest_path)
                 if file_exists == False:
-                    logger.debug("%s successfully removed" %
-                                 (os.path.basename(latest_path)))
+                    logger.info("%s successfully processed" %
+                                (os.path.basename(latest_path)))
         else:
             pass
