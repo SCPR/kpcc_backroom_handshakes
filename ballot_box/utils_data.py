@@ -3,7 +3,6 @@
 
 from __future__ import division
 from django.conf import settings
-from django.db.models import Sum
 import os.path
 import errno
 import logging
@@ -80,7 +79,6 @@ class Framer(object):
     #     """
     #     """
     #     self.id = self.unique_id
-
 
     def _slug(self, value):
         """

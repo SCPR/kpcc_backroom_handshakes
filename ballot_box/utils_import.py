@@ -77,9 +77,9 @@ class Saver(object):
                 "lastname": judicial["lastname"],
                 "fullname": judicial["fullname"],
                 "yescount": judicial["yescount"],
-                "yespct": judicial["yespct"],
+                "yespct": judicial["yespct"]/100,
                 "nocount": judicial["nocount"],
-                "nopct": judicial["nopct"],
+                "nopct": judicial["nopct"]/100,
             }
         )
         if created:
@@ -98,9 +98,9 @@ class Saver(object):
                 "fullname": measure["fullname"],
                 "description": measure["description"],
                 "yescount": measure["yescount"],
-                "yespct": measure["yespct"],
+                "yespct": measure["yespct"]/100,
                 "nocount": measure["nocount"],
-                "nopct": measure["nopct"],
+                "nopct": measure["nopct"]/100,
             }
         )
         if created:
@@ -123,7 +123,7 @@ class Saver(object):
                 "party": candidate["party"],
                 "incumbent": candidate["incumbent"],
                 "votecount": candidate["votecount"],
-                "votepct": candidate["votepct"],
+                "votepct": candidate["votepct"]/100,
             }
         )
         if created:
