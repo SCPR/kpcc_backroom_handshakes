@@ -716,7 +716,7 @@ class LacProcessMethods(object):
         else:
             """ This is a candidate for elected office """
             if contest['contest_title'] == "MEMBER OF THE ASSEMBLY":
-                contestname = "State Assembly Member District " + \
+                contestname = "State Assembly District " + \
                     contest['district'].lstrip("0")
             elif "SUPERVISOR" in contest['contest_title']:
                 contestname = "Supervisor District " + \
