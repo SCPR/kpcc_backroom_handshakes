@@ -1,8 +1,11 @@
 from __future__ import division
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.timezone import localtime
 from ballot_box.utils_files import Retriever
-from ballot_box.models import ResultSource
+from ballot_box.utils_data import Framer
+from ballot_box.utils_import import Saver
+from ballot_box.models import ResultSource, Election
 from ballot_box.lac_schemas import *
 import logging
 import time
@@ -10,7 +13,9 @@ import datetime
 import os.path
 import shutil
 import operator
+import re
 from bs4 import BeautifulSoup
+from delorean import parse
 
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
@@ -19,11 +24,11 @@ logger = logging.getLogger("kpcc_backroom_handshakes")
 class BuildLacResults(object):
     """Scaffolding to ingest LA County registrar election results."""
 
-    retrieve = Retriever()
+    # retrieve = Retriever()
 
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
-    contest_file = "internet.dat"
+    #contest_file = "internet.dat"
 
     date_object = datetime.datetime.now()
 
@@ -40,46 +45,72 @@ class BuildLacResults(object):
         # self.get_results_file(item, self.data_directory)
         self.parse_results_file(item, self.data_directory)
 
-    def get_results_file(self, item, data_directory):
+    def get_results_file(self, src, data_directory):
         """
         """
+
+        retrieve = Retriever()
 
         # download the latest results file
-        self.retrieve._successful_save_results(item)
-
-        # compare files in a zipfile with a list of expected files
-        # self.retrieve._found_files_in_zipfile(item)
-
-        # create timestamped version of a file deemed latest
-        self.retrieve._copy_timestamped_file_as_latest(
-            item, self.data_directory)
-
-        # save path to timestamped version of a filein the db
-        """
-        """
+        retrieve._request_results_and_save(src, data_directory)
 
         # move latest files to a working directory
-        self.retrieve._create_directory_for_latest_file(
-            item, self.data_directory)
+        retrieve._create_directory_for_latest_file(src, data_directory)
 
-        # move timestamped file to working directory as latest
-        self.retrieve._move_latest_files_to_latest_directory(
-            item, self.data_directory)
+        # create timestamped version of a file deemed latest
+        retrieve._copy_timestamped_file_to_latest(src, data_directory)
 
         # move timestamped zipfile to archives
-        self.retrieve._archive_downloaded_file(item, self.data_directory)
+        retrieve._archive_downloaded_file(src, data_directory)
+
+        # compare files in a zipfile with a list of expected files
+        retrieve._found_required_files(src, data_directory)
 
         # if the item is a zipfile extract the files
-        # self.retrieve._unzip_latest_file(item, self.data_directory)
+        retrieve._unzip_latest_file(src, data_directory)
 
-    def parse_results_file(self, item, data_directory):
+        # # download the latest results file
+        # self.retrieve._successful_save_results(item)
+
+        # # compare files in a zipfile with a list of expected files
+        # # self.retrieve._found_files_in_zipfile(item)
+
+        # # create timestamped version of a file deemed latest
+        # self.retrieve._copy_timestamped_file_as_latest(
+        #     item, self.data_directory)
+
+        # # save path to timestamped version of a file in the db
+        # """
+        # """
+
+        # # move latest files to a working directory
+        # self.retrieve._create_directory_for_latest_file(
+        #     item, self.data_directory)
+
+        # # move timestamped file to working directory as latest
+        # self.retrieve._move_latest_files_to_latest_directory(
+        #     item, self.data_directory)
+
+        # # move timestamped zipfile to archives
+        # self.retrieve._archive_downloaded_file(item, self.data_directory)
+
+        # # if the item is a zipfile extract the files
+        # # self.retrieve._unzip_latest_file(item, self.data_directory)
+
+
+
+    def parse_results_file(self, src, data_directory):
         """
         """
-        latest = "%s_latest" % (item.source_short)
+        saver = Saver()
+
+        latest = "%s_latest" % (src.source_short)
 
         latest_path = os.path.join(data_directory, latest)
 
-        contest_path = os.path.join(latest_path, item.source_files)
+        contest_path = os.path.join(latest_path, src.source_files)
+
+        election = Election.objects.filter(test_results=True).first()
 
         process = LacProcessMethods()
 
@@ -89,44 +120,73 @@ class BuildLacResults(object):
 
         races = process.collate_and_fetch_records_for_race(race_ids, rows)
 
-        contest_list = []
+        file_timestring = None
 
-        candidate_list = []
+        file_timestamp = None
 
-        measure_list = []
+        for r in races['000']:
+            if r[3:5] == 'TD':
+                parser = TD_parser()
+                parsed = parser.parse_line(r)
+                timestring = parsed['date'] + ' ' + parsed['time']
+                file_timestring = timestring
 
-        judicial_list = []
-
-        election_info = {}
-
-        for r in races:
-
-            records = process.dictify_records_and_return(races[r])
-
-            # identify and process overall election stats
-            if r == '000':
-                stats = process.dictify_records_and_return(races['145'])
-                election_info = process.compile_election_stats(records, stats)
-            elif r == '145':
-                pass
+        if file_timestring:
+            file_timestamp = parse(file_timestring, dayfirst=False).datetime
+            file_timestamp = localtime(file_timestamp)
+            update_this = saver._eval_timestamps(
+                file_timestamp, src.source_latest)
+            if update_this == True:
+                """ switch back to 'false' after update_this works and you have a live data source """
+                logger.debug(
+                    "We have newer data in the database so let's delete these files.")
+                # os.remove(latest_path)
             else:
-                """
-                checks to see if this is a recall contest or a nonpartisan contest. for now, it's unclear how to store or display these contests. in future, however, we may want to parse and return their results.
-                """
-                skip = process.check_if_recall_or_nonpartisan(records)
-                if skip:
-                    pass
-                else:
-                    contest = process.compile_contest_results(records)
-                    contest_list.append(contest['contest_details'])
-                    for measure in contest['measures']:
-                        measure_list.append(measure)
-                    for candidate in contest['candidates']:
-                        candidate_list.append(candidate)
-                    for judge in contest['judges']:
-                        judicial_list.append(judge)
+                logger.debug("Updating timestamps in the database")
+                saver._update_result_timestamps(src, file_timestamp)
 
-        process.prettyprint(election_info, contest_list, measure_list, candidate_list, judicial_list)
+                contest_list = []
+
+                candidate_list = []
+
+                measure_list = []
+
+                judicial_list = []
+
+                election_info = {}
+
+                for r in races:
+
+                    records = process.dictify_records_and_return(races[r])
+
+                    # identify and process overall election stats
+                    if r == '000':
+                        stats = process.dictify_records_and_return(races['145'])
+                        election_info = process.compile_election_stats(records, stats)
+                    elif r == '145':
+                        pass
+                    else:
+                        """
+                        checks to see if this is a recall contest or a nonpartisan contest. for now, it's unclear how to store or display these contests. in future, however, we may want to parse and return their results.
+                        """
+                        skip = process.check_if_recall_or_nonpartisan(records)
+                        if skip:
+                            pass
+                        else:
+                            contest = process.compile_contest_results(records)
+                            process.update_database(contest,election,src)
+                            contest_list.append(contest['contest_details'])
+                            for measure in contest['measures']:
+                                measure_list.append(measure)
+                            for candidate in contest['candidates']:
+                                candidate_list.append(candidate)
+                            for judge in contest['judges']:
+                                judicial_list.append(judge)
+
+                # process.prettyprint(election_info, contest_list, measure_list, candidate_list, judicial_list)        
+
+        else:
+            logger.debug('No file timestamp was found. Unable to determine whether this data is newer than what we already have.')
 
 
 class LacProcessMethods(object):
@@ -332,12 +392,12 @@ class LacProcessMethods(object):
             elif record['record_type'] == 'AB':
                 election_info['absentee_total_text'] = record[
                     'absentee_total_text']
-                election_info['absentee_total'] = record['absentee_total']
+                election_info['absentee_total'] = record['absentee_total'].replace(',','')
 
             elif record['record_type'] == 'BC':
                 election_info['vote_by_mail_ballots'] = record[
-                    'vote_by_mail_ballots']
-                election_info['ballots_cast'] = record['ballots_cast']
+                    'vote_by_mail_ballots'].replace(',','')
+                election_info['ballots_cast'] = record['ballots_cast'].replace(',','')
                 election_info['percent_turnout'] = record['percent_turnout']
 
             elif record['record_type'] == 'PR':
@@ -347,11 +407,11 @@ class LacProcessMethods(object):
                     election_info['total_precinct_text'] = record[
                         'total_precinct_text']
                     election_info['total_precincts'] = record[
-                        'total_precincts']
+                        'total_precincts'].replace(',','')
                     election_info['precincts_reporting_text'] = record[
                         'precincts_reporting_text']
                     election_info['precincts_reporting'] = record[
-                        'precincts_reporting']
+                        'precincts_reporting'].replace(',','')
                     election_info['percent_precincts_reporting'] = record[
                         'percent_precincts_reporting']
 
@@ -363,117 +423,335 @@ class LacProcessMethods(object):
         """
         fetches records for each contest and returns overall contest info,candidates, measures, etc.
         """
-        contest_dictionary = {}
-        measure_list = []
-        candidate_list = []
-        judicial_list = []
+        contest = {}
+        measures = []
+        candidates = []
+        judge_candidates = []
         for record in records:
             if record['record_type'] == 'CC':
-                contest_dictionary['page_sequence'] = record['page_sequence']
-                contest_dictionary['contest_id'] = record['contest_id']
-                contest_dictionary['district'] = record['district']
-                contest_dictionary['division'] = record['division']
-                contest_dictionary['party_code'] = record['party_code']
-                contest_dictionary['contest_title'] = record['contest_title']
-                contest_dictionary['contest_title_cont'] = record[
+                contest['page_sequence'] = record['page_sequence']
+                contest['contest_id'] = record['contest_id']
+                contest['district'] = record['district']
+                contest['division'] = record['division']
+                contest['party_code'] = record['party_code']
+                contest['contest_title'] = record['contest_title']
+                contest['contest_title_cont'] = record[
                     'contest_title_cont']
-                contest_dictionary['is_ballot_measure'] = False
-                contest_dictionary['is_judicial_contest'] = False
+                contest['is_ballot_measure'] = False
+                contest['is_judicial_contest'] = False
 
             elif record['record_type'] == 'MC':
-                contest_dictionary['page_sequence'] = record['page_sequence']
-                contest_dictionary['contest_id'] = record['contest_id']
-                contest_dictionary['district'] = record['district']
-                contest_dictionary['division'] = record['division']
-                contest_dictionary['contest_title'] = record['contest_title']
-                contest_dictionary['contest_title_cont'] = record[
+                contest['page_sequence'] = record['page_sequence']
+                contest['contest_id'] = record['contest_id']
+                contest['district'] = record['district']
+                contest['division'] = record['division']
+                contest['contest_title'] = record['contest_title']
+                contest['contest_title_cont'] = record[
                     'contest_title_cont']
-                contest_dictionary['is_ballot_measure'] = True
-                contest_dictionary['is_judicial_contest'] = False
+                contest['is_ballot_measure'] = True
+                contest['is_judicial_contest'] = False
 
             elif record['record_type'] == 'JC':
-                contest_dictionary['page_sequence'] = record['page_sequence']
-                contest_dictionary['contest_id'] = record['contest_id']
-                contest_dictionary['district'] = record['district']
-                contest_dictionary['division'] = record['division']
-                contest_dictionary['contest_title'] = record['contest_title']
-                contest_dictionary['contest_title_cont'] = record[
+                contest['page_sequence'] = record['page_sequence']
+                contest['contest_id'] = record['contest_id']
+                contest['district'] = record['district']
+                contest['division'] = record['division']
+                contest['contest_title'] = record['contest_title']
+                contest['contest_title_cont'] = record[
                     'contest_title_cont']
-                contest_dictionary['is_ballot_measure'] = False
-                contest_dictionary['is_judicial_contest'] = True
+                contest['is_ballot_measure'] = False
+                contest['is_judicial_contest'] = True
 
             elif record['record_type'] == 'PT':
-                contest_dictionary['party_code'] = record['party_code']
-                contest_dictionary['party_name'] = record['party_name']
+                contest['party_code'] = record['party_code']
+                contest['party_name'] = record['party_name']
 
             elif record['record_type'] == 'CN':
-                candidate_dictionary = {}
-                candidate_dictionary['page_sequence'] = record['page_sequence']
-                candidate_dictionary['contest_id'] = record['contest_id']
-                candidate_dictionary['district'] = record['district']
-                candidate_dictionary['division'] = record['division']
-                candidate_dictionary['party_code'] = record['party_code']
-                candidate_dictionary[
+                candidate = {}
+                candidate['page_sequence'] = record['page_sequence']
+                candidate['contest_id'] = record['contest_id']
+                candidate['district'] = record['district']
+                candidate['division'] = record['division']
+                candidate['party_code'] = record['party_code']
+                candidate[
                     'candidate_name'] = record['candidate_name']
-                candidate_dictionary['party_short'] = record['party_short']
-                candidate_dictionary['votes'] = record['votes']
-                candidate_dictionary['percent_of_vote'] = record[
+                candidate['party_short'] = record['party_short']
+                candidate['votes'] = record['votes'].replace(',','')
+                candidate['percent_of_vote'] = record[
                     'percent_of_vote']
-                candidate_list.append(candidate_dictionary)
+                candidates.append(candidate)
 
             elif record['record_type'] == 'MT':
-                measure_dictionary = {}
-                measure_dictionary['page_sequence'] = record['page_sequence']
-                measure_dictionary['contest_id'] = record['contest_id']
-                measure_dictionary['district'] = record['district']
-                measure_dictionary['division'] = record['division']
-                measure_dictionary['measure_id'] = record['measure_id']
-                measure_dictionary['measure_text'] = record[
+                measure = {}
+                measure['page_sequence'] = record['page_sequence']
+                measure['contest_id'] = record['contest_id']
+                measure['district'] = record['district']
+                measure['division'] = record['division']
+                measure['measure_id'] = record['measure_id']
+                measure['measure_text'] = record[
                     'measure_text'].replace('- YES', '').strip()
-                measure_dictionary['yes_votes'] = record['yes_votes']
-                measure_dictionary['yes_percent'] = record['yes_percent']
-                measure_dictionary['no_votes'] = record['no_votes']
-                measure_dictionary['no_percent'] = record['no_percent']
-                measure_list.append(measure_dictionary)
+                measure['yes_votes'] = record['yes_votes'].replace(',','')
+                measure['yes_percent'] = record['yes_percent']
+                measure['no_votes'] = record['no_votes'].replace(',','')
+                measure['no_percent'] = record['no_percent']
+                measures.append(measure)
 
             elif record['record_type'] == 'JN':
-                judge_dictionary = {}
-                judge_dictionary['record_type'] = record['record_type']
-                judge_dictionary['contest_id'] = record['contest_id']
-                judge_dictionary['district'] = record['district']
-                judge_dictionary['division'] = record['division']
-                judge_dictionary['judicial_text'] = record['judicial_text']
-                judge_dictionary['judicial_name'] = record['judicial_name']
-                judge_dictionary['voting_rule'] = record['voting_rule']
-                judge_dictionary['yes_votes'] = record['yes_votes']
-                judge_dictionary['yes_percent'] = record['no_percent']
-                judge_dictionary['no_votes'] = record['no_votes']
-                judge_dictionary['no_percent'] = record['no_percent']
-                judicial_list.append(judge_dictionary)
+                judge_candidate = {}
+                judge_candidate['record_type'] = record['record_type']
+                judge_candidate['contest_id'] = record['contest_id']
+                judge_candidate['district'] = record['district']
+                judge_candidate['division'] = record['division']
+                judge_candidate['judicial_text'] = record['judicial_text']
+                judge_candidate['judicial_name'] = record['judicial_name']
+                judge_candidate['voting_rule'] = record['voting_rule']
+                judge_candidate['yes_votes'] = record['yes_votes'].replace(',','')
+                judge_candidate['yes_percent'] = record['no_percent']
+                judge_candidate['no_votes'] = record['no_votes'].replace(',','')
+                judge_candidate['no_percent'] = record['no_percent']
+                judge_candidates.append(judge_candidate)
 
             elif record['record_type'] == 'PR':
-                contest_dictionary['total_precinct_text'] = record[
+                contest['total_precinct_text'] = record[
                     'total_precinct_text']
-                contest_dictionary['total_precincts'] = record[
-                    'total_precincts']
-                contest_dictionary['precincts_reporting_text'] = record[
+                contest['total_precincts'] = record[
+                    'total_precincts'].replace(',','')
+                contest['precincts_reporting_text'] = record[
                     'precincts_reporting_text']
-                contest_dictionary['precincts_reporting'] = record[
-                    'precincts_reporting']
-                contest_dictionary['percent_precincts_reporting'] = record[
+                contest['precincts_reporting'] = record[
+                    'precincts_reporting'].replace(',','')
+                contest['percent_precincts_reporting'] = record[
                     'percent_precincts_reporting']
 
             elif record['record_type'] == 'DR':
-                contest_dictionary['registration'] = record['registration']
+                contest['registration'] = record['registration'].replace(',','')
 
             elif record['record_type'] == 'VF':
-                contest_dictionary['vote_for_text'] = record['vote_for_text']
-                contest_dictionary['vote_for_number'] = record[
+                contest['vote_for_text'] = record['vote_for_text']
+                contest['vote_for_number'] = record[
                     'vote_for_number']
 
-        contest_package = {'contest_details': contest_dictionary,
-                           'candidates': candidate_list, 'measures': measure_list, 'judges': judicial_list}
+        contest_package = {'contest_details': contest,
+                           'candidates': candidates, 'measures': measures, 'judges': judge_candidates}
         return contest_package
+
+    def update_database(self, contest_package, election, src):
+        """ import candidates, measures, office and contest info from compiled data """
+        saver = Saver()
+        frame = Framer()
+        contest = contest_package['contest_details']
+        candidates = contest_package['candidates']
+        measures = contest_package['measures']
+        judges = contest_package['judges']
+        
+        if contest['is_judicial_contest']:
+            """ This is a judicial candidate """
+
+            for judge in judges:
+                pass
+
+        elif contest['is_ballot_measure']:
+            """ This is a judicial appointee """
+            contestname = (contest['contest_title']).title()
+            if contest['contest_title_cont']:
+                fullname = (contest['contest_title_cont']).replace("MEASURE","Measure")
+            else:
+                fullname = (contest['contest_title']).title()
+                contestname = (contest['contest_title']).title()
+            officename = frame._concat(
+                "Measure",
+                contestname,
+                delimiter="-",
+            )
+            level = None
+            frame.office["officename"] = officename
+            frame.office["officeslug"] = frame._slug(officename)
+            frame.office["active"] = True
+            frame.contest["election_id"] = election.id
+            frame.contest["resultsource_id"] = src.id
+            frame.contest["seatnum"] = None
+            frame.contest["is_uncontested"] = False
+            frame.contest["is_national"] = False
+            frame.contest["is_statewide"] = False
+            frame.contest["level"] = "county"
+            frame.contest["is_ballot_measure"] = True
+            frame.contest["is_judicial"] = False
+            frame.contest["is_runoff"] = False
+            frame.contest["reporttype"] = None
+            if frame._to_num(contest['total_precincts'])["change"] == True:
+                pt = frame._to_num(contest['total_precincts'])["value"]
+                frame.contest["precinctstotal"] = pt
+            else:
+                frame.contest["precinctstotal"] = None
+                raise Exception("precinctstotal is not a number")
+            if frame._to_num(contest['precincts_reporting'])["change"] == True:
+                pr = frame._to_num(contest['precincts_reporting'])["value"]
+                frame.contest["precinctsreporting"] = pr
+            else:
+                frame.contest["precinctsreporting"] = None
+                raise Exception("precinctsreporting is not a number")
+            frame.contest["precinctsreportingpct"] = frame._calc_pct(
+                frame.contest["precinctsreporting"],
+                frame.contest["precinctstotal"]
+            )
+            frame.contest["votersregistered"] = contest['registration']
+            frame.contest["votersturnout"] = None
+            frame.contest["contestname"] = frame.office["officename"]
+            frame.contest["contestdescription"] = None
+            frame.contest["contestid"] = frame._concat(
+                election.electionid,
+                src.source_short,
+                frame.contest["level"],
+                frame.office["officeslug"],
+                delimiter="-"
+            )
+            saver.make_office(frame.office)
+            saver.make_contest(frame.office, frame.contest)
+
+            for measure in measures:
+                frame.measure["ballotorder"] = None
+                frame.measure["fullname"] = fullname
+                frame.measure["measureslug"] = frame._slug(fullname)
+                frame.measure["description"] = measure['measure_text'].title()
+                if frame._to_num(measure['yes_votes'])["change"] == True:
+                    yescount = frame._to_num(measure['yes_votes'])["value"]
+                    frame.measure["yescount"] = yescount
+                else:
+                    frame.measure["yescount"] = None
+                    raise Exception("yescount is not a number")
+                if frame._to_num(measure['yes_percent'])["change"] == True:
+                    yespct = frame._to_num(measure['yes_percent'])["value"]
+                    frame.measure["yespct"] = yespct
+                else:
+                    frame.measure["yespct"] = None
+                    raise Exception("yespct is not a number")
+                if frame._to_num(measure['no_votes'])["change"] == True:
+                    nocount = frame._to_num(measure['no_votes'])["value"]
+                    frame.measure["nocount"] = nocount
+                else:
+                    frame.measure["nocount"] = None
+                    raise Exception("nocount is not a number")
+                if frame._to_num(measure['no_percent'])["change"] == True:
+                    nopct = frame._to_num(measure['no_percent'])["value"]
+                    frame.measure["nopct"] = nopct
+                else:
+                    frame.measure["nopct"] = None
+                    raise Exception("nopct is not a number")
+                frame.measure["measureid"] = frame._concat(
+                    frame.measure["measureslug"],
+                    frame.contest["contestid"],
+                    delimiter="-"
+                )
+                saver.make_measure(frame.contest, frame.measure)
+
+        else:
+            """ This is a candidate for elected office """
+            if contest['contest_title'] == "MEMBER OF THE ASSEMBLY":
+                contestname = "State Assembly Member District " + contest['district'].lstrip("0")
+            elif "SUPERVISOR" in contest['contest_title']:
+                contestname = "Supervisor District " + contest['district'].lstrip("0")
+            elif "U.S. REPRESENTATIVE" in contest['contest_title']:
+                contestname = "U.S. House of Representatives District " + contest['district'].lstrip("0")
+            elif "DELEGATES" in contest['contest_title']:
+                contestname = "Presidential Primary Delegates - CD" + contest['district'].lstrip("0")
+            elif "STATE SENATOR" in contest['contest_title']:
+                contestname = "State Senate District " + contest['district'].lstrip("0")
+            elif "PARTY COUNTY COMMITTEE" in contest['contest_title']:
+                contestname = contest['party_name'].capitalize() + ' Party County Committee District ' + contest['district'].lstrip("0")
+            else:
+                contestname = contest['contest_title'].title() + ' ' + contest['contest_title_cont'].title()
+            officename = contestname
+            if "U.S." in contest['contest_title'] or "STATE" in contest['contest_title']:
+                level = "california"
+                frame.contest["is_statewide"] = True
+            else:
+                level = "county"
+                frame.contest["is_statewide"] = False
+            frame.contest["level"] = level
+            frame.contest["seatnum"] = "1010101"
+            # district = contest['district'].lstrip('0')
+            # logger.debug(district)
+            # if frame._to_num(district)["change"] == True:
+            #     # seatnum = frame._to_num(district)["value"]
+            #     logger.debug(contest)
+            #     frame.contest["seatnum"] = district
+            # else:
+            #     frame.contest["seatnum"] = None
+            #     logger.debug("No seatnum for this office")
+            frame.office["officename"] = officename
+            frame.office["officeslug"] = frame._slug(officename)
+            frame.office["active"] = True
+            frame.contest["election_id"] = election.id
+            frame.contest["resultsource_id"] = src.id
+            if len(candidates) < 2:
+                frame.contest["is_uncontested"] = True
+            else:
+                frame.contest["is_uncontested"] = False
+            frame.contest["is_national"] = False
+            frame.contest["is_ballot_measure"] = False
+            frame.contest["is_judicial"] = False
+            frame.contest["is_runoff"] = False
+            frame.contest["reporttype"] = None
+            if frame._to_num(contest['total_precincts'])["change"] == True:
+                pt = frame._to_num(contest['total_precincts'])["value"]
+                frame.contest["precinctstotal"] = pt
+            else:
+                frame.contest["precinctstotal"] = None
+                raise Exception("precinctstotal is not a number")
+            if frame._to_num(contest['precincts_reporting'])["change"] == True:
+                pr = frame._to_num(contest['precincts_reporting'])["value"]
+                frame.contest["precinctsreporting"] = pr
+            else:
+                frame.contest["precinctsreporting"] = None
+                raise Exception(
+                    "precinctsreporting is not a number")
+            frame.contest["precinctsreportingpct"] = frame._calc_pct(
+                frame.contest["precinctsreporting"],
+                frame.contest["precinctstotal"]
+            )
+            frame.contest["votersregistered"] = contest['registration']
+            frame.contest["votersturnout"] = None
+            frame.contest["contestname"] = frame.office[
+                "officename"]
+            try:
+                frame.contest["contestdescription"] = contest['vote_for_text'].capitalize() + ' ' + contest['vote_for_number']
+            except:
+                frame.contest["contestdescription"] = None
+            frame.contest["contestid"] = frame._concat(
+                election.electionid,
+                src.source_short,
+                frame.contest["level"],
+                frame.office["officeslug"],
+                frame.contest["seatnum"],
+                delimiter="-"
+            )
+            saver.make_office(frame.office)
+            saver.make_contest(frame.office, frame.contest)
+            for candidate in candidates:
+                logger.debug(contest)
+                logger.debug(candidate)
+                fullname = candidate['candidate_name'].title()
+                party = candidate['party_short']
+                if party == "REP":
+                    party = "Republican"
+                elif party == "DEM":
+                    party = "Democrat"
+                frame.candidate["ballotorder"] = None
+                frame.candidate["firstname"] = None
+                frame.candidate["lastname"] = None
+                frame.candidate["fullname"] = fullname
+                frame.candidate["candidateslug"] = frame._slug(fullname)
+                frame.candidate["party"] = party
+                frame.candidate["incumbent"] = False
+                frame.candidate["votecount"] = candidate['votes']
+                frame.candidate["votepct"] = candidate['percent_of_vote']
+                frame.candidate["candidateid"] = frame._concat(
+                    frame.candidate["candidateslug"],
+                    frame.contest["contestid"],
+                    delimiter="-"
+                )
+                saver.make_candidate(
+                    frame.contest, frame.candidate)
 
     def check_if_recall_or_nonpartisan(self, records):
         """
