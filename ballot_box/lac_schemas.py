@@ -59,11 +59,8 @@ class TD_parser(FixedWidthParser):
     page_sequence = FixedWidthField(0, 3)
     record_type = FixedWidthField(3, 2)
     election_id = FixedWidthField(5, 4)
-    # time = FixedWidthField(15, 5)
-    # date = FixedWidthField(21, 10)
-    # Revert back to above fields after done parsing 1998 test data
-    time = FixedWidthField(21, 5)
-    date = FixedWidthField(27, 10)
+    time = FixedWidthField(15, 5)
+    date = FixedWidthField(21, 10)
 
 class ST_parser(FixedWidthParser):
     # Election Statistics record

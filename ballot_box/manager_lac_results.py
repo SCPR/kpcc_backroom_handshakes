@@ -27,7 +27,7 @@ class BuildLacResults(object):
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
     sources = ResultSource.objects.filter(
-        source_short="lac", source_active=True)
+        source_short="lac98", source_active=True)
 
     def _init(self, *args, **kwargs):
         """
@@ -543,7 +543,12 @@ class LacProcessMethods(object):
                 frame.contest["precinctsreporting"],
                 frame.contest["precinctstotal"]
             )
-            frame.contest["votersregistered"] = contest['registration']
+            if frame._to_num(contest['registration'])["convert"] == True:
+                frame.contest["votersregistered"] = frame._to_num(contest['registration'])["value"]
+            else:
+                frame.contest["votersregistered"] = None
+                raise Exception(
+                    "votersregistered is not a number")
             frame.contest["votersturnout"] = None
             frame.contest["contestname"] = frame.office["officename"]
             frame.contest["contestdescription"] = None
@@ -558,7 +563,7 @@ class LacProcessMethods(object):
             saver.make_contest(frame.office, frame.contest)
 
             for judge in judges:
-                fullname = judge["judicial_name"]
+                fullname = judge["judicial_name"].title()
                 frame.judicial["firstname"] = None
                 frame.judicial["lastname"] = None
                 frame.judicial["ballotorder"] = None
@@ -641,7 +646,12 @@ class LacProcessMethods(object):
                 frame.contest["precinctsreporting"],
                 frame.contest["precinctstotal"]
             )
-            frame.contest["votersregistered"] = contest['registration']
+            if frame._to_num(contest['registration'])["convert"] == True:
+                frame.contest["votersregistered"] = frame._to_num(contest['registration'])["value"]
+            else:
+                frame.contest["votersregistered"] = None
+                raise Exception(
+                    "votersregistered is not a number")
             frame.contest["votersturnout"] = None
             frame.contest["contestname"] = frame.office["officename"]
             frame.contest["contestdescription"] = None
@@ -756,7 +766,12 @@ class LacProcessMethods(object):
                 frame.contest["precinctsreporting"],
                 frame.contest["precinctstotal"]
             )
-            frame.contest["votersregistered"] = contest['registration']
+            if frame._to_num(contest['registration'])["convert"] == True:
+                frame.contest["votersregistered"] = frame._to_num(contest['registration'])["value"]
+            else:
+                frame.contest["votersregistered"] = None
+                raise Exception(
+                    "votersregistered is not a number")
             frame.contest["votersturnout"] = None
             frame.contest["contestname"] = frame.office[
                 "officename"]
@@ -790,13 +805,18 @@ class LacProcessMethods(object):
                 frame.candidate["candidateslug"] = frame._slug(fullname)
                 frame.candidate["party"] = party
                 frame.candidate["incumbent"] = False
-                frame.candidate["votecount"] = candidate['votes']
-
+                if frame._to_num(candidate['votes'])["convert"] == True:
+                    frame.candidate["votecount"] = frame._to_num(candidate['votes'])["value"]
+                else:
+                    frame.candidate["votecount"] = None
+                    raise Exception(
+                        "votecount is not a number")
                 if frame._to_num(candidate['percent_of_vote'])["convert"] == True:
                     frame.candidate["votepct"] = frame._to_num(candidate['percent_of_vote'])["value"]
                 else:
                     frame.candidate["votepct"] = None
-
+                    raise Exception(
+                        "votepct is not a number")
                 frame.candidate["candidateid"] = frame._concat(
                     frame.candidate["candidateslug"],
                     frame.contest["contestid"],
