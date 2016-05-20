@@ -33,7 +33,7 @@ class Saver(object):
         if created:
             logger.debug("%s created" % (office["officeslug"]))
         else:
-            logger.debug("%s exists but we updated figures" % (office["officeslug"]))
+            logger.debug("%s exists" % (office["officeslug"]))
 
     def make_contest(self, office, contest):
         """
@@ -52,6 +52,7 @@ class Saver(object):
                 "is_statewide": contest["is_statewide"],
                 "is_ballot_measure": contest["is_ballot_measure"],
                 "is_judicial": contest["is_judicial"],
+                "reporttype": contest["reporttype"],
                 "precinctstotal": contest["precinctstotal"],
                 "precinctsreporting": contest["precinctsreporting"],
                 "precinctsreportingpct": contest["precinctsreportingpct"],

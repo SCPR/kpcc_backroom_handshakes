@@ -3,6 +3,7 @@
 
 from __future__ import division
 from django.conf import settings
+from django.db.models import Sum
 import os.path
 import errno
 import logging
@@ -10,7 +11,7 @@ import time
 import datetime
 import shutil
 import re
-from delorean import Delorean
+import types
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
@@ -75,78 +76,111 @@ class Framer(object):
         self.judicial["nocount"] = None
         self.judicial["nopct"] = None
 
-    def set_id_field(self):
-        """
-        """
-        self.id = self.unique_id
+    # def set_id_field(self):
+    #     """
+    #     """
+    #     self.id = self.unique_id
 
-    def _slug(self, unicode_string):
-        """
-        creates a slug from a unicode string
-        """
-        if isinstance(unicode_string, unicode):
-            output = unicode_string.lower().strip().replace(" ", "-")
-        else:
-            output = unicode(unicode_string)
-            output = output.lower().strip().replace(" ", "-")
-        number_of_spaces = output.count(" ")
-        if number_of_spaces == 0:
-            return output
-        else:
-            return False
 
-    def _concat(self, *args, **kwargs):
+    def _slug(self, value):
         """
+        creates an unicode slug from a value
         """
-        values = list(args)
-        output = kwargs["delimiter"].join(values)
-        return output
+        if isinstance(value, basestring):
+            try:
+                converted = value
+            except Exception, exception:
+                logger.error(exception)
+                raise
+        elif isinstance(value, str):
+            try:
+                converted = unicode(value, "utf-8")
+            except Exception, exception:
+                logger.error(exception)
+                raise
+        elif isinstance(value, (int, long, float)):
+            self.assertNotIsInstance(value, basestring)
+            try:
+                converted = str(value)
+                converted = unicode(converted)
+            except Exception, exception:
+                logger.error(exception)
+                raise
+        else:
+            self.assertNotIsInstance(value, basestring)
+            try:
+                converted = unicode(value)
+            except Exception, exception:
+                logger.error(exception)
+                raise
+        output = converted.lower().strip().replace(" ", "-")
+        output = re.sub(r"[^\w-]", "", output)
+
+        if isinstance(output, basestring):
+            number_of_spaces = output.count(" ")
+            if number_of_spaces == 0:
+                return output
+            else:
+                return False
 
     def _to_num(self, value):
         """
-        can this value be converted to an int
+        given a value can it be converted to an int
+        http://stackoverflow.com/a/16464365
         """
         output = {}
         # actually integer values
         if isinstance(value, (int, long)):
-            output["change"] = True
+            output["convert"] = True
             output["value"] = value
+            output["type"] = type(value)
         # some floats can be converted without loss
         elif isinstance(value, float):
-            output["change"] = (int(value) == float(value))
+            output["convert"] = (int(value) == float(value))
             output["value"] = value
+            output["type"] = type(value)
+        # we can't convert nonetypes
+        elif isinstance(value, types.NoneType):
+            output["convert"] = False
+            output["value"] = None
+            output["type"] = type(value)
         # we can't convert non-string
         elif not isinstance(value, basestring):
-            output["change"] = False
-            output["value"] = None
+            output["convert"] = False
+            output["value"] = "Nonstring"
+            output["type"] = type(value)
         else:
             value = value.strip()
             try:
                 # try to convert value to float
                 float_value = float(value)
-                output["change"] = True
+                output["convert"] = True
                 output["value"] = float_value
+                output["type"] = type(float_value)
             except ValueError:
                 # if fails try to convert value to int
                 try:
                     int_value = int(value)
-                    output["change"] = True
+                    output["convert"] = True
                     output["value"] = int_value
+                    output["type"] = type(int_value)
                 # if fails it's a string
                 except ValueError:
-                    output["change"] = False
+                    output["convert"] = False
                     output["value"] = None
+                    output["type"] = type(value)
         return output
 
     def _calc_pct(self, dividend, divisor):
         """
+        calculate a percent or return false
         """
         dividend = self._to_num(dividend)
         divisor = self._to_num(divisor)
-        if dividend["change"] == True and divisor["change"] == True:
-            output = dividend["value"] / divisor["value"]
+        if dividend["convert"] == True and divisor["convert"] == True:
+            output = float(dividend["value"] / divisor["value"])
         else:
-            output = False
+            output = None
         return output
 
     def _find_nth(self, haystack, needle, n):
@@ -154,4 +188,24 @@ class Framer(object):
         while start >= 0 and n > 1:
             start = haystack.find(needle, start + 1)
             n -= 1
-        return start
+        if isinstance(start, (int, float)):
+            return start
+        else:
+            return False
+
+    def _concat(self, *args, **kwargs):
+        """
+        create a slug-like string given values and a delimiter
+        """
+        values = list(args)
+        output = []
+        for value in values:
+            if not isinstance(value, (str, basestring)):
+                value = unicode(value)
+            else:
+                value = unicode(value)
+            value = value.strip()
+            output.append(value)
+        output = kwargs["delimiter"].join(output)
+        output = unicode(output)
+        return output
