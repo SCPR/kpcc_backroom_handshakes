@@ -183,7 +183,7 @@ class BuildLacResults(object):
                             for judge in contest['judges']:
                                 judicial_list.append(judge)
 
-                # process.prettyprint(election_info, contest_list, measure_list, candidate_list, judicial_list)        
+                # process.prettyprint(election_info, contest_list, measure_list, candidate_list, judicial_list)
 
         else:
             logger.debug('No file timestamp was found. Unable to determine whether this data is newer than what we already have.')
@@ -543,7 +543,7 @@ class LacProcessMethods(object):
         candidates = contest_package['candidates']
         measures = contest_package['measures']
         judges = contest_package['judges']
-        
+
         if contest['is_judicial_contest']:
             """ This is a judicial candidate """
 
@@ -830,7 +830,7 @@ class LacProcessMethods(object):
                 f.write('N/A\n')
 
     def prettyprint(self, election_info, contest_list, measure_list, candidate_list, judicial_list):
-        """Prints human readable, detailed layout of all candidates, contests, measures, and 
+        """Prints human readable, detailed layout of all candidates, contests, measures, and
         election stats. Activate by un-commenting call in evaluate_and_process_races().
         """
         report = ''
