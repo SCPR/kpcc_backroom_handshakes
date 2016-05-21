@@ -168,7 +168,6 @@ class LacProcessMethods(object):
                 list_of_race_ids.append(race_id)
         set_of_race_ids = set(list_of_race_ids)
         race_ids = list(set_of_race_ids)
-        print "\t* Race ids compiled"
         return race_ids
 
     def collate_and_fetch_records_for_race(self, race_ids, rows):
@@ -199,7 +198,6 @@ class LacProcessMethods(object):
                     else:
                         pass
                 races[rid] = race_rows
-        print "\t* Races collated"
         return [races, election_info]
 
     def dictify_records_and_return(self, race):
