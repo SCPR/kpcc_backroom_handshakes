@@ -508,7 +508,7 @@ class LacProcessMethods(object):
     def update_database(self, contest_package, election, src):
         """ import candidates, measures, office and contest info from compiled data """
         saver = Saver()
-        frame = Framer()
+        framer = Framer()
         contest = contest_package['contest_details']
         candidates = contest_package['candidates']
         measures = contest_package['measures']
@@ -519,96 +519,94 @@ class LacProcessMethods(object):
             contestname = (contest['contest_title'] +
                            ' ' + contest['contest_title_cont']).title()
             officename = contestname
-            frame.office["officename"] = officename
-            frame.office["officeslug"] = frame._slug(officename)
-            frame.office["active"] = True
-            frame.contest["election_id"] = election.id
-            frame.contest["resultsource_id"] = src.id
-            frame.contest["seatnum"] = None
-            frame.contest["is_uncontested"] = False
-            frame.contest["is_national"] = False
-            frame.contest["is_statewide"] = True
-            frame.contest["level"] = "california"
+            framer.office["officename"] = officename
+            framer.office["officeslug"] = framer._slug(officename)
+            framer.office["active"] = True
+            framer.contest["election_id"] = election.id
+            framer.contest["resultsource_id"] = src.id
+            framer.contest["seatnum"] = None
+            framer.contest["is_uncontested"] = False
+            framer.contest["is_national"] = False
+            framer.contest["is_statewide"] = True
+            framer.contest["level"] = "california"
             # need to determine appropriate level
-            frame.contest["is_ballot_measure"] = False
-            frame.contest["is_judicial"] = True
-            frame.contest["is_runoff"] = False
-            frame.contest["reporttype"] = None
-            if frame._to_num(contest['total_precincts'])["convert"] == True:
-                pt = frame._to_num(contest['total_precincts'])["value"]
-                frame.contest["precinctstotal"] = pt
+            framer.contest["is_ballot_measure"] = False
+            framer.contest["is_judicial"] = True
+            framer.contest["is_runoff"] = False
+            framer.contest["reporttype"] = None
+            if framer._to_num(contest['total_precincts'])["convert"] == True:
+                pt = framer._to_num(contest['total_precincts'])["value"]
+                framer.contest["precinctstotal"] = pt
             else:
-                frame.contest["precinctstotal"] = None
+                framer.contest["precinctstotal"] = None
                 raise Exception("precinctstotal is not a number")
-            if frame._to_num(contest['precincts_reporting'])["convert"] == True:
-                pr = frame._to_num(contest['precincts_reporting'])["value"]
-                frame.contest["precinctsreporting"] = pr
+            if framer._to_num(contest['precincts_reporting'])["convert"] == True:
+                pr = framer._to_num(contest['precincts_reporting'])["value"]
+                framer.contest["precinctsreporting"] = pr
             else:
-                frame.contest["precinctsreporting"] = None
+                framer.contest["precinctsreporting"] = None
                 raise Exception("precinctsreporting is not a number")
-            frame.contest["precinctsreportingpct"] = frame._calc_pct(
-                frame.contest["precinctsreporting"],
-                frame.contest["precinctstotal"]
+            framer.contest["precinctsreportingpct"] = framer._calc_pct(
+                framer.contest["precinctsreporting"],
+                framer.contest["precinctstotal"]
             )
-            if frame._to_num(contest['registration'])["convert"] == True:
-                frame.contest["votersregistered"] = frame._to_num(
+            if framer._to_num(contest['registration'])["convert"] == True:
+                framer.contest["votersregistered"] = framer._to_num(
                     contest['registration'])["value"]
             else:
-                frame.contest["votersregistered"] = None
+                framer.contest["votersregistered"] = None
                 raise Exception(
                     "votersregistered is not a number")
-            frame.contest["votersturnout"] = None
-            frame.contest["contestname"] = frame.office["officename"]
-            frame.contest["contestdescription"] = None
-            frame.contest["contestid"] = frame._concat(
+            framer.contest["votersturnout"] = None
+            framer.contest["contestname"] = framer.office["officename"]
+            framer.contest["contestdescription"] = None
+            framer.contest["contestid"] = saver._make_contest_id(
                 election.electionid,
                 src.source_short,
-                frame.contest["level"],
-                frame.office["officeslug"],
-                delimiter="-"
+                framer.contest["level"],
+                framer.office["officeslug"],
             )
-            saver.make_office(frame.office)
-            saver.make_contest(frame.office, frame.contest)
+            saver.make_office(framer.office)
+            saver.make_contest(framer.office, framer.contest)
 
             for judge in judges:
                 fullname = judge["judicial_name"].title()
-                frame.judicial["firstname"] = None
-                frame.judicial["lastname"] = None
-                frame.judicial["ballotorder"] = None
-                frame.judicial["fullname"] = fullname
-                frame.judicial["judicialslug"] = frame._slug(fullname)
-                frame.judicial["description"] = judge['judicial_text'].title()
-                logger.debug(judge['yes_votes'])
-                if frame._to_num(judge['yes_votes'])["convert"] == True:
-                    yescount = frame._to_num(judge['yes_votes'])["value"]
-                    frame.judicial["yescount"] = yescount
+                framer.judicial["firstname"] = None
+                framer.judicial["lastname"] = None
+                framer.judicial["ballotorder"] = None
+                framer.judicial["fullname"] = fullname
+                framer.judicial["judicialslug"] = framer._slug(fullname)
+                framer.judicial["description"] = judge['judicial_text'].title()
+                if framer._to_num(judge['yes_votes'])["convert"] == True:
+                    yescount = framer._to_num(judge['yes_votes'])["value"]
+                    framer.judicial["yescount"] = yescount
                 else:
-                    frame.judicial["yescount"] = None
+                    framer.judicial["yescount"] = None
                     raise Exception("yescount is not a number")
-                if frame._to_num(judge['yes_percent'])["convert"] == True:
-                    yespct = frame._to_num(judge['yes_percent'])["value"]
-                    frame.judicial["yespct"] = yespct
+                if framer._to_num(judge['yes_percent'])["convert"] == True:
+                    yespct = framer._to_num(judge['yes_percent'])["value"]
+                    framer.judicial["yespct"] = yespct
                 else:
-                    frame.judicial["yespct"] = None
+                    framer.judicial["yespct"] = None
                     raise Exception("yespct is not a number")
-                if frame._to_num(judge['no_votes'])["convert"] == True:
-                    nocount = frame._to_num(judge['no_votes'])["value"]
-                    frame.judicial["nocount"] = nocount
+                if framer._to_num(judge['no_votes'])["convert"] == True:
+                    nocount = framer._to_num(judge['no_votes'])["value"]
+                    framer.judicial["nocount"] = nocount
                 else:
-                    frame.judicial["nocount"] = None
+                    framer.judicial["nocount"] = None
                     raise Exception("nocount is not a number")
-                if frame._to_num(judge['no_percent'])["convert"] == True:
-                    nopct = frame._to_num(judge['no_percent'])["value"]
-                    frame.judicial["nopct"] = nopct
+                if framer._to_num(judge['no_percent'])["convert"] == True:
+                    nopct = framer._to_num(judge['no_percent'])["value"]
+                    framer.judicial["nopct"] = nopct
                 else:
-                    frame.judicial["nopct"] = None
+                    framer.judicial["nopct"] = None
                     raise Exception("nopct is not a number")
-                frame.judicial["judgeid"] = frame._concat(
-                    frame.judicial["judicialslug"],
-                    frame.contest["contestid"],
+                framer.judicial["judgeid"] = framer._concat(
+                    framer.judicial["judicialslug"],
+                    framer.contest["contestid"],
                     delimiter="-"
                 )
-                saver.make_judicial(frame.contest, frame.judicial)
+                saver.make_judicial(framer.contest, framer.judicial)
 
         elif contest['is_ballot_measure']:
             """ This is a ballot measure """
@@ -619,98 +617,95 @@ class LacProcessMethods(object):
             else:
                 fullname = (contest['contest_title']).title()
                 contestname = (contest['contest_title']).title()
-            officename = frame._concat(
+            officename = framer._concat(
                 "Measure",
                 contestname,
                 delimiter="-",
             )
             # level = None
-            frame.office["officename"] = officename
-            frame.office["officeslug"] = frame._slug(officename)
-            frame.office["active"] = True
-            frame.contest["election_id"] = election.id
-            frame.contest["resultsource_id"] = src.id
-            frame.contest["seatnum"] = None
-            frame.contest["is_uncontested"] = False
-            frame.contest["is_national"] = False
-            frame.contest["is_statewide"] = False
-            frame.contest["level"] = "county"
-            frame.contest["is_ballot_measure"] = True
-            frame.contest["is_judicial"] = False
-            frame.contest["is_runoff"] = False
-            frame.contest["reporttype"] = None
-            if frame._to_num(contest['total_precincts'])["convert"] == True:
-                pt = frame._to_num(contest['total_precincts'])["value"]
-                frame.contest["precinctstotal"] = pt
+            framer.office["officename"] = officename
+            framer.office["officeslug"] = framer._slug(officename)
+            framer.office["active"] = True
+            framer.contest["election_id"] = election.id
+            framer.contest["resultsource_id"] = src.id
+            framer.contest["seatnum"] = None
+            framer.contest["is_uncontested"] = False
+            framer.contest["is_national"] = False
+            framer.contest["is_statewide"] = False
+            framer.contest["level"] = "county"
+            framer.contest["is_ballot_measure"] = True
+            framer.contest["is_judicial"] = False
+            framer.contest["is_runoff"] = False
+            framer.contest["reporttype"] = None
+            if framer._to_num(contest['total_precincts'])["convert"] == True:
+                pt = framer._to_num(contest['total_precincts'])["value"]
+                framer.contest["precinctstotal"] = pt
             else:
-                frame.contest["precinctstotal"] = None
+                framer.contest["precinctstotal"] = None
                 raise Exception("precinctstotal is not a number")
-            if frame._to_num(contest['precincts_reporting'])["convert"] == True:
-                pr = frame._to_num(contest['precincts_reporting'])["value"]
-                frame.contest["precinctsreporting"] = pr
+            if framer._to_num(contest['precincts_reporting'])["convert"] == True:
+                pr = framer._to_num(contest['precincts_reporting'])["value"]
+                framer.contest["precinctsreporting"] = pr
             else:
-                frame.contest["precinctsreporting"] = None
+                framer.contest["precinctsreporting"] = None
                 raise Exception("precinctsreporting is not a number")
-            frame.contest["precinctsreportingpct"] = frame._calc_pct(
-                frame.contest["precinctsreporting"],
-                frame.contest["precinctstotal"]
+            framer.contest["precinctsreportingpct"] = framer._calc_pct(
+                framer.contest["precinctsreporting"],
+                framer.contest["precinctstotal"]
             )
-            if frame._to_num(contest['registration'])["convert"] == True:
-                frame.contest["votersregistered"] = frame._to_num(
+            if framer._to_num(contest['registration'])["convert"] == True:
+                framer.contest["votersregistered"] = framer._to_num(
                     contest['registration'])["value"]
             else:
-                frame.contest["votersregistered"] = None
+                framer.contest["votersregistered"] = None
                 raise Exception(
                     "votersregistered is not a number")
-            frame.contest["votersturnout"] = None
-            frame.contest["contestname"] = frame.office["officename"]
-            frame.contest["contestdescription"] = None
-            frame.contest["contestid"] = frame._concat(
+            framer.contest["votersturnout"] = None
+            framer.contest["contestname"] = framer.office["officename"]
+            framer.contest["contestdescription"] = None
+            framer.contest["contestid"] = saver._make_contest_id(
                 election.electionid,
                 src.source_short,
-                frame.contest["level"],
-                frame.office["officeslug"],
-                delimiter="-"
+                framer.contest["level"],
+                framer.office["officeslug"],
             )
-            saver.make_office(frame.office)
-            saver.make_contest(frame.office, frame.contest)
-
+            saver.make_office(framer.office)
+            saver.make_contest(framer.office, framer.contest)
             for measure in measures:
-                frame.measure["ballotorder"] = None
-                frame.measure["fullname"] = fullname
-                frame.measure["measureslug"] = frame._slug(fullname)
-                frame.measure["description"] = measure['measure_text'].title()
-                if frame._to_num(measure['yes_votes'])["convert"] == True:
-                    yescount = frame._to_num(measure['yes_votes'])["value"]
-                    frame.measure["yescount"] = yescount
+                framer.measure["ballotorder"] = None
+                framer.measure["fullname"] = fullname
+                framer.measure["measureslug"] = framer._slug(fullname)
+                framer.measure['measure_id'] = measure['measure_id'].lower()
+                framer.measure["description"] = measure['measure_text'].title()
+                if framer._to_num(measure['yes_votes'])["convert"] == True:
+                    yescount = framer._to_num(measure['yes_votes'])["value"]
+                    framer.measure["yescount"] = yescount
                 else:
-                    frame.measure["yescount"] = None
+                    framer.measure["yescount"] = None
                     raise Exception("yescount is not a number")
-                if frame._to_num(measure['yes_percent'])["convert"] == True:
-                    yespct = frame._to_num(measure['yes_percent'])["value"]
-                    frame.measure["yespct"] = yespct
+                if framer._to_num(measure['yes_percent'])["convert"] == True:
+                    yespct = framer._to_num(measure['yes_percent'])["value"]
+                    framer.measure["yespct"] = yespct
                 else:
-                    frame.measure["yespct"] = None
+                    framer.measure["yespct"] = None
                     raise Exception("yespct is not a number")
-                if frame._to_num(measure['no_votes'])["convert"] == True:
-                    nocount = frame._to_num(measure['no_votes'])["value"]
-                    frame.measure["nocount"] = nocount
+                if framer._to_num(measure['no_votes'])["convert"] == True:
+                    nocount = framer._to_num(measure['no_votes'])["value"]
+                    framer.measure["nocount"] = nocount
                 else:
-                    frame.measure["nocount"] = None
+                    framer.measure["nocount"] = None
                     raise Exception("nocount is not a number")
-                if frame._to_num(measure['no_percent'])["convert"] == True:
-                    nopct = frame._to_num(measure['no_percent'])["value"]
-                    frame.measure["nopct"] = nopct
+                if framer._to_num(measure['no_percent'])["convert"] == True:
+                    nopct = framer._to_num(measure['no_percent'])["value"]
+                    framer.measure["nopct"] = nopct
                 else:
-                    frame.measure["nopct"] = None
+                    framer.measure["nopct"] = None
                     raise Exception("nopct is not a number")
-                frame.measure["measureid"] = frame._concat(
-                    frame.measure["measureslug"],
-                    frame.contest["contestid"],
-                    delimiter="-"
+                framer.measure["measureid"] = saver._make_measure_id(
+                    framer.contest["contestid"],
+                    framer.measure['measure_id'],
                 )
-                saver.make_measure(frame.contest, frame.measure)
-
+                saver.make_measure(framer.contest, framer.measure)
         else:
             """ This is a candidate for elected office """
             if contest['contest_title'] == "MEMBER OF THE ASSEMBLY":
@@ -737,77 +732,75 @@ class LacProcessMethods(object):
             officename = contestname
             if "U.S." in contest['contest_title'] or "STATE" in contest['contest_title']:
                 level = "california"
-                frame.contest["is_statewide"] = True
+                framer.contest["is_statewide"] = True
             else:
                 level = "county"
-                frame.contest["is_statewide"] = False
-            frame.contest["level"] = level
-            frame.contest["seatnum"] = "1010101"
+                framer.contest["is_statewide"] = False
+            framer.contest["level"] = level
+            framer.contest["seatnum"] = "1010101"
             # district = contest['district'].lstrip('0')
             # logger.debug(district)
-            # if frame._to_num(district)["convert"] == True:
-            #     # seatnum = frame._to_num(district)["value"]
+            # if framer._to_num(district)["convert"] == True:
+            #     # seatnum = framer._to_num(district)["value"]
             #     logger.debug(contest)
-            #     frame.contest["seatnum"] = district
+            #     framer.contest["seatnum"] = district
             # else:
-            #     frame.contest["seatnum"] = None
+            #     framer.contest["seatnum"] = None
             #     logger.debug("No seatnum for this office")
-            frame.office["officename"] = officename
-            frame.office["officeslug"] = frame._slug(officename)
-            frame.office["active"] = True
-            frame.contest["election_id"] = election.id
-            frame.contest["resultsource_id"] = src.id
+            framer.office["officename"] = officename
+            framer.office["officeslug"] = framer._slug(officename)
+            framer.office["active"] = True
+            framer.contest["election_id"] = election.id
+            framer.contest["resultsource_id"] = src.id
             if len(candidates) < 2:
-                frame.contest["is_uncontested"] = True
+                framer.contest["is_uncontested"] = True
             else:
-                frame.contest["is_uncontested"] = False
-            frame.contest["is_national"] = False
-            frame.contest["is_ballot_measure"] = False
-            frame.contest["is_judicial"] = False
-            frame.contest["is_runoff"] = False
-            frame.contest["reporttype"] = None
-            if frame._to_num(contest['total_precincts'])["convert"] == True:
-                pt = frame._to_num(contest['total_precincts'])["value"]
-                frame.contest["precinctstotal"] = pt
+                framer.contest["is_uncontested"] = False
+            framer.contest["is_national"] = False
+            framer.contest["is_ballot_measure"] = False
+            framer.contest["is_judicial"] = False
+            framer.contest["is_runoff"] = False
+            framer.contest["reporttype"] = None
+            if framer._to_num(contest['total_precincts'])["convert"] == True:
+                pt = framer._to_num(contest['total_precincts'])["value"]
+                framer.contest["precinctstotal"] = pt
             else:
-                frame.contest["precinctstotal"] = None
+                framer.contest["precinctstotal"] = None
                 raise Exception("precinctstotal is not a number")
-            if frame._to_num(contest['precincts_reporting'])["convert"] == True:
-                pr = frame._to_num(contest['precincts_reporting'])["value"]
-                frame.contest["precinctsreporting"] = pr
+            if framer._to_num(contest['precincts_reporting'])["convert"] == True:
+                pr = framer._to_num(contest['precincts_reporting'])["value"]
+                framer.contest["precinctsreporting"] = pr
             else:
-                frame.contest["precinctsreporting"] = None
+                framer.contest["precinctsreporting"] = None
                 raise Exception(
                     "precinctsreporting is not a number")
-            frame.contest["precinctsreportingpct"] = frame._calc_pct(
-                frame.contest["precinctsreporting"],
-                frame.contest["precinctstotal"]
+            framer.contest["precinctsreportingpct"] = framer._calc_pct(
+                framer.contest["precinctsreporting"],
+                framer.contest["precinctstotal"]
             )
-            if frame._to_num(contest['registration'])["convert"] == True:
-                frame.contest["votersregistered"] = frame._to_num(
+            if framer._to_num(contest['registration'])["convert"] == True:
+                framer.contest["votersregistered"] = framer._to_num(
                     contest['registration'])["value"]
             else:
-                frame.contest["votersregistered"] = None
+                framer.contest["votersregistered"] = None
                 raise Exception(
                     "votersregistered is not a number")
-            frame.contest["votersturnout"] = None
-            frame.contest["contestname"] = frame.office[
+            framer.contest["votersturnout"] = None
+            framer.contest["contestname"] = framer.office[
                 "officename"]
             try:
-                frame.contest["contestdescription"] = contest[
+                framer.contest["contestdescription"] = contest[
                     'vote_for_text'].capitalize() + ' ' + contest['vote_for_number']
             except:
-                frame.contest["contestdescription"] = None
-            frame.contest["contestid"] = frame._concat(
+                framer.contest["contestdescription"] = None
+            framer.contest["contestid"] = saver._make_contest_id(
                 election.electionid,
                 src.source_short,
-                frame.contest["level"],
-                frame.office["officeslug"],
-                frame.contest["seatnum"],
-                delimiter="-"
+                framer.contest["level"],
+                framer.office["officeslug"],
             )
-            saver.make_office(frame.office)
-            saver.make_contest(frame.office, frame.contest)
+            saver.make_office(framer.office)
+            saver.make_contest(framer.office, framer.contest)
             for candidate in candidates:
                 # logger.debug(contest)
                 # logger.debug(candidate)
@@ -817,34 +810,34 @@ class LacProcessMethods(object):
                     party = "Republican"
                 elif party == "DEM":
                     party = "Democrat"
-                frame.candidate["ballotorder"] = None
-                frame.candidate["firstname"] = None
-                frame.candidate["lastname"] = None
-                frame.candidate["fullname"] = fullname
-                frame.candidate["candidateslug"] = frame._slug(fullname)
-                frame.candidate["party"] = party
-                frame.candidate["incumbent"] = False
-                if frame._to_num(candidate['votes'])["convert"] == True:
-                    frame.candidate["votecount"] = frame._to_num(candidate['votes'])[
+                framer.candidate["ballotorder"] = None
+                framer.candidate["firstname"] = None
+                framer.candidate["lastname"] = None
+                framer.candidate["fullname"] = fullname
+                framer.candidate["candidateslug"] = framer._slug(fullname)
+                framer.candidate["party"] = party
+                framer.candidate["incumbent"] = False
+                if framer._to_num(candidate['votes'])["convert"] == True:
+                    framer.candidate["votecount"] = framer._to_num(candidate['votes'])[
                         "value"]
                 else:
-                    frame.candidate["votecount"] = None
+                    framer.candidate["votecount"] = None
                     raise Exception(
                         "votecount is not a number")
-                if frame._to_num(candidate['percent_of_vote'])["convert"] == True:
-                    frame.candidate["votepct"] = frame._to_num(
+                if framer._to_num(candidate['percent_of_vote'])["convert"] == True:
+                    framer.candidate["votepct"] = framer._to_num(
                         candidate['percent_of_vote'])["value"]
                 else:
-                    frame.candidate["votepct"] = None
+                    framer.candidate["votepct"] = None
                     raise Exception(
                         "votepct is not a number")
-                frame.candidate["candidateid"] = frame._concat(
-                    frame.candidate["candidateslug"],
-                    frame.contest["contestid"],
+                framer.candidate["candidateid"] = framer._concat(
+                    framer.candidate["candidateslug"],
+                    framer.contest["contestid"],
                     delimiter="-"
                 )
                 saver.make_candidate(
-                    frame.contest, frame.candidate)
+                    framer.contest, framer.candidate)
 
     def check_if_recall_or_nonpartisan(self, records):
         """
