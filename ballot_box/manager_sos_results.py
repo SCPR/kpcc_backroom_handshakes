@@ -76,6 +76,9 @@ class BuildSosResults(object):
                 file_timestamp = parse(file_timestring, dayfirst=False).datetime
                 update_this = saver._eval_timestamps(
                     file_timestamp, src.source_latest)
+
+                update_this = True
+
                 if update_this == False:
                     logger.info(
                         "@chrislkeller we have newer data in the database so let's delete these files")
@@ -146,13 +149,11 @@ class BuildSosResults(object):
                             framer.contest["contestname"] = framer.office[
                                 "officename"]
                             framer.contest["contestdescription"] = None
-                            framer.contest["contestid"] = framer._concat(
+                            framer.contest["contestid"] = saver._make_contest_id(
                                 election.electionid,
                                 src.source_short,
                                 framer.contest["level"],
                                 framer.office["officeslug"],
-                                framer.contest["seatnum"],
-                                delimiter="-"
                             )
                             framer.judicial["ballotorder"] = None
                             framer.judicial["firstname"] = None
@@ -232,13 +233,11 @@ class BuildSosResults(object):
                             framer.contest["contestname"] = framer.office[
                                 "officename"]
                             framer.contest["contestdescription"] = None
-                            framer.contest["contestid"] = framer._concat(
+                            framer.contest["contestid"] = saver._make_contest_id(
                                 election.electionid,
                                 src.source_short,
                                 framer.contest["level"],
                                 framer.office["officeslug"],
-                                framer.contest["seatnum"],
-                                delimiter="-"
                             )
                             framer.judicial["ballotorder"] = None
                             framer.judicial["firstname"] = None
@@ -269,6 +268,11 @@ class BuildSosResults(object):
                                 contestname,
                                 delimiter="-",
                             )
+
+                            logger.debug(r)
+
+                            raise Exception
+
                             fullname = unicode(race.ContestName.contents[0])
                             level = None
                             seatnum = None
@@ -318,13 +322,11 @@ class BuildSosResults(object):
                             framer.contest["contestname"] = framer.office[
                                 "officename"]
                             framer.contest["contestdescription"] = None
-                            framer.contest["contestid"] = framer._concat(
+                            framer.contest["contestid"] = saver._make_contest_id(
                                 election.electionid,
                                 src.source_short,
                                 framer.contest["level"],
                                 framer.office["officeslug"],
-                                framer.contest["seatnum"],
-                                delimiter="-"
                             )
                             framer.measure["ballotorder"] = None
                             framer.measure["fullname"] = fullname
@@ -334,10 +336,10 @@ class BuildSosResults(object):
                             framer.measure["yespct"] = yespct
                             framer.measure["nocount"] = nocount
                             framer.measure["nopct"] = nopct
-                            framer.measure["measureid"] = framer._concat(
-                                framer.measure["measureslug"],
+
+                            framer.measure["measureid"] = saver._make_measure_id(
                                 framer.contest["contestid"],
-                                delimiter="-"
+                                framer.measure["measureslug"],
                             )
                             saver.make_office(framer.office)
                             saver.make_contest(framer.office, framer.contest)
@@ -395,13 +397,11 @@ class BuildSosResults(object):
                             framer.contest["contestname"] = framer.office[
                                 "officename"]
                             framer.contest["contestdescription"] = None
-                            framer.contest["contestid"] = framer._concat(
+                            framer.contest["contestid"] = saver._make_contest_id(
                                 election.electionid,
                                 src.source_short,
                                 framer.contest["level"],
                                 framer.office["officeslug"],
-                                framer.contest["seatnum"],
-                                delimiter="-"
                             )
                             saver.make_office(framer.office)
                             saver.make_contest(framer.office, framer.contest)
