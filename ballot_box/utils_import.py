@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import localtime
 from ballot_box.models import *
+from ballot_box.utils_data import Framer
 import logging
 import time
 import datetime
@@ -63,7 +64,8 @@ class Saver(object):
         if created:
             logger.debug("%s created" % (contest["contestid"]))
         else:
-            logger.debug("%s exists but we updated figures" % (contest["contestid"]))
+            logger.debug("%s exists but we updated figures" %
+                         (contest["contestid"]))
 
     def make_judicial(self, contest, judicial):
         """
@@ -77,15 +79,16 @@ class Saver(object):
                 "lastname": judicial["lastname"],
                 "fullname": judicial["fullname"],
                 "yescount": judicial["yescount"],
-                "yespct": judicial["yespct"]/100,
+                "yespct": judicial["yespct"] / 100,
                 "nocount": judicial["nocount"],
-                "nopct": judicial["nopct"]/100,
+                "nopct": judicial["nopct"] / 100,
             }
         )
         if created:
             logger.debug("%s created" % (judicial["judgeid"]))
         else:
-            logger.debug("%s exists but we updated figures" % (judicial["judgeid"]))
+            logger.debug("%s exists but we updated figures" %
+                         (judicial["judgeid"]))
 
     def make_measure(self, contest, measure):
         """
@@ -98,9 +101,9 @@ class Saver(object):
                 "fullname": measure["fullname"],
                 "description": measure["description"],
                 "yescount": measure["yescount"],
-                "yespct": measure["yespct"]/100,
+                "yespct": measure["yespct"] / 100,
                 "nocount": measure["nocount"],
-                "nopct": measure["nopct"]/100,
+                "nopct": measure["nopct"] / 100,
             }
         )
         if created:
@@ -123,7 +126,7 @@ class Saver(object):
                 "party": candidate["party"],
                 "incumbent": candidate["incumbent"],
                 "votecount": candidate["votecount"],
-                "votepct": candidate["votepct"]/100,
+                "votepct": candidate["votepct"] / 100,
             }
         )
         if created:
@@ -158,3 +161,49 @@ class Saver(object):
         obj = ResultSource.objects.get(source_slug=src.source_slug)
         obj.source_latest = file_timestamp
         obj.save(update_fields=["source_latest"])
+
+    def _make_contest_id(self, *args, **kwargs):
+        """
+        """
+        framer = Framer()
+        required_keys = [
+            "electionid",
+            "source_short",
+            "level",
+            "officeslug",
+        ]
+        if len(args) != len(required_keys):
+            raise Exception
+        else:
+            pass
+        if kwargs:
+            args = list(args)
+            # this needs work but it's a start
+            args.append(kwargs.values()[0].lower())
+            output = framer._concat(*args, delimiter="-")
+        else:
+            output = framer._concat(*args, delimiter="-")
+        return output
+
+    def _make_measure_id(self, *args, **kwargs):
+        """
+        """
+        framer = Framer()
+        required_keys = [
+            "contestid",
+            "measure_id",
+        ]
+        if len(args) != len(required_keys):
+            raise Exception
+        else:
+            pass
+        if kwargs:
+            args = list(args)
+            # this needs work but it's a start
+            args.append(kwargs.values()[0].lower())
+            output = framer._concat(*args, delimiter="-")
+        else:
+            output = framer._concat(*args, delimiter="-")
+        return output
+
+
