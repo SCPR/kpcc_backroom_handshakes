@@ -104,7 +104,6 @@ INSTALLED_APPS = (
     "django.contrib.humanize",
 
     # api & tools
-    "bakery",
     "django_admin_bootstrapped",
     "django.contrib.admin",
     "django.contrib.admindocs",
