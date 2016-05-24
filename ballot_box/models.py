@@ -97,10 +97,9 @@ class Office(models.Model):
     """
     describes the thing that a candidate is campaigning for
     """
-    name = models.CharField("Name Of The Office",
-                            max_length=255, null=False, blank=False)
-    slug = models.SlugField("Slug Of The Office",
-                            unique=True, max_length=255, null=True, blank=True)
+    name = models.CharField("Name Of The Office", max_length=255, null=False, blank=False)
+    slug = models.SlugField("Slug Of The Office", unique=True, max_length=255, null=True, blank=True)
+    officeid = models.CharField("Office ID", max_length=255, null=True, blank=True)
     active = models.BooleanField("Is This Office Active?", default=False)
     poss_error = models.BooleanField("Possible Error", default=False)
     created = models.DateTimeField("Date Created", auto_now_add=True)
