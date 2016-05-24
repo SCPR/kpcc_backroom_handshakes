@@ -177,7 +177,10 @@ class Framer(object):
         dividend = self._to_num(dividend)
         divisor = self._to_num(divisor)
         if dividend["convert"] == True and divisor["convert"] == True:
-            output = float(dividend["value"] / divisor["value"])
+            if divisor["value"] == 0:
+                output = 0
+            else:
+                output = float(dividend["value"] / divisor["value"])
         else:
             output = None
         return output

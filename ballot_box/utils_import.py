@@ -25,9 +25,10 @@ class Saver(object):
         """
         """
         obj, created = Office.objects.update_or_create(
-            slug=office["officeslug"],
+            officeid=office["officeid"],
             defaults={
                 "name": office["officename"],
+                "slug": office["officeslug"],
                 "active": office["active"]
             }
         )
@@ -196,7 +197,7 @@ class Saver(object):
         if kwargs:
             args = list(args)
             # this needs work but it's a start
-            args.append(kwargs.values()[0].lower())
+            args.append(str(kwargs.values()[0]).lower())
             output = framer._concat(*args, delimiter="-")
         else:
             output = framer._concat(*args, delimiter="-")
@@ -228,7 +229,7 @@ class Saver(object):
         if kwargs:
             args = list(args)
             # this needs work but it's a start
-            args.append(kwargs.values()[0].lower())
+            args.append(str(kwargs.values()[0]).lower())
             output = framer._concat(*args, delimiter="-")
         else:
             output = framer._concat(*args, delimiter="-")
