@@ -6,7 +6,6 @@ dbf==0.94.3
 Delorean==0.6.0
 Django==1.9
 django-admin-bootstrapped==2.5.7
-django-bakery==0.8.2
 django-debug-toolbar==1.4
 django-mass-edit==2.6
 django-tastypie==0.13.3
@@ -21,8 +20,8 @@ openpyxl==2.2.0b1
 paramiko==1.16.0
 pycrypto==2.6.1
 python-dateutil==2.5.3
-python-googlegeocoder==0.3.0
 python-mimeparse==1.5.2
+python-slugify==1.2.0
 pytz==2016.4
 PyYAML==3.11
 redis==2.10.5
@@ -32,6 +31,6 @@ slacker==0.9.9
 slacker-log-handler==1.2.0
 SQLAlchemy==1.0.12
 sqlparse==0.1.19
-twitter==1.15.0
 tzlocal==1.2.2
+Unidecode==0.4.19
 xlrd==0.9.4
