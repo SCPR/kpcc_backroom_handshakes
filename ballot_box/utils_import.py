@@ -64,8 +64,7 @@ class Saver(object):
         if created:
             logger.debug("%s created" % (contest["contestid"]))
         else:
-            logger.debug("%s exists but we updated figures" %
-                         (contest["contestid"]))
+            logger.debug("%s exists but we updated figures" % (contest["contestid"]))
 
     def make_judicial(self, contest, judicial):
         """
@@ -87,8 +86,7 @@ class Saver(object):
         if created:
             logger.debug("%s created" % (judicial["judgeid"]))
         else:
-            logger.debug("%s exists but we updated figures" %
-                         (judicial["judgeid"]))
+            logger.debug("%s exists but we updated figures" % (judicial["judgeid"]))
 
     def make_measure(self, contest, measure):
         """
@@ -109,8 +107,7 @@ class Saver(object):
         if created:
             logger.debug("%s created" % (measure["measureid"]))
         else:
-            logger.debug("%s exists but we updated figures" %
-                         (measure["measureid"]))
+            logger.debug("%s exists but we updated figures" % (measure["measureid"]))
 
     def make_candidate(self, contest, candidate):
         """
@@ -132,8 +129,7 @@ class Saver(object):
         if created:
             logger.debug("%s created" % (candidate["candidateid"]))
         else:
-            logger.debug("%s exists but we updated figures" %
-                         (candidate["candidateid"]))
+            logger.debug("%s exists but we updated figures" % (candidate["candidateid"]))
 
     def _eval_timestamps(self, file_time, database_time):
         """
@@ -161,6 +157,27 @@ class Saver(object):
         obj = ResultSource.objects.get(source_slug=src.source_slug)
         obj.source_latest = file_timestamp
         obj.save(update_fields=["source_latest"])
+
+    def _make_office_id(self, *args, **kwargs):
+        """
+        """
+        framer = Framer()
+        required_keys = [
+            "source_short",
+            "officeslug",
+        ]
+        if len(args) != len(required_keys):
+            raise Exception
+        else:
+            pass
+        if kwargs:
+            args = list(args)
+            # this needs work but it's a start
+            args.append(kwargs.values()[0].lower())
+            output = framer._concat(*args, delimiter="-")
+        else:
+            output = framer._concat(*args, delimiter="-")
+        return output
 
     def _make_contest_id(self, *args, **kwargs):
         """
