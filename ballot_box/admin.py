@@ -38,6 +38,8 @@ class BallotMeasureAdmin(admin.ModelAdmin):
         "get_source",
     )
 
+    list_per_page = 15
+
     list_filter = ("fullname",)
 
     search_fields = ("fullname",)
@@ -77,6 +79,8 @@ class CandidateAdmin(admin.ModelAdmin):
         "get_source",
     )
 
+    list_per_page = 15
+
     list_editable = (
         "votecount",
         "votepct",
@@ -114,10 +118,13 @@ class ContestAdmin(admin.ModelAdmin):
     )
 
     list_filter = (
-        "contestname",
         "is_display_priority",
-        "is_homepage_priority"
+        "is_homepage_priority",
+        "is_ballot_measure",
+        "contestname",
     )
+
+    list_per_page = 15
 
     search_fields = ("contestname",)
 
@@ -182,6 +189,8 @@ class JudicialCandidateAdmin(admin.ModelAdmin):
         "get_source",
     )
 
+    list_per_page = 15
+
     list_filter = ("fullname",)
 
     search_fields = ("fullname",)
@@ -195,6 +204,13 @@ class JudicialCandidateAdmin(admin.ModelAdmin):
 
 
 class OfficeAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "name",
+        "slug",
+    )
+
+    list_per_page = 15
 
     list_filter = ("name",)
 
