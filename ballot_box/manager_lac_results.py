@@ -65,77 +65,74 @@ class BuildLacResults(object):
         """
         """
         saver = Saver()
-
-        latest = "%s_latest" % (src.source_short)
-
-        latest_path = os.path.join(data_directory, latest)
-
-        contest_path = os.path.join(latest_path, src.source_files)
-
+        latest_directory = "%s%s_latest" % (data_directory, src.source_short)
         election = Election.objects.filter(test_results=True).first()
-
         process = LacProcessMethods()
+        for file in src.source_files.split(", "):
+            latest_path = os.path.join(latest_directory, file)
+            file_exists = os.path.isfile(latest_path)
+            file_has_size = os.path.getsize(latest_path)
+            if file_exists == True and file_has_size > 0:
+                rows = process.open_results_file(latest_path)
+                race_ids = process.get_race_ids_from(rows)
+                election_package = process.collate_and_fetch_records_for_race(
+                    race_ids, rows)
+                races = election_package[0]
+                election_title = election_package[1]["title"]
+                election_stats = election_package[1]["stats"]
+                file_timestring = None
+                file_timestamp = None
+                for t in election_title:
+                    if t[3:5] == 'TD':
+                        parser = TD_parser()
+                        parsed = parser.parse_line(t)
+                        timestring = parsed['date'] + ' ' + parsed['time']
+                        file_timestring = timestring
+                if file_timestring:
+                    file_timestamp = parse(
+                        file_timestring, dayfirst=False).datetime
+                    file_timestamp = localtime(file_timestamp)
+                    update_this = saver._eval_timestamps(
+                        file_timestamp, src.source_latest)
 
-        rows = process.open_results_file(contest_path)
+                    # REMOVE #
+                    update_this = election.test_results
 
-        race_ids = process.get_race_ids_from(rows)
-
-        election_package = process.collate_and_fetch_records_for_race(
-            race_ids, rows)
-
-        races = election_package[0]
-
-        election_title = election_package[1]["title"]
-
-        election_stats = election_package[1]["stats"]
-
-        file_timestring = None
-
-        file_timestamp = None
-
-        for t in election_title:
-            if t[3:5] == 'TD':
-                parser = TD_parser()
-                parsed = parser.parse_line(t)
-                timestring = parsed['date'] + ' ' + parsed['time']
-                file_timestring = timestring
-        # logger.debug(file_timestring)
-        if file_timestring:
-            file_timestamp = parse(file_timestring, dayfirst=False).datetime
-            file_timestamp = localtime(file_timestamp)
-            update_this = saver._eval_timestamps(
-                file_timestamp, src.source_latest)
-
-            update_this = True  # delete after update_this works and you have a live data source
-
-            if update_this == False:
-                logger.debug(
-                    "We have newer data in the database so let's delete these files.")
-                # os.remove(latest_path)
-            else:
-                logger.debug("Updating timestamps in the database")
-                saver._update_result_timestamps(src, file_timestamp)
-
-                # identify and process overall election stats
-                title = process.dictify_records_and_return(election_title)
-                stats = process.dictify_records_and_return(election_stats)
-                election_info = process.compile_election_stats(title, stats)
-
-                # process and import each race
-                for r in races:
-                    records = process.dictify_records_and_return(races[r])
-                    """
-                    checks to see if this is a recall contest or a nonpartisan contest. for now, it's unclear how to store or display these contests. in future, however, we may want to parse and return their results.
-                    """
-                    skip = process.check_if_recall_or_nonpartisan(records)
-                    if skip:
-                        pass
+                    if update_this == False:
+                        logger.info(
+                            "we have newer data in the database so let's delete these files")
+                        os.remove(latest_path)
                     else:
-                        contest = process.compile_contest_results(records)
-                        process.update_database(contest, election, src)
-        else:
-            logger.debug(
-                'No file timestamp was found. Unable to determine whether this data is newer than what we already have.')
+                        logger.info(
+                            "we have new data to save and we'll update timestamps in the database")
+                        saver._update_result_timestamps(src, file_timestamp)
+                        title = process.dictify_records_and_return(
+                            election_title)
+                        stats = process.dictify_records_and_return(
+                            election_stats)
+                        election_info = process.compile_election_stats(
+                            title, stats)
+                        for r in races:
+                            records = process.dictify_records_and_return(races[
+                                                                         r])
+                            """
+                            checks to see if this is a recall contest or a nonpartisan contest
+                            for now, it's unclear how to store or display these contests
+                            in future, however, we may want to parse and return their results
+                            """
+                            skip = process.check_if_recall_or_nonpartisan(
+                                records)
+                            if skip:
+                                pass
+                            else:
+                                contest = process.compile_contest_results(
+                                    records)
+                                process.update_database(contest, election, src)
+                        os.remove(latest_path)
+                        logger.info("we've finished processing sos results")
+                else:
+                    logger.error(
+                        "unable to determine whether this data is newer than what we already have.")
 
 
 class LacProcessMethods(object):
@@ -523,6 +520,10 @@ class LacProcessMethods(object):
             framer.office["officename"] = officename
             framer.office["officeslug"] = slugify(officename)
             framer.office["active"] = True
+            framer.office["officeid"] = saver._make_office_id(
+                src.source_short,
+                framer.office["officeslug"],
+            )
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
             framer.contest["seatnum"] = None
@@ -627,6 +628,10 @@ class LacProcessMethods(object):
             framer.office["officename"] = officename
             framer.office["officeslug"] = slugify(officename)
             framer.office["active"] = True
+            framer.office["officeid"] = saver._make_office_id(
+                src.source_short,
+                framer.office["officeslug"],
+            )
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
             framer.contest["seatnum"] = None
@@ -708,48 +713,72 @@ class LacProcessMethods(object):
                 )
                 saver.make_measure(framer.contest, framer.measure)
         else:
-            """ This is a candidate for elected office """
-            if contest['contest_title'] == "MEMBER OF THE ASSEMBLY":
-                contestname = "State Assembly District " + \
-                    contest['district'].lstrip("0")
-            elif "SUPERVISOR" in contest['contest_title']:
-                contestname = "Supervisor District " + \
-                    contest['district'].lstrip("0")
-            elif "U.S. REPRESENTATIVE" in contest['contest_title']:
-                contestname = "U.S. House of Representatives District " + \
-                    contest['district'].lstrip("0")
-            elif "DELEGATES" in contest['contest_title']:
-                contestname = "Presidential Primary Delegates - CD" + \
-                    contest['district'].lstrip("0")
-            elif "STATE SENATOR" in contest['contest_title']:
-                contestname = "State Senate District " + \
-                    contest['district'].lstrip("0")
-            elif "PARTY COUNTY COMMITTEE" in contest['contest_title']:
-                contestname = contest['party_name'].capitalize(
-                ) + ' Party County Committee District ' + contest['district'].lstrip("0")
-            else:
-                contestname = contest['contest_title'].title(
-                ) + '' + contest['contest_title_cont'].title()
+            """ this is a candidate for elected office """
+            strip_district = contest['district'].lstrip("0")
             if "U.S." in contest['contest_title'] or "STATE" in contest['contest_title']:
                 level = "california"
                 framer.contest["is_statewide"] = True
             else:
                 level = "county"
+                county_name = "Los Angeles County"
                 framer.contest["is_statewide"] = False
             framer.contest["level"] = level
             framer.contest["seatnum"] = "1010101"
-            # district = contest['district'].lstrip('0')
-            # logger.debug(district)
-            # if framer._to_num(district)["convert"] == True:
-            #     # seatnum = framer._to_num(district)["value"]
-            #     logger.debug(contest)
-            #     framer.contest["seatnum"] = district
-            # else:
-            #     framer.contest["seatnum"] = None
-            #     logger.debug("No seatnum for this office")
+            if contest['contest_title'] == "MEMBER OF THE ASSEMBLY":
+                contestname = "State Assembly District %s" % (strip_district)
+            elif "SUPERVISOR" in contest['contest_title']:
+                contestname = "Supervisor District %s" % (strip_district)
+            elif "U.S. REPRESENTATIVE" in contest['contest_title']:
+                contestname = "U.S. House of Representatives District %s" % (
+                    strip_district)
+            elif "DELEGATES" in contest['contest_title']:
+                designation = contest['contest_title_cont'].replace(
+                    "CONGRESSIONAL DISTRICT-", "")
+                if designation == "REP":
+                    this_desig = "Republican"
+                elif designation == "DEM":
+                    this_desig = "Democratic"
+                else:
+                    this_desig = None
+                contestname = "%s Presidential Primary Delegates - CD%s" % (
+                    this_desig, strip_district)
+            elif "STATE SENATOR" in contest['contest_title']:
+                contestname = "State Senate District %s" % (strip_district)
+            elif "PRESIDENTIAL PREFERENCE" in contest['contest_title']:
+                designation = contest['contest_title_cont'].upper()
+                if designation == "AI":
+                    this_desig = "American Independent"
+                elif designation == "REP":
+                    this_desig = "Republican"
+                elif designation == "DEM":
+                    this_desig = "Democratic"
+                elif designation == "PF":
+                    this_desig = "Peace And Freedom"
+                elif designation == "LIB":
+                    this_desig = "Libertarian"
+                elif designation == "GRN":
+                    this_desig = "Green"
+                else:
+                    this_desig = None
+                contestname = "%s Presidential Primary" % (this_desig)
+            elif "PARTY COUNTY COMMITTEE" in contest['contest_title']:
+                contestname = "%s Party County Committee District %s" % (
+                    contest['party_name'].capitalize(), strip_district)
+            elif "JUDGE-SUPERIOR COURT" in contest['contest_title']:
+                contestname = "Judge Superior Court %s" % (
+                    contest['contest_title_cont'].title())
+            else:
+                contestname = "%s %s" % (contest['contest_title'].title(), contest[
+                                         'contest_title_cont'].title())
+            if level == "county":
+                contestname = "%s %s" % (county_name, contestname)
             framer.office["officename"] = contestname.replace(".", "")
             framer.office["officeslug"] = slugify(framer.office["officename"])
             framer.office["active"] = True
+            framer.office["officeid"] = saver._make_office_id(
+                src.source_short,
+                framer.office["officeslug"],
+            )
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
             if len(candidates) < 2:
@@ -772,8 +801,7 @@ class LacProcessMethods(object):
                 framer.contest["precinctsreporting"] = pr
             else:
                 framer.contest["precinctsreporting"] = None
-                raise Exception(
-                    "precinctsreporting is not a number")
+                raise Exception("precinctsreporting is not a number")
             framer.contest["precinctsreportingpct"] = framer._calc_pct(
                 framer.contest["precinctsreporting"],
                 framer.contest["precinctstotal"]
@@ -783,8 +811,7 @@ class LacProcessMethods(object):
                     contest['registration'])["value"]
             else:
                 framer.contest["votersregistered"] = None
-                raise Exception(
-                    "votersregistered is not a number")
+                raise Exception("votersregistered is not a number")
             framer.contest["votersturnout"] = None
             framer.contest["contestname"] = framer.office[
                 "officename"]
@@ -802,8 +829,6 @@ class LacProcessMethods(object):
             saver.make_office(framer.office)
             saver.make_contest(framer.office, framer.contest)
             for candidate in candidates:
-                # logger.debug(contest)
-                # logger.debug(candidate)
                 fullname = candidate['candidate_name'].title()
                 party = candidate['party_short']
                 if party == "REP":
@@ -822,22 +847,19 @@ class LacProcessMethods(object):
                         "value"]
                 else:
                     framer.candidate["votecount"] = None
-                    raise Exception(
-                        "votecount is not a number")
+                    raise Exception("votecount is not a number")
                 if framer._to_num(candidate['percent_of_vote'])["convert"] == True:
                     framer.candidate["votepct"] = framer._to_num(
                         candidate['percent_of_vote'])["value"]
                 else:
                     framer.candidate["votepct"] = None
-                    raise Exception(
-                        "votepct is not a number")
+                    raise Exception("votepct is not a number")
                 framer.candidate["candidateid"] = saver._make_this_id(
                     "candidate",
                     framer.contest["contestid"],
                     framer.candidate["candidateslug"],
                 )
-                saver.make_candidate(
-                    framer.contest, framer.candidate)
+                saver.make_candidate(framer.contest, framer.candidate)
 
     def check_if_recall_or_nonpartisan(self, records):
         """
