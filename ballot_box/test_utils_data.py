@@ -80,6 +80,18 @@ class TestFramer(TestCase):
             {"nonstring": "none"},
         ]
 
+        self.list_of_contest_ids = [
+            190000000050,
+            190000000150,
+            190000001150,
+            "190000000050",
+            "190000000150",
+            "190000001150",
+            u"190000000050",
+            u"190000000150",
+            u"190000001150",
+        ]
+
     def test_a_download_chain(self):
         """
         initiate a series of functions based on a list of data sources that will eventually be defined in the database
@@ -89,6 +101,9 @@ class TestFramer(TestCase):
             self.Test_slug(value)
             self.Test_to_num(value)
             self.Test_calc_pct(value, 100)
+
+        for value in self.list_of_contest_ids:
+            self.Test_get_prop_number(value, "190")
 
         self.Test_find_nth(
             "Mariano-Florentino-Ricardo",
@@ -225,6 +240,14 @@ class TestFramer(TestCase):
         else:
             output = None
             self.assertEquals(output, None)
+
+    def Test_get_prop_number(self, value, substring):
+        value = str(value)
+        self.assertIsInstance(value, (str))
+        self.assertEquals(len(value), 12)
+        format_value = value.replace(substring, "")
+        self.assertEquals(len(format_value), 9)
+        output = int(format_value)
 
     def Test_find_nth(self, haystack, needle, n):
         start = haystack.find(needle)
