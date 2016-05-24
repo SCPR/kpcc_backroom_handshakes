@@ -63,9 +63,5 @@ public/static/*
 dbsync_setup.rb
 data/*
 SCRATCHPAD.md
-ballot_box/data_dump/*.zip
-ballot_box/data_dump/_archived_files/*.zip
-ballot_box/data_dump/_archived_files/*.txt
-ballot_box/data_dump/sos_latest/*.xml
-ballot_box/data_dump/lac_latest/*.txt
+ballot_box/data_dump/*
 development.yml
