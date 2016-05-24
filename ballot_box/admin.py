@@ -6,24 +6,46 @@ import logging
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
 
-class CandidateInline(admin.StackedInline):
+class CandidateInline(admin.TabularInline):
+
     model = Candidate
     extra = 0
+    fields = (
+        "party",
+        "votecount",
+        "votepct",
+        "incumbent",
+    )
 
+class JudicialInline(admin.TabularInline):
+    model = JudicialCandidate
+    extra = 0
+    fields = (
+        "yescount",
+        "yespct",
+        "nocount",
+        "nopct",
+    )
+
+class MeasureInline(admin.TabularInline):
+    model = BallotMeasure
+    extra = 0
+    fields = (
+        "yescount",
+        "yespct",
+        "nocount",
+        "nopct",
+    )
 
 class BallotMeasureAdmin(admin.ModelAdmin):
 
     def get_source(self, obj):
-        return obj.contest.resultsource
+        return obj.contest.resultsource.source_short
     get_source.short_description = "Data Source"
-    # get_source.admin_order_field = "contest__resultsource"
 
-    # def get_total_votes(self, obj):
-    #     candidates = obj.contest.candidate_set.all()
-    #     vote_total = candidates.aggregate(Sum("votecount"))["votecount__sum"]
-    #     return vote_total
-    # get_total_votes.short_description = "Total Votes in Contest"
-    # get_total_votes.admin_order_field = "votecount"
+    def get_contest(self, obj):
+        return obj.contest.contestname
+    get_contest.short_description = "Contest"
 
     def precincts_reporting_pct(self, obj):
         return obj.contest.precinctsreportingpct
@@ -35,6 +57,7 @@ class BallotMeasureAdmin(admin.ModelAdmin):
         "yespct",
         "nopct",
         "precincts_reporting_pct",
+        "get_contest",
         "get_source",
     )
 
@@ -52,21 +75,22 @@ class BallotMeasureAdmin(admin.ModelAdmin):
 class CandidateAdmin(admin.ModelAdmin):
 
     def get_source(self, obj):
-        return obj.contest.resultsource
+        return obj.contest.resultsource.source_short
     get_source.short_description = "Data Source"
-    get_source.admin_order_field = "contest__resultsource"
+
+    def get_contest(self, obj):
+        return obj.contest.contestname
+    get_contest.short_description = "Contest"
 
     def get_total_votes(self, obj):
         candidates = obj.contest.candidate_set.all()
         vote_total = candidates.aggregate(Sum("votecount"))["votecount__sum"]
         return vote_total
     get_total_votes.short_description = "Total Votes in Contest"
-    # get_total_votes.admin_order_field = "votecount"
 
     def precincts_reporting_pct(self, obj):
         return obj.contest.precinctsreportingpct
     precincts_reporting_pct.short_description = "Pct Precincts Reporting"
-    # precincts_reporting_pct.admin_order_field = "contest__candidate"
 
     list_display = (
         "fullname",
@@ -76,6 +100,7 @@ class CandidateAdmin(admin.ModelAdmin):
         "precincts_reporting_pct",
         "party",
         "contest",
+        "get_contest",
         "get_source",
     )
 
@@ -105,7 +130,17 @@ class ContestAdmin(admin.ModelAdmin):
         return obj.candidate_set.count()
 
     get_candidate_count.short_description = "Number of Candidates"
-    # get_candidate_count.admin_order_field = "candidate__contest"
+
+    inlines = [JudicialInline, CandidateInline, MeasureInline]
+
+    def get_inline_instances(self, request, obj=None):
+        if obj and obj.is_judicial == True:
+            inlines = [JudicialInline]
+        elif obj and obj.is_ballot_measure == True:
+            inlines = [MeasureInline]
+        else:
+            inlines = [CandidateInline]
+        return [inline(self.model, self.admin_site) for inline in inlines]
 
     list_display = (
         "contestname",
@@ -135,15 +170,12 @@ class ContestAdmin(admin.ModelAdmin):
 
     save_on_top = True
 
-    inlines = (CandidateInline,)
-
 
 class ElectionAdmin(admin.ModelAdmin):
 
     def get_contest_count(self, obj):
         return obj.contest_set.count()
     get_contest_count.short_description = "Number of Races"
-    # get_contest_count.admin_order_field = "contest__election"
 
     list_display = (
         "type",
@@ -165,27 +197,30 @@ class ElectionAdmin(admin.ModelAdmin):
 class JudicialCandidateAdmin(admin.ModelAdmin):
 
     def get_source(self, obj):
-        return obj.contest.resultsource
+        return obj.contest.resultsource.source_short
     get_source.short_description = "Data Source"
-    # get_source.admin_order_field = "contest__resultsource"
 
-    # def get_total_votes(self, obj):
-    #     candidates = obj.contest.candidate_set.all()
-    #     vote_total = candidates.aggregate(Sum("votecount"))["votecount__sum"]
-    #     return vote_total
-    # get_total_votes.short_description = "Total Votes in Contest"
-    # get_total_votes.admin_order_field = "votecount"
+    def get_contest(self, obj):
+        return obj.contest.contestname
+    get_contest.short_description = "Contest"
+
+    def get_total_votes(self, obj):
+        candidates = obj.contest.candidate_set.all()
+        vote_total = candidates.aggregate(Sum("votecount"))["votecount__sum"]
+        return vote_total
+    get_total_votes.short_description = "Total Votes in Contest"
 
     def precincts_reporting_pct(self, obj):
         return obj.contest.precinctsreportingpct
     precincts_reporting_pct.short_description = "Precincts Reporting"
-    # precincts_reporting_pct.admin_order_field = "judicialcandidate__contest"
 
     list_display = (
         "fullname",
         "yespct",
         "nopct",
+        "get_total_votes",
         "precincts_reporting_pct",
+        "get_contest",
         "get_source",
     )
 
@@ -251,5 +286,4 @@ admin.site.register(Contest, ContestAdmin)
 admin.site.register(Election, ElectionAdmin)
 admin.site.register(JudicialCandidate, JudicialCandidateAdmin)
 admin.site.register(Office, OfficeAdmin)
-# admin.site.register(ReportingUnit, ReportingUnitAdmin)
 admin.site.register(ResultSource, ResultSourceAdmin)
