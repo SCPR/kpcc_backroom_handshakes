@@ -185,14 +185,25 @@ class Saver(object):
             output = framer._concat(*args, delimiter="-")
         return output
 
-    def _make_measure_id(self, *args, **kwargs):
+    def _make_this_id(self, contest_type, *args, **kwargs):
         """
         """
         framer = Framer()
-        required_keys = [
-            "contestid",
-            "measure_id",
-        ]
+        if contest_type == "measure":
+            required_keys = [
+                "contestid",
+                "measure_id",
+            ]
+        elif contest_type == "judicial":
+            required_keys = [
+                "contestid",
+                "judicialslug",
+            ]
+        elif contest_type == "candidate":
+            required_keys = [
+                "contestid",
+                "candidateslug",
+            ]
         if len(args) != len(required_keys):
             raise Exception
         else:
@@ -205,5 +216,3 @@ class Saver(object):
         else:
             output = framer._concat(*args, delimiter="-")
         return output
-
-
