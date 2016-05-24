@@ -32,8 +32,8 @@ class BuildSosResults(object):
         """
         """
         for src in self.sources:
-            self.parse_results_file(src, self.data_directory)
             self.get_results_file(src, self.data_directory)
+            self.parse_results_file(src, self.data_directory)
 
     def get_results_file(self, src, data_directory):
         """
@@ -74,18 +74,21 @@ class BuildSosResults(object):
             if file_exists == True and file_has_size > 0:
                 soup = BeautifulSoup(open(latest_path), "xml")
                 file_timestring = unicode(soup.find("IssueDate").contents[0])
-                file_timestamp = parse(file_timestring, dayfirst=False).datetime
+                file_timestamp = parse(
+                    file_timestring, dayfirst=False).datetime
                 update_this = saver._eval_timestamps(
                     file_timestamp, src.source_latest)
 
-                update_this = True
+                # REMOVE #
+                update_this = election.test_results
 
                 if update_this == False:
                     logger.info(
-                        "@chrislkeller we have newer data in the database so let's delete these files")
+                        "we have newer data in the database so let's delete these files")
                     os.remove(latest_path)
                 else:
-                    logger.info("@chrislkeller we have new data to save and we'll update timestamps in the database")
+                    logger.info(
+                        "we have new data to save and we'll update timestamps in the database")
                     saver._update_result_timestamps(src, file_timestamp)
                     races = soup.find_all("Contest")
                     for race in races:
@@ -96,23 +99,37 @@ class BuildSosResults(object):
                             this is a judicial candidate
                             """
                             this_type = "judicial"
-                            contestname = unicode(" ".join(race.ContestName.stripped_strings))
-                            officename_idx = framer._find_nth(contestname, " - ", 1)
-                            officename = unicode(contestname[:officename_idx].replace(".", ""))
-                            fullname_idx = framer._find_nth(contestname, " - ", 1) + 3
+                            contestname = unicode(
+                                " ".join(race.ContestName.stripped_strings))
+                            officename_idx = framer._find_nth(
+                                contestname, " - ", 1)
+                            officename = unicode(
+                                contestname[:officename_idx].replace(".", ""))
+                            fullname_idx = framer._find_nth(
+                                contestname, " - ", 1) + 3
                             fullname = unicode(contestname[fullname_idx:])
                             level = None
                             seatnum = None
-                            precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
-                            precinctsreport = r.find(attrs={"Id": "PR"}).contents[0]
+                            precinctstotal = r.find(
+                                attrs={"Id": "TP"}).contents[0]
+                            precinctsreport = r.find(
+                                attrs={"Id": "PR"}).contents[0]
                             reporttype = r.find(attrs={"Id": "RT"}).contents[0]
-                            yescount = framer._to_num(r.find_all("Selection")[0].ValidVotes.contents[0])["value"]
-                            yespct = framer._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
-                            nocount = framer._to_num(r.find_all("Selection")[1].ValidVotes.contents[0])["value"]
-                            nopct = framer._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
+                            yescount = framer._to_num(r.find_all("Selection")[
+                                                      0].ValidVotes.contents[0])["value"]
+                            yespct = framer._to_num(
+                                r.find(attrs={"Id": "PYV"}).contents[0])["value"]
+                            nocount = framer._to_num(r.find_all("Selection")[
+                                                     1].ValidVotes.contents[0])["value"]
+                            nopct = framer._to_num(
+                                r.find(attrs={"Id": "PNV"}).contents[0])["value"]
                             framer.office["officename"] = officename
                             framer.office["officeslug"] = slugify(officename)
                             framer.office["active"] = True
+                            framer.office["officeid"] = saver._make_office_id(
+                                src.source_short,
+                                framer.office["officeslug"],
+                            )
                             framer.contest["election_id"] = election.id
                             framer.contest["resultsource_id"] = src.id
                             framer.contest["seatnum"] = seatnum
@@ -129,7 +146,8 @@ class BuildSosResults(object):
                                 framer.contest["precinctstotal"] = pt
                             else:
                                 framer.contest["precinctstotal"] = None
-                                raise Exception("precinctstotal is not a number")
+                                raise Exception(
+                                    "precinctstotal is not a number")
                             if framer._to_num(precinctsreport)["convert"] == True:
                                 pr = framer._to_num(precinctsreport)["value"]
                                 framer.contest["precinctsreporting"] = pr
@@ -141,9 +159,12 @@ class BuildSosResults(object):
                                 framer.contest["precinctsreporting"],
                                 framer.contest["precinctstotal"]
                             )
-                            framer.contest["votersregistered"] = framer._to_num(None)["value"]
-                            framer.contest["votersturnout"] = framer._to_num(None)["value"]
-                            framer.contest["contestname"] = framer.office["officename"]
+                            framer.contest["votersregistered"] = framer._to_num(None)[
+                                "value"]
+                            framer.contest["votersturnout"] = framer._to_num(None)[
+                                "value"]
+                            framer.contest["contestname"] = framer.office[
+                                "officename"]
                             framer.contest["contestdescription"] = None
                             framer.contest["contestid"] = saver._make_contest_id(
                                 election.electionid,
@@ -167,29 +188,44 @@ class BuildSosResults(object):
                             )
                             saver.make_office(framer.office)
                             saver.make_contest(framer.office, framer.contest)
-                            saver.make_judicial(framer.contest, framer.judicial)
+                            saver.make_judicial(
+                                framer.contest, framer.judicial)
                         elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "150":
                             """
                             this is a judicial candidate
                             """
                             this_type = "judicial"
-                            contestname = unicode(" ".join(race.ContestName.stripped_strings))
-                            officename_idx = framer._find_nth(contestname, " - ", 2)
-                            officename = unicode(contestname[:officename_idx].replace(" - ", " "))
-                            fullname_idx = framer._find_nth(contestname, " - ", 2) + 3
+                            contestname = unicode(
+                                " ".join(race.ContestName.stripped_strings))
+                            officename_idx = framer._find_nth(
+                                contestname, " - ", 2)
+                            officename = unicode(
+                                contestname[:officename_idx].replace(" - ", " "))
+                            fullname_idx = framer._find_nth(
+                                contestname, " - ", 2) + 3
                             fullname = unicode(contestname[fullname_idx:])
                             level = None
                             seatnum = None
-                            precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
-                            precinctsreport = r.find(attrs={"Id": "PR"}).contents[0]
+                            precinctstotal = r.find(
+                                attrs={"Id": "TP"}).contents[0]
+                            precinctsreport = r.find(
+                                attrs={"Id": "PR"}).contents[0]
                             reporttype = r.find(attrs={"Id": "RT"}).contents[0]
-                            yescount = framer._to_num(r.find_all("Selection")[0].ValidVotes.contents[0])["value"]
-                            yespct = framer._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
-                            nocount = framer._to_num(r.find_all("Selection")[1].ValidVotes.contents[0])["value"]
-                            nopct = framer._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
+                            yescount = framer._to_num(r.find_all("Selection")[
+                                                      0].ValidVotes.contents[0])["value"]
+                            yespct = framer._to_num(
+                                r.find(attrs={"Id": "PYV"}).contents[0])["value"]
+                            nocount = framer._to_num(r.find_all("Selection")[
+                                                     1].ValidVotes.contents[0])["value"]
+                            nopct = framer._to_num(
+                                r.find(attrs={"Id": "PNV"}).contents[0])["value"]
                             framer.office["officename"] = officename
                             framer.office["officeslug"] = slugify(officename)
                             framer.office["active"] = True
+                            framer.office["officeid"] = saver._make_office_id(
+                                src.source_short,
+                                framer.office["officeslug"],
+                            )
                             framer.contest["election_id"] = election.id
                             framer.contest["resultsource_id"] = src.id
                             framer.contest["seatnum"] = seatnum
@@ -206,20 +242,25 @@ class BuildSosResults(object):
                                 framer.contest["precinctstotal"] = pt
                             else:
                                 framer.contest["precinctstotal"] = None
-                                raise Exception("precinctstotal is not a number")
+                                raise Exception(
+                                    "precinctstotal is not a number")
                             if framer._to_num(precinctsreport)["convert"] == True:
                                 pr = framer._to_num(precinctsreport)["value"]
                                 framer.contest["precinctsreporting"] = pr
                             else:
                                 framer.contest["precinctsreporting"] = None
-                                raise Exception("precinctsreporting is not a number")
+                                raise Exception(
+                                    "precinctsreporting is not a number")
                             framer.contest["precinctsreportingpct"] = framer._calc_pct(
                                 framer.contest["precinctsreporting"],
                                 framer.contest["precinctstotal"]
                             )
-                            framer.contest["votersregistered"] = framer._to_num(None)["value"]
-                            framer.contest["votersturnout"] = framer._to_num(None)["value"]
-                            framer.contest["contestname"] = framer.office["officename"]
+                            framer.contest["votersregistered"] = framer._to_num(None)[
+                                "value"]
+                            framer.contest["votersturnout"] = framer._to_num(None)[
+                                "value"]
+                            framer.contest["contestname"] = framer.office[
+                                "officename"]
                             framer.contest["contestdescription"] = None
                             framer.contest["contestid"] = saver._make_contest_id(
                                 election.electionid,
@@ -243,15 +284,19 @@ class BuildSosResults(object):
                             )
                             saver.make_office(framer.office)
                             saver.make_contest(framer.office, framer.contest)
-                            saver.make_judicial(framer.contest, framer.judicial)
+                            saver.make_judicial(
+                                framer.contest, framer.judicial)
                         elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "190":
                             """
                             this is a proposition
                             """
                             this_type = "Proposition"
-                            fullname = unicode(race.ContestName.contents[0].replace(".", ""))
-                            description = unicode(" ".join(race.ContestName.stripped_strings).replace(".", ""))
-                            prop_num = framer._get_prop_number(race.ContestIdentifier.attrs["IdNumber"], "190")
+                            fullname = unicode(race.ContestName.contents[
+                                               0].replace(".", ""))
+                            description = unicode(
+                                " ".join(race.ContestName.stripped_strings).replace(".", ""))
+                            prop_num = framer._get_prop_number(
+                                race.ContestIdentifier.attrs["IdNumber"], "190")
                             officename = framer._concat(
                                 this_type,
                                 prop_num,
@@ -259,16 +304,26 @@ class BuildSosResults(object):
                             )
                             level = None
                             seatnum = None
-                            precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
-                            precinctsreport = r.find(attrs={"Id": "PR"}).contents[0]
+                            precinctstotal = r.find(
+                                attrs={"Id": "TP"}).contents[0]
+                            precinctsreport = r.find(
+                                attrs={"Id": "PR"}).contents[0]
                             reporttype = r.find(attrs={"Id": "RT"}).contents[0]
-                            yescount = framer._to_num(r.find_all("Selection")[0].ValidVotes.contents[0])["value"]
-                            yespct = framer._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
-                            nocount = framer._to_num(r.find_all("Selection")[1].ValidVotes.contents[0])["value"]
-                            nopct = framer._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
+                            yescount = framer._to_num(r.find_all("Selection")[
+                                                      0].ValidVotes.contents[0])["value"]
+                            yespct = framer._to_num(
+                                r.find(attrs={"Id": "PYV"}).contents[0])["value"]
+                            nocount = framer._to_num(r.find_all("Selection")[
+                                                     1].ValidVotes.contents[0])["value"]
+                            nopct = framer._to_num(
+                                r.find(attrs={"Id": "PNV"}).contents[0])["value"]
                             framer.office["officename"] = officename
                             framer.office["officeslug"] = slugify(officename)
                             framer.office["active"] = True
+                            framer.office["officeid"] = saver._make_office_id(
+                                src.source_short,
+                                framer.office["officeslug"],
+                            )
                             framer.contest["election_id"] = election.id
                             framer.contest["resultsource_id"] = src.id
                             framer.contest["seatnum"] = seatnum
@@ -285,19 +340,23 @@ class BuildSosResults(object):
                                 framer.contest["precinctstotal"] = pt
                             else:
                                 framer.contest["precinctstotal"] = None
-                                raise Exception("precinctstotal is not a number")
+                                raise Exception(
+                                    "precinctstotal is not a number")
                             if framer._to_num(precinctsreport)["convert"] == True:
                                 pr = framer._to_num(precinctsreport)["value"]
                                 framer.contest["precinctsreporting"] = pr
                             else:
                                 framer.contest["precinctsreporting"] = None
-                                raise Exception("precinctsreporting is not a number")
+                                raise Exception(
+                                    "precinctsreporting is not a number")
                             framer.contest["precinctsreportingpct"] = framer._calc_pct(
                                 framer.contest["precinctsreporting"],
                                 framer.contest["precinctstotal"]
                             )
-                            framer.contest["votersregistered"] = framer._to_num(None)["value"]
-                            framer.contest["votersturnout"] = framer._to_num(None)["value"]
+                            framer.contest["votersregistered"] = framer._to_num(None)[
+                                "value"]
+                            framer.contest["votersturnout"] = framer._to_num(None)[
+                                "value"]
                             framer.contest["contestname"] = framer._concat(
                                 officename,
                                 fullname,
@@ -312,7 +371,8 @@ class BuildSosResults(object):
                             )
                             framer.measure["ballotorder"] = None
                             framer.measure["fullname"] = officename
-                            framer.measure["measureslug"] = slugify(framer.contest["contestname"])
+                            framer.measure["measureslug"] = slugify(
+                                framer.contest["contestname"])
                             framer.measure["description"] = description
                             framer.measure["yescount"] = yescount
                             framer.measure["yespct"] = yespct
@@ -331,18 +391,29 @@ class BuildSosResults(object):
                             this is a non-judicial candidate
                             """
                             this_type = "candidate"
-                            contestname = unicode(" ".join(race.ContestName.stripped_strings))
-                            officename_idx = framer._find_nth(contestname, " - ", 1)
-                            officename = unicode(contestname[:officename_idx].replace(".", ""))
-                            level_idx = framer._find_nth(contestname, " - ", 1) + 3
-                            level = unicode(contestname[level_idx:].replace(" Results", "").lower())
+                            contestname = unicode(
+                                " ".join(race.ContestName.stripped_strings))
+                            officename_idx = framer._find_nth(
+                                contestname, " - ", 1)
+                            officename = unicode(
+                                contestname[:officename_idx].replace(".", ""))
+                            level_idx = framer._find_nth(
+                                contestname, " - ", 1) + 3
+                            level = unicode(contestname[level_idx:].replace(
+                                " Results", "").lower())
                             seatnum = None
-                            precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
-                            precinctsreport = r.find(attrs={"Id": "PR"}).contents[0]
+                            precinctstotal = r.find(
+                                attrs={"Id": "TP"}).contents[0]
+                            precinctsreport = r.find(
+                                attrs={"Id": "PR"}).contents[0]
                             reporttype = r.find(attrs={"Id": "RT"}).contents[0]
                             framer.office["officename"] = officename
                             framer.office["officeslug"] = slugify(officename)
                             framer.office["active"] = True
+                            framer.office["officeid"] = saver._make_office_id(
+                                src.source_short,
+                                framer.office["officeslug"],
+                            )
                             framer.contest["election_id"] = election.id
                             framer.contest["resultsource_id"] = src.id
                             framer.contest["seatnum"] = seatnum
@@ -359,7 +430,8 @@ class BuildSosResults(object):
                                 framer.contest["precinctstotal"] = pt
                             else:
                                 framer.contest["precinctstotal"] = None
-                                raise Exception("precinctstotal is not a number")
+                                raise Exception(
+                                    "precinctstotal is not a number")
 
                             if framer._to_num(precinctsreport)["convert"] == True:
                                 pr = framer._to_num(precinctsreport)["value"]
@@ -372,8 +444,10 @@ class BuildSosResults(object):
                                 framer.contest["precinctsreporting"],
                                 framer.contest["precinctstotal"]
                             )
-                            framer.contest["votersregistered"] = framer._to_num(None)["value"]
-                            framer.contest["votersturnout"] = framer._to_num(None)["value"]
+                            framer.contest["votersregistered"] = framer._to_num(None)[
+                                "value"]
+                            framer.contest["votersturnout"] = framer._to_num(None)[
+                                "value"]
                             framer.contest["contestname"] = framer.office[
                                 "officename"]
                             framer.contest["contestdescription"] = None
@@ -392,13 +466,16 @@ class BuildSosResults(object):
                                     candidate.AffiliationIdentifier.RegisteredName.contents[0])
                                 if party == "Democratic":
                                     party = "Democrat"
-                                votecount = framer._to_num(candidate.ValidVotes.contents[0])["value"]
-                                votepct = framer._to_num(candidate.CountMetric.contents[0])["value"]
+                                votecount = framer._to_num(
+                                    candidate.ValidVotes.contents[0])["value"]
+                                votepct = framer._to_num(
+                                    candidate.CountMetric.contents[0])["value"]
                                 framer.candidate["ballotorder"] = None
                                 framer.candidate["firstname"] = None
                                 framer.candidate["lastname"] = None
                                 framer.candidate["fullname"] = fullname
-                                framer.candidate["candidateslug"] = slugify(fullname)
+                                framer.candidate[
+                                    "candidateslug"] = slugify(fullname)
                                 framer.candidate["party"] = party
                                 framer.candidate["incumbent"] = False
                                 framer.candidate["votecount"] = votecount
@@ -411,7 +488,7 @@ class BuildSosResults(object):
                                 saver.make_candidate(
                                     framer.contest, framer.candidate)
                     os.remove(latest_path)
-                    logger.info("@chrislkeller we've finished processing sos results")
+                    logger.info("we've finished processing sos results")
             else:
                 logger.error("XML file to parse is not at expected location")
 
