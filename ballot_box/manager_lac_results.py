@@ -16,6 +16,7 @@ import operator
 import re
 from bs4 import BeautifulSoup
 from delorean import parse
+from slugify import slugify
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
@@ -96,7 +97,6 @@ class BuildLacResults(object):
             if t[3:5] == 'TD':
                 parser = TD_parser()
                 parsed = parser.parse_line(t)
-                logger.debug(parsed)
                 timestring = parsed['date'] + ' ' + parsed['time']
                 file_timestring = timestring
         # logger.debug(file_timestring)
@@ -105,7 +105,9 @@ class BuildLacResults(object):
             file_timestamp = localtime(file_timestamp)
             update_this = saver._eval_timestamps(
                 file_timestamp, src.source_latest)
+
             update_this = True  # delete after update_this works and you have a live data source
+
             if update_this == False:
                 logger.debug(
                     "We have newer data in the database so let's delete these files.")
@@ -131,7 +133,6 @@ class BuildLacResults(object):
                     else:
                         contest = process.compile_contest_results(records)
                         process.update_database(contest, election, src)
-
         else:
             logger.debug(
                 'No file timestamp was found. Unable to determine whether this data is newer than what we already have.')
@@ -520,7 +521,7 @@ class LacProcessMethods(object):
                            ' ' + contest['contest_title_cont']).title()
             officename = contestname
             framer.office["officename"] = officename
-            framer.office["officeslug"] = framer._slug(officename)
+            framer.office["officeslug"] = slugify(officename)
             framer.office["active"] = True
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
@@ -555,8 +556,7 @@ class LacProcessMethods(object):
                     contest['registration'])["value"]
             else:
                 framer.contest["votersregistered"] = None
-                raise Exception(
-                    "votersregistered is not a number")
+                raise Exception("votersregistered is not a number")
             framer.contest["votersturnout"] = None
             framer.contest["contestname"] = framer.office["officename"]
             framer.contest["contestdescription"] = None
@@ -575,7 +575,7 @@ class LacProcessMethods(object):
                 framer.judicial["lastname"] = None
                 framer.judicial["ballotorder"] = None
                 framer.judicial["fullname"] = fullname
-                framer.judicial["judicialslug"] = framer._slug(fullname)
+                framer.judicial["judicialslug"] = slugify(fullname)
                 framer.judicial["description"] = judge['judicial_text'].title()
                 if framer._to_num(judge['yes_votes'])["convert"] == True:
                     yescount = framer._to_num(judge['yes_votes'])["value"]
@@ -601,15 +601,16 @@ class LacProcessMethods(object):
                 else:
                     framer.judicial["nopct"] = None
                     raise Exception("nopct is not a number")
-                framer.judicial["judgeid"] = framer._concat(
-                    framer.judicial["judicialslug"],
+                framer.judicial["judgeid"] = saver._make_this_id(
+                    "judicial",
                     framer.contest["contestid"],
-                    delimiter="-"
+                    framer.judicial["judicialslug"],
                 )
                 saver.make_judicial(framer.contest, framer.judicial)
 
         elif contest['is_ballot_measure']:
-            """ This is a ballot measure """
+            """ this is a ballot measure """
+            this_type = "Measure"
             contestname = (contest['contest_title']).title()
             if contest['contest_title_cont']:
                 fullname = (contest['contest_title_cont']
@@ -618,13 +619,13 @@ class LacProcessMethods(object):
                 fullname = (contest['contest_title']).title()
                 contestname = (contest['contest_title']).title()
             officename = framer._concat(
-                "Measure",
+                this_type,
                 contestname,
                 delimiter="-",
             )
-            # level = None
+            level = None
             framer.office["officename"] = officename
-            framer.office["officeslug"] = framer._slug(officename)
+            framer.office["officeslug"] = slugify(officename)
             framer.office["active"] = True
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
@@ -674,8 +675,7 @@ class LacProcessMethods(object):
             for measure in measures:
                 framer.measure["ballotorder"] = None
                 framer.measure["fullname"] = fullname
-                framer.measure["measureslug"] = framer._slug(fullname)
-                framer.measure['measure_id'] = measure['measure_id'].lower()
+                framer.measure["measureslug"] = slugify(fullname)
                 framer.measure["description"] = measure['measure_text'].title()
                 if framer._to_num(measure['yes_votes'])["convert"] == True:
                     yescount = framer._to_num(measure['yes_votes'])["value"]
@@ -701,9 +701,10 @@ class LacProcessMethods(object):
                 else:
                     framer.measure["nopct"] = None
                     raise Exception("nopct is not a number")
-                framer.measure["measureid"] = saver._make_measure_id(
+                framer.measure["measureid"] = saver._make_this_id(
+                    "measure",
                     framer.contest["contestid"],
-                    framer.measure['measure_id'],
+                    measure['measure_id'].lower(),
                 )
                 saver.make_measure(framer.contest, framer.measure)
         else:
@@ -728,8 +729,7 @@ class LacProcessMethods(object):
                 ) + ' Party County Committee District ' + contest['district'].lstrip("0")
             else:
                 contestname = contest['contest_title'].title(
-                ) + ' ' + contest['contest_title_cont'].title()
-            officename = contestname
+                ) + '' + contest['contest_title_cont'].title()
             if "U.S." in contest['contest_title'] or "STATE" in contest['contest_title']:
                 level = "california"
                 framer.contest["is_statewide"] = True
@@ -747,8 +747,8 @@ class LacProcessMethods(object):
             # else:
             #     framer.contest["seatnum"] = None
             #     logger.debug("No seatnum for this office")
-            framer.office["officename"] = officename
-            framer.office["officeslug"] = framer._slug(officename)
+            framer.office["officename"] = contestname.replace(".", "")
+            framer.office["officeslug"] = slugify(framer.office["officename"])
             framer.office["active"] = True
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
@@ -814,7 +814,7 @@ class LacProcessMethods(object):
                 framer.candidate["firstname"] = None
                 framer.candidate["lastname"] = None
                 framer.candidate["fullname"] = fullname
-                framer.candidate["candidateslug"] = framer._slug(fullname)
+                framer.candidate["candidateslug"] = slugify(fullname)
                 framer.candidate["party"] = party
                 framer.candidate["incumbent"] = False
                 if framer._to_num(candidate['votes'])["convert"] == True:
@@ -831,10 +831,10 @@ class LacProcessMethods(object):
                     framer.candidate["votepct"] = None
                     raise Exception(
                         "votepct is not a number")
-                framer.candidate["candidateid"] = framer._concat(
-                    framer.candidate["candidateslug"],
+                framer.candidate["candidateid"] = saver._make_this_id(
+                    "candidate",
                     framer.contest["contestid"],
-                    delimiter="-"
+                    framer.candidate["candidateslug"],
                 )
                 saver.make_candidate(
                     framer.contest, framer.candidate)
