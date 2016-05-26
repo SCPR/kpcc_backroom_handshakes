@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.db.models import Sum
+from django.db.models import Sum, F
 from kpcc_backroom_handshakes.custom_fields import ListField
 from ballot_box.utils_data import Framer, Checker
 import logging
@@ -166,6 +166,24 @@ class Contest(models.Model):
         super(Contest, self).save(*args, **kwargs)
 
 
+# @receiver(post_save, sender=Contest)
+def contest_post_save(sender, **kwargs):
+    instance = kwargs.get("instance")
+    created = kwargs.get("created")
+    if created == False:
+        if instance.precinctsreporting == instance.precinctstotal and instance.precinctsreportingpct != 1.0:
+            Contest.objects.filter(id=instance.id).update(
+                precinctsreportingpct=1.0, poss_error=True)
+        else:
+            precinctsreportingpct = instance.precinctsreporting / instance.precinctstotal
+            Contest.objects.filter(id=instance.id).update(
+                precinctsreportingpct=precinctsreportingpct, poss_error=False)
+        poss_error = checker._return_sanity_checks(instance)
+        Contest.objects.filter(id=instance.id).update(poss_error=poss_error)
+post_save.connect(contest_post_save, Contest, weak=False,
+                  dispatch_uid="contest_post_save")
+
+
 class Candidate(models.Model):
     """
     describes a person running for office
@@ -203,6 +221,32 @@ class Candidate(models.Model):
         super(Candidate, self).save(*args, **kwargs)
 
 
+# @receiver(post_save, sender=Candidate)
+def candidate_post_save(sender, **kwargs):
+    instance = kwargs.get("instance")
+    created = kwargs.get("created")
+    if created == False:
+        candidates = instance.contest.candidate_set.all()
+        tvs = candidates.aggregate(Sum("votecount"))["votecount__sum"]
+        for candidate in candidates:
+            if candidate.votecount == 0 and tvs == 0:
+                Candidate.objects.filter(id=candidate.id).update(
+                    votepct=0, poss_error=False)
+            elif framer._calc_pct(candidate.votecount, tvs):
+                votepct = framer._calc_pct(candidate.votecount, tvs)
+                Candidate.objects.filter(id=candidate.id).update(
+                    votepct=votepct, poss_error=False)
+            else:
+                Candidate.objects.filter(id=candidate.id).update(
+                    votepct=None, poss_error=True)
+            poss_error = checker._return_sanity_checks(
+                candidate, totalvotes=tvs)
+            Candidate.objects.filter(id=candidate.id).update(
+                poss_error=poss_error)
+post_save.connect(candidate_post_save, Candidate, weak=False,
+                  dispatch_uid="candidate_post_save")
+
+
 class BallotMeasure(models.Model):
     """
     describes a measure that can be voted on
@@ -237,6 +281,30 @@ class BallotMeasure(models.Model):
         # elif not self.measureid:
             # create self.measureid
         super(BallotMeasure, self).save(*args, **kwargs)
+
+
+# @receiver(post_save, sender=BallotMeasure)
+def measure_post_save(sender, **kwargs):
+    instance = kwargs.get("instance")
+    created = kwargs.get("created")
+    if created == False:
+        tvs = instance.yescount + instance.nocount
+        if instance.yescount == 0 and instance.nocount == 0:
+            BallotMeasure.objects.filter(id=instance.id).update(
+                yespct=0, nopct=0, poss_error=False)
+        elif instance.yescount > 0 and instance.nocount > 0:
+            yespct = framer._calc_pct(instance.yescount, tvs)
+            nopct = framer._calc_pct(instance.nocount, tvs)
+            BallotMeasure.objects.filter(id=instance.id).update(
+                yespct=yespct, nopct=nopct, poss_error=False)
+        else:
+            BallotMeasure.objects.filter(id=instance.id).update(
+                yespct=None, nopct=None, poss_error=True)
+        poss_error = checker._return_sanity_checks(instance, totalvotes=tvs)
+        BallotMeasure.objects.filter(
+            id=instance.id).update(poss_error=poss_error)
+post_save.connect(measure_post_save, BallotMeasure,
+                  weak=False, dispatch_uid="measure_post_save")
 
 
 class JudicialCandidate(models.Model):
@@ -276,25 +344,26 @@ class JudicialCandidate(models.Model):
             # create self.judgeid
         super(JudicialCandidate, self).save(*args, **kwargs)
 
-    @receiver(post_save, sender=Candidate)
-    def post_save(sender, update_fields, **kwargs):
-        instance = kwargs.get("instance")
-        created = kwargs.get("created")
-        if created == False:
-            candidates = instance.contest.candidate_set.all()
-            tvs = candidates.aggregate(Sum("votecount"))["votecount__sum"]
-            for candidate in candidates:
-                if candidate.votecount == 0 and tvs == 0:
-                    Candidate.objects.filter(id=candidate.id).update(
-                        votepct=0, poss_error=False)
-                elif framer._calc_pct(candidate.votecount, tvs):
-                    votepct = framer._calc_pct(candidate.votecount, tvs)
-                    Candidate.objects.filter(id=candidate.id).update(
-                        votepct=votepct, poss_error=False)
-                else:
-                    Candidate.objects.filter(id=candidate.id).update(
-                        votepct=None, poss_error=True)
-                poss_error = checker._return_sanity_checks(
-                    candidate, totalvotes=tvs)
-                Candidate.objects.filter(id=candidate.id).update(
-                    poss_error=poss_error)
+
+# @receiver(post_save, sender=JudicialCandidate)
+def judicial_post_save(sender, **kwargs):
+    instance = kwargs.get("instance")
+    created = kwargs.get("created")
+    if created == False:
+        tvs = instance.yescount + instance.nocount
+        if instance.yescount == 0 and instance.nocount == 0:
+            JudicialCandidate.objects.filter(id=instance.id).update(
+                yespct=0, nopct=0, poss_error=False)
+        elif instance.yescount > 0 and instance.nocount > 0:
+            yespct = framer._calc_pct(instance.yescount, tvs)
+            nopct = framer._calc_pct(instance.nocount, tvs)
+            JudicialCandidate.objects.filter(id=instance.id).update(
+                yespct=yespct, nopct=nopct, poss_error=False)
+        else:
+            JudicialCandidate.objects.filter(id=instance.id).update(
+                yespct=None, nopct=None, poss_error=True)
+        poss_error = checker._return_sanity_checks(instance, totalvotes=tvs)
+        JudicialCandidate.objects.filter(
+            id=instance.id).update(poss_error=poss_error)
+post_save.connect(judicial_post_save, JudicialCandidate,
+                  weak=False, dispatch_uid="judicial_post_save")

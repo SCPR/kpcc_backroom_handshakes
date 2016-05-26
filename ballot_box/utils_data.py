@@ -232,6 +232,8 @@ class Checker(object):
         if hasattr(obj, "precinctsreporting") and hasattr(obj, "precinctstotal"):
             sane_data.append(self._eval_part_of_whole(
                 obj.precinctsreporting, obj.precinctstotal))
+            if obj.precinctsreporting == obj.precinctstotal and obj.precinctsreportingpct != 1.0:
+                sane_data.append(False)
             sane_data.append(self._eval_part_of_whole(
                 obj.precinctsreportingpct, 1.0))
         if hasattr(obj, "votersturnout"):
