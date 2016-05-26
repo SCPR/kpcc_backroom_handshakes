@@ -76,7 +76,7 @@ class Saver(object):
                     "reporttype": contest["reporttype"],
                     "precinctstotal": contest["precinctstotal"],
                     "precinctsreporting": contest["precinctsreporting"],
-                    "precinctsreportingpct": contest["precinctsreportingpct"],
+                    "precinctsreportingpct": contest["precinctsreportingpct"] / 100,
                     "votersregistered": contest["votersregistered"],
                     "votersturnout": contest["votersturnout"],
                     "poss_error": contest["poss_error"],
@@ -182,7 +182,7 @@ class Saver(object):
                     "party": candidate["party"],
                     "incumbent": candidate["incumbent"],
                     "votecount": candidate["votecount"],
-                    "votepct": candidate["votepct"],
+                    "votepct": candidate["votepct"] / 100,
                     "poss_error": candidate["poss_error"],
                 }
             )
