@@ -165,11 +165,13 @@ STATIC_URL = "/static/"
 
 SITE_URL = ""
 
-# Additional locations of static files
-STATICFILES_DIRS = (
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = [
     os.path.join(PROJECT_ROOT, 'static'),
-)
+]
 
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 # build paths inside the project like this: os.path.join(base_dir, ...)
