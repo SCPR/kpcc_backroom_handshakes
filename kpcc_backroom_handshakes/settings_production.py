@@ -6,6 +6,7 @@ from os.path import expanduser
 from kpcc_backroom_handshakes.settings_common import *
 import pytz
 from pytz import timezone
+import dj_database_url
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
@@ -15,22 +16,26 @@ INTERNAL_IPS = CONFIG.get("internal_ips", None)
 
 DATABASES = {
     "default": {
-        "ENGINE" : "django.db.backends.mysql",
-        "NAME" : CONFIG["database"]["database"],
-        "USER" : CONFIG["database"]["username"],
-        "PASSWORD" : CONFIG["database"]["password"],
-        "HOST" : CONFIG["database"]["host"],
-        "PORT" : CONFIG["database"]["port"]
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": CONFIG["database"]["database"],
+        "USER": CONFIG["database"]["username"],
+        "PASSWORD": CONFIG["database"]["password"],
+        "HOST": CONFIG["database"]["host"],
+        "PORT": CONFIG["database"]["port"]
     }
 }
+
+# update database configuration with $database_url.
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 SECRET_KEY = CONFIG["secret_key"]
 
 # twitter api though should change this
-TWITTER_CONSUMER_KEY         = CONFIG["api"]["twitter"]["consumer_key"]
-TWITTER_CONSUMER_SECRET      = CONFIG["api"]["twitter"]["consumer_secret"]
-TWITTER_ACCESS_TOKEN         = CONFIG["api"]["twitter"]["access_token"]
-TWITTER_ACCESS_TOKEN_SECRET  = CONFIG["api"]["twitter"]["access_token_secret"]
+TWITTER_CONSUMER_KEY = CONFIG["api"]["twitter"]["consumer_key"]
+TWITTER_CONSUMER_SECRET = CONFIG["api"]["twitter"]["consumer_secret"]
+TWITTER_ACCESS_TOKEN = CONFIG["api"]["twitter"]["access_token"]
+TWITTER_ACCESS_TOKEN_SECRET = CONFIG["api"]["twitter"]["access_token_secret"]
 LOCAL_TWITTER_TIMEZONE = pytz.timezone("US/Pacific")
 TWITTER_TIMEZONE = timezone("UTC")
 
@@ -148,7 +153,9 @@ MEDIA_URL = ""
 # Don"t put anything in this directory yourself; store your static files
 # in apps" "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(SITE_ROOT, "public", "static")
+# STATIC_ROOT = os.path.join(SITE_ROOT, "public", "static")
+
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -158,8 +165,10 @@ SITE_URL = "#"
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-
+    os.path.join(PROJECT_ROOT, 'static'),
 )
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 # build paths inside the project like this: os.path.join(base_dir, ...)
 # if "build" in CONFIG:
@@ -192,8 +201,8 @@ LOGGING = {
 
     "formatters": {
         "verbose": {
-            "format" : "\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s",
-            "datefmt" : "%d/%b/%Y %H:%M:%S"
+            "format": "\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s",
+            "datefmt": "%d/%b/%Y %H:%M:%S"
         },
         "simple": {
             "format": "\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s"
@@ -236,10 +245,10 @@ LOGGING = {
             "channel": "#2016-election-results"
         },
         #"file": {
-            #"level": "DEBUG",
-            #"class": "logging.FileHandler",
-            #"filename": "mysite.log",
-            #"formatter": "verbose"
+        #"level": "DEBUG",
+        #"class": "logging.FileHandler",
+        #"filename": "mysite.log",
+        #"formatter": "verbose"
         #},
     },
 

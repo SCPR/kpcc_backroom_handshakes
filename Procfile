@@ -1,1 +1,1 @@
-web: gunicorn myproject.wsgi --log-file -
+web: gunicorn kpcc_backroom_handshakes.wsgi --log-file -
