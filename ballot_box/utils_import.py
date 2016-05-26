@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import localtime
 from ballot_box.models import *
-from ballot_box.utils_data import Framer
+from ballot_box.utils_data import Framer, Checker
 import logging
 import time
 import datetime
@@ -16,121 +16,185 @@ import pytz
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
+checker = Checker()
+
 
 class Saver(object):
     """
     """
 
+    log_message = "\n*** My Import Messages ***\n"
+
     def make_office(self, office):
         """
         """
-        obj, created = Office.objects.update_or_create(
-            officeid=office["officeid"],
-            defaults={
-                "name": office["officename"],
-                "slug": office["officeslug"],
-                "active": office["active"]
-            }
-        )
-        if created:
-            logger.debug("%s created" % (office["officeslug"]))
-        else:
-            logger.debug("%s exists" % (office["officeslug"]))
+        log_message = ""
+        try:
+            obj, created = Office.objects.update_or_create(
+                officeid=office["officeid"],
+                defaults={
+                    "name": office["officename"],
+                    "slug": office["officeslug"],
+                    "active": office["active"],
+                    "poss_error": False,
+                }
+            )
+            if created:
+                log_message += "* %s created\n" % (office["officeslug"])
+            else:
+                log_message += "* %s exists\n" % (office["officeslug"])
+        except Exception, exception:
+            error_output = "%s %s" % (exception, office["officeslug"])
+            logger.error(error_output)
+            raise
+        return log_message
 
     def make_contest(self, office, contest):
         """
         """
-        this_office = Office.objects.get(name=office["officename"])
-        obj, created = this_office.contest_set.update_or_create(
-            election_id=contest["election_id"],
-            resultsource_id=contest["resultsource_id"],
-            contestid=contest["contestid"],
-            defaults={
-                "contestname": contest["contestname"],
-                "seatnum": contest["seatnum"],
-                "contestdescription": contest["contestdescription"],
-                "is_uncontested": contest["is_uncontested"],
-                "is_national": contest["is_national"],
-                "is_statewide": contest["is_statewide"],
-                "is_ballot_measure": contest["is_ballot_measure"],
-                "is_judicial": contest["is_judicial"],
-                "reporttype": contest["reporttype"],
-                "precinctstotal": contest["precinctstotal"],
-                "precinctsreporting": contest["precinctsreporting"],
-                "precinctsreportingpct": contest["precinctsreportingpct"],
-                "votersregistered": contest["votersregistered"],
-                "votersturnout": contest["votersturnout"],
-            }
-        )
-        if created:
-            logger.debug("%s created" % (contest["contestid"]))
-        else:
-            logger.debug("%s exists but we updated figures" % (contest["contestid"]))
+        log_message = ""
+        try:
+            this_office = Office.objects.get(officeid=office["officeid"])
+        except Exception, exception:
+            error_output = "%s %s" % (exception, office["officeid"])
+            logger.error(error_output)
+            raise
+        try:
+            obj, created = this_office.contest_set.update_or_create(
+                election_id=contest["election_id"],
+                resultsource_id=contest["resultsource_id"],
+                contestid=contest["contestid"],
+                defaults={
+                    "contestname": contest["contestname"],
+                    "seatnum": contest["seatnum"],
+                    "contestdescription": contest["contestdescription"],
+                    "is_uncontested": contest["is_uncontested"],
+                    "is_national": contest["is_national"],
+                    "is_statewide": contest["is_statewide"],
+                    "is_ballot_measure": contest["is_ballot_measure"],
+                    "is_judicial": contest["is_judicial"],
+                    "reporttype": contest["reporttype"],
+                    "precinctstotal": contest["precinctstotal"],
+                    "precinctsreporting": contest["precinctsreporting"],
+                    "precinctsreportingpct": contest["precinctsreportingpct"],
+                    "votersregistered": contest["votersregistered"],
+                    "votersturnout": contest["votersturnout"],
+                    "poss_error": contest["poss_error"],
+                }
+            )
+            if created:
+                log_message += "\t* %s created\n" % (contest["contestid"])
+            else:
+                log_message += "\t* %s exists but we updated figures\n" % (contest["contestid"])
+        except Exception, exception:
+            error_output = "%s %s" % (exception, contest["contestid"])
+            logger.error(error_output)
+            raise
+        return log_message
 
     def make_judicial(self, contest, judicial):
         """
         """
-        this_contest = Contest.objects.get(contestid=contest["contestid"])
-        obj, created = this_contest.judicialcandidate_set.update_or_create(
-            judgeid=judicial["judgeid"],
-            defaults={
-                "ballotorder": judicial["ballotorder"],
-                "firstname": judicial["firstname"],
-                "lastname": judicial["lastname"],
-                "fullname": judicial["fullname"],
-                "yescount": judicial["yescount"],
-                "yespct": judicial["yespct"] / 100,
-                "nocount": judicial["nocount"],
-                "nopct": judicial["nopct"] / 100,
-            }
-        )
-        if created:
-            logger.debug("%s created" % (judicial["judgeid"]))
-        else:
-            logger.debug("%s exists but we updated figures" % (judicial["judgeid"]))
+        log_message = ""
+        try:
+            this_contest = Contest.objects.get(contestid=contest["contestid"])
+        except Exception, exception:
+            error_output = "%s %s" % (exception, contest["contestid"])
+            logger.error(error_output)
+            raise
+        try:
+            obj, created = this_contest.judicialcandidate_set.update_or_create(
+                judgeid=judicial["judgeid"],
+                defaults={
+                    "ballotorder": judicial["ballotorder"],
+                    "firstname": judicial["firstname"],
+                    "lastname": judicial["lastname"],
+                    "fullname": judicial["fullname"],
+                    "yescount": judicial["yescount"],
+                    "yespct": judicial["yespct"] / 100,
+                    "nocount": judicial["nocount"],
+                    "nopct": judicial["nopct"] / 100,
+                    "poss_error": judicial["poss_error"],
+                }
+            )
+            if created:
+                log_message += "\t\t* %s created\n" % (judicial["judgeid"])
+            else:
+                log_message += "\t\t* %s exists but we updated figures\n" % (judicial["judgeid"])
+        except Exception, exception:
+            error_output = "%s %s" % (exception, judicial["judgeid"])
+            logger.error(error_output)
+            raise
+        return log_message
 
     def make_measure(self, contest, measure):
         """
         """
-        this_contest = Contest.objects.get(contestid=contest["contestid"])
-        obj, created = this_contest.ballotmeasure_set.update_or_create(
-            measureid=measure["measureid"],
-            defaults={
-                "ballotorder": measure["ballotorder"],
-                "fullname": measure["fullname"],
-                "description": measure["description"],
-                "yescount": measure["yescount"],
-                "yespct": measure["yespct"] / 100,
-                "nocount": measure["nocount"],
-                "nopct": measure["nopct"] / 100,
-            }
-        )
-        if created:
-            logger.debug("%s created" % (measure["measureid"]))
-        else:
-            logger.debug("%s exists but we updated figures" % (measure["measureid"]))
+        log_message = ""
+        try:
+            this_contest = Contest.objects.get(contestid=contest["contestid"])
+        except Exception, exception:
+            error_output = "%s %s" % (exception, contest["contestid"])
+            logger.error(error_output)
+            raise
+        try:
+            obj, created = this_contest.ballotmeasure_set.update_or_create(
+                measureid=measure["measureid"],
+                defaults={
+                    "ballotorder": measure["ballotorder"],
+                    "fullname": measure["fullname"],
+                    "description": measure["description"],
+                    "yescount": measure["yescount"],
+                    "yespct": measure["yespct"] / 100,
+                    "nocount": measure["nocount"],
+                    "nopct": measure["nopct"] / 100,
+                    "poss_error": measure["poss_error"],
+                }
+            )
+            if created:
+                log_message += "\t\t* %s created\n" % (measure["measureid"])
+            else:
+                log_message += "\t\t* %s exists but we updated figures\n" % (measure["measureid"])
+        except Exception, exception:
+            error_output = "%s %s" % (exception, measure["measureid"])
+            logger.error(error_output)
+            raise
+        return log_message
 
     def make_candidate(self, contest, candidate):
         """
         """
-        this_contest = Contest.objects.get(contestid=contest["contestid"])
-        obj, created = this_contest.candidate_set.update_or_create(
-            candidateid=candidate["candidateid"],
-            defaults={
-                "ballotorder": candidate["ballotorder"],
-                "firstname": candidate["firstname"],
-                "lastname": candidate["lastname"],
-                "fullname": candidate["fullname"],
-                "party": candidate["party"],
-                "incumbent": candidate["incumbent"],
-                "votecount": candidate["votecount"],
-                "votepct": candidate["votepct"] / 100,
-            }
-        )
-        if created:
-            logger.debug("%s created" % (candidate["candidateid"]))
-        else:
-            logger.debug("%s exists but we updated figures" % (candidate["candidateid"]))
+        log_message = ""
+        try:
+            this_contest = Contest.objects.get(contestid=contest["contestid"])
+        except Exception, exception:
+            error_output = "%s %s" % (exception, contest["contestid"])
+            logger.error(error_output)
+            raise
+        try:
+            obj, created = this_contest.candidate_set.update_or_create(
+                candidateid=candidate["candidateid"],
+                defaults={
+                    "ballotorder": candidate["ballotorder"],
+                    "firstname": candidate["firstname"],
+                    "lastname": candidate["lastname"],
+                    "fullname": candidate["fullname"],
+                    "party": candidate["party"],
+                    "incumbent": candidate["incumbent"],
+                    "votecount": candidate["votecount"],
+                    "votepct": candidate["votepct"],
+                    "poss_error": candidate["poss_error"],
+                }
+            )
+            if created:
+                log_message += "\t\t* %s created\n" % (candidate["candidateid"])
+            else:
+                log_message += "\t\t* %s exists but we updated figures\n" % (candidate["candidateid"])
+        except Exception, exception:
+            error_output = "%s %s" % (exception, candidate["candidateid"])
+            logger.error(error_output)
+            raise
+        return log_message
 
     def _eval_timestamps(self, file_time, database_time):
         """

@@ -16,7 +16,6 @@ logger = logging.getLogger("kpcc_backroom_handshakes")
 
 
 class Framer(object):
-
     """
     """
 
@@ -217,3 +216,40 @@ class Framer(object):
         output = kwargs["delimiter"].join(output)
         output = unicode(output)
         return output
+
+
+class Checker(object):
+    """
+    """
+
+    def _return_sanity_checks(self, obj, **kwargs):
+        sane_data = []
+        if hasattr(obj, "votepct"):
+            sane_data.append(self._eval_part_of_whole(obj.votepct, 100))
+        if hasattr(obj, "votecount"):
+            sane_data.append(self._eval_part_of_whole(
+                obj.votecount, kwargs["totalvotes"]))
+        if hasattr(obj, "precinctsreporting") and hasattr(obj, "precinctstotal"):
+            sane_data.append(self._eval_part_of_whole(
+                obj.precinctsreporting, obj.precinctstotal))
+            sane_data.append(self._eval_part_of_whole(
+                obj.precinctsreportingpct, 1.0))
+        if hasattr(obj, "votersturnout"):
+            sane_data.append(self._eval_part_of_whole(obj.votersturnout, 1.0))
+        if hasattr(obj, "yescount") and hasattr(obj, "nocount"):
+            total = (obj.yescount + obj.nocount)
+            sane_data.append(self._eval_part_of_whole(obj.yescount, total))
+            sane_data.append(self._eval_part_of_whole(obj.nocount, total))
+        if hasattr(obj, "yespct") and hasattr(obj, "nopct"):
+            sane_data.append(self._eval_part_of_whole(obj.yespct, 100))
+            sane_data.append(self._eval_part_of_whole(obj.nopct, 100))
+        if False in sane_data:
+            return True
+        else:
+            return False
+
+    def _eval_part_of_whole(self, part, whole):
+        if part <= whole:
+            return True
+        else:
+            return False
