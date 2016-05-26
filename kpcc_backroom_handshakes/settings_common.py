@@ -13,6 +13,8 @@ import yaml
 
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
 
 CONFIG_PATH = "%s_CONFIG_PATH" % ("kpcc_backroom_handshakes".upper())

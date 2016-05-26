@@ -4,6 +4,7 @@ boto==2.40.0
 csvkit==0.9.1
 dbf==0.94.3
 Delorean==0.6.0
+dj-database-url==0.4.1
 Django==1.9
 django-admin-bootstrapped==2.5.7
 django-appconf==1.0.2
@@ -38,4 +39,5 @@ SQLAlchemy==1.0.12
 sqlparse==0.1.19
 tzlocal==1.2.2
 Unidecode==0.4.19
+whitenoise==3.1
 xlrd==0.9.4
