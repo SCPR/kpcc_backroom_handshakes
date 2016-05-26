@@ -5,13 +5,13 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.db.models import Sum
 from kpcc_backroom_handshakes.custom_fields import ListField
-from ballot_box.utils_data import Framer
-
+from ballot_box.utils_data import Framer, Checker
 import logging
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
 framer = Framer()
+checker = Checker()
 
 
 class Election(models.Model):
@@ -42,9 +42,9 @@ class Election(models.Model):
     election_date = models.DateField(
         "Date of the Election", null=True, blank=True)
     poll_close_at = models.DateTimeField(
-        "Time the Polls Close", null=True, blank=True)
+        "Time Polls Close", null=True, blank=True)
     national = models.BooleanField(
-        "Is this a National Election?", default=False)
+        "Is National Election?", default=False)
     created = models.DateTimeField("Date Created", auto_now_add=True)
     modified = models.DateTimeField("Date Modified", auto_now=True)
 
@@ -65,10 +65,10 @@ class ResultSource(models.Model):
     """
     election = models.ForeignKey(Election)
     source_name = models.CharField(
-        "Name Of Data Source", db_index=True, unique=True, max_length=255)
-    source_short = models.CharField("Shortname Of Data Source", max_length=5)
+        "Data Source Name", db_index=True, unique=True, max_length=255)
+    source_short = models.CharField("Data Source Shortname", max_length=5)
     source_slug = models.SlugField(
-        "Slugged Data Soure", db_index=True, unique=True, max_length=255, null=True, blank=True)
+        "Slugged Data Source", db_index=True, unique=True, max_length=255, null=True, blank=True)
     source_url = models.URLField(
         "Url To Data Source", max_length=1024, null=True, blank=True)
     source_active = models.BooleanField("Active Data Source?", default=False)
@@ -85,7 +85,6 @@ class ResultSource(models.Model):
     # datafile
     # results_level
 
-
     def __unicode__(self):
         return self.source_name
 
@@ -97,9 +96,12 @@ class Office(models.Model):
     """
     describes the thing that a candidate is campaigning for
     """
-    name = models.CharField("Name Of The Office", max_length=255, null=False, blank=False)
-    slug = models.SlugField("Slug Of The Office", unique=True, max_length=255, null=True, blank=True)
-    officeid = models.CharField("Office ID", max_length=255, null=True, blank=True)
+    name = models.CharField("Name Of The Office",
+                            max_length=255, null=False, blank=False)
+    slug = models.SlugField(
+        "Slug Of The Office", db_index=True, max_length=255, null=True, blank=True)
+    officeid = models.CharField(
+        "Office ID", max_length=255, null=True, blank=True)
     active = models.BooleanField("Is This Office Active?", default=False)
     poss_error = models.BooleanField("Possible Error", default=False)
     created = models.DateTimeField("Date Created", auto_now_add=True)
@@ -122,7 +124,7 @@ class Contest(models.Model):
     contestid = models.CharField(
         "Contest ID", max_length=255, null=True, blank=True)
     contestname = models.CharField(
-        "Display Reference To This Contest", max_length=255, null=False, blank=False)
+        "Contest", max_length=255, null=False, blank=False)
     seatnum = models.IntegerField(
         "Number of district or seat up for grabs", null=True, blank=True)
     contestdescription = models.TextField(
@@ -134,15 +136,15 @@ class Contest(models.Model):
     is_judicial = models.BooleanField("Is Judicial Contest?", default=False)
     is_runoff = models.BooleanField("Is A Runoff Contest?", default=False)
     is_display_priority = models.BooleanField(
-        "Interested In This Race?", default=False)
+        "Interested In?", default=False)
     is_homepage_priority = models.BooleanField(
-        "Feature This Race?", default=False)
+        "Feature This?", default=False)
     reporttype = models.CharField(
         "Status of Results", max_length=255, null=True, blank=True)
     precinctstotal = models.IntegerField(
         "Total Number Of Precincts", null=True, blank=True)
     precinctsreporting = models.IntegerField(
-        "Number Of Precincts Reporting Votes", null=True, blank=True)
+        "Precincts Reporting", null=True, blank=True)
     precinctsreportingpct = models.FloatField(
         "Percent Of Precincts Reporting", null=True, blank=True)
     votersregistered = models.IntegerField(
@@ -183,8 +185,7 @@ class Candidate(models.Model):
         "Political Party", max_length=255, null=True, blank=True)
     incumbent = models.BooleanField(
         "Is Candidate An Incumbent?", default=False)
-    votecount = models.IntegerField(
-        "Votes Received", null=True, blank=True)
+    votecount = models.IntegerField("Votes Received", null=True, blank=True)
     votepct = models.FloatField(
         "Percent Of Total Votes", null=True, blank=True)
     poss_error = models.BooleanField("Possible Error", default=False)
@@ -199,14 +200,6 @@ class Candidate(models.Model):
             # create self.candidateid
         # elif not self.candidateid:
             # create self.candidateid
-
-        # if self.votepct is None:
-        #     candidates = self.contest.candidate_set.all()
-        #     tvs = candidates.aggregate(Sum("votecount"))["votecount__sum"]
-        #     if framer._calc_pct(self.votecount, tvs):
-        #         self.votepct = framer._calc_pct(self.votecount, tvs)
-        #     else:
-        #         self.votepct = None
         super(Candidate, self).save(*args, **kwargs)
 
 
@@ -283,7 +276,6 @@ class JudicialCandidate(models.Model):
             # create self.judgeid
         super(JudicialCandidate, self).save(*args, **kwargs)
 
-
     @receiver(post_save, sender=Candidate)
     def post_save(sender, update_fields, **kwargs):
         instance = kwargs.get("instance")
@@ -292,8 +284,17 @@ class JudicialCandidate(models.Model):
             candidates = instance.contest.candidate_set.all()
             tvs = candidates.aggregate(Sum("votecount"))["votecount__sum"]
             for candidate in candidates:
-                if framer._calc_pct(candidate.votecount, tvs):
+                if candidate.votecount == 0 and tvs == 0:
+                    Candidate.objects.filter(id=candidate.id).update(
+                        votepct=0, poss_error=False)
+                elif framer._calc_pct(candidate.votecount, tvs):
                     votepct = framer._calc_pct(candidate.votecount, tvs)
-                    Candidate.objects.filter(id=candidate.id).update(votepct=votepct)
+                    Candidate.objects.filter(id=candidate.id).update(
+                        votepct=votepct, poss_error=False)
                 else:
-                    Candidate.objects.filter(id=candidate.id).update(votepct=None, poss_error=True)
+                    Candidate.objects.filter(id=candidate.id).update(
+                        votepct=None, poss_error=True)
+                poss_error = checker._return_sanity_checks(
+                    candidate, totalvotes=tvs)
+                Candidate.objects.filter(id=candidate.id).update(
+                    poss_error=poss_error)
