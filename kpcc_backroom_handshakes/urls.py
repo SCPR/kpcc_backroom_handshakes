@@ -22,11 +22,11 @@ admin.autodiscover()
 
 urlpatterns = [
 
-    # tastypie api
     url(r'^api/?', include(v1_api.urls)),
     url(r"^admin/doc/", include("django.contrib.admindocs.urls")),
     url(r"^admin/", include(admin.site.urls)),
     url(r"^admin/", include("massadmin.urls")),
+    url(r"^ballot-box/?", include("ballot_box.urls")),
 ]
 
 if settings.DEBUG:
