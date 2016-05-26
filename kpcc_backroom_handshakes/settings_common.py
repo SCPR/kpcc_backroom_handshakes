@@ -21,7 +21,7 @@ CONFIG_PATH = "%s_CONFIG_PATH" % ("kpcc_backroom_handshakes".upper())
 
 CONFIG_FILE = os.environ.setdefault(CONFIG_PATH, "./development.yml")
 
-CONFIG_YML = os.path.join(PROJECT_PATH, "development.yml")
+CONFIG_YML = os.path.join(PROJECT_ROOT, "development.yml")
 
 CONFIG = yaml.load(open(CONFIG_YML))
 
