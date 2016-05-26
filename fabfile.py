@@ -47,7 +47,7 @@ def dump_ballot_box():
     """
     shortcut to dump data from ballot box as fixtures
     """
-    local("python manage.py dumpdata ballot_box > ballot_box/fixtures/data.json")
+    local("python manage.py dumpdata ballot_box.ResultSource > ballot_box/fixtures/data.json")
 
 
 def load_ballot_box():
