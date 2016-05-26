@@ -69,7 +69,7 @@ class BuildSosResults(object):
                     file_timestamp, src.source_latest)
 
                 # REMOVE #
-                # update_this = election.test_results
+                update_this = election.test_results
 
                 if update_this == False:
                     logger.debug(
@@ -299,7 +299,7 @@ class BuildResults(object):
         self.framer.contest["is_statewide"] = True
         self.framer.contest["level"] = "california"
         self.framer.contest["is_ballot_measure"] = True
-        self.framer.contest["is_judicial"] = True
+        self.framer.contest["is_judicial"] = False
         self.framer.contest["is_runoff"] = False
         self.framer.contest["reporttype"] = None
         self.framer.contest["poss_error"] = False
