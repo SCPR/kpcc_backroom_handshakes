@@ -74,6 +74,8 @@ if "email" in CONFIG:
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+print BASE_DIR
+
 if CONFIG["installed_apps"]:
     INSTALLED_APPS += tuple(CONFIG["installed_apps"])
 else:
@@ -161,7 +163,7 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = "/static/"
 
-SITE_URL = "#"
+SITE_URL = ""
 
 # Additional locations of static files
 STATICFILES_DIRS = (
