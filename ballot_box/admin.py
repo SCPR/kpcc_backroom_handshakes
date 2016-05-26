@@ -1,3 +1,4 @@
+from __future__ import division
 from django.conf import settings
 from django.contrib import admin
 from ballot_box.models import *
@@ -17,6 +18,7 @@ class CandidateInline(admin.TabularInline):
         "incumbent",
     )
 
+
 class JudicialInline(admin.TabularInline):
     model = JudicialCandidate
     extra = 0
@@ -26,6 +28,7 @@ class JudicialInline(admin.TabularInline):
         "nocount",
         "nopct",
     )
+
 
 class MeasureInline(admin.TabularInline):
     model = BallotMeasure
@@ -37,39 +40,69 @@ class MeasureInline(admin.TabularInline):
         "nopct",
     )
 
+
 class BallotMeasureAdmin(admin.ModelAdmin):
+
+    def yes_percent(self, obj):
+        return "{0:.1f}%".format(obj.yespct * 100)
+    yes_percent.short_description = "Percent Of Yes Votes"
+
+    def no_percent(self, obj):
+        return "{0:.1f}%".format(obj.nopct * 100)
+    no_percent.short_description = "Percent Of No Votes"
+
+    def precincts_reporting_pct(self, obj):
+        return "{0:.1f}%".format(obj.contest.precinctsreportingpct * 100)
+    precincts_reporting_pct.short_description = "Precincts Reporting"
 
     def get_source(self, obj):
         return obj.contest.resultsource.source_short
     get_source.short_description = "Data Source"
 
-    def get_contest(self, obj):
-        return obj.contest.contestname
-    get_contest.short_description = "Contest"
-
-    def precincts_reporting_pct(self, obj):
-        return obj.contest.precinctsreportingpct
-    precincts_reporting_pct.short_description = "Precincts Reporting"
-    # precincts_reporting_pct.admin_order_field = 'candidate__contest'
-
     list_display = (
         "fullname",
-        "yespct",
-        "nopct",
+        "yescount",
+        "yes_percent",
+        "nocount",
+        "no_percent",
         "precincts_reporting_pct",
-        "get_contest",
         "get_source",
+        "poss_error",
     )
 
     list_per_page = 15
 
-    list_filter = ("fullname",)
+    list_editable = (
+        "yescount",
+        "nocount",
+    )
+
+    list_filter = (
+        "poss_error",
+        "fullname",
+    )
 
     search_fields = ("fullname",)
 
-    ordering = ("fullname",)
+    ordering = (
+        "-yespct",
+        "-fullname",
+    )
 
     save_on_top = True
+
+    actions = [
+        "set_possible_error",
+        "remove_possible_error",
+    ]
+
+    def set_possible_error(self, request, queryset):
+        queryset.update(poss_error=True)
+    set_possible_error.short_description = "Set Possible Error"
+
+    def remove_possible_error(self, request, queryset):
+        queryset.update(poss_error=False)
+    remove_possible_error.short_description = "Remove Possible Error"
 
 
 class CandidateAdmin(admin.ModelAdmin):
@@ -78,9 +111,9 @@ class CandidateAdmin(admin.ModelAdmin):
         return obj.contest.resultsource.source_short
     get_source.short_description = "Data Source"
 
-    def get_contest(self, obj):
-        return obj.contest.contestname
-    get_contest.short_description = "Contest"
+    def vote_percent(self, obj):
+        return "{0:.1f}%".format(obj.votepct * 100)
+    vote_percent.short_description = "Percent Of Total Votes"
 
     def get_total_votes(self, obj):
         candidates = obj.contest.candidate_set.all()
@@ -89,30 +122,100 @@ class CandidateAdmin(admin.ModelAdmin):
     get_total_votes.short_description = "Total Votes in Contest"
 
     def precincts_reporting_pct(self, obj):
-        return obj.contest.precinctsreportingpct
-    precincts_reporting_pct.short_description = "Pct Precincts Reporting"
+        return "{0:.1f}%".format(obj.contest.precinctsreportingpct * 100)
+    precincts_reporting_pct.short_description = "Precincts Reporting"
 
     list_display = (
         "fullname",
         "votecount",
-        "votepct",
+        "vote_percent",
         "get_total_votes",
         "precincts_reporting_pct",
         "party",
         "contest",
-        "get_contest",
         "get_source",
+        "poss_error",
+    )
+
+    list_per_page = 40
+
+    list_editable = (
+        "votecount",
+    )
+
+    list_filter = (
+        "poss_error",
+        "party",
+        "contest",
+    )
+
+    search_fields = (
+        "fullname",
+        "contest",
+    )
+
+    ordering = (
+        "-contest",
+        "-votepct",
+        "-fullname",
+    )
+
+    save_on_top = True
+
+    actions = [
+        "set_possible_error",
+        "remove_possible_error",
+    ]
+
+    def set_possible_error(self, request, queryset):
+        queryset.update(poss_error=True)
+    set_possible_error.short_description = "Set Possible Error"
+
+    def remove_possible_error(self, request, queryset):
+        queryset.update(poss_error=False)
+    remove_possible_error.short_description = "Remove Possible Error"
+
+
+class JudicialCandidateAdmin(admin.ModelAdmin):
+
+    def yes_percent(self, obj):
+        return "{0:.1f}%".format(obj.yespct * 100)
+    yes_percent.short_description = "Percent Of Yes Votes"
+
+    def no_percent(self, obj):
+        return "{0:.1f}%".format(obj.nopct * 100)
+    no_percent.short_description = "Percent Of No Votes"
+
+    def precincts_reporting_pct(self, obj):
+        return "{0:.1f}%".format(obj.contest.precinctsreportingpct * 100)
+    precincts_reporting_pct.short_description = "Precincts Reporting"
+
+    def get_source(self, obj):
+        return obj.contest.resultsource.source_short
+    get_source.short_description = "Data Source"
+
+    list_display = (
+        "fullname",
+        "yescount",
+        "yes_percent",
+        "nocount",
+        "no_percent",
+        "precincts_reporting_pct",
+        "get_source",
+        "poss_error",
     )
 
     list_per_page = 15
 
-    list_editable = (
-        "votecount",
-        "votepct",
-        # "precincts_reporting_pct",
+    list_filter = (
+        "poss_error",
+        "fullname",
     )
 
-    list_filter = ("contest",)
+    list_editable = (
+        "yescount",
+        "nocount",
+    )
 
     search_fields = ("fullname",)
 
@@ -123,11 +226,28 @@ class CandidateAdmin(admin.ModelAdmin):
 
     save_on_top = True
 
+    actions = [
+        "set_possible_error",
+        "remove_possible_error",
+    ]
+
+    def set_possible_error(self, request, queryset):
+        queryset.update(poss_error=True)
+    set_possible_error.short_description = "Set Possible Error"
+
+    def remove_possible_error(self, request, queryset):
+        queryset.update(poss_error=False)
+    remove_possible_error.short_description = "Remove Possible Error"
+
 
 class ContestAdmin(admin.ModelAdmin):
 
     def get_candidate_count(self, obj):
         return obj.candidate_set.count()
+
+    def precincts_reporting_pct(self, obj):
+        return "{0:.1f}%".format(obj.precinctsreportingpct * 100)
+    precincts_reporting_pct.short_description = "Precincts Reporting"
 
     get_candidate_count.short_description = "Number of Candidates"
 
@@ -146,29 +266,67 @@ class ContestAdmin(admin.ModelAdmin):
         "contestname",
         "is_display_priority",
         "is_homepage_priority",
-        "get_candidate_count",
-        "precinctsreporting",
-        "votersturnout",
+        # "get_candidate_count",
+        "precincts_reporting_pct",
+        # "votersturnout",
         "resultsource",
+        "poss_error",
     )
 
     list_filter = (
+        "poss_error",
         "is_display_priority",
         "is_homepage_priority",
         "is_ballot_measure",
+        "is_judicial",
         "contestname",
     )
 
-    list_per_page = 15
+    list_per_page = 100
 
     search_fields = ("contestname",)
 
     ordering = (
+        "-is_display_priority",
         "contestname",
-        "is_display_priority",
+        "-precinctsreportingpct",
     )
 
     save_on_top = True
+
+    actions = [
+        "interested_in_contest",
+        "uninterested_in_contest",
+        "feature_contest",
+        "unfeature_contest",
+        "set_possible_error",
+        "remove_possible_error",
+    ]
+
+    def interested_in_contest(self, request, queryset):
+        queryset.update(is_display_priority=True)
+    interested_in_contest.short_description = "Interested In"
+
+    def uninterested_in_contest(self, request, queryset):
+        queryset.update(is_display_priority=False)
+    uninterested_in_contest.short_description = "Uninterested In"
+
+    def feature_contest(self, request, queryset):
+        queryset.update(is_homepage_priority=True)
+        queryset.update(is_display_priority=True)
+    feature_contest.short_description = "Feature"
+
+    def unfeature_contest(self, request, queryset):
+        queryset.update(is_homepage_priority=False)
+    unfeature_contest.short_description = "Unfeature"
+
+    def set_possible_error(self, request, queryset):
+        queryset.update(poss_error=True)
+    set_possible_error.short_description = "Set Possible Error"
+
+    def remove_possible_error(self, request, queryset):
+        queryset.update(poss_error=False)
+    remove_possible_error.short_description = "Remove Possible Error"
 
 
 class ElectionAdmin(admin.ModelAdmin):
@@ -194,50 +352,6 @@ class ElectionAdmin(admin.ModelAdmin):
     save_on_top = True
 
 
-class JudicialCandidateAdmin(admin.ModelAdmin):
-
-    def get_source(self, obj):
-        return obj.contest.resultsource.source_short
-    get_source.short_description = "Data Source"
-
-    def get_contest(self, obj):
-        return obj.contest.contestname
-    get_contest.short_description = "Contest"
-
-    def get_total_votes(self, obj):
-        candidates = obj.contest.candidate_set.all()
-        vote_total = candidates.aggregate(Sum("votecount"))["votecount__sum"]
-        return vote_total
-    get_total_votes.short_description = "Total Votes in Contest"
-
-    def precincts_reporting_pct(self, obj):
-        return obj.contest.precinctsreportingpct
-    precincts_reporting_pct.short_description = "Precincts Reporting"
-
-    list_display = (
-        "fullname",
-        "yespct",
-        "nopct",
-        "get_total_votes",
-        "precincts_reporting_pct",
-        "get_contest",
-        "get_source",
-    )
-
-    list_per_page = 15
-
-    list_filter = ("fullname",)
-
-    search_fields = ("fullname",)
-
-    ordering = (
-        "contest",
-        "fullname",
-    )
-
-    save_on_top = True
-
-
 class OfficeAdmin(admin.ModelAdmin):
 
     list_display = (
@@ -245,7 +359,7 @@ class OfficeAdmin(admin.ModelAdmin):
         "slug",
     )
 
-    list_per_page = 15
+    # list_per_page = 15
 
     list_filter = ("name",)
 
@@ -278,6 +392,19 @@ class ResultSourceAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         "source_slug": ("source_name",)
     }
+
+    actions = [
+        "set_active",
+        "set_not_active",
+    ]
+
+    def set_active(self, request, queryset):
+        queryset.update(source_active=True)
+    set_active.short_description = "Activate Source"
+
+    def set_not_active(self, request, queryset):
+        queryset.update(source_active=False)
+    set_not_active.short_description = "Deactivate Source"
 
 
 admin.site.register(BallotMeasure, BallotMeasureAdmin)
