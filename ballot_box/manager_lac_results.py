@@ -844,6 +844,8 @@ class LacProcessMethods(object):
                     party = "Libertarian"
                 elif party == "GRN":
                     party = "Green"
+                elif party == "NP":
+                    party = "No Party Preference"
                 framer.candidate["ballotorder"] = None
                 framer.candidate["firstname"] = None
                 framer.candidate["lastname"] = None
