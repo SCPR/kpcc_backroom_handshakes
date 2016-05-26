@@ -42,32 +42,23 @@ class BuildLacResults(object):
         """
         """
         retrieve = Retriever()
-
-        # download the latest results file
         retrieve._request_results_and_save(src, data_directory)
-
-        # move latest files to a working directory
         retrieve._create_directory_for_latest_file(src, data_directory)
-
-        # create timestamped version of a file deemed latest
         retrieve._copy_timestamped_file_to_latest(src, data_directory)
-
-        # move timestamped zipfile to archives
         retrieve._archive_downloaded_file(src, data_directory)
-
-        # compare files in a zipfile with a list of expected files
         retrieve._found_required_files(src, data_directory)
-
-        # if the item is a zipfile extract the files
         retrieve._unzip_latest_file(src, data_directory)
+        retrieve.log_message += "*** Ending Request ***\n"
+        logger.debug(retrieve.log_message)
 
     def parse_results_file(self, src, data_directory):
         """
         """
         saver = Saver()
-        latest_directory = "%s%s_latest" % (data_directory, src.source_short)
-        election = Election.objects.filter(test_results=True).first()
         process = LacProcessMethods()
+        latest_directory = "%s%s_latest" % (data_directory, src.source_short)
+        election = Election.objects.filter(
+            test_results=True, electionid=src.election.electionid).first()
         for file in src.source_files.split(", "):
             latest_path = os.path.join(latest_directory, file)
             file_exists = os.path.isfile(latest_path)
@@ -99,12 +90,12 @@ class BuildLacResults(object):
                     update_this = election.test_results
 
                     if update_this == False:
-                        logger.info(
-                            "we have newer data in the database so let's delete these files")
+                        logger.debug(
+                            "\n*****\nwe have newer data in the database so let's delete these files\n*****")
                         os.remove(latest_path)
                     else:
-                        logger.info(
-                            "we have new data to save and we'll update timestamps in the database")
+                        logger.debug(
+                            "\n*****\nwe have new data to save and we'll update timestamps in the database\n*****")
                         saver._update_result_timestamps(src, file_timestamp)
                         title = process.dictify_records_and_return(
                             election_title)
@@ -129,7 +120,7 @@ class BuildLacResults(object):
                                     records)
                                 process.update_database(contest, election, src)
                         os.remove(latest_path)
-                        logger.info("we've finished processing sos results")
+                        logger.debug("we've finished processing lac results")
                 else:
                     logger.error(
                         "unable to determine whether this data is newer than what we already have.")
@@ -499,8 +490,12 @@ class LacProcessMethods(object):
                 contest['vote_for_number'] = record[
                     'vote_for_number']
 
-        contest_package = {'contest_details': contest,
-                           'candidates': candidates, 'measures': measures, 'judges': judge_candidates}
+        contest_package = {
+            'contest_details': contest,
+            'candidates': candidates,
+            'measures': measures,
+            'judges': judge_candidates,
+        }
         return contest_package
 
     def update_database(self, contest_package, election, src):
@@ -511,7 +506,7 @@ class LacProcessMethods(object):
         candidates = contest_package['candidates']
         measures = contest_package['measures']
         judges = contest_package['judges']
-
+        race_log = "\n"
         if contest['is_judicial_contest']:
             """ This is a judicial appointee """
             contestname = (contest['contest_title'] +
@@ -536,6 +531,7 @@ class LacProcessMethods(object):
             framer.contest["is_judicial"] = True
             framer.contest["is_runoff"] = False
             framer.contest["reporttype"] = None
+            framer.contest["poss_error"] = False
             if framer._to_num(contest['total_precincts'])["convert"] == True:
                 pt = framer._to_num(contest['total_precincts'])["value"]
                 framer.contest["precinctstotal"] = pt
@@ -567,8 +563,8 @@ class LacProcessMethods(object):
                 framer.contest["level"],
                 framer.office["officeslug"],
             )
-            saver.make_office(framer.office)
-            saver.make_contest(framer.office, framer.contest)
+            race_log += saver.make_office(framer.office)
+            race_log += saver.make_contest(framer.office, framer.contest)
 
             for judge in judges:
                 fullname = judge["judicial_name"].title()
@@ -578,6 +574,7 @@ class LacProcessMethods(object):
                 framer.judicial["fullname"] = fullname
                 framer.judicial["judicialslug"] = slugify(fullname)
                 framer.judicial["description"] = judge['judicial_text'].title()
+                framer.judicial["poss_error"] = False
                 if framer._to_num(judge['yes_votes'])["convert"] == True:
                     yescount = framer._to_num(judge['yes_votes'])["value"]
                     framer.judicial["yescount"] = yescount
@@ -607,7 +604,8 @@ class LacProcessMethods(object):
                     framer.contest["contestid"],
                     framer.judicial["judicialslug"],
                 )
-                saver.make_judicial(framer.contest, framer.judicial)
+                race_log += saver.make_judicial(framer.contest,
+                                                framer.judicial)
 
         elif contest['is_ballot_measure']:
             """ this is a ballot measure """
@@ -643,6 +641,7 @@ class LacProcessMethods(object):
             framer.contest["is_judicial"] = False
             framer.contest["is_runoff"] = False
             framer.contest["reporttype"] = None
+            framer.contest["poss_error"] = False
             if framer._to_num(contest['total_precincts'])["convert"] == True:
                 pt = framer._to_num(contest['total_precincts'])["value"]
                 framer.contest["precinctstotal"] = pt
@@ -675,13 +674,14 @@ class LacProcessMethods(object):
                 framer.contest["level"],
                 framer.office["officeslug"],
             )
-            saver.make_office(framer.office)
-            saver.make_contest(framer.office, framer.contest)
+            race_log += saver.make_office(framer.office)
+            race_log += saver.make_contest(framer.office, framer.contest)
             for measure in measures:
                 framer.measure["ballotorder"] = None
                 framer.measure["fullname"] = fullname
                 framer.measure["measureslug"] = slugify(fullname)
                 framer.measure["description"] = measure['measure_text'].title()
+                framer.measure["poss_error"] = False
                 if framer._to_num(measure['yes_votes'])["convert"] == True:
                     yescount = framer._to_num(measure['yes_votes'])["value"]
                     framer.measure["yescount"] = yescount
@@ -711,7 +711,7 @@ class LacProcessMethods(object):
                     framer.contest["contestid"],
                     measure['measure_id'].lower(),
                 )
-                saver.make_measure(framer.contest, framer.measure)
+                race_log += saver.make_measure(framer.contest, framer.measure)
         else:
             """ this is a candidate for elected office """
             strip_district = contest['district'].lstrip("0")
@@ -790,6 +790,7 @@ class LacProcessMethods(object):
             framer.contest["is_judicial"] = False
             framer.contest["is_runoff"] = False
             framer.contest["reporttype"] = None
+            framer.contest["poss_error"] = False
             if framer._to_num(contest['total_precincts'])["convert"] == True:
                 pt = framer._to_num(contest['total_precincts'])["value"]
                 framer.contest["precinctstotal"] = pt
@@ -826,8 +827,8 @@ class LacProcessMethods(object):
                 framer.contest["level"],
                 framer.office["officeslug"],
             )
-            saver.make_office(framer.office)
-            saver.make_contest(framer.office, framer.contest)
+            race_log += saver.make_office(framer.office)
+            race_log += saver.make_contest(framer.office, framer.contest)
             for candidate in candidates:
                 fullname = candidate['candidate_name'].title()
                 party = candidate['party_short']
@@ -835,6 +836,14 @@ class LacProcessMethods(object):
                     party = "Republican"
                 elif party == "DEM":
                     party = "Democrat"
+                elif party == "AI":
+                    party = "American Independent"
+                elif party == "PF":
+                    party = "Peace And Freedom"
+                elif party == "LIB":
+                    party = "Libertarian"
+                elif party == "GRN":
+                    party = "Green"
                 framer.candidate["ballotorder"] = None
                 framer.candidate["firstname"] = None
                 framer.candidate["lastname"] = None
@@ -842,6 +851,7 @@ class LacProcessMethods(object):
                 framer.candidate["candidateslug"] = slugify(fullname)
                 framer.candidate["party"] = party
                 framer.candidate["incumbent"] = False
+                framer.candidate["poss_error"] = False
                 if framer._to_num(candidate['votes'])["convert"] == True:
                     framer.candidate["votecount"] = framer._to_num(candidate['votes'])[
                         "value"]
@@ -859,7 +869,9 @@ class LacProcessMethods(object):
                     framer.contest["contestid"],
                     framer.candidate["candidateslug"],
                 )
-                saver.make_candidate(framer.contest, framer.candidate)
+                race_log += saver.make_candidate(framer.contest,
+                                                 framer.candidate)
+        logger.debug(race_log)
 
     def check_if_recall_or_nonpartisan(self, records):
         """
