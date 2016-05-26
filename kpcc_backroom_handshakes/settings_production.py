@@ -233,7 +233,7 @@ LOGGING = {
             "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
             "api_key": SLACK_API_KEY,
             "class": "slacker_log_handler.SlackerLogHandler",
-            "channel": "#logging-2016-election"
+            "channel": "#2016-election-results"
         },
         #"file": {
             #"level": "DEBUG",
@@ -249,8 +249,8 @@ LOGGING = {
                 "console",
                 "mail_admins",
                 # "slack-error",
-                #"slack-debug",
-                # "slack-info"
+                # "slack-info",
+                # "slack-debug",
             ],
             "level": "DEBUG",
             "propagate": False,
