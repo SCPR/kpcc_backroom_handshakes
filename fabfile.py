@@ -28,9 +28,13 @@ env.remote_ref = 'origin/master'
 env.requirements_file = 'requirements.txt'
 env.use_ssh_config = True
 
-CONFIG_PATH = "%s_CONFIG_PATH" % (env.project_name.upper())
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+CONFIG_PATH = "%s_CONFIG_PATH" % ("kpcc_backroom_handshakes".upper())
+
 CONFIG_FILE = os.environ.setdefault(CONFIG_PATH, "./development.yml")
-CONFIG = yaml.load(open(CONFIG_FILE))
+
+CONFIG_YML = os.path.join(BASE_DIR, "development.yml")
 
 logger = logging.getLogger("root")
 logging.basicConfig(
