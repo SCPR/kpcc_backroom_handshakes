@@ -27,6 +27,8 @@ os.environ["CONFIG_PATH"] = "%s_DEVELOPMENT" % ("kpcc_backroom_handshakes".upper
 
 # DEBUG = CONFIG.get("debug", False)
 
+DEBUG = False
+
 # print DEBUG
 
 ADMINS = (
