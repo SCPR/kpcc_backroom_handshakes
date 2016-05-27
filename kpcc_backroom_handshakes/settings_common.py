@@ -17,15 +17,17 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 os.environ["CONFIG_PATH"] = "%s_DEVELOPMENT" % ("kpcc_backroom_handshakes".upper())
 
-if os.environ["CONFIG_PATH"] == "%s_DEVELOPMENT" % ("kpcc_backroom_handshakes".upper()):
+# if os.environ["CONFIG_PATH"] == "%s_PRODUCTION" % ("kpcc_backroom_handshakes".upper()):
 
-    CONFIG_FILE = os.environ.setdefault(os.environ["CONFIG_PATH"], "/development.yml")
+#     CONFIG_FILE = os.environ.setdefault(os.environ["CONFIG_PATH"], "/development.yml")
 
-    CONFIG_YML = os.path.join(BASE_DIR, "development.yml")
+#     CONFIG_YML = os.path.join(BASE_DIR, "development.yml")
 
-    CONFIG = yaml.load(open(CONFIG_YML))
+#     CONFIG = yaml.load(open(CONFIG_YML))
 
-DEBUG = CONFIG.get("debug", False)
+# DEBUG = CONFIG.get("debug", False)
+
+# print DEBUG
 
 ADMINS = (
     ("", ""),
