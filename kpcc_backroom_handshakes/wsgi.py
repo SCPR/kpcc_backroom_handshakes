@@ -1,5 +1,5 @@
 """
-WSGI config for accountability_tracker project.
+WSGI config for kpcc_backroom_handshakes project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -8,9 +8,7 @@ https://docs.djangoproject.com/en/1.7/howto/deployment/wsgi/
 """
 
 import os
-import sys
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kpcc_backroom_handshakes.settings_production")
 
 from django.core.wsgi import get_wsgi_application
-
-os.environ['DJANGO_SETTINGS_MODULE'] = 'myapp.settings'
 application = get_wsgi_application()
