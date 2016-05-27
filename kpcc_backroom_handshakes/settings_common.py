@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 import yaml
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
 PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
@@ -19,7 +21,7 @@ CONFIG_PATH = "%s_CONFIG_PATH" % ("kpcc_backroom_handshakes".upper())
 
 CONFIG_FILE = os.environ.setdefault(CONFIG_PATH, "./development.yml")
 
-CONFIG_YML = os.path.join(PROJECT_PATH, "development.yml")
+CONFIG_YML = os.path.join(BASE_DIR, "development.yml")
 
 CONFIG = yaml.load(open(CONFIG_YML))
 
