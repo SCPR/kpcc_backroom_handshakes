@@ -4,18 +4,13 @@ boto==2.40.0
 csvkit==0.9.1
 dbf==0.94.3
 Delorean==0.6.0
-dj-database-url==0.4.1
 Django==1.9
 django-admin-bootstrapped==2.5.7
-django-appconf==1.0.2
 django-debug-toolbar==1.4
-django-locking==0.3.0
 django-mass-edit==2.6
-django-staticfiles==1.2.1
 django-tastypie==0.13.3
 ecdsa==0.13
 Fabric==1.11.1
-gunicorn==19.6.0
 humanize==0.5.1
 jdcal==1.2
 latimes-calculate==0.3.1
@@ -31,7 +26,6 @@ pytz==2016.4
 PyYAML==3.11
 redis==2.10.5
 requests==2.9.1
-simplejson==3.8.2
 six==1.10.0
 slacker==0.9.9
 slacker-log-handler==1.2.0
@@ -39,5 +33,4 @@ SQLAlchemy==1.0.12
 sqlparse==0.1.19
 tzlocal==1.2.2
 Unidecode==0.4.19
-whitenoise==3.1
 xlrd==0.9.4
