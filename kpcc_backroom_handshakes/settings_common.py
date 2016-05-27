@@ -13,23 +13,17 @@ import yaml
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+CONFIG_PATH = "%s_CONFIG_PATH" % ("kpcc_backroom_handshakes".upper())
 
-os.environ["CONFIG_PATH"] = "%s_DEVELOPMENT" % ("kpcc_backroom_handshakes".upper())
+CONFIG_FILE = os.environ.setdefault(CONFIG_PATH, "development.yml")
 
-# if os.environ["CONFIG_PATH"] == "%s_PRODUCTION" % ("kpcc_backroom_handshakes".upper()):
+CONFIG_YML = os.path.join(BASE_DIR, "development.yml")
 
-#     CONFIG_FILE = os.environ.setdefault(os.environ["CONFIG_PATH"], "/development.yml")
+CONFIG = yaml.load(open(CONFIG_YML))
 
-#     CONFIG_YML = os.path.join(BASE_DIR, "development.yml")
+DEBUG = CONFIG.get("debug", False)
 
-#     CONFIG = yaml.load(open(CONFIG_YML))
-
-# DEBUG = CONFIG.get("debug", False)
-
-DEBUG = False
-
-# print DEBUG
+SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
 ADMINS = (
     ("", ""),
