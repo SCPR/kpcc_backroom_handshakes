@@ -11,8 +11,6 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 import yaml
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
 PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
@@ -21,11 +19,11 @@ CONFIG_PATH = "%s_CONFIG_PATH" % ("kpcc_backroom_handshakes".upper())
 
 CONFIG_FILE = os.environ.setdefault(CONFIG_PATH, "./development.yml")
 
-CONFIG = yaml.load(open(CONFIG_FILE))
+CONFIG_YML = os.path.join(PROJECT_PATH, "development.yml")
+
+CONFIG = yaml.load(open(CONFIG_YML))
 
 DEBUG = CONFIG.get("debug", False)
-
-SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
 ADMINS = (
     ("", ""),
@@ -58,7 +56,7 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             # insert your TEMPLATE_DIRS here
-            os.path.join(PROJECT_ROOT, "templates")
+            os.path.join(SITE_ROOT, "templates")
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -83,7 +81,6 @@ MIDDLEWARE_CLASSES = (
     #"django.contrib.auth.middleware.SessionAuthenticationMiddleware",
     #"django.middleware.cache.UpdateCacheMiddleware",
     #"django.middleware.cache.FetchFromCacheMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",

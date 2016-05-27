@@ -8,10 +8,9 @@ https://docs.djangoproject.com/en/1.7/howto/deployment/wsgi/
 """
 
 import os
+import sys
+
 from django.core.wsgi import get_wsgi_application
 
-os.environ["CONFIG_PATH"] = "%s_PRODUCTION" % ("kpcc_backroom_handshakes".upper())
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kpcc_backroom_handshakes.settings_production")
-
+os.environ['DJANGO_SETTINGS_MODULE'] = 'myapp.settings'
 application = get_wsgi_application()
