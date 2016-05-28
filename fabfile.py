@@ -184,10 +184,6 @@ def buildserver():
     local("python manage.py buildserver")
 
 
-def move():
-    local("python manage.py move_baked_files")
-
-
 def commit(message='updates'):
     with lcd(settings.DEPLOY_DIR):
         try:
