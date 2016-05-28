@@ -65,3 +65,4 @@ data/*
 SCRATCHPAD.md
 ballot_box/data_dump/*
 development.yml
+locustfile.py
