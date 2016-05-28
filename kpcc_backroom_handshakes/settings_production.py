@@ -154,7 +154,7 @@ STATIC_ROOT = os.path.join(SITE_ROOT, "static")
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = "/static/"
 
-SITE_URL = "#"
+SITE_URL = CONFIG["site_url"]
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -162,16 +162,19 @@ STATICFILES_DIRS = (
 )
 
 # build paths inside the project like this: os.path.join(base_dir, ...)
-# if "build" in CONFIG:
-#     STAGING = CONFIG["build"]["staging"]
-#     STAGING_PREFIX = CONFIG["build"]["staging_prefix"]
-#     LIVE_PREFIX = CONFIG["build"]["live_prefix"]
-#     DEPLOY_DIR = CONFIG["build"]["deploy_dir"]
-#     STATIC_DIR = STATIC_URL
-#     BUILD_DIR = CONFIG["build"]["build_dir"]
-#     BAKERY_VIEWS = tuple(CONFIG["build"]["views"])
-#     URL_PATH = ""
-
+if "build" in CONFIG:
+    STAGING = CONFIG["build"]["staging"]
+    STAGING_PREFIX = CONFIG["build"]["staging_prefix"]
+    LIVE_PREFIX = CONFIG["build"]["live_prefix"]
+    DEPLOY_DIR = CONFIG["build"]["deploy_dir"]
+    STATIC_DIR = STATIC_URL
+    BUILD_DIR = os.path.join(STATIC_ROOT, CONFIG["build"]["build_dir"])
+    BAKERY_VIEWS = tuple(CONFIG["build"]["views"])
+    URL_PATH = ""
+    BAKERY_CACHE_CONTROL = {
+        'text/html': 300,
+        'application/javascript': 86400
+    }
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
