@@ -17,24 +17,28 @@ from fabric.context_managers import lcd
 from fabric.colors import green
 from fabric.contrib import django
 
-os.environ[
-    "DJANGO_SETTINGS_MODULE"] = "kpcc_backroom_handshakes.settings_production"
+os.environ["DJANGO_SETTINGS_MODULE"] = "kpcc_backroom_handshakes.settings_production"
 
 from django.conf import settings
 
-env.project_name = 'kpcc_backroom_handshakes'
-env.local_branch = 'master'
-env.remote_ref = 'origin/master'
-env.requirements_file = 'requirements.txt'
-env.use_ssh_config = True
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
 
 CONFIG_PATH = "%s_CONFIG_PATH" % ("kpcc_backroom_handshakes".upper())
 
 CONFIG_FILE = os.environ.setdefault(CONFIG_PATH, "./development.yml")
 
-CONFIG_YML = os.path.join(BASE_DIR, "development.yml")
+CONFIG_YML = os.path.join(PROJECT_PATH, "development.yml")
+
+CONFIG = yaml.load(open(CONFIG_YML))
+
+env.hosts = CONFIG["deployment_env"]["hosts"]
+env.project_name = CONFIG["deployment_env"]["project_name"]
+env.local_branch = CONFIG["deployment_env"]["local_branch"]
+env.remote_ref = CONFIG["deployment_env"]["remote_ref"]
+env.requirements_file = CONFIG["deployment_env"]["requirements_file"]
+env.use_ssh_config = CONFIG["deployment_env"]["use_ssh_config"]
 
 logger = logging.getLogger("root")
 logging.basicConfig(
@@ -195,13 +199,16 @@ def commit(message='updates'):
 
 
 def deploy():
-    data()
-    time.sleep(5)
-    build()
-    time.sleep(5)
-    local("python manage.py move_baked_files")
-    time.sleep(5)
-    commit()
+
+    logger.debug(CONFIG)
+
+    # data()
+    # time.sleep(5)
+    # build()
+    # time.sleep(5)
+    # local("python manage.py move_baked_files")
+    # time.sleep(5)
+    # commit()
 
 
 def bootstrap():
