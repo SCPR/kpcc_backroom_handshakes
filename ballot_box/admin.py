@@ -129,7 +129,7 @@ class ContestAdmin(admin.ModelAdmin):
         return obj.candidate_set.count()
 
     def precincts_reporting_pct(self, obj):
-        return "{0:.1f}%".format(obj.precinctsreportingpct * 100)
+        return "{0:.2f}%".format(obj.precinctsreportingpct * 100)
     precincts_reporting_pct.short_description = "Precincts Reporting"
 
     get_candidate_count.short_description = "Number of Candidates"
@@ -157,6 +157,7 @@ class ContestAdmin(admin.ModelAdmin):
     )
 
     list_filter = (
+        "resultsource",
         "poss_error",
         "is_display_priority",
         "is_homepage_priority",
