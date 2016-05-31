@@ -209,6 +209,7 @@ def deploy():
                 with prefix("workon %s" % (env.project_name)):
                     run("pip install -r %s" % (env.requirements_file))
                     run("python manage.py migrate")
+        sudo("service apache2 restart")
 
 
 def bootstrap():
