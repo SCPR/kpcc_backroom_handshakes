@@ -208,7 +208,6 @@ def deploy():
             with prefix("source /usr/local/bin/virtualenvwrapper.sh"):
                 with prefix("workon %s" % (env.project_name)):
                     run("pip install -r %s" % (env.requirements_file))
-                    run("python manage.py makemigration")
                     run("python manage.py migrate")
 
 
