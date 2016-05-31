@@ -509,16 +509,21 @@ class LacProcessMethods(object):
         race_log = "\n"
         if contest['is_judicial_contest']:
             """ This is a judicial appointee """
-            contestname = (contest['contest_title'] +
-                           ' ' + contest['contest_title_cont']).title()
+            if "SUPREME COURT" in contest["contest_title"]:
+                contestname = "Supreme Court"
+            elif "APPELLATE COURT" in contest["contest_title"]:
+                contestname = "Courts of Appeal District 02"
+            else:
+                contestname = contest["contest_title"]
             officename = contestname
             framer.office["officename"] = officename
             framer.office["officeslug"] = slugify(officename)
             framer.office["active"] = True
-            framer.office["officeid"] = saver._make_office_id(
-                src.source_short,
-                framer.office["officeslug"],
-            )
+            framer.office["officeid"] = framer.office["officeslug"]
+            # framer.office["officeid"] = saver._make_office_id(
+            #     src.source_short,
+            #     framer.office["officeslug"],
+            # )
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
             framer.contest["seatnum"] = None
@@ -626,10 +631,11 @@ class LacProcessMethods(object):
             framer.office["officename"] = officename
             framer.office["officeslug"] = slugify(officename)
             framer.office["active"] = True
-            framer.office["officeid"] = saver._make_office_id(
-                src.source_short,
-                framer.office["officeslug"],
-            )
+            framer.office["officeid"] = framer.office["officeslug"]
+            # framer.office["officeid"] = saver._make_office_id(
+            #     src.source_short,
+            #     framer.office["officeslug"],
+            # )
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
             framer.contest["seatnum"] = None
@@ -744,6 +750,8 @@ class LacProcessMethods(object):
                     this_desig, strip_district)
             elif "STATE SENATOR" in contest['contest_title']:
                 contestname = "State Senate District %s" % (strip_district)
+            elif "UNITED STATES SENATOR" in contest["contest_title"]:
+                contestname = "US Senate"
             elif "PRESIDENTIAL PREFERENCE" in contest['contest_title']:
                 designation = contest['contest_title_cont'].upper()
                 if designation == "AI":
@@ -775,10 +783,11 @@ class LacProcessMethods(object):
             framer.office["officename"] = contestname.replace(".", "")
             framer.office["officeslug"] = slugify(framer.office["officename"])
             framer.office["active"] = True
-            framer.office["officeid"] = saver._make_office_id(
-                src.source_short,
-                framer.office["officeslug"],
-            )
+            framer.office["officeid"] = framer.office["officeslug"]
+            # framer.office["officeid"] = saver._make_office_id(
+            #     src.source_short,
+            #     framer.office["officeslug"],
+            # )
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
             if len(candidates) < 2:

@@ -150,6 +150,7 @@ class BuildResults(object):
         if race_id == "140":
             officename_idx = self.framer._find_nth(contestname, " - ", 1)
             officename = unicode(contestname[:officename_idx].replace(".", ""))
+            officename = unicode(officename.replace(" Justice",""))
             fullname_idx = self.framer._find_nth(contestname, " - ", 1) + 3
         elif race_id == "150":
             officename_idx = self.framer._find_nth(contestname, " - ", 2)
@@ -175,8 +176,9 @@ class BuildResults(object):
         self.framer.office["officename"] = officename
         self.framer.office["officeslug"] = slugify(officename)
         self.framer.office["active"] = True
-        self.framer.office["officeid"] = self.saver._make_office_id(
-            src.source_short, self.framer.office["officeslug"])
+        self.framer.office["officeid"] = self.framer.office["officeslug"]
+        # self.framer.office["officeid"] = self.saver._make_office_id(
+        #     src.source_short, self.framer.office["officeslug"])
         self.framer.contest["election_id"] = election.id
         self.framer.contest["resultsource_id"] = src.id
         self.framer.contest["seatnum"] = seatnum
@@ -287,10 +289,11 @@ class BuildResults(object):
         self.framer.office["officename"] = officename
         self.framer.office["officeslug"] = slugify(officename)
         self.framer.office["active"] = True
-        self.framer.office["officeid"] = self.saver._make_office_id(
-            src.source_short,
-            self.framer.office["officeslug"],
-        )
+        self.framer.office["officeid"] = self.framer.office["officeslug"]
+        # self.framer.office["officeid"] = self.saver._make_office_id(
+        #     src.source_short,
+        #     self.framer.office["officeslug"],
+        # )
         self.framer.contest["election_id"] = election.id
         self.framer.contest["resultsource_id"] = src.id
         self.framer.contest["seatnum"] = seatnum
@@ -372,10 +375,11 @@ class BuildResults(object):
         self.framer.office["officename"] = officename
         self.framer.office["officeslug"] = slugify(officename)
         self.framer.office["active"] = True
-        self.framer.office["officeid"] = self.saver._make_office_id(
-            src.source_short,
-            self.framer.office["officeslug"],
-        )
+        self.framer.office["officeid"] = self.framer.office["officeslug"]
+        # self.framer.office["officeid"] = self.saver._make_office_id(
+        #     src.source_short,
+        #     self.framer.office["officeslug"],
+        # )
         self.framer.contest["election_id"] = election.id
         self.framer.contest["resultsource_id"] = src.id
         self.framer.contest["seatnum"] = seatnum
