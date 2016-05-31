@@ -63,10 +63,6 @@ if "email" in CONFIG:
     EMAIL_PORT = CONFIG["email"]["port"]
     EMAIL_USE_TLS = CONFIG["email"]["use_tls"]
 
-#CACHE_MIDDLEWARE_ALIAS = "default"
-#CACHE_MIDDLEWARE_SECONDS = (60 * 5)
-#CACHE_MIDDLEWARE_KEY_PREFIX = ""
-
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 if CONFIG["installed_apps"]:
@@ -129,6 +125,28 @@ else:
 #             }
 #         }
 #     }
+
+if DEBUG == True:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+        }
+    }
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+            "LOCATION": "handshakes_cache",
+            "TIMEOUT": 600,
+            "OPTIONS": {
+                "MAX_ENTRIES": 500
+            }
+        }
+    }
+
+# CACHE_MIDDLEWARE_ALIAS = "default"
+# CACHE_MIDDLEWARE_SECONDS = (60 * 10)
+# CACHE_MIDDLEWARE_KEY_PREFIX = ""
 
 # Python dotted path to the WSGI application used by Django"s runserver.
 WSGI_APPLICATION = "kpcc_backroom_handshakes.wsgi.application"
