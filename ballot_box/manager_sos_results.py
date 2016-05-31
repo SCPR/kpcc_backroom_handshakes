@@ -27,7 +27,8 @@ class BuildSosResults(object):
 
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
-    sources = ResultSource.objects.filter(source_short="sos", source_active=True)
+    sources = ResultSource.objects.filter(
+        source_short="sos", source_active=True)
 
     def _init(self, *args, **kwargs):
         """
@@ -129,7 +130,8 @@ class BuildSosResults(object):
                                     result.contest, candidate)
                     logger.debug(race_log)
                     os.remove(latest_path)
-                    logger.debug("\n*****\nwe've finished processing sos results\n*****")
+                    logger.debug(
+                        "\n*****\nwe've finished processing sos results\n*****")
             else:
                 logger.error("XML file to parse is not at expected location")
 
@@ -149,7 +151,7 @@ class BuildResults(object):
         if race_id == "140":
             officename_idx = self.framer._find_nth(contestname, " - ", 1)
             officename = unicode(contestname[:officename_idx].replace(".", ""))
-            officename = unicode(officename.replace(" Justice",""))
+            officename = unicode(officename.replace(" Justice", ""))
             fullname_idx = self.framer._find_nth(contestname, " - ", 1) + 3
         elif race_id == "150":
             officename_idx = self.framer._find_nth(contestname, " - ", 2)
@@ -158,8 +160,8 @@ class BuildResults(object):
             fullname_idx = self.framer._find_nth(contestname, " - ", 2) + 3
         fullname = unicode(contestname[fullname_idx:])
         level = "california"
-        seatnum = self.framer._get_prop_number(
-            race.ContestIdentifier.attrs["IdNumber"], race_id)
+        # seatnum = self.framer._get_prop_number(race.ContestIdentifier.attrs["IdNumber"], race_id)
+        seatnum = None
         is_statewide = True
         precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
         precinctsreport = r.find(attrs={"Id": "PR"}).contents[0]
@@ -216,7 +218,6 @@ class BuildResults(object):
                 src.source_short,
                 self.framer.contest["level"],
                 self.framer.office["officeslug"],
-                seatnum=self.framer.contest["seatnum"],
             )
             self.framer.judicial["ballotorder"] = None
             self.framer.judicial["firstname"] = None
