@@ -64,5 +64,6 @@ dbsync_setup.rb
 data/*
 SCRATCHPAD.md
 ballot_box/data_dump/*
+kpcc_backroom_handshakes/static/*
 development.yml
 locustfile.py

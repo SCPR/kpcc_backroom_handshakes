@@ -23,10 +23,11 @@ class BuildSosResults(object):
     scaffolding to ingest secretary of state election results
     """
 
+    retrieve = Retriever()
+
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
-    sources = ResultSource.objects.filter(
-        source_short="sos", source_active=True)
+    sources = ResultSource.objects.filter(source_short="sos", source_active=True)
 
     def _init(self, *args, **kwargs):
         """
@@ -34,19 +35,18 @@ class BuildSosResults(object):
         for src in self.sources:
             self.get_results_file(src, self.data_directory)
             self.parse_results_file(src, self.data_directory)
+            self.retrieve._build_and_move_results()
 
     def get_results_file(self, src, data_directory):
         """
         """
-        retrieve = Retriever()
-        retrieve._request_results_and_save(src, data_directory)
-        retrieve._create_directory_for_latest_file(src, data_directory)
-        retrieve._copy_timestamped_file_to_latest(src, data_directory)
-        retrieve._archive_downloaded_file(src, data_directory)
-        retrieve._found_required_files(src, data_directory)
-        retrieve._unzip_latest_file(src, data_directory)
-        retrieve.log_message += "*** Ending Request ***\n"
-        logger.debug(retrieve.log_message)
+        self.retrieve._request_results_and_save(src, data_directory)
+        self.retrieve._create_directory_for_latest_file(src, data_directory)
+        self.retrieve._copy_timestamped_file_to_latest(src, data_directory)
+        self.retrieve._archive_downloaded_file(src, data_directory)
+        self.retrieve._found_required_files(src, data_directory)
+        self.retrieve._unzip_latest_file(src, data_directory)
+        self.retrieve.log_message += "*** Ending Request ***\n"
 
     def parse_results_file(self, src, data_directory):
         """
@@ -129,8 +129,7 @@ class BuildSosResults(object):
                                     result.contest, candidate)
                     logger.debug(race_log)
                     os.remove(latest_path)
-                    logger.debug(
-                        "\n*****\nwe've finished processing sos results\n*****")
+                    logger.debug("\n*****\nwe've finished processing sos results\n*****")
             else:
                 logger.error("XML file to parse is not at expected location")
 
