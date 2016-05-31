@@ -204,9 +204,12 @@ def deploy():
     with cd(env.code_dir):
         run("git co %s" % env.local_branch)
         run("git pull")
-        run("pip install -r %s" % (env.requirements_file))
-        with prefix("workon %s" % (env.project_name)):
-            run("python manage.py migrate")
+        with prefix("WORKON_HOME=$HOME/.virtualenvs"):
+            with prefix("source /usr/local/bin/virtualenvwrapper.sh"):
+                with prefix("workon %s" % (env.project_name)):
+                    run("pip install -r %s" % (env.requirements_file))
+                    run("python manage.py makemigration")
+                    run("python manage.py migrate")
 
 
 def bootstrap():
