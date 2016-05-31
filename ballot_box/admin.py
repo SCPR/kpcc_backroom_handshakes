@@ -101,12 +101,16 @@ class OfficeAdmin(admin.ModelAdmin):
 
     list_display = (
         "name",
+        "officeid",
         "slug",
     )
 
     # list_per_page = 15
 
-    list_filter = ("name",)
+    list_filter = (
+        "name",
+        "officeid",
+    )
 
     search_fields = ("name",)
 
