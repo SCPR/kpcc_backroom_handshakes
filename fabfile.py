@@ -17,7 +17,8 @@ from fabric.context_managers import lcd
 from fabric.colors import green
 from fabric.contrib import django
 
-os.environ["DJANGO_SETTINGS_MODULE"] = "kpcc_backroom_handshakes.settings_production"
+os.environ[
+    "DJANGO_SETTINGS_MODULE"] = "kpcc_backroom_handshakes.settings_production"
 
 from django.conf import settings
 
@@ -39,6 +40,7 @@ env.local_branch = CONFIG["deployment_env"]["local_branch"]
 env.remote_ref = CONFIG["deployment_env"]["remote_ref"]
 env.requirements_file = CONFIG["deployment_env"]["requirements_file"]
 env.use_ssh_config = CONFIG["deployment_env"]["use_ssh_config"]
+env.code_dir = CONFIG["deployment_env"]["code_dir"]
 
 logger = logging.getLogger("root")
 logging.basicConfig(
@@ -92,7 +94,7 @@ development functions
 """
 
 
-def run():
+def lrun():
     """
     shortcut for base manage.py function to run the dev server
     """
@@ -199,16 +201,12 @@ def commit(message='updates'):
 
 
 def deploy():
-
-    logger.debug(CONFIG)
-
-    # data()
-    # time.sleep(5)
-    # build()
-    # time.sleep(5)
-    # local("python manage.py move_baked_files")
-    # time.sleep(5)
-    # commit()
+    with cd(env.code_dir):
+        run("git co %s" % env.local_branch)
+        run("git pull")
+        run("pip install -r %s" % (env.requirements_file))
+        with prefix("workon %s" % (env.project_name)):
+            run("python manage.py migrate")
 
 
 def bootstrap():
@@ -223,7 +221,6 @@ def bootstrap():
                 migrate()
                 time.sleep(2)
                 local("python manage.py createsuperuser")
-                run()
 
 
 def syncstart():
@@ -233,7 +230,6 @@ def syncstart():
     migrate()
     # load data fixtures
     load_ballot_box()
-    run()
     # any new dependencies/apps the rest of the team may need?
 
 
