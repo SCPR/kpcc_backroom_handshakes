@@ -37,6 +37,7 @@ class BuildLacResults(object):
         for src in self.sources:
             self.get_results_file(src, self.data_directory)
             self.parse_results_file(src, self.data_directory)
+            self.retrieve._build_and_move_results()
 
     def get_results_file(self, src, data_directory):
         """
