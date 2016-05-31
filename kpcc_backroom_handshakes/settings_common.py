@@ -47,6 +47,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "162.243.135.6"
+]
+
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
@@ -80,9 +86,9 @@ TEMPLATES = [
 ]
 
 MIDDLEWARE_CLASSES = (
-    #"django.contrib.auth.middleware.SessionAuthenticationMiddleware",
-    #"django.middleware.cache.UpdateCacheMiddleware",
-    #"django.middleware.cache.FetchFromCacheMiddleware",
+    "django.contrib.auth.middleware.SessionAuthenticationMiddleware",
+    "django.middleware.cache.UpdateCacheMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",

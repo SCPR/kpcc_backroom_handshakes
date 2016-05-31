@@ -3,6 +3,7 @@ from tastypie.resources import ModelResource
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.serializers import Serializer
+from tastypie.cache import SimpleCache
 from ballot_box.models import Contest, Candidate, BallotMeasure, JudicialCandidate
 
 
@@ -29,9 +30,10 @@ class CandidateResource(ModelResource):
         # filtering = {
         #     "calculated_id": ALL,
         # }
-        allowed_methods = ['get']
-        serializer = Serializer(formats=['json'])
+        allowed_methods = ["get"]
+        serializer = Serializer(formats=["json"])
         limit = 275
+        cache = SimpleCache(cache_name="default")
         # authentication = ApiKeyAuthentication()
 
 
@@ -53,9 +55,10 @@ class MeasureResource(ModelResource):
         # filtering = {
         #     "calculated_id": ALL,
         # }
-        allowed_methods = ['get']
-        serializer = Serializer(formats=['json'])
+        allowed_methods = ["get"]
+        serializer = Serializer(formats=["json"])
         limit = 275
+        cache = SimpleCache(cache_name="default")
         # authentication = ApiKeyAuthentication()
 
 
@@ -77,19 +80,20 @@ class JudicialResource(ModelResource):
         # filtering = {
         #     "calculated_id": ALL,
         # }
-        allowed_methods = ['get']
-        serializer = Serializer(formats=['json'])
+        allowed_methods = ["get"]
+        serializer = Serializer(formats=["json"])
         limit = 275
+        cache = SimpleCache(cache_name="default")
         # authentication = ApiKeyAuthentication()
 
 
 class ContestResource(ModelResource):
     candidates = fields.ToManyField(
-        'kpcc_backroom_handshakes.api.CandidateResource', 'candidate_set', full=True)
+        "kpcc_backroom_handshakes.api.CandidateResource", "candidate_set", full=True)
     measures = fields.ToManyField(
-        'kpcc_backroom_handshakes.api.MeasureResource', 'ballotmeasure_set', full=True)
+        "kpcc_backroom_handshakes.api.MeasureResource", "ballotmeasure_set", full=True)
     judicial_candidates = fields.ToManyField(
-        'kpcc_backroom_handshakes.api.JudicialResource', 'judicialcandidate_set', full=True)
+        "kpcc_backroom_handshakes.api.JudicialResource", "judicialcandidate_set", full=True)
 
     class Meta:
         queryset = Contest.objects.filter(is_display_priority=True)
@@ -119,7 +123,8 @@ class ContestResource(ModelResource):
         # filtering = {
         #     "calculated_id": ALL,
         # }
-        allowed_methods = ['get']
-        serializer = Serializer(formats=['json'])
+        allowed_methods = ["get"]
+        serializer = Serializer(formats=["json"])
         limit = 275
+        cache = SimpleCache(cache_name="default")
         # authentication = ApiKeyAuthentication()
