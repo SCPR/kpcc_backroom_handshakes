@@ -47,6 +47,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "162.243.135.6"
+]
+
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
