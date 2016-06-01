@@ -48,6 +48,7 @@ class BuildSosResults(object):
         self.retrieve._found_required_files(src, data_directory)
         self.retrieve._unzip_latest_file(src, data_directory)
         self.retrieve.log_message += "*** Ending Request ***\n"
+        logger.debug(self.retrieve.log_message)
 
     def parse_results_file(self, src, data_directory):
         """
