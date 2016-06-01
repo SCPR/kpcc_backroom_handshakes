@@ -254,7 +254,7 @@ LOGGING = {
             "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
             "api_key": SLACK_API_KEY,
             "class": "slacker_log_handler.SlackerLogHandler",
-            "channel": "#2016-election-results"
+            "channel": "#logging-2016-election"
         },
         #"file": {
             #"level": "DEBUG",
