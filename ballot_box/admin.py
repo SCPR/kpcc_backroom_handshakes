@@ -129,7 +129,10 @@ class ContestAdmin(admin.ModelAdmin):
         return obj.candidate_set.count()
 
     def precincts_reporting_pct(self, obj):
-        return "{0:.2f}%".format(obj.precinctsreportingpct * 100)
+        if obj.precinctsreportingpct == None:
+            return 0
+        else:
+            return "{0:.2f}%".format(obj.precinctsreportingpct * 100)
     precincts_reporting_pct.short_description = "Precincts Reporting"
 
     get_candidate_count.short_description = "Number of Candidates"
@@ -216,15 +219,24 @@ class ContestAdmin(admin.ModelAdmin):
 class BallotMeasureAdmin(admin.ModelAdmin):
 
     def yes_percent(self, obj):
-        return "{0:.1f}%".format(obj.yespct * 100)
+        if obj.yespct == None:
+            return 0
+        else:
+            return "{0:.1f}%".format(obj.yespct * 100)
     yes_percent.short_description = "Percent Of Yes Votes"
 
     def no_percent(self, obj):
-        return "{0:.1f}%".format(obj.nopct * 100)
+        if obj.nopct == None:
+            return 0
+        else:
+            return "{0:.1f}%".format(obj.nopct * 100)
     no_percent.short_description = "Percent Of No Votes"
 
     def precincts_reporting_pct(self, obj):
-        return "{0:.1f}%".format(obj.contest.precinctsreportingpct * 100)
+        if obj.contest.precinctsreportingpct == None:
+            return 0
+        else:
+            return "{0:.1f}%".format(obj.contest.precinctsreportingpct * 100)
     precincts_reporting_pct.short_description = "Precincts Reporting"
 
     def get_source(self, obj):
@@ -284,7 +296,10 @@ class CandidateAdmin(admin.ModelAdmin):
     get_source.short_description = "Data Source"
 
     def vote_percent(self, obj):
-        return "{0:.1f}%".format(obj.votepct * 100)
+        if obj.votepct == None:
+            return 0
+        else:
+            return "{0:.1f}%".format(obj.votepct * 100)
     vote_percent.short_description = "Percent Of Total Votes"
 
     def get_total_votes(self, obj):
@@ -294,7 +309,10 @@ class CandidateAdmin(admin.ModelAdmin):
     get_total_votes.short_description = "Total Votes in Contest"
 
     def precincts_reporting_pct(self, obj):
-        return "{0:.1f}%".format(obj.contest.precinctsreportingpct * 100)
+        if obj.contest.precinctsreportingpct == None:
+            return 0
+        else:
+            return "{0:.1f}%".format(obj.contest.precinctsreportingpct * 100)
     precincts_reporting_pct.short_description = "Precincts Reporting"
 
     list_display = (
@@ -351,15 +369,24 @@ class CandidateAdmin(admin.ModelAdmin):
 class JudicialCandidateAdmin(admin.ModelAdmin):
 
     def yes_percent(self, obj):
-        return "{0:.1f}%".format(obj.yespct * 100)
+        if obj.yespct == None:
+            return 0
+        else:
+            return "{0:.1f}%".format(obj.yespct * 100)
     yes_percent.short_description = "Percent Of Yes Votes"
 
     def no_percent(self, obj):
-        return "{0:.1f}%".format(obj.nopct * 100)
+        if obj.nopct == None:
+            return 0
+        else:
+            return "{0:.1f}%".format(obj.nopct * 100)
     no_percent.short_description = "Percent Of No Votes"
 
     def precincts_reporting_pct(self, obj):
-        return "{0:.1f}%".format(obj.contest.precinctsreportingpct * 100)
+        if obj.contest.precinctsreportingpct == None:
+            return 0
+        else:
+            return "{0:.1f}%".format(obj.contest.precinctsreportingpct * 100)
     precincts_reporting_pct.short_description = "Precincts Reporting"
 
     def get_source(self, obj):
