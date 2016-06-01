@@ -32,7 +32,11 @@ def neg_to_posi(value):
 
 @register.filter
 def percentage(value):
-    return "%s" % (value*100)
+    if value == None:
+        return "N/A"
+    else:
+        return "%s" % (value*100)
+
 
 register.filter(currency)
 register.filter(neg_to_posi)
