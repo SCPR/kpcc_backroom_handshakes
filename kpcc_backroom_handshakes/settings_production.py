@@ -269,9 +269,9 @@ LOGGING = {
             "handlers": [
                 "console",
                 "mail_admins",
-                # "slack-error",
-                # "slack-info",
-                # "slack-debug",
+                "slack-error",
+                "slack-info",
+                "slack-debug",
             ],
             "level": "DEBUG",
             "propagate": False,
