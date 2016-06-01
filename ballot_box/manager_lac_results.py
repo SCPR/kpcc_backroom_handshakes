@@ -26,6 +26,8 @@ class BuildLacResults(object):
     scaffolding to ingest la county registrar election results
     """
 
+    retrieve = Retriever()
+
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
     sources = ResultSource.objects.filter(
@@ -42,15 +44,14 @@ class BuildLacResults(object):
     def get_results_file(self, src, data_directory):
         """
         """
-        retrieve = Retriever()
-        retrieve._request_results_and_save(src, data_directory)
-        retrieve._create_directory_for_latest_file(src, data_directory)
-        retrieve._copy_timestamped_file_to_latest(src, data_directory)
-        retrieve._archive_downloaded_file(src, data_directory)
-        retrieve._found_required_files(src, data_directory)
-        retrieve._unzip_latest_file(src, data_directory)
-        retrieve.log_message += "*** Ending Request ***\n"
-        logger.debug(retrieve.log_message)
+        self.retrieve._request_results_and_save(src, data_directory)
+        self.retrieve._create_directory_for_latest_file(src, data_directory)
+        self.retrieve._copy_timestamped_file_to_latest(src, data_directory)
+        self.retrieve._archive_downloaded_file(src, data_directory)
+        self.retrieve._found_required_files(src, data_directory)
+        self.retrieve._unzip_latest_file(src, data_directory)
+        self.retrieve.log_message += "*** Ending Request ***\n"
+        logger.debug(self.retrieve.log_message)
 
     def parse_results_file(self, src, data_directory):
         """

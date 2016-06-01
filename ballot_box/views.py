@@ -24,9 +24,8 @@ class ResultIndex(ListView):
         context = super(ResultIndex, self).get_context_data(**kwargs)
         queryset = Contest.objects.filter(election__electionid="primary-2016-06-07")
         context["featured_list"] = queryset.filter(is_homepage_priority=True)
-        context["house_rep_list"] = queryset.filter(
-            contestid__contains="sos-districtwide-us-house-of-representatives"
-        )
+        context["local_list"] = queryset.filter(resultsource__source_short="lac").filter(is_display_priority=True)
+        context["house_rep_list"] = queryset.filter(contestid__contains="sos-districtwide-us-house-of-representatives")
         context["state_list"] = queryset.filter(
             Q(contestid__contains="sos-districtwide-state-senate") |
             Q(contestid__contains="sos-districtwide-state-assembly")
