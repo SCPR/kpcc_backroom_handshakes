@@ -182,9 +182,66 @@
             <article class="results-block">
             <div class="results-collection">
                 <div class="collection-header">Local Races</div>
+                {% for contest in local_list %}
+                    <div class="results-block" data-race="#">
+                        <header>
+                            <h2>{{ contest.contestname }}</h2>
+                            <aside>&nbsp;</aside>
+                        </header>
+                        <div class="clearfix">
+                            {% if contest.is_judicial %}
+                                <section class="initiative local condensed yes">
+                                    <div class="title">
+                                        <h3>Yes</h3>
+                                    </div>
+
+                                    <div class="result relative">
+                                        <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
+                                    </div>
+                                </section>
+                                <section class="initiative local condensed no">
+                                    <div class="title">
+                                        <h3>No</h3>
+                                    </div>
+                                    <div class="result relative">
+                                        <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
+                                    </div>
+                                </section>
+                            {% elif contest.is_ballot_measure %}
+                                <section class="initiative local condensed yes">
+                                    <div class="title">
+                                        <h3>Yes</h3>
+                                    </div>
+
+                                    <div class="result relative">
+                                        <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
+                                    </div>
+                                </section>
+                                <section class="initiative local condensed no">
+                                    <div class="title">
+                                        <h3>No</h3>
+                                    </div>
+                                    <div class="result relative">
+                                        <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
+                                    </div>
+                                </section>
+                            {% else %}
+                                {% for candidate in contest.candidate_set.all|slice:":6"|dictsortreversed:"votepct" %}
+                                    <section class="initiative local condensed">
+                                        <div class="title">
+                                            <h3>{{ candidate.fullname }}</h3>
+                                        </div>
+                                        <div class="result relative">
+                                            <div class="yes "><strong><span>{{ candidate.votepct|percentage|floatformat:1 }}</span><b class="percentage">%</b></strong></div>
+                                        </div>
+                                    </section>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
             </article>
-
 
             <article class="results-block">
                 <div class="results-collection">
