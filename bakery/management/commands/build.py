@@ -55,11 +55,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """
-        Making it happen.
+        making it happen.
         """
-        logger.info("Build started")
+        logger.info("Starting to build HTML results page")
 
-        # Set options
+        # set options
         self.set_options(*args, **options)
 
         """
@@ -67,15 +67,15 @@ class Command(BaseCommand):
         but it is a working solution to commment
         """
 
-        # Get the build directory ready
+        # get the build directory ready
         # if not options.get("keep_build_dir"):
         #     self.init_build_dir()
 
-        # Build up static files
+        # build up static files
         # if not options.get("skip_static"):
         #     self.build_static()
 
-        # Build the media directory
+        # build the media directory
         # if not options.get("skip_media"):
         #     self.build_media()
 
@@ -84,11 +84,11 @@ class Command(BaseCommand):
         else:
             os.makedirs(self.build_dir)
 
-        # Build views
+        # build views
         self.build_views()
 
-        # Close out
-        logger.info("Build finished")
+        # close out
+        logger.info("Finished building HTML results page")
 
     def set_options(self, *args, **options):
         """
@@ -197,7 +197,6 @@ class Command(BaseCommand):
         then loop through and run them all
         """
         for view_str in self.view_list:
-            logger.debug("Building %s" % view_str)
             if self.verbosity > 1:
                 six.print_("Building %s" % view_str)
             try:
