@@ -81,11 +81,19 @@ def fetch_lac():
     local("python manage.py fetch_lac_results")
 
 
+def fetch_oc():
+    """
+    shortcut for running the management command to fetch sos results
+    """
+    local("python manage.py fetch_oc_results")
+
+
 def fetch_all():
     """
     shortcut for running all management commands to fetch results
     """
     local("python manage.py fetch_sos_results")
+    local("python manage.py fetch_oc_results")
     local("python manage.py fetch_lac_results")
 
 
