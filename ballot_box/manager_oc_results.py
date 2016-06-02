@@ -387,7 +387,7 @@ class BuildResults(object):
             this_candidate["ballotorder"] = candidate.attrs["cand_Seq_nbr"]
             this_candidate["firstname"] = None
             this_candidate["lastname"] = None
-            this_candidate["fullname"] = fullname
+            this_candidate["fullname"] = fullname.replace("* ", "")
             this_candidate["candidateslug"] = slugify(fullname)
             this_candidate["party"] = party
             this_candidate["incumbent"] = False
