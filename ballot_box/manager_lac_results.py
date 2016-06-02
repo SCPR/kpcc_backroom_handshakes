@@ -87,10 +87,6 @@ class BuildLacResults(object):
                     file_timestamp = localtime(file_timestamp)
                     update_this = saver._eval_timestamps(
                         file_timestamp, src.source_latest)
-
-                    # REMOVE #
-                    update_this = election.test_results
-
                     if update_this == False:
                         logger.debug(
                             "\n*****\nwe have newer data in the database so let's delete these files\n*****")
