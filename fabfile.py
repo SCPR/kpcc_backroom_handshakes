@@ -209,7 +209,10 @@ def deploy():
                 with prefix("workon %s" % (env.project_name)):
                     run("pip install -r %s" % (env.requirements_file))
                     run("python manage.py migrate")
-        sudo("service apache2 restart")
+        sudo("sudo service uwsgi restart")
+        sudo("sudo service nginx restart")
+        sudo("sudo service varnish restart")
+        sudo("sudo /etc/init.d/newrelic-sysmond start")
 
 
 def bootstrap():
