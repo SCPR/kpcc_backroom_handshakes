@@ -113,14 +113,69 @@
         <div class="row-fluid">
             <section class="span24">
                 <div class="header-well clearfix">
+                    <!--
                     <h2 class="callout center-contents"><a href="http://www.scpr.org/topics/2016-election">Jump to KPCC&#39;s complete election coverage</a></h2>
+                    -->
                 </div>
             </section>
         </div>
         <div class="results">
             <article class="results-block">
-                {% for contest in featured_list %}
-                    <div class="results-block" data-race="#">
+
+                <div class="results-block">
+                    <header>
+                        <h2>{{ dem_pres.contestname }}</h2>
+                    </header>
+                    <div class="clearfix">
+                        {% for candidate in dem_pres.candidate_set.all|dictsortreversed:"votepct" %}
+                            <section class="initiative local condensed">
+                                <div class="title">
+                                    <h3>{{ candidate.fullname }}</h3>
+                                </div>
+                                <div class="result relative">
+                                    <div class="yes "><strong><span>{{ candidate.votepct|percentage|floatformat:1 }}</span><b class="percentage">%</b></strong></div>
+                                </div>
+                            </section>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="results-block">
+                    <header>
+                        <h2>{{ gop_pres.contestname }}</h2>
+                    </header>
+                    <div class="clearfix">
+                        {% for candidate in gop_pres.candidate_set.all|dictsortreversed:"votepct" %}
+                            <section class="initiative local condensed">
+                                <div class="title">
+                                    <h3>{{ candidate.fullname }}</h3>
+                                </div>
+                                <div class="result relative">
+                                    <div class="yes "><strong><span>{{ candidate.votepct|percentage|floatformat:1 }}</span><b class="percentage">%</b></strong></div>
+                                </div>
+                            </section>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="results-block">
+                    <header>
+                        <h2>{{ senate_primary.contestname }}</h2>
+                    </header>
+                    <div class="clearfix">
+                        {% for candidate in senate_primary.candidate_set.all|dictsortreversed:"votepct" %}
+                            <section class="initiative local condensed">
+                                <div class="title">
+                                    <h3>{{ candidate.fullname }}</h3>
+                                </div>
+                                <div class="result relative">
+                                    <div class="yes "><strong><span>{{ candidate.votepct|percentage|floatformat:1 }}</span><b class="percentage">%</b></strong></div>
+                                </div>
+                            </section>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% for contest in additional_list %}
+                    <div class="results-block">
                         <header>
                             <h2>{{ contest.contestname }}</h2>
                             <aside>&nbsp;</aside>
@@ -131,7 +186,6 @@
                                     <div class="title">
                                         <h3>Yes</h3>
                                     </div>
-
                                     <div class="result relative">
                                         <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
                                     </div>
@@ -163,7 +217,7 @@
                                     </div>
                                 </section>
                             {% else %}
-                                {% for candidate in contest.candidate_set.all|slice:":6"|dictsortreversed:"votepct" %}
+                                {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct" %}
                                     <section class="initiative local condensed">
                                         <div class="title">
                                             <h3>{{ candidate.fullname }}</h3>
@@ -180,73 +234,102 @@
             </article>
 
             <article class="results-block">
-            <div class="results-collection">
-                <div class="collection-header">Local Races</div>
-                {% for contest in local_list %}
-                    <div class="results-block" data-race="#">
-                        <header>
-                            <h2>{{ contest.contestname }}</h2>
-                            <aside>&nbsp;</aside>
-                        </header>
-                        <div class="clearfix">
-                            {% if contest.is_judicial %}
-                                <section class="initiative local condensed yes">
-                                    <div class="title">
-                                        <h3>Yes</h3>
-                                    </div>
-
-                                    <div class="result relative">
-                                        <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
-                                    </div>
-                                </section>
-                                <section class="initiative local condensed no">
-                                    <div class="title">
-                                        <h3>No</h3>
-                                    </div>
-                                    <div class="result relative">
-                                        <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
-                                    </div>
-                                </section>
-                            {% elif contest.is_ballot_measure %}
-                                <section class="initiative local condensed yes">
-                                    <div class="title">
-                                        <h3>Yes</h3>
-                                    </div>
-
-                                    <div class="result relative">
-                                        <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
-                                    </div>
-                                </section>
-                                <section class="initiative local condensed no">
-                                    <div class="title">
-                                        <h3>No</h3>
-                                    </div>
-                                    <div class="result relative">
-                                        <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
-                                    </div>
-                                </section>
-                            {% else %}
-                                {% for candidate in contest.candidate_set.all|slice:":6"|dictsortreversed:"votepct" %}
-                                    <section class="initiative local condensed">
+                <div class="results-collection active">
+                    <div class="collection-header">Local Results</div>
+                    {% for contest in local_list %}
+                        <div class="results-block">
+                            <header>
+                                <h2>{{ contest.contestname }}</h2>
+                                <aside>&nbsp;</aside>
+                            </header>
+                            <div class="clearfix">
+                                {% if contest.is_judicial %}
+                                    <section class="initiative local condensed yes">
                                         <div class="title">
-                                            <h3>{{ candidate.fullname }}</h3>
+                                            <h3>Yes</h3>
                                         </div>
+
                                         <div class="result relative">
-                                            <div class="yes "><strong><span>{{ candidate.votepct|percentage|floatformat:1 }}</span><b class="percentage">%</b></strong></div>
+                                            <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
                                         </div>
                                     </section>
-                                {% endfor %}
-                            {% endif %}
+                                    <section class="initiative local condensed no">
+                                        <div class="title">
+                                            <h3>No</h3>
+                                        </div>
+                                        <div class="result relative">
+                                            <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
+                                        </div>
+                                    </section>
+                                {% elif contest.is_ballot_measure %}
+                                    <section class="initiative local condensed yes">
+                                        <div class="title">
+                                            <h3>Yes</h3>
+                                        </div>
+
+                                        <div class="result relative">
+                                            <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
+                                        </div>
+                                    </section>
+                                    <section class="initiative local condensed no">
+                                        <div class="title">
+                                            <h3>No</h3>
+                                        </div>
+                                        <div class="result relative">
+                                            <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
+                                        </div>
+                                    </section>
+                                {% else %}
+                                    {% for candidate in contest.candidate_set.all|slice:":6"|dictsortreversed:"votepct" %}
+                                        <section class="initiative local condensed">
+                                            <div class="title">
+                                                <h3>{{ candidate.fullname }}</h3>
+                                            </div>
+                                            <div class="result relative">
+                                                <div class="yes "><strong><span>{{ candidate.votepct|percentage|floatformat:1 }}</span><b class="percentage">%</b></strong></div>
+                                            </div>
+                                        </section>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
-            </div>
+                    {% endfor %}
+                </div>
             </article>
 
             <article class="results-block">
-                <div class="results-collection">
-                    <div class="collection-header">Full State Results</div>
+                <div class="results-collection active">
+                    <div class="collection-header">State Results</div>
                     {% for contest in state_list %}
+                        <div class="results-block">
+                            <header>
+                                <h2>{{ contest.contestname }}</h2>
+                                <aside>&nbsp;</aside>
+                            </header>
+                            <div class="clearfix">
+                            {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct" %}
+                                <section class="initiative local condensed">
+                                    <div class="title">
+                                        <h3>{{ candidate.fullname }}</h3>
+                                    </div>
+                                    <div class="result relative">
+                                        {% if candidate.votepct %}
+                                            <div class="yes "><strong><span>{{ candidate.votepct|percentage|floatformat:1 }}</span><b class="percentage">%</b></strong></div>
+                                        {% else %}
+                                            <div class="yes "><strong><span>n/a</span><b class="percentage">%</b></strong></div>
+                                        {% endif %}
+                                    </div>
+                                </section>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </article>
+
+            <article class="results-block">
+                <div class="results-collection active">
+                    <div class="collection-header">U.S. House Of Representatives Results</div>
+                    {% for contest in house_rep_list %}
                         <div class="results-block">
                             <header>
                                 <h2>{{ contest.contestname }}</h2>
@@ -270,35 +353,6 @@
                         </div>
                     {% endfor %}
                 </div>
-            </article>
-
-            <article class="results-block">
-            <div class="results-collection">
-                <div class="collection-header">U.S. House Of Representatives</div>
-                {% for contest in house_rep_list %}
-                    <div class="results-block">
-                        <header>
-                            <h2>{{ contest.contestname }}</h2>
-                            <aside>&nbsp;</aside>
-                        </header>
-                        <div class="clearfix">
-                        {% for candidate in contest.candidate_set.all|slice:":6"|dictsortreversed:"votepct" %}
-                            <section class="initiative local condensed">
-                                <div class="title">
-                                    <h3>{{ candidate.fullname }}</h3>
-                                </div>
-                                <div class="result relative">
-                                    {% if candidate.votepct %}
-                                        <div class="yes "><strong><span>{{ candidate.votepct|percentage|floatformat:1 }}</span><b class="percentage">%</b></strong></div>
-                                    {% else %}
-                                        <div class="yes "><strong><span>n/a</span><b class="percentage">%</b></strong></div>
-                                    {% endif %}
-                                </div>
-                            </section>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-            </div>
             </article>
         </div>
     </div>
