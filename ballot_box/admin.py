@@ -341,7 +341,6 @@ class CandidateAdmin(admin.ModelAdmin):
 
     search_fields = (
         "fullname",
-        "contest",
     )
 
     ordering = (
