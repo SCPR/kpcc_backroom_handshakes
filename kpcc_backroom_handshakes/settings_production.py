@@ -34,6 +34,9 @@ TWITTER_ACCESS_TOKEN_SECRET  = CONFIG["api"]["twitter"]["access_token_secret"]
 LOCAL_TWITTER_TIMEZONE = pytz.timezone("US/Pacific")
 TWITTER_TIMEZONE = timezone("UTC")
 
+SLACK_TOKEN = CONFIG["api"]["slack"]["token"]
+SLACK_API_KEY = CONFIG["api"]["slack"]["api_key"]
+
 # maplight api key
 MAP_LIGHT_API_KEY = CONFIG["api"]["maplight"]["api_key"]
 
@@ -59,10 +62,6 @@ if "email" in CONFIG:
     EMAIL_HOST_PASSWORD = CONFIG["email"]["password"]
     EMAIL_PORT = CONFIG["email"]["port"]
     EMAIL_USE_TLS = CONFIG["email"]["use_tls"]
-
-#CACHE_MIDDLEWARE_ALIAS = 'default'
-#CACHE_MIDDLEWARE_SECONDS = (60 * 5)
-#CACHE_MIDDLEWARE_KEY_PREFIX = ''
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -107,8 +106,8 @@ else:
 #     }
 
 #     CACHES = {
-#         'default': {
-#             'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+#         "default": {
+#             "BACKEND": "django.core.cache.backends.dummy.DummyCache",
 #         }
 #     }
 
@@ -126,6 +125,28 @@ else:
 #             }
 #         }
 #     }
+
+if DEBUG == True:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+        }
+    }
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+            "LOCATION": "handshakes_cache",
+            "TIMEOUT": 600,
+            "OPTIONS": {
+                "MAX_ENTRIES": 500
+            }
+        }
+    }
+
+# CACHE_MIDDLEWARE_ALIAS = "default"
+# CACHE_MIDDLEWARE_SECONDS = (60 * 10)
+# CACHE_MIDDLEWARE_KEY_PREFIX = ""
 
 # Python dotted path to the WSGI application used by Django"s runserver.
 WSGI_APPLICATION = "kpcc_backroom_handshakes.wsgi.application"
@@ -145,13 +166,13 @@ MEDIA_URL = ""
 # Don"t put anything in this directory yourself; store your static files
 # in apps" "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(SITE_ROOT, "public", "static")
+STATIC_ROOT = os.path.join(SITE_ROOT, "static")
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = "/static/"
 
-SITE_URL = "#"
+SITE_URL = CONFIG["site_url"]
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -159,12 +180,101 @@ STATICFILES_DIRS = (
 )
 
 # build paths inside the project like this: os.path.join(base_dir, ...)
-# if "build" in CONFIG:
-#     STAGING = CONFIG["build"]["staging"]
-#     STAGING_PREFIX = CONFIG["build"]["staging_prefix"]
-#     LIVE_PREFIX = CONFIG["build"]["live_prefix"]
-#     DEPLOY_DIR = CONFIG["build"]["deploy_dir"]
-#     STATIC_DIR = STATIC_URL
-#     BUILD_DIR = CONFIG["build"]["build_dir"]
-#     BAKERY_VIEWS = tuple(CONFIG["build"]["views"])
-#     URL_PATH = ""
+if "build" in CONFIG:
+    STAGING = CONFIG["build"]["staging"]
+    STAGING_PREFIX = CONFIG["build"]["staging_prefix"]
+    LIVE_PREFIX = CONFIG["build"]["live_prefix"]
+    DEPLOY_DIR = CONFIG["build"]["deploy_dir"]
+    STATIC_DIR = STATIC_URL
+    BUILD_DIR = os.path.join(STATIC_ROOT, CONFIG["build"]["build_dir"])
+    BAKERY_VIEWS = tuple(CONFIG["build"]["views"])
+    URL_PATH = ""
+    BAKERY_CACHE_CONTROL = {
+        'text/html': 300,
+        'application/javascript': 86400
+    }
+
+# A sample logging configuration. The only tangible logging
+# performed by this configuration is to send an email to
+# the site admins on every HTTP 500 error when DEBUG=False.
+# See http://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
+
+LOGGING = {
+    "version": 1,
+
+    "disable_existing_loggers": True,
+
+    "filters": {
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse"
+        }
+    },
+
+    "formatters": {
+        "verbose": {
+            "format" : "\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s",
+            "datefmt" : "%d/%b/%Y %H:%M:%S"
+        },
+        "simple": {
+            "format": "\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s"
+        },
+    },
+
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "simple"
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler"
+        },
+        "slack-error": {
+            "level": "ERROR",
+            "api_key": SLACK_API_KEY,
+            "username": "ElexLogger",
+            "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
+            "class": "slacker_log_handler.SlackerLogHandler",
+            "channel": "#logging-2016-election"
+        },
+        "slack-debug": {
+            "level": "DEBUG",
+            "username": "ElexLogger",
+            "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
+            "api_key": SLACK_API_KEY,
+            "class": "slacker_log_handler.SlackerLogHandler",
+            "channel": "#logging-2016-election"
+        },
+        "slack-info": {
+            "level": "INFO",
+            "username": "ElexLogger",
+            "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
+            "api_key": SLACK_API_KEY,
+            "class": "slacker_log_handler.SlackerLogHandler",
+            "channel": "#logging-2016-election"
+        },
+        #"file": {
+            #"level": "DEBUG",
+            #"class": "logging.FileHandler",
+            #"filename": "mysite.log",
+            #"formatter": "verbose"
+        #},
+    },
+
+    "loggers": {
+        "kpcc_backroom_handshakes": {
+            "handlers": [
+                "console",
+                "mail_admins",
+                "slack-error",
+                "slack-info",
+                "slack-debug",
+            ],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    }
+}
