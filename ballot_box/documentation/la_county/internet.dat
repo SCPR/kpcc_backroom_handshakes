@@ -1,0 +1,68 @@
+000ET1215      County of Los Angeles
+000ET1215      Department of Registrar-Recorder/County Clerk
+000ET1215      Semi-Official Election Returns
+000ET1215      June 4, 1996 - Test Election
+000TD1215      17:15 04/07/1998
+001STSTAT      COUNTYWIDE STATISTICS        PRIMARY ELECTION
+001BKSTAT
+001PRSTAT      TOTAL PRECINCTS      2,309            PRECINCTS REPORTING     1,109    29.99
+001DRSTAT      REGISTRATION     2,384,358
+001BKSTAT
+001PSSTAT                         142,009   DEMOCRATIC                     142,002    99.99
+001PSSTAT                         142,009   REPUBLICAN                     142,002    99.99
+001PSSTAT                         142,009   GREEN                          142,002    99.99
+001PSSTAT                         142,009   INDEPENDENT                    142,002    99.99
+001PSSTAT                         142,009   NATURAL LAW                    142,002    99.99
+001PSSTAT                         142,009   PEACE AND FREEDOM              142,002    99.99
+001PSSTAT                         142,009   REFORM                         142,002    99.99
+001PSSTAT                         142,009   NONPARTISAN                    142,002    99.99
+001BKSTAT
+001ABSTAT                                                 ABSENTEE TOTAL 	   209
+001BCSTAT                                           BALLOTS CAST/TURNOUT   998,304    52.99
+029JCSC        SUPREME COURT JUSTICES
+029BKSC
+029JNSC           ASSOCIATE JUSTICE          JOYCE L KENNARD    - YES      429,039    46.29
+029JNSC                                                         - NO       629,039    53.27
+029BKSC
+029JNSC           ASSOCIATE JUSTICE          RONALD M GEORGE    - YES      429,039    46.29
+029JNSC                                                         - NO       629,039    53.27
+029BKSC
+029JNSC           ASSOCIATE JUSTICE          KATHRYN M WERDEGAR - YES      429,039    46.29
+029JNSC                                                         - NO       629,039    53.27
+029BKSC
+029PRSC        TOTAL PRECINCTS        689            PRECINCTS REPORTING       580    89.99
+029DRSC        REGISTRATION     2,493,039
+030JCAC        APPELLATE COURT JUSTICES
+030BKAC
+030JNAC           ASSOCIATE JUSTICE DIV 1    WILLIAM MASTERSON  - YES      429,039    46.29
+030JNSC                                                         - NO       629,039    53.27
+030BKAC
+030JNAC           ASSOCIATE JUSTICE DIV 1    REUBEN A ORTEGA    - YES      429,039    46.29
+030JNSC                                                         - NO       629,039    53.27
+030BKAC
+030JNAC           PRESIDING JUSTICE DIV 2    ROGER W BOREN      - YES      429,039    46.29
+030JNSC                                                         - NO       629,039    53.27
+030BKAC
+030JNAC           ASSOCIATE JUSTICE DIV 2    MICHAEL G NOTT     - YES      429,039    46.29
+030JNSC                                                         - NO       629,039    53.27
+030BKAC
+030PRAC        TOTAL PRECINCTS        689            PRECINCTS REPORTING       580    89.99
+030DRAC        REGISTRATION     2,493,039
+063MCCITYMB    MANHATTAN BEACH SPEC MUNI
+063BKCITYMB
+063MTCITYMB          J - APPOINTIVE CITY CLERK      - YES                  429,039    46.29
+063MTCITYMB                                         - NO                   629,039    53.27
+063BKCITYMB
+063MTCITYMB          K - APPOINTIVE CITY TREASURER  - YES                  429,039    46.29
+063MTCITYMB                                         - NO                   629,039    53.27
+063BKCITYMB
+063MTCITYMB          L - TERM LIMIT-COUNCILMEMBER   - YES                  429,039    46.29
+063MTCITYMB                                         - NO                   629,039    53.27
+063BKCITYMB
+063MTCITYMB          M - TERM LIMIT-COUNCILMEMBER   - YES                  429,039    46.29
+063MTCITYMB                                         - NO                   629,039    53.27
+063BKCIYTMB
+063PRCITYMB    TOTAL PRECINCTS        689            PRECINCTS REPORTING       580    89.99
+063DRCITYMB    REGISTRATION     2,493,039
+999EF1215       716
+

@@ -17,23 +17,34 @@ from fabric.context_managers import lcd
 from fabric.colors import green
 from fabric.contrib import django
 
-os.environ["DJANGO_SETTINGS_MODULE"] = "kpcc_backroom_handshakes.settings_production"
+os.environ[
+    "DJANGO_SETTINGS_MODULE"] = "kpcc_backroom_handshakes.settings_production"
 
 from django.conf import settings
 
-env.project_name = 'kpcc_backroom_handshakes'
-env.local_branch = 'master'
-env.remote_ref = 'origin/master'
-env.requirements_file = 'requirements.txt'
-env.use_ssh_config = True
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-CONFIG_PATH = "%s_CONFIG_PATH" % (env.project_name.upper())
+PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
+
+CONFIG_PATH = "%s_CONFIG_PATH" % ("kpcc_backroom_handshakes".upper())
+
 CONFIG_FILE = os.environ.setdefault(CONFIG_PATH, "./development.yml")
-CONFIG = yaml.load(open(CONFIG_FILE))
+
+CONFIG_YML = os.path.join(PROJECT_PATH, "development.yml")
+
+CONFIG = yaml.load(open(CONFIG_YML))
+
+env.hosts = CONFIG["deployment_env"]["hosts"]
+env.project_name = CONFIG["deployment_env"]["project_name"]
+env.local_branch = CONFIG["deployment_env"]["local_branch"]
+env.remote_ref = CONFIG["deployment_env"]["remote_ref"]
+env.requirements_file = CONFIG["deployment_env"]["requirements_file"]
+env.use_ssh_config = CONFIG["deployment_env"]["use_ssh_config"]
+env.code_dir = CONFIG["deployment_env"]["code_dir"]
 
 logger = logging.getLogger("root")
 logging.basicConfig(
-    format = "\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s",
+    format="\033[1;36m%(levelname)s: %(filename)s (def %(funcName)s %(lineno)s): \033[1;37m %(message)s",
     level=logging.DEBUG
 )
 
@@ -41,26 +52,62 @@ logging.basicConfig(
 data functions
 """
 
+
 def dump_ballot_box():
     """
-    shortcut for base manage.py function to run the dev server
+    shortcut to dump data from ballot box as fixtures
     """
-    local("py manage.py dumpdata ballot_box > ballot_box/fixtures/data.json")
+    local("python manage.py dumpdata ballot_box.ResultSource > ballot_box/fixtures/data.json")
+
 
 def load_ballot_box():
     """
+    shortcut to load ballot box data fixtures
     """
     local("python manage.py loaddata ballot_box/fixtures/data.json")
+
+
+def fetch_sos():
+    """
+    shortcut for running the management command to fetch sos results
+    """
+    local("python manage.py fetch_sos_results")
+
+
+def fetch_lac():
+    """
+    shortcut for running the management command to fetch sos results
+    """
+    local("python manage.py fetch_lac_results")
+
+
+def fetch_oc():
+    """
+    shortcut for running the management command to fetch sos results
+    """
+    local("python manage.py fetch_oc_results")
+
+
+def fetch_all():
+    """
+    shortcut for running all management commands to fetch results
+    """
+    local("python manage.py fetch_sos_results")
+    local("python manage.py fetch_oc_results")
+    local("python manage.py fetch_lac_results")
+
 
 """
 development functions
 """
 
-def run():
+
+def lrun():
     """
     shortcut for base manage.py function to run the dev server
     """
     local("python manage.py runserver")
+
 
 def make():
     """
@@ -68,17 +115,20 @@ def make():
     """
     local("python manage.py makemigrations")
 
+
 def migrate():
     """
     shortcut for base manage.py function to apply db migrations
     """
     local("python manage.py migrate")
 
+
 def superuser():
     """
     shortcut for base manage.py function to create a superuser
     """
     local("python manage.py createsuperuser")
+
 
 def test():
     """
@@ -90,12 +140,16 @@ def test():
 bootstrapping functions
 """
 
+
 def rename_files():
     """
     shortcut to install requirements from repository's requirements.txt
     """
-    os.rename("kpcc_backroom_handshakes/settings_common.py.template", "kpcc_backroom_handshakes/settings_common.py")
-    os.rename("kpcc_backroom_handshakes/settings_production.py.template", "kpcc_backroom_handshakes/settings_production.py")
+    os.rename("kpcc_backroom_handshakes/settings_common.py.template",
+              "kpcc_backroom_handshakes/settings_common.py")
+    os.rename("kpcc_backroom_handshakes/settings_production.py.template",
+              "kpcc_backroom_handshakes/settings_production.py")
+
 
 def requirements():
     """
@@ -103,16 +157,18 @@ def requirements():
     """
     local("pip install -r requirements.txt")
 
+
 def create_db():
     connection = None
     db_config = CONFIG["database"]
-    logger.debug("Creating %s database for %s django project" % (db_config["database"], env.project_name))
+    logger.debug("Creating %s database for %s django project" %
+                 (db_config["database"], env.project_name))
     create_statement = "CREATE DATABASE %s" % (db_config["database"])
     try:
         connection = MySQLdb.connect(
-            host = db_config["host"],
-            user = db_config["username"],
-            passwd = db_config["password"]
+            host=db_config["host"],
+            user=db_config["username"],
+            passwd=db_config["password"]
         )
         cursor = connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(create_statement)
@@ -124,6 +180,7 @@ def create_db():
         if connection:
             connection.close()
 
+
 def makesecret(length=50, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'):
     """
     generates secret key for use in django settings
@@ -132,14 +189,14 @@ def makesecret(length=50, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789!@#
     key = ''.join(random.choice(allowed_chars) for i in range(length))
     print 'SECRET_KEY = "%s"' % key
 
+
 def build():
     local("python manage.py build")
+
 
 def buildserver():
     local("python manage.py buildserver")
 
-def move():
-    local("python manage.py move_baked_files")
 
 def commit(message='updates'):
     with lcd(settings.DEPLOY_DIR):
@@ -150,14 +207,21 @@ def commit(message='updates'):
             print(green("Nothing new to commit.", bold=False))
         local("git push")
 
+
 def deploy():
-    data()
-    time.sleep(5)
-    build()
-    time.sleep(5)
-    local("python manage.py move_baked_files")
-    time.sleep(5)
-    commit()
+    with cd(env.code_dir):
+        run("git co %s" % env.local_branch)
+        run("git pull")
+        with prefix("WORKON_HOME=$HOME/.virtualenvs"):
+            with prefix("source /usr/local/bin/virtualenvwrapper.sh"):
+                with prefix("workon %s" % (env.project_name)):
+                    run("pip install -r %s" % (env.requirements_file))
+                    run("python manage.py migrate")
+        sudo("sudo service uwsgi restart")
+        sudo("sudo service nginx restart")
+        sudo("sudo service varnish restart")
+        sudo("sudo /etc/init.d/newrelic-sysmond start")
+
 
 def bootstrap():
     with prefix("WORKON_HOME=$HOME/.virtualenvs"):
@@ -171,7 +235,7 @@ def bootstrap():
                 migrate()
                 time.sleep(2)
                 local("python manage.py createsuperuser")
-                run()
+
 
 def syncstart():
     # check if requirements need update
@@ -180,8 +244,8 @@ def syncstart():
     migrate()
     # load data fixtures
     load_ballot_box()
-    run()
     # any new dependencies/apps the rest of the team may need?
+
 
 def __env_cmd(cmd):
     return env.bin_root + cmd

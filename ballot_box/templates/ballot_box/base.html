@@ -1,0 +1,41 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+
+<!-- begin doc -->
+<html lang="en">
+
+    <!-- begin header -->
+    <head>
+
+        <!-- begin meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- end meta -->
+
+        <!-- begin css -->
+        <link href="http://www.scpr.org/assets/application-4c808cff951c47885edfa5cf39942a07.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="{% static "css/results-display.css" %}" media="screen" rel="stylesheet" type="text/css" />
+        <!-- end css -->
+
+        <!-- begin base scripts -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <!-- end base scripts -->
+
+    </head>
+    <!-- end header -->
+
+    <!-- begin body -->
+    <body>
+        {% block display_block %}{% endblock %}
+
+        <!-- begin additional scripts -->
+
+        {% block extra_js %}{% endblock %}
+        <!-- end additional scripts -->
+
+    </body>
+    <!-- end body -->
+
+</html>
+<!-- end document -->
