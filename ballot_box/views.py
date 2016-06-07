@@ -12,6 +12,8 @@ from django.db.models import Q, Avg, Max, Min, Sum, Count
 from django import forms
 from .models import *
 import os
+import time
+import datetime
 import logging
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
@@ -23,6 +25,7 @@ class FeaturedIndex(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(FeaturedIndex, self).get_context_data(**kwargs)
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         queryset = Contest.objects.filter(election__electionid="primary-2016-06-07").filter(is_homepage_priority=True)
         context["featured_list"] = queryset.filter(is_homepage_priority=True)
         dem_pres = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-democratic").first()
@@ -50,6 +53,7 @@ class BakedFeaturedIndex(BuildableListView):
 
     def get_context_data(self, **kwargs):
         context = super(BakedFeaturedIndex, self).get_context_data(**kwargs)
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         queryset = Contest.objects.filter(election__electionid="primary-2016-06-07").filter(is_homepage_priority=True)
         context["featured_list"] = queryset.filter(is_homepage_priority=True)
         dem_pres = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-democratic").first()
@@ -72,6 +76,7 @@ class ResultIndex(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ResultIndex, self).get_context_data(**kwargs)
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         queryset = Contest.objects.filter(election__electionid="primary-2016-06-07")
         context["dem_pres"] = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-democratic").first()
         context["gop_pres"] = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-republican").first()
@@ -107,6 +112,7 @@ class BakedResultsIndex(BuildableListView):
 
     def get_context_data(self, **kwargs):
         context = super(BakedResultsIndex, self).get_context_data(**kwargs)
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         queryset = Contest.objects.filter(election__electionid="primary-2016-06-07")
         context["dem_pres"] = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-democratic").first()
         context["gop_pres"] = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-republican").first()
