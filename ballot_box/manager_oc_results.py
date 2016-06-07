@@ -94,16 +94,16 @@ class BuildOcResults(object):
                                 this is a proposition
                                 """
                                 result = compiler._compile_measure(race, election, src)
-                                race_log += saver.make_office(result.office)
-                                race_log += saver.make_contest(result.office, result.contest)
+                                # race_log += saver.make_office(result.office)
+                                # race_log += saver.make_contest(result.office, result.contest)
                                 race_log += saver.make_measure(result.contest, result.measure)
                             else:
                                 """
                                 this is a non-judicial candidate
                                 """
                                 result = compiler._compile_candidate(race, election, src)
-                                race_log += saver.make_office(result.office)
-                                race_log += saver.make_contest(result.office, result.contest)
+                                # race_log += saver.make_office(result.office)
+                                # race_log += saver.make_contest(result.office, result.contest)
                                 for candidate in result.candidates:
                                     race_log += saver.make_candidate(result.contest, candidate)
                     logger.debug(race_log)
