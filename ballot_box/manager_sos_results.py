@@ -86,9 +86,9 @@ class BuildSosResults(object):
                             """
                             result = compiler._compile_judicial(
                                 race, "140", election, src)
-                            race_log += saver.make_office(result.office)
-                            race_log += saver.make_contest(
-                                result.office, result.contest)
+                            # race_log += saver.make_office(result.office)
+                            # race_log += saver.make_contest(
+                                # result.office, result.contest)
                             race_log += saver.make_judicial(
                                 result.contest, result.judicial)
                         elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "150":
@@ -97,9 +97,9 @@ class BuildSosResults(object):
                             """
                             result = compiler._compile_judicial(
                                 race, "150", election, src)
-                            race_log += saver.make_office(result.office)
-                            race_log += saver.make_contest(
-                                result.office, result.contest)
+                            # race_log += saver.make_office(result.office)
+                            # race_log += saver.make_contest(
+                                # result.office, result.contest)
                             race_log += saver.make_judicial(
                                 result.contest, result.judicial)
                         elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "190":
@@ -108,9 +108,9 @@ class BuildSosResults(object):
                             """
                             result = compiler._compile_measure(
                                 race, election, src)
-                            race_log += saver.make_office(result.office)
-                            race_log += saver.make_contest(
-                                result.office, result.contest)
+                            # race_log += saver.make_office(result.office)
+                            # race_log += saver.make_contest(
+                                # result.office, result.contest)
                             race_log += saver.make_measure(
                                 result.contest, result.measure)
                         else:
@@ -119,9 +119,9 @@ class BuildSosResults(object):
                             """
                             result = compiler._compile_candidate(
                                 race, election, src)
-                            race_log += saver.make_office(result.office)
-                            race_log += saver.make_contest(
-                                result.office, result.contest)
+                            # race_log += saver.make_office(result.office)
+                            # race_log += saver.make_contest(
+                                # result.office, result.contest)
                             for candidate in result.candidates:
                                 race_log += saver.make_candidate(
                                     result.contest, candidate)
