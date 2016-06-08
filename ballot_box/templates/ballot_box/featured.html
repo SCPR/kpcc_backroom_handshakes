@@ -124,7 +124,7 @@
             <article class="results-block">
                     <div class="results-block">
                         <header>
-                            <h2>{{ dem_pres.0.contest.contestname }}</h2>
+                            <h2>{{ dem_pres.0.contest.contestname }} ({{ dem_pres.0.contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                         </header>
                         <div class="clearfix">
                             {% for candidate in dem_pres|slice:":2"|dictsortreversed:"votepct" %}
@@ -141,7 +141,7 @@
                     </div>
                     <div class="results-block">
                         <header>
-                            <h2>{{ gop_pres.0.contest.contestname }}</h2>
+                            <h2>{{ gop_pres.0.contest.contestname }} ({{ gop_pres.0.contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                         </header>
                         <div class="clearfix">
                             {% for candidate in gop_pres|slice:":2"|dictsortreversed:"votepct" %}
@@ -158,7 +158,7 @@
                     </div>
                     <div class="results-block">
                         <header>
-                            <h2>{{ senate_primary.0.contest.contestname }}</h2>
+                            <h2>{{ senate_primary.0.contest.contestname }} ({{ senate_primary.0.contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                         </header>
                         <div class="clearfix">
                             {% for candidate in senate_primary|slice:":2"|dictsortreversed:"votepct" %}
@@ -175,7 +175,7 @@
                     </div>
                     <div class="results-block">
                         <header>
-                            <h2>{{ lac_sup_4.contestname }}</h2>
+                            <h2>{{ lac_sup_4.contestname }} ({{ lac_sup_4.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                         </header>
                         <div class="clearfix">
                             {% for candidate in lac_sup_4.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
@@ -192,7 +192,7 @@
                     </div>
                     <div class="results-block">
                         <header>
-                            <h2>{{ lac_sup_5.contestname }}</h2>
+                            <h2>{{ lac_sup_5.contestname }} ({{ lac_sup_5.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                         </header>
                         <div class="clearfix">
                             {% for candidate in lac_sup_5.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
