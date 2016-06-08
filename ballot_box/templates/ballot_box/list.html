@@ -127,7 +127,7 @@
 
                 <div class="results-block">
                     <header>
-                        <h2>{{ dem_pres.contestname }}</h2>
+                        <h2>{{ dem_pres.contestname }} ({{ dem_pres.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                     </header>
                     <div class="clearfix">
                         {% for candidate in dem_pres.candidate_set.all|dictsortreversed:"votepct" %}
@@ -144,7 +144,7 @@
                 </div>
                 <div class="results-block">
                     <header>
-                        <h2>{{ gop_pres.contestname }}</h2>
+                        <h2>{{ gop_pres.contestname }} ({{ gop_pres.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                     </header>
                     <div class="clearfix">
                         {% for candidate in gop_pres.candidate_set.all|dictsortreversed:"votepct" %}
@@ -161,7 +161,7 @@
                 </div>
                 <div class="results-block">
                     <header>
-                        <h2>{{ senate_primary.contestname }}</h2>
+                        <h2>{{ senate_primary.contestname }} ({{ senate_primary.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                     </header>
                     <div class="clearfix">
                         {% for candidate in senate_primary.candidate_set.all|dictsortreversed:"votepct" %}
@@ -180,7 +180,7 @@
                 {% for contest in additional_list %}
                     <div class="results-block">
                         <header>
-                            <h2>{{ contest.contestname }}</h2>
+                            <h2>{{ contest.contestname }} ({{ contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                             <aside>&nbsp;</aside>
                         </header>
                         <div class="clearfix">
@@ -242,7 +242,7 @@
                     {% for contest in local_list %}
                         <div class="results-block">
                             <header>
-                                <h2>{{ contest.contestname }}</h2>
+                                <h2>{{ contest.contestname }} ({{ contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                                 <aside>&nbsp;</aside>
                             </header>
                             <div class="clearfix">
@@ -306,7 +306,7 @@
                     {% for contest in state_list %}
                         <div class="results-block">
                             <header>
-                                <h2>{{ contest.contestname }}</h2>
+                                <h2>{{ contest.contestname }} ({{ contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                                 <aside>&nbsp;</aside>
                             </header>
                             <div class="clearfix">
@@ -335,7 +335,7 @@
                     {% for contest in house_rep_list %}
                         <div class="results-block">
                             <header>
-                                <h2>{{ contest.contestname }}</h2>
+                                <h2>{{ contest.contestname }} ({{ contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                                 <aside>&nbsp;</aside>
                             </header>
                             <div class="clearfix">
