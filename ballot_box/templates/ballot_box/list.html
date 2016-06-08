@@ -242,11 +242,14 @@
                     {% for contest in local_list %}
                         <div class="results-block">
                             <header>
-
-                                <h2>{{ contest.contestname }}</h2>
+                                {% if contest.is_judicial %}
+                                    <h2>{{ contest.contestname }} ({{ contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
+                                {% elif contest.is_ballot_measure %}
+                                    <h2>{{ contest.contestname }} ({{ contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
+                                {% else %}
+                                    <h2>{{ contest.contestname }} ({{ contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
+                                {% endif %}
                                 <aside>&nbsp;</aside>
-
-
                             </header>
                             <div class="clearfix">
                                 {% if contest.is_judicial %}
@@ -254,7 +257,6 @@
                                         <div class="title">
                                             <h3>Yes</h3>
                                         </div>
-
                                         <div class="result relative">
                                             <div class="yes "><strong><span>0</span><b class="percentage">%</b></strong></div>
                                         </div>
