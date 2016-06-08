@@ -124,7 +124,11 @@ class BakedResultsIndex(BuildableListView):
             Q(contestid="primary-2016-06-07-sos-statewide-president-libertarian") |
             Q(contestid="primary-2016-06-07-sos-statewide-president-peace-and-freedom")
         )
-        context["local_list"] = queryset.filter(resultsource__source_short="lac").filter(is_display_priority=True)
+        context["local_list"] = queryset.filter(is_display_priority=True).filter(
+            Q(resultsource__source_short="lac") |
+            Q(resultsource__source_short="oc")
+
+        )
         context["state_list"] = queryset.filter(
             Q(contestid__contains="sos-districtwide-state-senate") |
             Q(contestid__contains="sos-districtwide-state-assembly")
