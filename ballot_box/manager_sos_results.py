@@ -84,47 +84,35 @@ class BuildSosResults(object):
                             """
                             this is a judicial candidate
                             """
-                            result = compiler._compile_judicial(
-                                race, "140", election, src)
+                            result = compiler._compile_judicial(race, "140", election, src)
                             # race_log += saver.make_office(result.office)
-                            # race_log += saver.make_contest(
-                                # result.office, result.contest)
-                            race_log += saver.make_judicial(
-                                result.contest, result.judicial)
+                            race_log += saver.make_contest(result.office, result.contest)
+                            race_log += saver.make_judicial(result.contest, result.judicial)
                         elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "150":
                             """
                             this is a judicial candidate
                             """
-                            result = compiler._compile_judicial(
-                                race, "150", election, src)
+                            result = compiler._compile_judicial(race, "150", election, src)
                             # race_log += saver.make_office(result.office)
-                            # race_log += saver.make_contest(
-                                # result.office, result.contest)
-                            race_log += saver.make_judicial(
-                                result.contest, result.judicial)
+                            race_log += saver.make_contest(result.office, result.contest)
+                            race_log += saver.make_judicial(result.contest, result.judicial)
                         elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "190":
                             """
                             this is a proposition
                             """
-                            result = compiler._compile_measure(
-                                race, election, src)
+                            result = compiler._compile_measure(race, election, src)
                             # race_log += saver.make_office(result.office)
-                            # race_log += saver.make_contest(
-                                # result.office, result.contest)
-                            race_log += saver.make_measure(
-                                result.contest, result.measure)
+                            race_log += saver.make_contest(result.office, result.contest)
+                            race_log += saver.make_measure(result.contest, result.measure)
                         else:
                             """
                             this is a non-judicial candidate
                             """
-                            result = compiler._compile_candidate(
-                                race, election, src)
+                            result = compiler._compile_candidate(race, election, src)
                             # race_log += saver.make_office(result.office)
-                            # race_log += saver.make_contest(
-                                # result.office, result.contest)
+                            race_log += saver.make_contest(result.office, result.contest)
                             for candidate in result.candidates:
-                                race_log += saver.make_candidate(
-                                    result.contest, candidate)
+                                race_log += saver.make_candidate(result.contest, candidate)
                     logger.debug(race_log)
                     os.remove(latest_path)
                     logger.debug(
