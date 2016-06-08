@@ -567,7 +567,7 @@ class LacProcessMethods(object):
                 framer.office["officeslug"],
             )
             # race_log += saver.make_office(framer.office)
-            # race_log += saver.make_contest(framer.office, framer.contest)
+            race_log += saver.make_contest(framer.office, framer.contest)
 
             for judge in judges:
                 fullname = judge["judicial_name"].title()
@@ -679,7 +679,7 @@ class LacProcessMethods(object):
                 framer.office["officeslug"],
             )
             # race_log += saver.make_office(framer.office)
-            # race_log += saver.make_contest(framer.office, framer.contest)
+            race_log += saver.make_contest(framer.office, framer.contest)
             for measure in measures:
                 framer.measure["ballotorder"] = None
                 framer.measure["fullname"] = fullname
@@ -835,7 +835,7 @@ class LacProcessMethods(object):
                 framer.office["officeslug"],
             )
             # race_log += saver.make_office(framer.office)
-            # race_log += saver.make_contest(framer.office, framer.contest)
+            race_log += saver.make_contest(framer.office, framer.contest)
             for candidate in candidates:
                 fullname = candidate['candidate_name'].title()
                 party = candidate['party_short']
