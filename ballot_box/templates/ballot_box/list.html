@@ -245,7 +245,11 @@
                                 {% if contest.is_judicial %}
                                     <h2>{{ contest.contestname }} ({{ contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                                 {% elif contest.is_ballot_measure %}
-                                    <h2>{{ contest.contestname }} ({{ contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
+                                    {% if contest.resultsource.source_short == "oc" %}
+                                        <h2>{{ contest.contestname }}</h2>
+                                    {% else %}
+                                        <h2>{{ contest.contestname }} ({{ contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
+                                    {% endif %}
                                 {% else %}
                                     <h2>{{ contest.contestname }} ({{ contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                                 {% endif %}
