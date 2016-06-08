@@ -34,9 +34,9 @@ class FeaturedIndex(ListView):
             Q(candidateid="primary-2016-06-07-sos-statewide-president-democratic-hillary-clinton")
         )
         gop_pres = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-republican").first()
-        context["gop_pres"] = gop_pres.candidate_set.select_related("contest").order_by("votepct")
+        context["gop_pres"] = gop_pres.candidate_set.select_related("contest").order_by("-votepct")
         senate_primary = queryset.filter(contestid="primary-2016-06-07-sos-statewide-us-senate").first()
-        context["senate_primary"] = senate_primary.candidate_set.select_related("contest")
+        context["senate_primary"] = senate_primary.candidate_set.select_related("contest").order_by("-votepct")
         context["lac_sup_4"] = queryset.filter(contestid="primary-2016-06-07-lac-county-los-angeles-county-supervisor-district-4").first()
         context["lac_sup_5"] = queryset.filter(contestid="primary-2016-06-07-lac-county-los-angeles-county-supervisor-district-5").first()
         return context
@@ -62,9 +62,9 @@ class BakedFeaturedIndex(BuildableListView):
             Q(candidateid="primary-2016-06-07-sos-statewide-president-democratic-hillary-clinton")
         )
         gop_pres = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-republican").first()
-        context["gop_pres"] = gop_pres.candidate_set.select_related("contest").order_by("votepct")
+        context["gop_pres"] = gop_pres.candidate_set.select_related("contest").order_by("-votepct")
         senate_primary = queryset.filter(contestid="primary-2016-06-07-sos-statewide-us-senate").first()
-        context["senate_primary"] = senate_primary.candidate_set.select_related("contest")
+        context["senate_primary"] = senate_primary.candidate_set.select_related("contest").order_by("-votepct")
         context["lac_sup_4"] = queryset.filter(contestid="primary-2016-06-07-lac-county-los-angeles-county-supervisor-district-4").first()
         context["lac_sup_5"] = queryset.filter(contestid="primary-2016-06-07-lac-county-los-angeles-county-supervisor-district-5").first()
         return context
