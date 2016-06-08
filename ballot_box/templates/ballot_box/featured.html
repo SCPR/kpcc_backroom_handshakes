@@ -161,7 +161,7 @@
                             <h2>{{ senate_primary.0.contest.contestname }} ({{ senate_primary.0.contest.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                         </header>
                         <div class="clearfix">
-                            {% for candidate in senate_primary|slice:":2"|dictsortreversed:"votepct" %}
+                            {% for candidate in senate_primary|dictsortreversed:"votepct"|slice:":2" %}
                                 <section class="initiative local condensed">
                                     <div class="title">
                                         <h3>{{ candidate.fullname }}</h3>
@@ -178,7 +178,7 @@
                             <h2>{{ lac_sup_4.contestname }} ({{ lac_sup_4.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                         </header>
                         <div class="clearfix">
-                            {% for candidate in lac_sup_4.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
+                            {% for candidate in lac_sup_4.candidate_set.all|dictsortreversed:"votepct"|slice:":2" %}
                                 <section class="initiative local condensed">
                                     <div class="title">
                                         <h3>{{ candidate.fullname }}</h3>
@@ -195,7 +195,7 @@
                             <h2>{{ lac_sup_5.contestname }} ({{ lac_sup_5.precinctsreportingpct|percentage|floatformat:1 }}% reporting)</h2>
                         </header>
                         <div class="clearfix">
-                            {% for candidate in lac_sup_5.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
+                            {% for candidate in lac_sup_5.candidate_set.all|dictsortreversed:"votepct"|slice:":2" %}
                                 <section class="initiative local condensed">
                                     <div class="title">
                                         <h3>{{ candidate.fullname }}</h3>
