@@ -57,7 +57,8 @@ class Command(BaseCommand):
         """
         making it happen.
         """
-        logger.info("Starting to build HTML results page")
+
+        logger.info("Starting to build HTML page")
 
         # set options
         self.set_options(*args, **options)
@@ -88,7 +89,7 @@ class Command(BaseCommand):
         self.build_views()
 
         # close out
-        logger.info("Finished building HTML results page")
+        logger.info("Finished building HTML page")
 
     def set_options(self, *args, **options):
         """
