@@ -13,5 +13,5 @@ urlpatterns = [
     url(r'ballot-box/results/all/$', ResultIndex.as_view(), name="result-index"),
     # url(r'ballot-box/results$', RedirectView.as_view(url="all/", permanent=False), name='index'),
     url(r'ballot-box/$', RedirectView.as_view(url="results/all/", permanent=False), name='index'),
-    url(r'', RedirectView.as_view(url="ballot-box/results/all/", permanent=False), name='index'),
+    # url(r'', RedirectView.as_view(url="ballot-box/results/all/", permanent=False), name='index'),
 ]
