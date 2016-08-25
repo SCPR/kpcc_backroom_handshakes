@@ -97,6 +97,12 @@ def fetch_all():
     local("python manage.py fetch_lac_results")
 
 
+def fetch_maplight():
+    """
+    """
+    local("python manage.py fetch_maplight_finance")
+
+
 """
 development functions
 """

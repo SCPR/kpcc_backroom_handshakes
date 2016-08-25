@@ -16,7 +16,7 @@ from django.views.generic import ListView, RedirectView
 from django.views.generic import TemplateView, DetailView
 from django.core.urlresolvers import reverse, NoReverseMatch
 
-logger = logging.getLogger("cali_water_reports")
+logger = logging.getLogger("kpcc_backroom_handshakes")
 
 class BuildableMixin(object):
     """

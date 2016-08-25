@@ -24,7 +24,8 @@ urlpatterns = [
     url(r"^admin/", include(admin.site.urls)),
     url(r"^admin/", include("massadmin.urls")),
     url(r"^api/?", include(v1_api.urls)),
-    url(r"", include("ballot_box.urls", namespace="ballot-box")),
+    url(r"^campaign-finance/?", include("maplight_finance.urls", namespace="campaign-finance")),
+    url(r"^ballot-box/?", include("ballot_box.urls", namespace="ballot-box")),
 ]
 
 if settings.DEBUG:
