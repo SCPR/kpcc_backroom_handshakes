@@ -108,7 +108,7 @@ class BuildOcResults(object):
                                     race_log += saver.make_candidate(result.contest, candidate)
                     logger.debug(race_log)
                     os.remove(latest_path)
-                    logger.debug("\n*****\nwe've finished processing sos results\n*****")
+                    logger.debug("\n*****\nwe've finished processing orange county results\n*****")
             else:
                 logger.error("XML file to parse is not at expected location")
 
