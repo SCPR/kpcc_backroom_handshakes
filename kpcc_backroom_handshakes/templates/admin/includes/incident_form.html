@@ -1,0 +1,57 @@
+{% load bootstrapped_goodies_tags %}
+{% load ois_tracker_template_tags %}
+
+<style type="text/css">
+    .checkbox label { padding-left: 0px; }
+</style>
+
+<fieldset class="_module _aligned" id="fieldset-{% if stacked_prefix %}{{ stacked_prefix }}-{% endif %}{{ forloop.counter }}" style="background:transparent">
+    {% if fieldset.name %}
+        <legend>
+            {% if 'collapse' in fieldset.classes %}
+                <a data-toggle="collapse" data-target="#fieldset-{% if stacked_prefix %}{{ stacked_prefix }}-{% endif %}{{ forloop.counter }} .fields">{{ fieldset.name }}&nbsp;<span class="btn btn-xs btn-default"><span class="glyphicon glyphglyphicon glyphicon-resize-full"></i></span>
+                </a>
+            {% else %}
+                {{ fieldset.name }}
+            {% endif %}
+        </legend>
+    {% endif %}
+    <div class="fields">
+        {% if fieldset.description %}
+            <div class="description">{{ fieldset.description|safe }}</div>
+        {% endif %}
+        {% for line in fieldset %}
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    {% for field in line %}
+                        <div class="has-success string optional">
+
+                            {{ field|filter_type }}
+
+                            {% if field.is_checkbox %}
+                                <label class="checkbox-inline">
+                                    <div class="form-group boolean optional">
+                                        <div class="checkbox">
+                                            <label class="boolean optional" for="{{ field.field.html_name }}">
+                                                {{ field.field }}{{ field.field.label }}
+                                            </label>
+                                        </div>
+                                        {% if field.field.help_text %}
+                                            <p class="block">{{ field.field.help_text|safe }}</p>
+                                        {% endif %}
+                                    </div>
+                                </label>
+                            {% else %}
+                                <label class="select optional control-label" for="{{ field.field.html_name }}">{{ field.field.label }}</label>
+                                {% if field.field.help_text %}
+                                    <p class="block">{{ field.field.help_text|safe }}</p>
+                                {% endif %}
+                                    <input class="string optional form-control" type="text" value="{{ field.field.value }}" name="{{ field.field.html_name }}" id="{{ field.field.html_name }}">
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</fieldset>

@@ -79,47 +79,6 @@ class Framer(object):
     #     """
     #     self.id = self.unique_id
 
-    # def _slug(self, value):
-        """
-        creates an unicode slug from a value
-        """
-        # if isinstance(value, basestring):
-        #     try:
-        #         converted = value
-        #     except Exception, exception:
-        #         logger.error(exception)
-        #         raise
-        # elif isinstance(value, str):
-        #     try:
-        #         converted = unicode(value, "utf-8")
-        #     except Exception, exception:
-        #         logger.error(exception)
-        #         raise
-        # elif isinstance(value, (int, long, float)):
-        #     self.assertNotIsInstance(value, basestring)
-        #     try:
-        #         converted = str(value)
-        #         converted = unicode(converted)
-        #     except Exception, exception:
-        #         logger.error(exception)
-        #         raise
-        # else:
-        #     self.assertNotIsInstance(value, basestring)
-        #     try:
-        #         converted = unicode(value)
-        #     except Exception, exception:
-        #         logger.error(exception)
-        #         raise
-        # output = converted.lower().strip().replace(" ", "-")
-        # output = re.sub(r'[^a-z0-9]+', '-', output).strip('-')
-        # output = re.sub(r'[-]+', '-', output)
-        # output = re.sub(r"[^\w-]", "", output)
-        # if isinstance(output, basestring):
-        #     number_of_spaces = output.count(" ")
-        #     if number_of_spaces == 0:
-        #         return output
-        #     else:
-        #         return False
 
     def _to_num(self, value):
         """
