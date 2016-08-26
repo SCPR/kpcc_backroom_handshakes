@@ -53,11 +53,15 @@ class BuildDonationCharts(object):
         """
         run the functions needed to get contributors
         """
+        f = Framer()
         for measure in self.list_of_measures:
             requested_url = "%s%s" % (self.api_url, measure)
             response = requests.get(
                 requested_url, headers=self.request_headers)
             measure_data = response.json()["measure"]
+            identifying_information = measure_data["official_identifier"].split(" ")
+            measure_data["official_identifier"] = "Proposition %s" % (identifying_information[1])
+            measure_data["official_identifier_slug"] = f._slug(measure_data["official_identifier"])
             saver = Saver()
             saver.make_measure(measure_data)
             saver.make_measure_contributor(measure_data)
@@ -80,7 +84,7 @@ class Saver(object):
                 measure_id=measure["measure_id"],
                 defaults={
                     "official_identifier": measure["official_identifier"],
-                    "official_identifier_slug": f._slug(measure["official_identifier"]),
+                    "official_identifier_slug": measure["official_identifier_slug"],
                     "topic": measure["topic"],
                     "official_title": measure["official_title"],
                     "official_short_summary": measure["official_short_summary"],
@@ -93,40 +97,16 @@ class Saver(object):
                     "official_financial_effect_author": measure["official_financial_effect_author"],
                     "official_impartial_analysis": measure["official_impartial_analysis"],
                     "official_impartial_analysis_author": measure["official_impartial_analysis_author"],
-                    "official_background": measure["official_background"],
-                    "official_background_author": measure["official_background_author"],
                     "official_tax_rate": measure["official_tax_rate"],
                     "official_tax_rate_author": measure["official_tax_rate_author"],
                     "official_short_arguments_yes": measure["official_short_arguments_yes"],
                     "official_short_arguments_no": measure["official_short_arguments_no"],
                     "official_short_arguments_source": measure["official_short_arguments_source"],
-                    "official_arguments_yes": measure["official_arguments_yes"],
-                    "official_arguments_no": measure["official_arguments_no"],
-                    "official_arguments_source": measure["official_arguments_source"],
                     "official_rebuttal_yes": measure["official_rebuttal_yes"],
                     "official_rebuttal_no": measure["official_rebuttal_no"],
                     "measure_type": measure["measure_type"],
                     "passage_requirements": measure["passage_requirements"],
                     "fulltext_link": measure["fulltext_link"],
-                    "full_text": measure["full_text"],
-                    "simplified_title": measure["simplified_title"],
-                    "way_it_is": measure["way_it_is"],
-                    "what_if_pass": measure["what_if_pass"],
-                    "budget_effect": measure["budget_effect"],
-                    "people_for_say": measure["people_for_say"],
-                    "people_against_say": measure["people_against_say"],
-                    "evg_source": measure["evg_source"],
-                    "lwv_question": measure["lwv_question"],
-                    "lwv_situation": measure["lwv_situation"],
-                    "lwv_proposal": measure["lwv_proposal"],
-                    "lwv_fiscal_effects": measure["lwv_fiscal_effects"],
-                    "lwv_supporters_say": measure["lwv_supporters_say"],
-                    "lwv_opponents_say": measure["lwv_opponents_say"],
-                    "lwv_source": measure["lwv_source"],
-                    # "status": measure["status"],
-                    # "votes_for": measure["votes_for"],
-                    # "votes_against": measure["votes_against"],
-                    "weight": measure["weight"],
                     "published": measure["published"],
                     "disable_finance_data": measure["disable_finance_data"],
                     "deleted": measure["deleted"],
