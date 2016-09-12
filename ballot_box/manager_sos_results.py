@@ -5,7 +5,7 @@ from django.utils.timezone import localtime
 from ballot_box.utils_files import Retriever
 from ballot_box.utils_data import Framer
 from ballot_box.utils_import import Saver
-from ballot_box.models import ResultSource, Election
+from election_registrar.models import ResultSource, Election
 import logging
 import time
 import datetime
@@ -27,16 +27,18 @@ class BuildSosResults(object):
 
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
-    sources = ResultSource.objects.filter(
-        source_short="sos", source_active=True)
+    sources = ResultSource.objects.filter(source_short="sos", source_active=True)
 
     def _init(self, *args, **kwargs):
         """
         """
         for src in self.sources:
-            self.get_results_file(src, self.data_directory)
-            self.parse_results_file(src, self.data_directory)
-        self.retrieve._build_and_move_results()
+
+            logger.debug(src)
+
+            # self.get_results_file(src, self.data_directory)
+            # self.parse_results_file(src, self.data_directory)
+        # self.retrieve._build_and_move_results()
 
     def get_results_file(self, src, data_directory):
         """
@@ -56,8 +58,7 @@ class BuildSosResults(object):
         saver = Saver()
         compiler = BuildResults()
         latest_directory = "%s%s_latest" % (data_directory, src.source_short)
-        election = Election.objects.filter(
-            test_results=True, electionid=src.election.electionid).first()
+        election = Election.objects.filter(electionid=src.election.electionid).first()
         for file in src.source_files.split(", "):
             latest_path = os.path.join(latest_directory, file)
             file_exists = os.path.isfile(latest_path)
@@ -65,17 +66,13 @@ class BuildSosResults(object):
             if file_exists == True and file_has_size > 0:
                 soup = BeautifulSoup(open(latest_path), "xml")
                 file_timestring = unicode(soup.find("IssueDate").contents[0])
-                file_timestamp = parse(
-                    file_timestring, dayfirst=False).datetime
-                update_this = saver._eval_timestamps(
-                    file_timestamp, src.source_latest)
+                file_timestamp = parse(file_timestring, dayfirst=False).datetime
+                update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
                 if update_this == False:
-                    logger.debug(
-                        "\n*****\nwe have newer data in the database so let's delete these files\n*****")
+                    logger.debug("\n*****\nwe have newer data in the database so let's delete these files\n*****")
                     os.remove(latest_path)
                 else:
-                    logger.debug(
-                        "\n*****\nwe have new data to save and we'll update timestamps in the database\n*****")
+                    logger.debug("\n*****\nwe have new data so we'll update timestamps in the database\n*****")
                     saver._update_result_timestamps(src, file_timestamp)
                     races = soup.find_all("Contest")
                     race_log = "\n"
@@ -408,10 +405,8 @@ class BuildResults(object):
         self.framer.candidates = []
         for candidate in r.find_all("Selection"):
             this_candidate = {}
-            fullname = unicode(
-                candidate.Candidate.CandidateFullName.PersonFullName.contents[0])
-            party = unicode(
-                candidate.AffiliationIdentifier.RegisteredName.contents[0])
+            fullname = unicode(candidate.Candidate.CandidateFullName.PersonFullName.contents[0])
+            party = unicode(candidate.AffiliationIdentifier.RegisteredName.contents[0])
             if party == "Democratic":
                 party = "Democrat"
             votecount = self.framer._to_num(

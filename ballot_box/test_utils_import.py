@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.conf import settings
 from ballot_box.models import *
+from election_registrar.models import *
 import logging
 
 logger = logging.getLogger("kpcc_backroom_handshakes")

@@ -5,7 +5,7 @@ from django.utils.timezone import localtime
 from ballot_box.utils_files import Retriever
 from ballot_box.utils_data import Framer
 from ballot_box.utils_import import Saver
-from ballot_box.models import ResultSource, Election
+from election_registrar.models import ResultSource, Election
 import logging
 import time
 import datetime
