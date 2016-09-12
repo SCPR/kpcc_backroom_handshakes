@@ -1,0 +1,20 @@
+{% extends "election_registrar/base.html" %}
+
+{% block page_content %}
+    <div class="jumbotron text-center">
+        <h1>Xxxxxxx</h1>
+        <p>Xxxxxxx</p>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="list-inline">
+                    {% for election in election_list %}
+                        <li><a href="{% url 'election_registrar:detail' election.electionid %}">{{ election }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
