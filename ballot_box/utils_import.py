@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import localtime
 from ballot_box.models import *
+from election_registrar.models import *
 from ballot_box.utils_data import Framer, Checker
 import logging
 import time

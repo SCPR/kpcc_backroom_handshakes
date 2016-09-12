@@ -45,7 +45,7 @@ class FeaturedIndex(ListView):
 class BakedFeaturedIndex(BuildableListView):
     model = Contest
     template_name = "ballot_box/featured.html"
-    build_path = "featured.html"
+    build_path = "results/featured.html"
 
     def get_object(self):
         object = super(BakedFeaturedIndex, self).get_object()
@@ -104,7 +104,7 @@ class ResultIndex(ListView):
 class BakedResultsIndex(BuildableListView):
     model = Contest
     template_name = "ballot_box/list.html"
-    build_path = "all.html"
+    build_path = "results/all.html"
 
     def get_object(self):
         object = super(BakedResultsIndex, self).get_object()
