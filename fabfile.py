@@ -100,7 +100,7 @@ def fetch_all():
 def fetch_maplight():
     """
     """
-    local("python manage.py fetch_maplight_finance")
+    local("python manage.py fetch_measure_finance")
 
 
 """
