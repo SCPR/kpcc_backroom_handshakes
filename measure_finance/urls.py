@@ -6,17 +6,19 @@ from measure_finance.views import InitialDetailView
 
 app_name = "measure_finance"
 
+cache_timer = 60 * 1440
+
 urlpatterns = [
 
     url(
         r"(?P<electionid>[-\w]+)/measure-finance/(?P<slug>[-\w]+)/?$",
-        InitialDetailView.as_view(),
+        cache_page(cache_timer)(InitialDetailView.as_view()),
         name = "measure-detail"
     ),
 
     url(
         r"latest/measure-finance/(?P<slug>[-\w]+)/index.html$",
-        InitialDetailView.as_view(),
+        cache_page(cache_timer)(InitialDetailView.as_view()),
         name = "measure-detail"
     ),
 
