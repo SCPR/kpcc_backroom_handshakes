@@ -16,11 +16,11 @@
 
 {% block og_type %}website{% endblock %}
 
-{% block og_url %}{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
+{% block og_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
 
 {% block og_description %}This chart displays the top donors supporting and opposing California's {{ object.official_identifier }}: {{ object.official_title }}. Voters cast their choice on Nov. 8, 2016.{% endblock %}
 
-{% block twitter_url %}{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
+{% block twitter_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
 
 {% block twitter_title %}Charting contributions for and against California {{ object.official_identifier }} | scpr.org{% endblock %}
 
