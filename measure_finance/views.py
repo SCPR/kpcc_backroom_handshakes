@@ -18,30 +18,10 @@ import logging
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
 # Create your views here.
-@xframe_options_sameorigin
-def index(request):
-    contributions = MeasureContributor.objects.all()
-    supporting_contributions = MeasureTotal.objects.filter(support="Yes")
-    opposing_contributions = MeasureTotal.objects.filter(support="No")
-    logger.debug(opposing_contributions)
-
-
-    # total_sum = contributions.values("initiative_identifier").annotate(total=Sum("amount"))
-    # supporting_sum = supporting_contributions.values("initiative_identifier").annotate(total=Sum("amount"))
-    # opposing_sum = opposing_contributions.values("initiative_identifier").annotate(total=Sum("amount"))
-    # return render_to_response("maplight_finance/index.html", {
-    #     "total_sum": total_sum,
-    #     "supporting_sum": supporting_sum,
-    #     "opposing_sum": opposing_sum
-    # })
-
-
-# class InitialListView(BuildableListView):
+class InitialListView(BuildableListView):
     """ """
-    # build_path = "maplight-finance/index.html"
-    # model = Initiative
-    #queryset = InitiativeContributor.objects.values("initiative_identifier").annotate(total=Sum("amount"))
-    # template_name = "maplight_finance/index.html"
+    model = Measure
+    template_name = "measure_finance/index.html"
 
 
 class InitialDetailView(BuildableDetailView):

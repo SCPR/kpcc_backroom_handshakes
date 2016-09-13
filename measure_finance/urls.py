@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.views.generic import RedirectView
 from django.views.decorators.cache import cache_page
-from measure_finance.views import InitialDetailView
+from measure_finance.views import InitialListView, InitialDetailView
 
 app_name = "measure_finance"
 
@@ -20,6 +20,12 @@ urlpatterns = [
         r"latest/measure-finance/(?P<slug>[-\w]+)/index.html$",
         cache_page(cache_timer)(InitialDetailView.as_view()),
         name = "measure-detail"
+    ),
+
+    url(
+        r"(?P<electionid>[-\w]+)/measure-finance/?$",
+        InitialListView.as_view(),
+        name = "measure-index"
     ),
 
 ]
