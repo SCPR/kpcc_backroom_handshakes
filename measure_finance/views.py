@@ -55,11 +55,27 @@ class InitialDetailView(BuildableDetailView):
         context = super(InitialDetailView, self).get_context_data(**kwargs)
         aggregate_contribs = MeasureTotal.objects.filter(measure_id=self.object.id)
         context["total_support"] = aggregate_contribs.filter(support="Yes").first()
+        if context["total_support"]:
+            context["support_unitemized"] = context["total_support"].total_unitemized
+        else:
+            context["support_unitemized"] = None
+        if context["total_support"]:
+            context["support_itemized"] = context["total_support"].total_itemized
+        else:
+            context["support_itemized"] = None
         if context["total_support"] == None:
             context["total_support"] = 0
         else:
             context["total_support"] = context["total_support"].total_amount
         context["total_opposition"] = aggregate_contribs.filter(support="No").first()
+        if context["total_opposition"]:
+            context["opposition_unitemized"] = context["total_opposition"].total_unitemized
+        else:
+            context["opposition_unitemized"] = None
+        if context["total_opposition"]:
+            context["opposition_itemized"] = context["total_opposition"].total_itemized
+        else:
+            context["opposition_itemized"] = None
         if context["total_opposition"] == None:
             context["total_opposition"] = 0
         else:
