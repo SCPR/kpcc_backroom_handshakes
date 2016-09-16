@@ -33,7 +33,7 @@
 
         var color = d3.scale.ordinal()
             .domain(["one","two"])
-            .range(["#B4DD0A", "#66D8D8"]);
+            .range(["#f4f30f", "#3bdaef"]);
 
         var vis = d3.select("#chart-container")
             .append("svg:svg")

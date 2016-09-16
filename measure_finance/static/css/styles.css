@@ -84,9 +84,9 @@ footer .logo img { float: right; width: 120px; }
 
 .align-center { text-align: center; }
 
-.support-accent { color: #B4DD0A; font-size: 125%; font-family: "proxima-nova-condensed", "Avenir Next", "Avenir", "Lucida Grande", "Corbel", "Tahoma", Arial, sans-serif; font-weight: 400; }
+.support-accent { color: #f4f30f; font-size: 125%; font-family: "proxima-nova-condensed", "Avenir Next", "Avenir", "Lucida Grande", "Corbel", "Tahoma", Arial, sans-serif; font-weight: 400; }
 
-.oppose-accent { color: #66D8D8; font-size: 125%; font-family: "proxima-nova-condensed", "Avenir Next", "Avenir", "Lucida Grande", "Corbel", "Tahoma", Arial, sans-serif; font-weight: 400; }
+.oppose-accent { color: #3bdaef; font-size: 125%; font-family: "proxima-nova-condensed", "Avenir Next", "Avenir", "Lucida Grande", "Corbel", "Tahoma", Arial, sans-serif; font-weight: 400; }
 
 .ledger { color: #ffffff; }
 
@@ -97,9 +97,9 @@ footer .logo img { float: right; width: 120px; }
 .ledger .contributors .support section.display h1,
 .ledger .contributors .oppose section.display h1 { font-size: 75%; font-weight: 700; font-family: "proxima-nova", "Avenir Next", "Avenir", "Lucida Grande", "Corbel", "Tahoma", Arial, sans-serif; text-transform: uppercase; }
 
-.ledger .contributors .support section.display h1 { background: #B4DD0A; padding: 1% 0 1% 2%; }
+.ledger .contributors .support section.display h1 { color: #000000; background: #f4f30f; padding: 1% 0 1% 2%; }
 
-.ledger .contributors .oppose section.display h1 { background: #66D8D8; padding: 1% 2% 1% 0; }
+.ledger .contributors .oppose section.display h1 { color: #000000; background: #3bdaef; padding: 1% 2% 1% 0; }
 
 .ledger section.display ol li dl { font-size: 80%; }
 
