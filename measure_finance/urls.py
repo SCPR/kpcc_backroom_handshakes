@@ -24,7 +24,7 @@ urlpatterns = [
 
     url(
         r"(?P<electionid>[-\w]+)/measure-finance/?$",
-        InitialListView.as_view(),
+        cache_page(cache_timer)(InitialListView.as_view()),
         name = "measure-index"
     ),
 
