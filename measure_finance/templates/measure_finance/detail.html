@@ -69,13 +69,15 @@
                                 </dl>
                             </li>
                         {% endif %}
-                        {% if support_unitemized != 0.00 %}
-                            <li>
-                                <dl class="clearfix">
-                                    <dt>Unitemized contributions</dt>
-                                    <dd>{{ support_unitemized|currency }}</dd>
-                                </dl>
-                            </li>
+                        {% if support_unitemized %}
+                            {% if support_unitemized != 0.00 %}
+                                <li>
+                                    <dl class="clearfix">
+                                        <dt>Unitemized contributions</dt>
+                                        <dd>{{ support_unitemized|currency }}</dd>
+                                    </dl>
+                                </li>
+                            {% endif %}
                         {% endif %}
                     </ol>
                 </section>
@@ -108,13 +110,15 @@
                                 </dl>
                             </li>
                         {% endif %}
-                        {% if opposition_unitemized != 0.00 %}
-                            <li>
-                                <dl class="clearfix">
-                                    <dt>Unitemized contributions</dt>
-                                    <dd>{{ opposition_unitemized|currency }}</dd>
-                                </dl>
-                            </li>
+                        {% if opposition_unitemized %}
+                            {% if opposition_unitemized != 0.00 %}
+                                <li>
+                                    <dl class="clearfix">
+                                        <dt>Unitemized contributions</dt>
+                                        <dd>{{ opposition_unitemized|currency }}</dd>
+                                    </dl>
+                                </li>
+                            {% endif %}
                         {% endif %}
                     </ol>
                 </section>
