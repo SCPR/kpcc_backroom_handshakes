@@ -137,12 +137,22 @@ class Saver(object):
         """
         log_message = "\n"
         f = Framer()
+        this_measure = Measure.objects.get(measure_id=measure["measure_id"])
         try:
             this_measure = Measure.objects.get(measure_id=measure["measure_id"])
         except Exception, exception:
             error_output = "%s %s" % (exception, measure["measure_id"])
             logger.error(error_output)
             raise
+
+        try:
+            contrib = MeasureContributor.objects.filter(measure_id=this_measure.id)
+            if contrib:
+                contrib.delete()
+                log_message += "\t* Resetting contributors\n"
+        except:
+            pass
+
         try:
             for contrib in measure["measure_finance_top"]:
                 obj, created = this_measure.measurecontributor_set.update_or_create(
@@ -165,11 +175,9 @@ class Saver(object):
                     }
                 )
                 if created:
-                    log_message += "\t* %s created\n" % (
-                        smart_unicode(contrib["name"]))
+                    log_message += "\t* %s created\n" % (smart_unicode(contrib["name"]))
                 else:
-                    log_message += "\t* %s exists\n" % (
-                        smart_unicode(contrib["name"]))
+                    log_message += "\t* %s updated\n" % (smart_unicode(contrib["name"]))
         except Exception, exception:
             error_output = "%s %s" % (exception, contrib["finance_top_id"])
             logger.error(error_output)
@@ -183,17 +191,17 @@ class Saver(object):
         log_message = "\n"
         f = Framer()
         try:
-            this_measure = Measure.objects.get(
-                measure_id=measure["measure_id"])
+            this_measure = Measure.objects.get(measure_id=measure["measure_id"])
         except Exception, exception:
             error_output = "%s %s" % (exception, measure["measure_id"])
             logger.error(error_output)
             raise
         try:
             for position in measure["measure_finance"]:
+                uniq_key = "%s_%s" % (position["support"].lower(), this_measure.measure_id)
                 obj, created = this_measure.measuretotal_set.update_or_create(
                     measure=this_measure.id,
-                    finance_id=f._to_num(position["finance_id"])["value"],
+                    finance_id=uniq_key,
                     defaults={
                         "support": position["support"],
                         "total_amount": f._to_num(position["total_amount"])["value"],
@@ -201,21 +209,19 @@ class Saver(object):
                         "total_unitemized": f._to_num(position["total_unitemized"])["value"],
                         "total_itemized": f._to_num(position["total_itemized"])["value"],
                         "total_organization": f._to_num(position["total_organization"])["value"],
-                        "percentage_individual": f._convert_to_pct(position["percentage_individual"])["output_decimal"],
-                        "percentage_organization": f._convert_to_pct(position["percentage_organization"])["output_decimal"],
-                        "percentage_unitemized": f._convert_to_pct(position["percentage_unitemized"])["output_decimal"],
-                        "percentage_itemized": f._convert_to_pct(position["percentage_itemized"])["output_decimal"],
+                        "pct_individual": f._convert_to_pct(position["percentage_individual"])["output_decimal"],
+                        "pct_organization": f._convert_to_pct(position["percentage_organization"])["output_decimal"],
+                        "pct_unitemized": f._convert_to_pct(position["percentage_unitemized"])["output_decimal"],
+                        "pct_itemized": f._convert_to_pct(position["percentage_itemized"])["output_decimal"],
                         "updated_date": position["updated_date"],
                         "entity_type": position["entity_type"],
                         "finance_timestamp": f._save_proper_timezone(position["finance_timestamp"])
                     }
                 )
                 if created:
-                    log_message += "\t* %s created\n" % (
-                        smart_unicode(position["support"]))
+                    log_message += "\t* %s created\n" % (smart_unicode(position["support"]))
                 else:
-                    log_message += "\t* %s exists\n" % (
-                        smart_unicode(position["support"]))
+                    log_message += "\t* %s updated\n" % (smart_unicode(position["support"]))
         except Exception, exception:
             error_output = "%s %s" % (exception, position["finance_id"])
             logger.error(error_output)
