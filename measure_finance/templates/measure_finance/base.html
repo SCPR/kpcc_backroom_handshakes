@@ -73,8 +73,8 @@
 
         <!-- begin scripts -->
         <script src="http://projects.scpr.org/static/static-files/v3-dependencies/scripts/modernizr-2.5.3.min.js"></script>
-        <script src="{% static 'scripts/d3.js' %}"></script>
-        <script src="{% static 'scripts/app.js' %}"></script>
+
+        {% block extra_js %}{% endblock %}
         <!-- end scripts -->
 
         <!-- begin chartbeat -->
