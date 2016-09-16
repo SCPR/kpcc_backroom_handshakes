@@ -223,6 +223,7 @@ def deploy():
                 with prefix("workon %s" % (env.project_name)):
                     run("pip install -r %s" % (env.requirements_file))
                     run("python manage.py migrate")
+                    run("python manage.py collectstatic --noinput")
         sudo("sudo service uwsgi restart")
         sudo("sudo service nginx restart")
         sudo("sudo service varnish restart")
