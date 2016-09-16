@@ -1,5 +1,32 @@
 {% extends "measure_finance/base.html" %}
 
+{% load static from staticfiles %}
+{% load measure_finance_template_tags %}
+
+<!-- begin meta -->
+{% block title %}Charting contributions to California Ballot Measures | scpr.org{% endblock %}
+
+{% block description %}These charts displays the top donors supporting and opposing California's numerous ballot measures. Voters cast their choice on Nov. 8, 2016.{% endblock %}
+
+{% block keywords %}California, ballot measures, contributions, california counts{% endblock %}
+
+{% block og_title %}Charting contributions to California Ballot Measures | scpr.org{% endblock %}
+
+{% block og_site_name %}KPCC{% endblock %}
+
+{% block og_type %}website{% endblock %}
+
+{% block og_url %}http://{{ request.get_host }}/elections/latest/measure-finance/{% endblock %}
+
+{% block og_description %}These charts displays the top donors supporting and opposing California's numerous ballot measures. Voters cast their choice on Nov. 8, 2016.{% endblock %}
+
+{% block twitter_url %}http://{{ request.get_host }}/elections/latest/measure-finance/{% endblock %}
+
+{% block twitter_title %}Charting contributions to California Ballot Measures | scpr.org{% endblock %}
+
+{% block twitter_description %}These charts displays the top donors supporting and opposing California's numerous ballot measures. Voters cast their choice on Nov. 8, 2016.{% endblock %}
+<!-- end meta -->
+
 {% block css_overrides %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
 {% endblock %}
