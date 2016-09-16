@@ -1,7 +1,7 @@
 /* structural */
-body { max-width: 100%; height: 500px; max-height: 500px; min-height: 500px; }
+body { max-width: 100%; height: 555px; max-height: 555px; min-height: 555px; }
 
-.ledger { max-width: 100%; height: 500px; max-height: 500px; position: relative; }
+.ledger { max-width: 100%; height: 555px; max-height: 555px; min-height: 555px; position: relative; }
 
 .ledger header { height: 40px; background: #000; }
 
