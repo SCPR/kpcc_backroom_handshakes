@@ -23,7 +23,7 @@ class InitialListView(BuildableListView):
     model = Measure
     template_name = "measure_finance/index.html"
 
-@method_decorator(xframe_options_exempt, name='get_object')
+@method_decorator(xframe_options_exempt, name='dispatch')
 class InitialDetailView(BuildableDetailView):
     """ """
     model = Measure
@@ -50,6 +50,9 @@ class InitialDetailView(BuildableDetailView):
         path = os.path.join(settings.BUILD_DIR, self.sub_directory, self.get_url(obj)[1:])
         os.path.exists(path) or os.makedirs(path)
         return os.path.join(path, "index.html")
+
+    def dispatch(self, *args, **kwargs):
+        return super(InitialDetailView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(InitialDetailView, self).get_context_data(**kwargs)
