@@ -23,7 +23,7 @@ class InitialListView(BuildableListView):
     model = Measure
     template_name = "measure_finance/index.html"
 
-@method_decorator(xframe_options_exempt, name='get_object')
+@method_decorator(xframe_options_exempt, name='get_context_data')
 class InitialDetailView(BuildableDetailView):
     """ """
     model = Measure
