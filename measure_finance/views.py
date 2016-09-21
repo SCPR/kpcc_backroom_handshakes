@@ -3,6 +3,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest, Http404
+from django.utils.decorators import method_decorator
 from django.views.decorators.clickjacking import xframe_options_exempt, xframe_options_sameorigin
 from django.core.urlresolvers import reverse
 from django.core import serializers
@@ -17,13 +18,12 @@ import logging
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
-# Create your views here.
 class InitialListView(BuildableListView):
     """ """
     model = Measure
     template_name = "measure_finance/index.html"
 
-
+@method_decorator(xframe_options_exempt, name='get_object')
 class InitialDetailView(BuildableDetailView):
     """ """
     model = Measure
