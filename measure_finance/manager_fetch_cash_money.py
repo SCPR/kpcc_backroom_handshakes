@@ -11,6 +11,7 @@ from election_registrar.models import ResultSource, Election
 from delorean import parse
 import pytz
 from pytz import timezone
+from nameparser import HumanName
 import requests
 import logging
 import types
@@ -68,6 +69,7 @@ class BuildDonationCharts(object):
             measure_data["official_identifier"] = "Proposition %s" % (identifying_information[1])
             measure_data["official_identifier_slug"] = f._slug(measure_data["official_identifier"])
             measure_data["election_id"] = election.id
+            measure_data = f._massage_measure_title(measure_data)
             saver = Saver()
             saver.make_measure(measure_data)
             saver.make_measure_contributor(measure_data)
@@ -144,7 +146,6 @@ class Saver(object):
             error_output = "%s %s" % (exception, measure["measure_id"])
             logger.error(error_output)
             raise
-
         try:
             contrib = MeasureContributor.objects.filter(measure_id=this_measure.id)
             if contrib:
@@ -152,13 +153,17 @@ class Saver(object):
                 log_message += "\t* Resetting contributors\n"
         except:
             pass
-
         try:
             for contrib in measure["measure_finance_top"]:
+                if contrib["percentage_individual"] == "100.00" and contrib["top_type"] == "D":
+                    contrib["name"] = f._massage_measure_donor_name(contrib["name"])
+                is_llc = contrib["name"].find("LLC")
+                if is_llc > 0:
+                    donor_name = contrib["name"].split("LLC")
+                    contrib["name"] = "%s LLC" % (donor_name[0].strip().title())
                 obj, created = this_measure.measurecontributor_set.update_or_create(
                     measure=this_measure.id,
-                    finance_top_id=f._to_num(
-                        contrib["finance_top_id"])["value"],
+                    finance_top_id=f._to_num(contrib["finance_top_id"])["value"],
                     defaults={
                         "top_type": contrib["top_type"],
                         "support": contrib["support"],
@@ -351,6 +356,69 @@ class Framer(object):
             return start
         else:
             return False
+
+
+    def _massage_measure_donor_name(self, name_string):
+        """
+        """
+        name = HumanName(name_string)
+        name.first = name.first.title()
+        name.last = name.last.title()
+        if name.middle:
+            name.middle = name.middle.replace(".", "")
+            name.middle = "%s." % (name.middle.title())
+        if name == "JR. Munger CHARLES T.":
+            name.first = "Charles"
+            name.middle = "T."
+            name.last = "Munger"
+            name.suffix = "Jr."
+        if name == "M. Quinn. Delaney":
+            name.first = "M."
+            name.middle = "Quinn"
+            name.last = "Delaney"
+            name.suffix = None
+        if name == "Robert Alan. Eustace":
+            name.first = "Robert"
+            name.middle = "Alan"
+            name.last = "Eustace"
+            name.suffix = None
+        if name == "Susie Tompkins. Buell":
+            name.first = "Susie"
+            name.middle = "Tompkins"
+            name.last = "Buell"
+            name.suffix = None
+        if name.middle and name.suffix:
+            output = "%s %s %s %s" % (name.first, name.middle, name.last, name.suffix)
+        if name.middle:
+            output = "%s %s %s" % (name.first, name.middle, name.last)
+        elif name.suffix:
+            output = "%s %s %s" % (name.first, name.last, name.suffix)
+        else:
+            output = "%s %s" % (name.first, name.last)
+        return output
+
+
+    def _massage_measure_title(self, measure):
+        """
+        """
+        string = measure["official_title"]
+        number_of_periods = [i for i, letter in enumerate(string) if letter == "."]
+        if len(number_of_periods) > 1:
+            count = len(number_of_periods) - 1
+            output = string.replace(". ", ", ", count)
+            output = output.replace(".", "")
+        else:
+            output = string.replace(".", "")
+        measure["official_title"] = output
+        if measure["official_identifier_slug"] == "proposition-54":
+            measure["official_title"] = "public display of legislative bills, initiative and statute"
+        elif measure["official_identifier_slug"] == "proposition-63":
+            measure["official_title"] = "ammunition sales background checks, large-capacity magazine ban"
+        elif measure["official_identifier_slug"] == "proposition-64":
+            measure["official_title"] = "recreational marijuana legalization"
+        elif measure["official_identifier_slug"] == "proposition-65":
+            measure["official_title"] = "disposable bag sales for wildlife conservation"
+        return measure
 
     def _concat(self, *args, **kwargs):
         """
