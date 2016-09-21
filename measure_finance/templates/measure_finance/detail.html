@@ -56,7 +56,7 @@
                             {% for support in supporting_contributions %}
                                 <li>
                                     <dl class="clearfix">
-                                        <dt>{{ support.name|title }}</dt>
+                                        <dt>{{ support.name|upper }}</dt>
                                         <dd>{{ support.total|currency }}</dd>
                                     </dl>
                                 </li>
@@ -64,7 +64,7 @@
                         {% else %}
                             <li>
                                 <dl class="clearfix">
-                                    <dt>No Contributions</dt>
+                                    <dt>NO CONTRIBUTIONS</dt>
                                     <dd>$0.00</dd>
                                 </dl>
                             </li>
@@ -73,7 +73,7 @@
                             {% if support_unitemized != 0.00 %}
                                 <li>
                                     <dl class="clearfix">
-                                        <dt>Unitemized contributions</dt>
+                                        <dt>UNITEMIZED CONTRIBUTIONS</dt>
                                         <dd>{{ support_unitemized|currency }}</dd>
                                     </dl>
                                 </li>
@@ -97,7 +97,7 @@
                             {% for oppose in opposing_contributions %}
                                 <li>
                                     <dl class="clearfix">
-                                        <dt>{{ oppose.name|title }}</dt>
+                                        <dt>{{ oppose.name|upper }}</dt>
                                         <dd>{{ oppose.total|currency }}</dd>
                                     </dl>
                                 </li>
@@ -105,7 +105,7 @@
                         {% else %}
                             <li>
                                 <dl class="clearfix">
-                                    <dt>No Contributions</dt>
+                                    <dt>NO CONTRIBUTIONS</dt>
                                     <dd>$0.00</dd>
                                 </dl>
                             </li>
@@ -114,7 +114,7 @@
                             {% if opposition_unitemized != 0.00 %}
                                 <li>
                                     <dl class="clearfix">
-                                        <dt>Unitemized contributions</dt>
+                                        <dt>UNITEMIZED CONTRIBUTIONS</dt>
                                         <dd>{{ opposition_unitemized|currency }}</dd>
                                     </dl>
                                 </li>
