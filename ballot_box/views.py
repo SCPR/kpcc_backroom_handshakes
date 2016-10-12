@@ -41,6 +41,28 @@ class FeaturedIndex(ListView):
         context["lac_sup_5"] = queryset.filter(contestid="primary-2016-06-07-lac-county-los-angeles-county-supervisor-district-5").first()
         return context
 
+class RedesignIndex(ListView):
+    model = Contest
+    template_name = "ballot_box/redesign.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(RedesignIndex, self).get_context_data(**kwargs)
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        queryset = Contest.objects.filter(election__electionid="primary-2016-06-07").filter(is_homepage_priority=True)
+        context["featured_list"] = queryset.filter(is_homepage_priority=True)
+        dem_pres = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-democratic").first()
+        context["dem_pres"] = dem_pres.candidate_set.select_related('contest').filter(
+            Q(candidateid="primary-2016-06-07-sos-statewide-president-democratic-bernie-sanders") |
+            Q(candidateid="primary-2016-06-07-sos-statewide-president-democratic-hillary-clinton")
+        )
+        gop_pres = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-republican").first()
+        context["gop_pres"] = gop_pres.candidate_set.select_related("contest").order_by("-votepct")
+        senate_primary = queryset.filter(contestid="primary-2016-06-07-sos-statewide-us-senate").first()
+        context["senate_primary"] = senate_primary.candidate_set.select_related("contest").order_by("-votepct")
+        context["lac_sup_4"] = queryset.filter(contestid="primary-2016-06-07-lac-county-los-angeles-county-supervisor-district-4").first()
+        context["lac_sup_5"] = queryset.filter(contestid="primary-2016-06-07-lac-county-los-angeles-county-supervisor-district-5").first()
+        return context
+
 
 class BakedFeaturedIndex(BuildableListView):
     model = Contest

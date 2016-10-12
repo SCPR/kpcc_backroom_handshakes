@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q, Avg, Max, Min, Sum, Count
 from django import forms
 from .models import *
+from ballot_box.models import *
 import os
 import time
 import datetime
@@ -57,5 +58,5 @@ class ElectionDetailView(BuildableDetailView):
     def get_context_data(self, **kwargs):
         context = super(ElectionDetailView, self).get_context_data(**kwargs)
         context["result_sources"] = ResultSource.objects.filter(election__id=context["election"].id)
-        logger.debug(context)
+        context["contests"] = Contest.objects.filter(election__id=context["election"].id)
         return context

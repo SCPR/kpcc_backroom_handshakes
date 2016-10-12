@@ -12,15 +12,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- end meta -->
 
-        <!-- begin css -->
-        <link href="http://www.scpr.org/assets/application-4c808cff951c47885edfa5cf39942a07.css" media="screen" rel="stylesheet" type="text/css" />
-        <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-        <!--
-        <link href="{% static "css/results-display.css" %}" media="screen" rel="stylesheet" type="text/css" />
-        -->
-        <!-- end css -->
+        {% block extra_css %}{% endblock %}
 
         <!-- begin base scripts -->
+        <script src="https://use.typekit.net/cka2qre.js"></script>
+        <script>try{Typekit.load({ async: true });}catch(e){}</script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <!-- end base scripts -->
 
