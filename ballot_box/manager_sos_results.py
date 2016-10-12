@@ -29,15 +29,16 @@ class BuildSosResults(object):
 
     sources = ResultSource.objects.filter(source_short="sos", source_active=True)
 
+    elections = Election.objects.all().order_by("-election_date")
+
+    testing = elections[0].test_results
+
     def _init(self, *args, **kwargs):
         """
         """
         for src in self.sources:
-
-            logger.debug(src)
-
-            # self.get_results_file(src, self.data_directory)
-            # self.parse_results_file(src, self.data_directory)
+            self.get_results_file(src, self.data_directory)
+            self.parse_results_file(src, self.data_directory)
         # self.retrieve._build_and_move_results()
 
     def get_results_file(self, src, data_directory):
@@ -67,7 +68,12 @@ class BuildSosResults(object):
                 soup = BeautifulSoup(open(latest_path), "xml")
                 file_timestring = unicode(soup.find("IssueDate").contents[0])
                 file_timestamp = parse(file_timestring, dayfirst=False).datetime
-                update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
+
+                if self.testing == True:
+                    update_this = self.testing
+                else:
+                    update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
+
                 if update_this == False:
                     logger.debug("\n*****\nwe have newer data in the database so let's delete these files\n*****")
                     os.remove(latest_path)
@@ -82,7 +88,7 @@ class BuildSosResults(object):
                             this is a judicial candidate
                             """
                             result = compiler._compile_judicial(race, "140", election, src)
-                            # race_log += saver.make_office(result.office)
+                            race_log += saver.make_office(result.office)
                             race_log += saver.make_contest(result.office, result.contest)
                             race_log += saver.make_judicial(result.contest, result.judicial)
                         elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "150":
@@ -90,7 +96,7 @@ class BuildSosResults(object):
                             this is a judicial candidate
                             """
                             result = compiler._compile_judicial(race, "150", election, src)
-                            # race_log += saver.make_office(result.office)
+                            race_log += saver.make_office(result.office)
                             race_log += saver.make_contest(result.office, result.contest)
                             race_log += saver.make_judicial(result.contest, result.judicial)
                         elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "190":
@@ -98,7 +104,7 @@ class BuildSosResults(object):
                             this is a proposition
                             """
                             result = compiler._compile_measure(race, election, src)
-                            # race_log += saver.make_office(result.office)
+                            race_log += saver.make_office(result.office)
                             race_log += saver.make_contest(result.office, result.contest)
                             race_log += saver.make_measure(result.contest, result.measure)
                         else:
@@ -106,7 +112,7 @@ class BuildSosResults(object):
                             this is a non-judicial candidate
                             """
                             result = compiler._compile_candidate(race, election, src)
-                            # race_log += saver.make_office(result.office)
+                            race_log += saver.make_office(result.office)
                             race_log += saver.make_contest(result.office, result.contest)
                             for candidate in result.candidates:
                                 race_log += saver.make_candidate(result.contest, candidate)

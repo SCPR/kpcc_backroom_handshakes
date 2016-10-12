@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.conf import settings
-from ballot_box.models import ResultSource
+from election_registrar.models import ResultSource
 import os.path
 import sys
 import errno
@@ -24,7 +24,7 @@ class TestFileRetrival(TestCase):
     a series of reusable methods we'll need for downloading and moving files
     """
 
-    fixtures = ['ballot_box/fixtures/data.json']
+    fixtures = ['election_registrar/fixtures/election_registrar.json']
 
     def setUp(self):
         """
@@ -44,6 +44,8 @@ class TestFileRetrival(TestCase):
         logger.debug("running file download tests")
 
         data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
+
+        logger.debug(self.sources)
 
         for src in self.sources:
             if src.source_active == True:

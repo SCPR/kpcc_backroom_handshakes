@@ -104,6 +104,7 @@ class ContestAdmin(admin.ModelAdmin):
     )
 
     list_filter = (
+        "election",
         "resultsource",
         "poss_error",
         "is_display_priority",
@@ -187,6 +188,10 @@ class BallotMeasureAdmin(admin.ModelAdmin):
         return obj.contest.resultsource.source_short
     get_source.short_description = "Data Source"
 
+    def get_election(self, obj):
+        return obj.contest.election.election_date
+    get_election.short_description = "Election"
+
     list_display = (
         "fullname",
         "yescount",
@@ -194,6 +199,7 @@ class BallotMeasureAdmin(admin.ModelAdmin):
         "nocount",
         "no_percent",
         "precincts_reporting_pct",
+        "get_election",
         "get_source",
         "poss_error",
     )
@@ -239,6 +245,10 @@ class CandidateAdmin(admin.ModelAdmin):
         return obj.contest.resultsource.source_short
     get_source.short_description = "Data Source"
 
+    def get_election(self, obj):
+        return obj.contest.election.election_date
+    get_election.short_description = "Election"
+
     def vote_percent(self, obj):
         if obj.votepct == None:
             return 0
@@ -267,6 +277,7 @@ class CandidateAdmin(admin.ModelAdmin):
         "precincts_reporting_pct",
         "party",
         "contest",
+        "get_election",
         "get_source",
         "poss_error",
     )
@@ -336,6 +347,10 @@ class JudicialCandidateAdmin(admin.ModelAdmin):
         return obj.contest.resultsource.source_short
     get_source.short_description = "Data Source"
 
+    def get_election(self, obj):
+        return obj.contest.election.election_date
+    get_election.short_description = "Election"
+
     list_display = (
         "fullname",
         "yescount",
@@ -343,6 +358,7 @@ class JudicialCandidateAdmin(admin.ModelAdmin):
         "nocount",
         "no_percent",
         "precincts_reporting_pct",
+        "get_election",
         "get_source",
         "poss_error",
     )
