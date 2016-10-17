@@ -25,20 +25,26 @@ class FeaturedIndex(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(FeaturedIndex, self).get_context_data(**kwargs)
+        context["electionid"] = self.kwargs["electionid"]
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        queryset = Contest.objects.filter(election__electionid="primary-2016-06-07").filter(is_homepage_priority=True)
+        queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
         context["featured_list"] = queryset.filter(is_homepage_priority=True)
-        dem_pres = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-democratic").first()
+        dem_pres_contest_id = "%s-sos-statewide-president-democratic" % (context["electionid"])
+        dem_pres = queryset.filter(contestid=dem_pres_contest_id).first()
         context["dem_pres"] = dem_pres.candidate_set.select_related('contest').filter(
-            Q(candidateid="primary-2016-06-07-sos-statewide-president-democratic-bernie-sanders") |
-            Q(candidateid="primary-2016-06-07-sos-statewide-president-democratic-hillary-clinton")
+            Q(candidateid="%s-sos-statewide-president-democratic-bernie-sanders" % (context["electionid"])) |
+            Q(candidateid="%s-sos-statewide-president-democratic-hillary-clinton" % (context["electionid"]))
         )
-        gop_pres = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-republican").first()
+        gop_pres_contest_id = "%s-sos-statewide-president-republican" % (context["electionid"])
+        gop_pres = queryset.filter(contestid=gop_pres_contest_id).first()
         context["gop_pres"] = gop_pres.candidate_set.select_related("contest").order_by("-votepct")
-        senate_primary = queryset.filter(contestid="primary-2016-06-07-sos-statewide-us-senate").first()
+        senate_primary_contest_id = "%s-sos-statewide-president-republican" % (context["electionid"])
+        senate_primary = queryset.filter(contestid=senate_primary_contest_id).first()
         context["senate_primary"] = senate_primary.candidate_set.select_related("contest").order_by("-votepct")
-        context["lac_sup_4"] = queryset.filter(contestid="primary-2016-06-07-lac-county-los-angeles-county-supervisor-district-4").first()
-        context["lac_sup_5"] = queryset.filter(contestid="primary-2016-06-07-lac-county-los-angeles-county-supervisor-district-5").first()
+        lasup_4_primary_contest_id = "%s-lac-county-los-angeles-county-supervisor-district-4" % (context["electionid"])
+        context["lac_sup_4"] = queryset.filter(contestid=lasup_4_primary_contest_id).first()
+        lasup_5_primary_contest_id = "%s-lac-county-los-angeles-county-supervisor-district-5" % (context["electionid"])
+        context["lac_sup_5"] = queryset.filter(contestid=lasup_5_primary_contest_id).first()
         return context
 
 class RedesignIndex(ListView):
@@ -47,20 +53,12 @@ class RedesignIndex(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(RedesignIndex, self).get_context_data(**kwargs)
+        context["electionid"] = self.kwargs["electionid"]
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        queryset = Contest.objects.filter(election__electionid="primary-2016-06-07").filter(is_homepage_priority=True)
-        context["featured_list"] = queryset.filter(is_homepage_priority=True)
-        dem_pres = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-democratic").first()
-        context["dem_pres"] = dem_pres.candidate_set.select_related('contest').filter(
-            Q(candidateid="primary-2016-06-07-sos-statewide-president-democratic-bernie-sanders") |
-            Q(candidateid="primary-2016-06-07-sos-statewide-president-democratic-hillary-clinton")
-        )
-        gop_pres = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-republican").first()
-        context["gop_pres"] = gop_pres.candidate_set.select_related("contest").order_by("-votepct")
-        senate_primary = queryset.filter(contestid="primary-2016-06-07-sos-statewide-us-senate").first()
-        context["senate_primary"] = senate_primary.candidate_set.select_related("contest").order_by("-votepct")
-        context["lac_sup_4"] = queryset.filter(contestid="primary-2016-06-07-lac-county-los-angeles-county-supervisor-district-4").first()
-        context["lac_sup_5"] = queryset.filter(contestid="primary-2016-06-07-lac-county-los-angeles-county-supervisor-district-5").first()
+        queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
+        context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
+        context["featured_measures"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=True)
+        logger.debug(context["featured_races"])
         return context
 
 

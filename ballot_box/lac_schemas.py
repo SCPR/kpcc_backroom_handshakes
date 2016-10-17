@@ -41,7 +41,7 @@ class FixedWidthParser(object):
         for field in self._fields:
             attrs[field.name] = field.parse(line)
 
-        return attrs 
+        return attrs
 
 # RECORD SCHEMAS
 # ==============

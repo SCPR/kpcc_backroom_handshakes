@@ -68,12 +68,10 @@ class BuildSosResults(object):
                 soup = BeautifulSoup(open(latest_path), "xml")
                 file_timestring = unicode(soup.find("IssueDate").contents[0])
                 file_timestamp = parse(file_timestring, dayfirst=False).datetime
-
                 if self.testing == True:
                     update_this = self.testing
                 else:
                     update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
-
                 if update_this == False:
                     logger.debug("\n*****\nwe have newer data in the database so let's delete these files\n*****")
                     os.remove(latest_path)
