@@ -30,8 +30,11 @@ class BuildLacResults(object):
 
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
-    sources = ResultSource.objects.filter(
-        source_short="lac", source_active=True)
+    sources = ResultSource.objects.filter(source_short="lac", source_active=True)
+
+    elections = Election.objects.all().order_by("-election_date")
+
+    testing = elections[0].test_results
 
     def _init(self, *args, **kwargs):
         """
@@ -39,7 +42,7 @@ class BuildLacResults(object):
         for src in self.sources:
             self.get_results_file(src, self.data_directory)
             self.parse_results_file(src, self.data_directory)
-        self.retrieve._build_and_move_results()
+        # self.retrieve._build_and_move_results()
 
     def get_results_file(self, src, data_directory):
         """
@@ -59,8 +62,7 @@ class BuildLacResults(object):
         saver = Saver()
         process = LacProcessMethods()
         latest_directory = "%s%s_latest" % (data_directory, src.source_short)
-        election = Election.objects.filter(
-            test_results=True, electionid=src.election.electionid).first()
+        election = Election.objects.filter(electionid=src.election.electionid).first()
         for file in src.source_files.split(", "):
             latest_path = os.path.join(latest_directory, file)
             file_exists = os.path.isfile(latest_path)
@@ -68,8 +70,7 @@ class BuildLacResults(object):
             if file_exists == True and file_has_size > 0:
                 rows = process.open_results_file(latest_path)
                 race_ids = process.get_race_ids_from(rows)
-                election_package = process.collate_and_fetch_records_for_race(
-                    race_ids, rows)
+                election_package = process.collate_and_fetch_records_for_race(race_ids, rows)
                 races = election_package[0]
                 election_title = election_package[1]["title"]
                 election_stats = election_package[1]["stats"]
@@ -82,18 +83,17 @@ class BuildLacResults(object):
                         timestring = parsed['date'] + ' ' + parsed['time']
                         file_timestring = timestring
                 if file_timestring:
-                    file_timestamp = parse(
-                        file_timestring, dayfirst=False).datetime
+                    file_timestamp = parse(file_timestring, dayfirst=False).datetime
                     file_timestamp = localtime(file_timestamp)
-                    update_this = saver._eval_timestamps(
-                        file_timestamp, src.source_latest)
+                    if self.testing == True:
+                        update_this = self.testing
+                    else:
+                        update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
                     if update_this == False:
-                        logger.debug(
-                            "\n*****\nwe have newer data in the database so let's delete these files\n*****")
+                        logger.debug("\n*****\nwe have newer data in the database so let's delete these files\n*****")
                         os.remove(latest_path)
                     else:
-                        logger.debug(
-                            "\n*****\nwe have new data to save and we'll update timestamps in the database\n*****")
+                        logger.debug("\n*****\nwe have new data to save and we'll update timestamps in the database\n*****")
                         saver._update_result_timestamps(src, file_timestamp)
                         title = process.dictify_records_and_return(
                             election_title)
@@ -102,26 +102,22 @@ class BuildLacResults(object):
                         election_info = process.compile_election_stats(
                             title, stats)
                         for r in races:
-                            records = process.dictify_records_and_return(races[
-                                                                         r])
+                            records = process.dictify_records_and_return(races[r])
                             """
                             checks to see if this is a recall contest or a nonpartisan contest
                             for now, it's unclear how to store or display these contests
                             in future, however, we may want to parse and return their results
                             """
-                            skip = process.check_if_recall_or_nonpartisan(
-                                records)
+                            skip = process.check_if_recall_or_nonpartisan(records)
                             if skip:
                                 pass
                             else:
-                                contest = process.compile_contest_results(
-                                    records)
+                                contest = process.compile_contest_results(records)
                                 process.update_database(contest, election, src)
                         os.remove(latest_path)
                         logger.debug("we've finished processing lac results")
                 else:
-                    logger.error(
-                        "unable to determine whether this data is newer than what we already have.")
+                    logger.error("unable to determine whether this data is newer than what we already have.")
 
 
 class LacProcessMethods(object):
@@ -518,10 +514,10 @@ class LacProcessMethods(object):
             framer.office["officeslug"] = slugify(officename)
             framer.office["active"] = True
             framer.office["officeid"] = framer.office["officeslug"]
-            # framer.office["officeid"] = saver._make_office_id(
-            #     src.source_short,
-            #     framer.office["officeslug"],
-            # )
+            framer.office["officeid"] = saver._make_office_id(
+                src.source_short,
+                framer.office["officeslug"],
+            )
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
             framer.contest["seatnum"] = None
@@ -566,7 +562,7 @@ class LacProcessMethods(object):
                 framer.contest["level"],
                 framer.office["officeslug"],
             )
-            # race_log += saver.make_office(framer.office)
+            race_log += saver.make_office(framer.office)
             race_log += saver.make_contest(framer.office, framer.contest)
 
             for judge in judges:
@@ -630,10 +626,10 @@ class LacProcessMethods(object):
             framer.office["officeslug"] = slugify(officename)
             framer.office["active"] = True
             framer.office["officeid"] = framer.office["officeslug"]
-            # framer.office["officeid"] = saver._make_office_id(
-            #     src.source_short,
-            #     framer.office["officeslug"],
-            # )
+            framer.office["officeid"] = saver._make_office_id(
+                src.source_short,
+                framer.office["officeslug"],
+            )
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
             framer.contest["seatnum"] = None
@@ -678,7 +674,7 @@ class LacProcessMethods(object):
                 framer.contest["level"],
                 framer.office["officeslug"],
             )
-            # race_log += saver.make_office(framer.office)
+            race_log += saver.make_office(framer.office)
             race_log += saver.make_contest(framer.office, framer.contest)
             for measure in measures:
                 framer.measure["ballotorder"] = None
@@ -782,10 +778,10 @@ class LacProcessMethods(object):
             framer.office["officeslug"] = slugify(framer.office["officename"])
             framer.office["active"] = True
             framer.office["officeid"] = framer.office["officeslug"]
-            # framer.office["officeid"] = saver._make_office_id(
-            #     src.source_short,
-            #     framer.office["officeslug"],
-            # )
+            framer.office["officeid"] = saver._make_office_id(
+                src.source_short,
+                framer.office["officeslug"],
+            )
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
             if len(candidates) < 2:
@@ -834,7 +830,7 @@ class LacProcessMethods(object):
                 framer.contest["level"],
                 framer.office["officeslug"],
             )
-            # race_log += saver.make_office(framer.office)
+            race_log += saver.make_office(framer.office)
             race_log += saver.make_contest(framer.office, framer.contest)
             for candidate in candidates:
                 fullname = candidate['candidate_name'].title()
@@ -878,8 +874,7 @@ class LacProcessMethods(object):
                     framer.contest["contestid"],
                     framer.candidate["candidateslug"],
                 )
-                race_log += saver.make_candidate(framer.contest,
-                                                 framer.candidate)
+                race_log += saver.make_candidate(framer.contest, framer.candidate)
         logger.debug(race_log)
 
     def check_if_recall_or_nonpartisan(self, records):

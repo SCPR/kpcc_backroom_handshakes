@@ -29,6 +29,10 @@ class BuildOcResults(object):
 
     sources = ResultSource.objects.filter(source_short="oc", source_active=True)
 
+    elections = Election.objects.all().order_by("-election_date")
+
+    testing = elections[0].test_results
+
     race_ids = [
         "742",
         "743",
