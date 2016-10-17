@@ -2,7 +2,6 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
-from django.views.generic.base import RedirectView
 from django.contrib import admin
 from tastypie.api import Api
 from kpcc_backroom_handshakes.api import CandidateResource, MeasureResource, JudicialResource, ContestResource
@@ -21,12 +20,13 @@ v1_api.register(ContestResource())
 admin.autodiscover()
 
 urlpatterns = [
-
-    url(r'^api/?', include(v1_api.urls)),
     url(r"^admin/doc/", include("django.contrib.admindocs.urls")),
     url(r"^admin/", include(admin.site.urls)),
     url(r"^admin/", include("massadmin.urls")),
-    url(r"^ballot-box/?", include("ballot_box.urls")),
+    url(r"^api/?", include(v1_api.urls)),
+    url(r"^elections/", include("ballot_box.urls", namespace="ballot-box")),
+    url(r"^elections/", include("measure_finance.urls", namespace="campaign-finance")),
+    url(r"^elections/", include("election_registrar.urls", namespace="elections")),
 ]
 
 if settings.DEBUG:
@@ -36,4 +36,4 @@ if settings.DEBUG:
     )
 
 if settings.DEBUG and settings.MEDIA_ROOT:
-    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

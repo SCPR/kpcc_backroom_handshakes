@@ -1,0 +1,188 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_modify bootstrapped_goodies_tags %}
+
+{% block extrahead %}{{ block.super }}
+    {% url 'admin:jsi18n' as jsi18nurl %}
+    <script type="text/javascript" src="{{ jsi18nurl|default:"../../../jsi18n/" }}"></script>
+    <script src="//s3.amazonaws.com/s3.documentcloud.org/viewer/loader.js"></script>
+    {{ media }}
+{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+
+    <style type="text/css">
+        .container { min-width: 100%; }
+        .data-visuals .overflow {
+            margin: 15px 0 0 0;
+            overflow-y: scroll;
+        }
+    </style>
+
+{% endblock %}
+
+{% block coltype %}
+    {% if ordered_objects %}
+        colMS
+    {% else %}
+        colM
+    {% endif %}
+{% endblock %}
+
+{% block branding %}
+    <a class="navbar-brand" href="/admin/">KPCC Officer Involved Admin</a>
+{% endblock %}
+
+{% block bodyclass %}
+    {{ block.super }} {{ opts.app_label }}-{{ opts.object_model }} change-form
+{% endblock %}
+
+{% if not is_popup %}
+    {% block breadcrumbs %}
+        <ul class="breadcrumb">
+            <li><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
+            <li><a href="{% url 'admin:app_list' app_label=opts.app_label %}">{% with app_label=opts.app_config.verbose_name|default:opts.app_label %}{{ app_label|title }}{% endwith %}</a></li>
+            <li>{% if has_change_permission %}<a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %}</li>
+            <li>{% if add %}{% trans 'Add' %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}</li>
+        </ul>
+    {% endblock %}
+{% endif %}
+
+{% block object-tools %}
+    {% if change %}
+        {% if not is_popup %}
+            <div id="content-navbar-collapse" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    {% block object-tools-items %}
+                        <li>{% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}<a role="button" href="{% add_preserved_filters history_url %}" class="historylink">{% trans "History" %}</a></li>
+                        {% if has_absolute_url %}
+                            <li><a href="{% url 'admin:view_on_site' content_type_id original.pk %}" class="viewsitelink">{% trans "View on site" %}</a></li>
+                        {% endif %}
+                    {% endblock %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    {% with module_name=opts.model_name|lower|slugify %}
+        {% render_with_template_if_exist opts.app_label|lower|add:"/admin_model_"|add:module_name|add:"_change_form.html" "" %}
+    {% endwith %}
+
+    <div class="row data-visuals">
+
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div id="doc"></div>
+        </div>
+
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div id="form">
+                <form class="form-horizontal" {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
+
+                    <!--
+                    <div class="alert alert-warning">
+                        {% blocktrans %}Fields in <strong>bold</strong> are required.{% endblocktrans %}
+                    </div>
+                    -->
+
+                    {% if errors %}
+                        <div class="alert alert-danger">
+                            {% if errors|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+                            {{ adminform.form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    {#% if save_on_top %#}
+                        {#% block submit_buttons_top %#}
+                            {#% submit_row %#}
+                        {#% endblock %#}
+                    {#% endif %#}
+
+                    <input type="submit" value="{% trans 'Submit This Information' %}" class="btn btn-success btn-lg btn-block" name="_save" {{ onclick_attrib }}/>
+
+                    <div id="content-main">
+                        <div>
+                            <div class="overflow form-fields">
+                                {% if is_popup %}<input type="hidden" name="_popup" value="1" />{% endif %}
+                                {% block field_sets %}
+                                    {% for fieldset in adminform %}
+                                        {#% include "admin/includes/fieldset.html" with group_column_width=adminform|form_fieldset_column_width %#}
+                                        {% include "admin/includes/incident_form.html" %}
+                                    {% endfor %}
+                                {% endblock %}
+                                {% block after_field_sets %}{% endblock %}
+                                {% block inline_field_sets %}
+                                    {% for inline_admin_formset in inline_admin_formsets %}
+                                        {% include inline_admin_formset.opts.template %}
+                                    {% endfor %}
+                                {% endblock %}
+                                {% block after_related_objects %}{% endblock %}
+                            </div>
+
+                            {% block admin_change_form_document_ready %}
+                                <script type="text/javascript">
+                                    (function($) {
+                                        $(document).ready(function() {
+                                            $("#content .navbar-default").hide();
+                                            var dc_slug = "{{ original.incident_url }}".replace("https://www.documentcloud.org/documents/", "");
+                                            var fn = fn || {};
+                                                var fn = {
+                                                    getDocumentMeta: function(data){
+                                                        $("#document-title").html(data.document.title);
+                                                    }
+                                                };
+                                                var doc_width = $("#doc").width();
+                                                var existing_height = $(".kpcc-header").height() + $(".kpcc-footer").height() + $(".breadcrumb").height();
+                                                var remaining_height = screen.height - existing_height;
+                                                var doc_height = remaining_height - 240;
+                                                $(".data-visuals").css("height", doc_height - 5);
+                                                $("#form").css("height", doc_height);
+                                                $(".overflow").css("height", doc_height - 100);
+                                                var CURRENT_DOCUMENT = DV.load("https://documentcloud.org/documents/" + dc_slug + ".js", {
+                                                    container: "#doc",
+                                                    width: doc_width,
+                                                    height: doc_height,
+                                                    zoom: "auto",
+                                                    showSidebar: false,
+                                                    embedded: true,
+                                                    showAnnotations: false
+                                                });
+                                                var docJson = "https://www.documentcloud.org/api/documents/" + dc_slug + ".json";
+                                                $.getJSON(docJson, fn.getDocumentMeta);
+                                            $('.add-another').click(function(e) {
+                                                e.preventDefault();
+                                                showAddAnotherPopup(this);
+                                            });
+                                            $('.related-lookup').click(function(e) {
+                                                e.preventDefault();
+                                                showRelatedObjectLookupPopup(this);
+                                            });
+                                            {% if adminform and add %}
+                                                $('form#{{ opts.model_name }}_form :input:visible:enabled:first').focus()
+                                            {% endif %}
+                                        });
+                                    })(django.jQuery);
+                                </script>
+                            {% endblock %}
+
+                            {# JavaScript for prepopulated fields #}
+                            {% prepopulated_fields_js %}
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-actions">
+                        {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
+                    </div>
+
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

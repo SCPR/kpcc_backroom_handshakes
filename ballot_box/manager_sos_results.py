@@ -5,7 +5,7 @@ from django.utils.timezone import localtime
 from ballot_box.utils_files import Retriever
 from ballot_box.utils_data import Framer
 from ballot_box.utils_import import Saver
-from ballot_box.models import ResultSource, Election
+from election_registrar.models import ResultSource, Election
 import logging
 import time
 import datetime
@@ -23,10 +23,15 @@ class BuildSosResults(object):
     scaffolding to ingest secretary of state election results
     """
 
+    retrieve = Retriever()
+
     data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
 
-    sources = ResultSource.objects.filter(
-        source_short="sos", source_active=True)
+    sources = ResultSource.objects.filter(source_short="sos", source_active=True)
+
+    elections = Election.objects.all().order_by("-election_date")
+
+    testing = elections[0].test_results
 
     def _init(self, *args, **kwargs):
         """
@@ -34,19 +39,19 @@ class BuildSosResults(object):
         for src in self.sources:
             self.get_results_file(src, self.data_directory)
             self.parse_results_file(src, self.data_directory)
+        # self.retrieve._build_and_move_results()
 
     def get_results_file(self, src, data_directory):
         """
         """
-        retrieve = Retriever()
-        retrieve._request_results_and_save(src, data_directory)
-        retrieve._create_directory_for_latest_file(src, data_directory)
-        retrieve._copy_timestamped_file_to_latest(src, data_directory)
-        retrieve._archive_downloaded_file(src, data_directory)
-        retrieve._found_required_files(src, data_directory)
-        retrieve._unzip_latest_file(src, data_directory)
-        retrieve.log_message += "*** Ending Request ***\n"
-        logger.debug(retrieve.log_message)
+        self.retrieve._request_results_and_save(src, data_directory)
+        self.retrieve._create_directory_for_latest_file(src, data_directory)
+        self.retrieve._copy_timestamped_file_to_latest(src, data_directory)
+        self.retrieve._archive_downloaded_file(src, data_directory)
+        self.retrieve._found_required_files(src, data_directory)
+        self.retrieve._unzip_latest_file(src, data_directory)
+        self.retrieve.log_message += "*** Ending Request ***\n"
+        logger.debug(self.retrieve.log_message)
 
     def parse_results_file(self, src, data_directory):
         """
@@ -54,8 +59,7 @@ class BuildSosResults(object):
         saver = Saver()
         compiler = BuildResults()
         latest_directory = "%s%s_latest" % (data_directory, src.source_short)
-        election = Election.objects.filter(
-            test_results=True, electionid=src.election.electionid).first()
+        election = Election.objects.filter(electionid=src.election.electionid).first()
         for file in src.source_files.split(", "):
             latest_path = os.path.join(latest_directory, file)
             file_exists = os.path.isfile(latest_path)
@@ -63,21 +67,16 @@ class BuildSosResults(object):
             if file_exists == True and file_has_size > 0:
                 soup = BeautifulSoup(open(latest_path), "xml")
                 file_timestring = unicode(soup.find("IssueDate").contents[0])
-                file_timestamp = parse(
-                    file_timestring, dayfirst=False).datetime
-                update_this = saver._eval_timestamps(
-                    file_timestamp, src.source_latest)
-
-                # REMOVE #
-                update_this = election.test_results
-
+                file_timestamp = parse(file_timestring, dayfirst=False).datetime
+                if self.testing == True:
+                    update_this = self.testing
+                else:
+                    update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
                 if update_this == False:
-                    logger.debug(
-                        "\n*****\nwe have newer data in the database so let's delete these files\n*****")
+                    logger.debug("\n*****\nwe have newer data in the database so let's delete these files\n*****")
                     os.remove(latest_path)
                 else:
-                    logger.debug(
-                        "\n*****\nwe have new data to save and we'll update timestamps in the database\n*****")
+                    logger.debug("\n*****\nwe have new data so we'll update timestamps in the database\n*****")
                     saver._update_result_timestamps(src, file_timestamp)
                     races = soup.find_all("Contest")
                     race_log = "\n"
@@ -86,47 +85,35 @@ class BuildSosResults(object):
                             """
                             this is a judicial candidate
                             """
-                            result = compiler._compile_judicial(
-                                race, "140", election, src)
+                            result = compiler._compile_judicial(race, "140", election, src)
                             race_log += saver.make_office(result.office)
-                            race_log += saver.make_contest(
-                                result.office, result.contest)
-                            race_log += saver.make_judicial(
-                                result.contest, result.judicial)
+                            race_log += saver.make_contest(result.office, result.contest)
+                            race_log += saver.make_judicial(result.contest, result.judicial)
                         elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "150":
                             """
                             this is a judicial candidate
                             """
-                            result = compiler._compile_judicial(
-                                race, "150", election, src)
+                            result = compiler._compile_judicial(race, "150", election, src)
                             race_log += saver.make_office(result.office)
-                            race_log += saver.make_contest(
-                                result.office, result.contest)
-                            race_log += saver.make_judicial(
-                                result.contest, result.judicial)
+                            race_log += saver.make_contest(result.office, result.contest)
+                            race_log += saver.make_judicial(result.contest, result.judicial)
                         elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "190":
                             """
                             this is a proposition
                             """
-                            result = compiler._compile_measure(
-                                race, election, src)
+                            result = compiler._compile_measure(race, election, src)
                             race_log += saver.make_office(result.office)
-                            race_log += saver.make_contest(
-                                result.office, result.contest)
-                            race_log += saver.make_measure(
-                                result.contest, result.measure)
+                            race_log += saver.make_contest(result.office, result.contest)
+                            race_log += saver.make_measure(result.contest, result.measure)
                         else:
                             """
                             this is a non-judicial candidate
                             """
-                            result = compiler._compile_candidate(
-                                race, election, src)
+                            result = compiler._compile_candidate(race, election, src)
                             race_log += saver.make_office(result.office)
-                            race_log += saver.make_contest(
-                                result.office, result.contest)
+                            race_log += saver.make_contest(result.office, result.contest)
                             for candidate in result.candidates:
-                                race_log += saver.make_candidate(
-                                    result.contest, candidate)
+                                race_log += saver.make_candidate(result.contest, candidate)
                     logger.debug(race_log)
                     os.remove(latest_path)
                     logger.debug(
@@ -150,7 +137,7 @@ class BuildResults(object):
         if race_id == "140":
             officename_idx = self.framer._find_nth(contestname, " - ", 1)
             officename = unicode(contestname[:officename_idx].replace(".", ""))
-            officename = unicode(officename.replace(" Justice",""))
+            officename = unicode(officename.replace(" Justice", ""))
             fullname_idx = self.framer._find_nth(contestname, " - ", 1) + 3
         elif race_id == "150":
             officename_idx = self.framer._find_nth(contestname, " - ", 2)
@@ -159,8 +146,8 @@ class BuildResults(object):
             fullname_idx = self.framer._find_nth(contestname, " - ", 2) + 3
         fullname = unicode(contestname[fullname_idx:])
         level = "california"
-        seatnum = self.framer._get_prop_number(
-            race.ContestIdentifier.attrs["IdNumber"], race_id)
+        # seatnum = self.framer._get_prop_number(race.ContestIdentifier.attrs["IdNumber"], race_id)
+        seatnum = None
         is_statewide = True
         precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
         precinctsreport = r.find(attrs={"Id": "PR"}).contents[0]
@@ -217,7 +204,6 @@ class BuildResults(object):
                 src.source_short,
                 self.framer.contest["level"],
                 self.framer.office["officeslug"],
-                seatnum=self.framer.contest["seatnum"],
             )
             self.framer.judicial["ballotorder"] = None
             self.framer.judicial["firstname"] = None
@@ -423,10 +409,8 @@ class BuildResults(object):
         self.framer.candidates = []
         for candidate in r.find_all("Selection"):
             this_candidate = {}
-            fullname = unicode(
-                candidate.Candidate.CandidateFullName.PersonFullName.contents[0])
-            party = unicode(
-                candidate.AffiliationIdentifier.RegisteredName.contents[0])
+            fullname = unicode(candidate.Candidate.CandidateFullName.PersonFullName.contents[0])
+            party = unicode(candidate.AffiliationIdentifier.RegisteredName.contents[0])
             if party == "Democratic":
                 party = "Democrat"
             votecount = self.framer._to_num(

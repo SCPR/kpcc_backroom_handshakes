@@ -1,0 +1,176 @@
+{% extends "measure_finance/base.html" %}
+
+{% load static from staticfiles %}
+{% load measure_finance_template_tags %}
+
+<!-- begin meta -->
+{% block title %}Charting contributions for and against California {{ object.official_identifier }} | scpr.org{% endblock %}
+
+{% block description %}This chart displays the top donors supporting and opposing California's {{ object.official_identifier }}: {{ object.official_title }}. Voters cast their choice on Nov. 8, 2016.{% endblock %}
+
+{% block keywords %}California, {{ object.official_identifier }}, {{ object.official_title }}, {% for support in supporting_contributions %}{{ support.name|title }},{% endfor %}{% for oppose in opposing_contributions %}{{ oppose.name|title }},{% endfor %}{% endblock %}
+
+{% block og_title %}Charting contributions for and against California {{ object.official_identifier }} | scpr.org{% endblock %}
+
+{% block og_site_name %}KPCC{% endblock %}
+
+{% block og_type %}website{% endblock %}
+
+{% block og_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
+
+{% block og_description %}This chart displays the top donors supporting and opposing California's {{ object.official_identifier }}: {{ object.official_title }}. Voters cast their choice on Nov. 8, 2016.{% endblock %}
+
+{% block twitter_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
+
+{% block twitter_title %}Charting contributions for and against California {{ object.official_identifier }} | scpr.org{% endblock %}
+
+{% block twitter_description %}This chart displays the top donors supporting and opposing California's {{ object.official_identifier }}: {{ object.official_title }}. Voters cast their choice on Nov. 8, 2016.{% endblock %}
+<!-- end meta -->
+
+{% block contributions_chart_config %}
+    <script>
+        var chartConfig = {{ chart_config|safe }};
+    </script>
+{% endblock %}
+
+{% block page_content %}
+    <div class="ledger">
+        <header class="overline">
+            <mark>
+                <h1 class="align-center">{{ object.official_title }}</h1>
+            </mark>
+        </header>
+        <div class="contributors clearfix">
+            <div class="support">
+                <header>
+                    <mark>
+                        <h1 class="align-left"><span class="support-accent">For</span> {{ object.official_identifier }}</h1>
+                    </mark>
+                </header>
+                <section class="display">
+                    <mark>
+                        <h1 class="align-left">Top Contributors</h1>
+                    </mark>
+                    <ol>
+                        {% if supporting_contributions %}
+                            {% for support in supporting_contributions %}
+                                <li>
+                                    <dl class="clearfix">
+                                        <dt>{{ support.name|upper }}</dt>
+                                        <dd>{{ support.total|currency }}</dd>
+                                    </dl>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li>
+                                <dl class="clearfix">
+                                    <dt>NO CONTRIBUTIONS</dt>
+                                    <dd>$0.00</dd>
+                                </dl>
+                            </li>
+                        {% endif %}
+                        {% if support_unitemized %}
+                            {% if support_unitemized != 0.00 %}
+                                <li>
+                                    <dl class="clearfix">
+                                        <dt>UNITEMIZED CONTRIBUTIONS</dt>
+                                        <dd>{{ support_unitemized|currency }}</dd>
+                                    </dl>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    </ol>
+                </section>
+            </div>
+            <div class="oppose">
+                <header class="prologue">
+                    <mark>
+                        <h1 class="align-right">{{ object.official_identifier }} <span class="oppose-accent">Against</span></h1>
+                    </mark>
+                </header>
+                <section class="display">
+                    <mark>
+                        <h1 class="align-right">Top Contributors</h1>
+                    </mark>
+                    <ol>
+                        {% if opposing_contributions %}
+                            {% for oppose in opposing_contributions %}
+                                <li>
+                                    <dl class="clearfix">
+                                        <dt>{{ oppose.name|upper }}</dt>
+                                        <dd>{{ oppose.total|currency }}</dd>
+                                    </dl>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li>
+                                <dl class="clearfix">
+                                    <dt>NO CONTRIBUTIONS</dt>
+                                    <dd>$0.00</dd>
+                                </dl>
+                            </li>
+                        {% endif %}
+                        {% if opposition_unitemized %}
+                            {% if opposition_unitemized != 0.00 %}
+                                <li>
+                                    <dl class="clearfix">
+                                        <dt>UNITEMIZED CONTRIBUTIONS</dt>
+                                        <dd>{{ opposition_unitemized|currency }}</dd>
+                                    </dl>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    </ol>
+                </section>
+            </div>
+        </div>
+        <aside class="totals clearfix">
+            <div id="chart-container" class="chart-container"></div>
+            <div class="support-total">
+                <dl class="align-left">
+                    <dt>Total contributions</dt>
+                    <dd>{{ total_support | currency }}</dd>
+                </dl>
+            </div>
+            <div class="rule-style-left"></div>
+            <div class="oppose-total">
+                <dl class="align-right">
+                    <dt>Total contributions</dt>
+                    <dd>{{ total_opposition | currency }}</dd>
+                </dl>
+            </div>
+            <div class="rule-style-right"></div>
+        </aside>
+        <footer class="clearfix">
+            <div class="text">
+                <ol>
+                <li>
+                    <dl class="clearfix">
+                        <dt>Data Source</dt>
+                        <dd>MapLight data since Jan. 1, 2015</dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl class="clearfix">
+                        <dt>Last update</dt>
+                        <dd>{{ measure.modified|date:"N d, Y" }}</dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>Design &amp; Code</dt>
+                        <dd>89.3 KPCC</dd>
+                    </dl>
+                </li>
+            </div>
+            <div class="logo">
+                <img src="{% static 'images/maplight_logo_partner.png' %}" />
+            </div>
+        </footer>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'scripts/d3.js' %}"></script>
+    <script src="{% static 'scripts/app.js' %}"></script>
+{% endblock %}

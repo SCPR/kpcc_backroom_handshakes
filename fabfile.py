@@ -22,19 +22,25 @@ os.environ[
 
 from django.conf import settings
 
-env.project_name = 'kpcc_backroom_handshakes'
-env.local_branch = 'master'
-env.remote_ref = 'origin/master'
-env.requirements_file = 'requirements.txt'
-env.use_ssh_config = True
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
 
 CONFIG_PATH = "%s_CONFIG_PATH" % ("kpcc_backroom_handshakes".upper())
 
 CONFIG_FILE = os.environ.setdefault(CONFIG_PATH, "./development.yml")
 
-CONFIG_YML = os.path.join(BASE_DIR, "development.yml")
+CONFIG_YML = os.path.join(PROJECT_PATH, "development.yml")
+
+CONFIG = yaml.load(open(CONFIG_YML))
+
+env.hosts = CONFIG["deployment_env"]["hosts"]
+env.project_name = CONFIG["deployment_env"]["project_name"]
+env.local_branch = CONFIG["deployment_env"]["local_branch"]
+env.remote_ref = CONFIG["deployment_env"]["remote_ref"]
+env.requirements_file = CONFIG["deployment_env"]["requirements_file"]
+env.use_ssh_config = CONFIG["deployment_env"]["use_ssh_config"]
+env.code_dir = CONFIG["deployment_env"]["code_dir"]
 
 logger = logging.getLogger("root")
 logging.basicConfig(
@@ -51,14 +57,28 @@ def dump_ballot_box():
     """
     shortcut to dump data from ballot box as fixtures
     """
-    local("python manage.py dumpdata ballot_box.ResultSource > ballot_box/fixtures/data.json")
+    local("python manage.py dumpdata ballot_box > ballot_box/fixtures/ballot_box.json")
 
 
 def load_ballot_box():
     """
     shortcut to load ballot box data fixtures
     """
-    local("python manage.py loaddata ballot_box/fixtures/data.json")
+    local("python manage.py loaddata ballot_box/fixtures/ballot_box.json")
+
+
+def dump_registrar():
+    """
+    shortcut to dump data from ballot box as fixtures
+    """
+    local("python manage.py dumpdata election_registrar > election_registrar/fixtures/election_registrar.json")
+
+
+def load_registrar():
+    """
+    shortcut to load ballot box data fixtures
+    """
+    local("python manage.py loaddata election_registrar/fixtures/election_registrar.json")
 
 
 def fetch_sos():
@@ -75,12 +95,26 @@ def fetch_lac():
     local("python manage.py fetch_lac_results")
 
 
+def fetch_oc():
+    """
+    shortcut for running the management command to fetch sos results
+    """
+    local("python manage.py fetch_oc_results")
+
+
 def fetch_all():
     """
     shortcut for running all management commands to fetch results
     """
     local("python manage.py fetch_sos_results")
+    local("python manage.py fetch_oc_results")
     local("python manage.py fetch_lac_results")
+
+
+def fetch_maplight():
+    """
+    """
+    local("python manage.py fetch_measure_finance")
 
 
 """
@@ -88,7 +122,7 @@ development functions
 """
 
 
-def run():
+def lrun():
     """
     shortcut for base manage.py function to run the dev server
     """
@@ -184,10 +218,6 @@ def buildserver():
     local("python manage.py buildserver")
 
 
-def move():
-    local("python manage.py move_baked_files")
-
-
 def commit(message='updates'):
     with lcd(settings.DEPLOY_DIR):
         try:
@@ -199,13 +229,19 @@ def commit(message='updates'):
 
 
 def deploy():
-    data()
-    time.sleep(5)
-    build()
-    time.sleep(5)
-    local("python manage.py move_baked_files")
-    time.sleep(5)
-    commit()
+    with cd(env.code_dir):
+        run("git co %s" % env.local_branch)
+        run("git pull")
+        with prefix("WORKON_HOME=$HOME/.virtualenvs"):
+            with prefix("source /usr/local/bin/virtualenvwrapper.sh"):
+                with prefix("workon %s" % (env.project_name)):
+                    run("pip install -r %s" % (env.requirements_file))
+                    run("python manage.py migrate")
+                    run("python manage.py collectstatic --noinput")
+        sudo("sudo service uwsgi restart")
+        sudo("sudo service nginx restart")
+        sudo("sudo service varnish restart")
+        sudo("sudo /etc/init.d/newrelic-sysmond start")
 
 
 def bootstrap():
@@ -220,7 +256,6 @@ def bootstrap():
                 migrate()
                 time.sleep(2)
                 local("python manage.py createsuperuser")
-                run()
 
 
 def syncstart():
@@ -230,7 +265,6 @@ def syncstart():
     migrate()
     # load data fixtures
     load_ballot_box()
-    run()
     # any new dependencies/apps the rest of the team may need?
 
 

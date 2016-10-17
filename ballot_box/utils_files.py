@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf import settings
+from django.core import management
 import os.path
 import errno
 import logging
@@ -247,3 +248,9 @@ class Retriever(object):
                 else:
                     done = False
                     return False
+
+
+    def _build_and_move_results(self):
+        """
+        """
+        management.call_command("build")

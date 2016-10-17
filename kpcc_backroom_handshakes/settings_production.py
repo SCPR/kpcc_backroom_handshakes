@@ -63,10 +63,6 @@ if "email" in CONFIG:
     EMAIL_PORT = CONFIG["email"]["port"]
     EMAIL_USE_TLS = CONFIG["email"]["use_tls"]
 
-#CACHE_MIDDLEWARE_ALIAS = "default"
-#CACHE_MIDDLEWARE_SECONDS = (60 * 5)
-#CACHE_MIDDLEWARE_KEY_PREFIX = ""
-
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 if CONFIG["installed_apps"]:
@@ -130,6 +126,28 @@ else:
 #         }
 #     }
 
+if DEBUG == True:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+        }
+    }
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+            "LOCATION": "handshakes_cache",
+            "TIMEOUT": 600,
+            "OPTIONS": {
+                "MAX_ENTRIES": 500
+            }
+        }
+    }
+
+# CACHE_MIDDLEWARE_ALIAS = "default"
+# CACHE_MIDDLEWARE_SECONDS = (60 * 10)
+# CACHE_MIDDLEWARE_KEY_PREFIX = ""
+
 # Python dotted path to the WSGI application used by Django"s runserver.
 WSGI_APPLICATION = "kpcc_backroom_handshakes.wsgi.application"
 
@@ -148,13 +166,13 @@ MEDIA_URL = ""
 # Don"t put anything in this directory yourself; store your static files
 # in apps" "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(SITE_ROOT, "public", "static")
+STATIC_ROOT = os.path.join(SITE_ROOT, "static")
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = "/static/"
 
-SITE_URL = "#"
+SITE_URL = CONFIG["site_url"]
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -162,16 +180,19 @@ STATICFILES_DIRS = (
 )
 
 # build paths inside the project like this: os.path.join(base_dir, ...)
-# if "build" in CONFIG:
-#     STAGING = CONFIG["build"]["staging"]
-#     STAGING_PREFIX = CONFIG["build"]["staging_prefix"]
-#     LIVE_PREFIX = CONFIG["build"]["live_prefix"]
-#     DEPLOY_DIR = CONFIG["build"]["deploy_dir"]
-#     STATIC_DIR = STATIC_URL
-#     BUILD_DIR = CONFIG["build"]["build_dir"]
-#     BAKERY_VIEWS = tuple(CONFIG["build"]["views"])
-#     URL_PATH = ""
-
+if "build" in CONFIG:
+    STAGING = CONFIG["build"]["staging"]
+    STAGING_PREFIX = CONFIG["build"]["staging_prefix"]
+    LIVE_PREFIX = CONFIG["build"]["live_prefix"]
+    DEPLOY_DIR = CONFIG["build"]["deploy_dir"]
+    STATIC_DIR = STATIC_URL
+    BUILD_DIR = os.path.join(STATIC_ROOT, CONFIG["build"]["build_dir"])
+    BAKERY_VIEWS = tuple(CONFIG["build"]["views"])
+    URL_PATH = ""
+    BAKERY_CACHE_CONTROL = {
+        'text/html': 300,
+        'application/javascript': 86400
+    }
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -211,30 +232,30 @@ LOGGING = {
             "filters": ["require_debug_false"],
             "class": "django.utils.log.AdminEmailHandler"
         },
-        "slack-error": {
-            "level": "ERROR",
-            "api_key": SLACK_API_KEY,
-            "username": "ElexLogger",
-            "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
-            "class": "slacker_log_handler.SlackerLogHandler",
-            "channel": "#logging-2016-election"
-        },
-        "slack-debug": {
-            "level": "DEBUG",
-            "username": "ElexLogger",
-            "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
-            "api_key": SLACK_API_KEY,
-            "class": "slacker_log_handler.SlackerLogHandler",
-            "channel": "#logging-2016-election"
-        },
-        "slack-info": {
-            "level": "INFO",
-            "username": "ElexLogger",
-            "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
-            "api_key": SLACK_API_KEY,
-            "class": "slacker_log_handler.SlackerLogHandler",
-            "channel": "#2016-election-results"
-        },
+        # "slack-error": {
+        #     "level": "ERROR",
+        #     "api_key": SLACK_API_KEY,
+        #     "username": "ElexLogger",
+        #     "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
+        #     "class": "slacker_log_handler.SlackerLogHandler",
+        #     "channel": "#logging-2016-election"
+        # },
+        # "slack-debug": {
+        #     "level": "DEBUG",
+        #     "username": "ElexLogger",
+        #     "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
+        #     "api_key": SLACK_API_KEY,
+        #     "class": "slacker_log_handler.SlackerLogHandler",
+        #     "channel": "#logging-2016-election"
+        # },
+        # "slack-info": {
+        #     "level": "INFO",
+        #     "username": "ElexLogger",
+        #     "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
+        #     "api_key": SLACK_API_KEY,
+        #     "class": "slacker_log_handler.SlackerLogHandler",
+        #     "channel": "#logging-2016-election"
+        # },
         #"file": {
             #"level": "DEBUG",
             #"class": "logging.FileHandler",
