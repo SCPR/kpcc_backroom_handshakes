@@ -58,7 +58,6 @@ class RedesignIndex(ListView):
         queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
         context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
         context["featured_measures"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=True)
-        logger.debug(context["featured_races"])
         return context
 
 
