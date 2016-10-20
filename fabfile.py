@@ -264,6 +264,7 @@ def syncstart():
     # try migrate
     migrate()
     # load data fixtures
+    load_registrar()
     load_ballot_box()
     # any new dependencies/apps the rest of the team may need?
 
