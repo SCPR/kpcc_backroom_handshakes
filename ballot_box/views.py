@@ -63,7 +63,6 @@ class ResultIndex(ListView):
         context = super(ResultIndex, self).get_context_data(**kwargs)
         context["electionid"] = self.kwargs["electionid"]
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
         queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_display_priority=True)
         context["national_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
             is_display_priority=True).filter(is_ballot_measure=False).filter(
@@ -71,36 +70,21 @@ class ResultIndex(ListView):
                 Q(contestid__contains="sos-statewide-us-senate") |
                 Q(contestid__contains="sos-districtwide-united-states-representative")
         )
-
-
-
-
-        # context["dem_pres"] = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-democratic").first()
-        # context["gop_pres"] = queryset.filter(contestid="primary-2016-06-07-sos-statewide-president-republican").first()
-        # context["senate_primary"] = queryset.filter(contestid="primary-2016-06-07-sos-statewide-us-senate").first()
-        # context["additional_list"] = queryset.filter(
-        #     Q(contestid="primary-2016-06-07-sos-california-proposition-50") |
-        #     Q(contestid="primary-2016-06-07-sos-statewide-president-green") |
-        #     Q(contestid="primary-2016-06-07-sos-statewide-president-american-independent") |
-        #     Q(contestid="primary-2016-06-07-sos-statewide-president-libertarian") |
-        #     Q(contestid="primary-2016-06-07-sos-statewide-president-peace-and-freedom")
-        # )
-        # context["local_list"] = queryset.filter(is_display_priority=True).filter(
-        #     Q(resultsource__source_short="lac") |
-        #     Q(resultsource__source_short="oc")
-
-        # )
-        # context["state_list"] = queryset.filter(
-        #     Q(contestid__contains="sos-districtwide-state-senate") |
-        #     Q(contestid__contains="sos-districtwide-state-assembly")
-        # )
-
+        context["state_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
+            is_display_priority=True).filter(is_ballot_measure=False).filter(
+                Q(contestid__contains="sos-districtwide-state-senate") |
+                Q(contestid__contains="sos-districtwide-state-assembly")
+        )
+        context["local_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
+            is_display_priority=True).filter(is_ballot_measure=False).filter(
+                Q(resultsource__source_short="lac") |
+                Q(resultsource__source_short="oc")
+        )
         context["state_measures"] = queryset.filter(is_ballot_measure=True).filter(resultsource__source_short="sos")
         context["local_measures"] = queryset.filter(is_ballot_measure=True).filter(
             Q(resultsource__source_short="lac") |
             Q(resultsource__source_short="oc")
         )
-
         return context
 
 
