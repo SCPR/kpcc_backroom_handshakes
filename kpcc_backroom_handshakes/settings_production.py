@@ -232,36 +232,36 @@ LOGGING = {
             "filters": ["require_debug_false"],
             "class": "django.utils.log.AdminEmailHandler"
         },
-        # "slack-error": {
-        #     "level": "ERROR",
-        #     "api_key": SLACK_API_KEY,
-        #     "username": "ElexLogger",
-        #     "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
-        #     "class": "slacker_log_handler.SlackerLogHandler",
-        #     "channel": "#logging-2016-election"
-        # },
-        # "slack-debug": {
-        #     "level": "DEBUG",
-        #     "username": "ElexLogger",
-        #     "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
-        #     "api_key": SLACK_API_KEY,
-        #     "class": "slacker_log_handler.SlackerLogHandler",
-        #     "channel": "#logging-2016-election"
-        # },
-        # "slack-info": {
-        #     "level": "INFO",
-        #     "username": "ElexLogger",
-        #     "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
-        #     "api_key": SLACK_API_KEY,
-        #     "class": "slacker_log_handler.SlackerLogHandler",
-        #     "channel": "#logging-2016-election"
-        # },
-        #"file": {
-            #"level": "DEBUG",
-            #"class": "logging.FileHandler",
-            #"filename": "mysite.log",
-            #"formatter": "verbose"
-        #},
+        "slack-error": {
+            "level": "ERROR",
+            "api_key": SLACK_API_KEY,
+            "username": "ElexLogger",
+            "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
+            "class": "slacker_log_handler.SlackerLogHandler",
+            "channel": "#logging-2016-election"
+        },
+        "slack-debug": {
+            "level": "DEBUG",
+            "username": "ElexLogger",
+            "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
+            "api_key": SLACK_API_KEY,
+            "class": "slacker_log_handler.SlackerLogHandler",
+            "channel": "#logging-2016-election"
+        },
+        "slack-info": {
+            "level": "INFO",
+            "username": "ElexLogger",
+            "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
+            "api_key": SLACK_API_KEY,
+            "class": "slacker_log_handler.SlackerLogHandler",
+            "channel": "#logging-2016-election"
+        },
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": "mysite.log",
+            "formatter": "verbose"
+        },
     },
 
     "loggers": {
@@ -271,7 +271,7 @@ LOGGING = {
                 "mail_admins",
                 # "slack-error",
                 # "slack-info",
-                # "slack-debug",
+                "slack-debug",
             ],
             "level": "DEBUG",
             "propagate": False,

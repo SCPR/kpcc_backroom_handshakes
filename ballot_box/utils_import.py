@@ -180,7 +180,7 @@ class Saver(object):
                     "firstname": candidate["firstname"],
                     "lastname": candidate["lastname"],
                     "fullname": candidate["fullname"],
-                    "party": candidate["party"],
+                    # "party": candidate["party"],
                     "incumbent": candidate["incumbent"],
                     "votecount": candidate["votecount"],
                     "votepct": candidate["votepct"] / 100,
