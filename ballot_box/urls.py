@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.views.generic import RedirectView
 from django.views.decorators.cache import cache_page
-from .views import FeaturedIndex, ResultIndex, BakedFeaturedIndex, BakedResultsIndex, RedesignIndex
+from .views import FeaturedIndex, ResultIndex, BakedFeaturedIndex, BakedResultsIndex
 
 app_name = "ballot_box"
 
@@ -16,11 +16,11 @@ urlpatterns = [
         name="featured-index"
     ),
 
-    url(
-        r"(?P<electionid>[-\w]+)/results/featured/redesign/?$",
-        cache_page(cache_timer)(RedesignIndex.as_view()),
-        name="redesign-index"
-    ),
+    # url(
+    #     r"(?P<electionid>[-\w]+)/results/featured/redesign/?$",
+    #     cache_page(cache_timer)(RedesignIndex.as_view()),
+    #     name="redesign-index"
+    # ),
 
     url(
         r"(?P<electionid>[-\w]+)/results/featured/index.html$",

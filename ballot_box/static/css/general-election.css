@@ -22,7 +22,7 @@ header.election-status { width: 25%; float: right; height: auto; margin-bottom: 
 
 .buttons ul li:first-child { border-right: 1px solid #27aad6; border-left: 1px solid #27aad6; }
 
-.selected { background-color: #27aad6; color: #ffffff; }
+.buttons ul li.selected { background-color: #27aad6; color: #ffffff; }
 
 .buttons ul li:hover { background-color: #27aad6; color: #ffffff; cursor: pointer; }
 
@@ -34,9 +34,12 @@ header.election-status { width: 25%; float: right; height: auto; margin-bottom: 
 
 .results-block { width: 50%; height: auto; float: left; }
 
-.results-block:nth-child(n+3) { border-top: 1px solid #d8d8d8; }
+.results-block:nth-child(n+3) { border-top: 1px solid #dbdbdb; }
 
-.results-block header { width: 100%; height: 54px; margin-bottom: 28px; background-color: #f6f6f6; }
+.results-block header,
+.results-row header,
+.measures header,
+.measures-row header { width: 100%; height: 54px; margin-bottom: 28px; background-color: #f6f6f6; }
 
 .results-block .result { width: 96%; height: 85px; margin-left: 2%; margin-right: 2%; }
 
@@ -46,21 +49,27 @@ header.election-status { width: 25%; float: right; height: auto; margin-bottom: 
 
 .results-block .result .votes { width: 30%; float: right; }
 
-.measures header { width: 100%; height: 54px; background-color: #f6f6f6; margin-bottom: 18px; }
+.measures .results-block { width: 100%; float: none; }
 
-.measures-block { width: 50%; height: auto; float: left; border-bottom: 1px solid #d8d8d8; }
+.measures-block { width: 50%; height: auto; float: left; border-bottom: 1px solid #dbdbdb; margin-top: 24px; }
 
-.measures-block { margin-top: 24px; }
+/*.measures-row:last-child { border-bottom: 1px solid #dbdbdb; }*/
 
-.measures-block .result { width: 96%; height: 85px; margin-right: 2%; margin-left: 2%; }
+.measures-block .result { width: 96%; height: auto; margin-right: 2%; margin-left: 2%; }
 
-.measures-block .result .measure { width: 75%; float: left; }
+.measures-row .result { width: 98%; height: auto; margin: 18px 1%; }
 
-.measures-block .result .votes { width: 25%; float: right; }
+.measures-block .result .measure,
+.measures-row .result .measure { width: 75%; float: left; }
 
-.measures-block .result .votes dl.yes { width: 45%; float: left; margin-right: 5%; }
+.measures-block .result .votes,
+.measures-row .result .votes { width: 25%; float: right; }
 
-.measures-block .result .votes dl.no { width: 45%; float: right; margin-left: 5%; }
+.measures-block .result .votes dl.yes,
+.measures-row .result .votes dl.yes { width: 45%; float: left; margin-right: 5%; }
+
+.measures-block .result .votes dl.no,
+.measures-row .result .votes dl.no { width: 45%; float: right; margin-left: 5%; }
 
 .img-circle {
     border-radius: 50%;
@@ -75,11 +84,13 @@ header.election-status p { margin-top: 7px; }
 
 header p { font-size: 15px; line-height: 18px; font-style: italic; font-weight: 400; color: #898989; }
 
-.measures header h2 { width: 48%; float: left; margin-top: 18px; margin-right: 1%; margin-left: 1%; }
+.results .race-title { width: 63%; float: left; text-align: left; margin-top: 2%; margin-left: 2%; font-size: 18px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; }
 
-.race-title { width: 63%; float: left; text-align: left; margin-top: 2%; margin-bottom: 2%; font-size: 18px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; }
+.results .precincts-reporting { width: 33%; float: right; text-align: right; margin-top: 2%; margin-right: 2%; font-size: 15px; line-height: 18px; font-style: normal; font-weight: 400; color: #898989; }
 
-.precincts-reporting { width: 33%; float: left; text-align: right; margin-top: 2%; margin-right: 2%; font-size: 15px; line-height: 18px; font-style: normal; font-weight: 400; color: #898989; }
+.measures .race-title { width: 63%; float: left; text-align: left; margin-top: 1%; margin-left: 1%; font-size: 18px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; }
+
+.measures .precincts-reporting { width: 33%; float: right; text-align: right; margin-top: 1%; margin-right: 1%; font-size: 15px; line-height: 18px; font-style: normal; font-weight: 400; color: #898989; }
 
 .results-block .result .candidate h3 { margin-top: 16px; }
 
@@ -87,15 +98,21 @@ header p { font-size: 15px; line-height: 18px; font-style: italic; font-weight: 
 
 .votepct { font-size: 22px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; margin-top: 15px; }
 
-.measures-block .result .measure dl.measure-name dt { font-size: 18px; line-height: 18px; font-style: normal; font-weight: 400; color: #363636; }
+.measures-block .result .measure dl.measure-name dt,
+.measures-row .result .measure dl.measure-name dt { font-size: 18px; line-height: 18px; font-style: normal; font-weight: 400; color: #363636; }
 
-.measures-block .result .measure dl.measure-name dd { font-size: 15px; line-height: 18px; font-style: normal; font-weight: 400; color: #898989; margin-top: 10px; }
+.measures-block .result .measure dl.measure-name dd,
+.measures-row .result .measure dl.measure-name dd { font-size: 15px; line-height: 18px; font-style: normal; font-weight: 400; color: #898989; margin-top: 10px; }
 
 .measures-block .result .votes dl.yes dt,
-.measures-block .result .votes dl.no dt { width: 92%; margin-right: 3%; margin-bottom: 5px; margin-left: 3%; font-size: 22px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; }
+.measures-block .result .votes dl.no dt,
+.measures-row .result .votes dl.yes dt,
+.measures-row .result .votes dl.no dt { width: 92%; margin-right: 3%; margin-bottom: 5px; margin-left: 3%; font-size: 22px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; }
 
 .measures-block .result .votes dl.yes dd,
-.measures-block .result .votes dl.no dd { font-size: 10px; line-height: 12px; font-style: normal; font-weight: 500; color: #898989; text-transform: uppercase; margin-top: 12px; }
+.measures-block .result .votes dl.no dd,
+.measures-row .result .votes dl.yes dd,
+.measures-row .result .votes dl.no dd { font-size: 10px; line-height: 12px; font-style: normal; font-weight: 500; color: #898989; text-transform: uppercase; margin-top: 12px; }
 
 .blurb-text { font-size: 10px; line-height: 12px; font-style: normal; font-weight: 500; color: #898989; text-transform: uppercase; }
 
@@ -104,7 +121,6 @@ header p { font-size: 15px; line-height: 18px; font-style: italic; font-weight: 
 .align-right { text-align: right; }
 
 .align-center { text-align: center; }
-
 
 @media screen and (max-width: 768px) {
     header.election-header { width: 100%; float: none; }
@@ -131,3 +147,69 @@ header p { font-size: 15px; line-height: 18px; font-style: italic; font-weight: 
     .measures-block .result .measure { width: 100%; float: none; }
     .measures-block .result .votes { width: 100%; float: none; margin-top: 14px; margin-bottom: 14px; }
  }
+
+
+
+
+
+/* full list display */
+.results-row { width: 100%; height: 135px; }
+
+.results-row:nth-child(n+2) { border-top: 1px solid #dbdbdb; }
+
+.results-row .race-title { width: 64%; float: left; text-align: left; margin-top: 1%; margin-left: 1%; font-size: 18px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; }
+
+.results-row .precincts-reporting { width: 34%; float: right; text-align: right; margin-top: 1%; margin-right: 1%; font-size: 15px; line-height: 18px; font-style: normal; font-weight: 400; color: #898989; }
+
+.candidate-block { width: 48%; height: auto; float: left; margin-left: 1%; margin-right: 1%; }
+
+.candidate-block h3 { width: 50%; height: auto; float: left; margin-top: 0px; }
+
+.candidate-block h3.candidate-name { font-size: 18px; line-height: 16px; font-style: normal; font-weight: 500; color: #363636; text-align: left; }
+
+.candidate-block h3.votepct { font-size: 22px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; text-align: right; }
+
+
+.results-row,
+.measures-row { width: 100%; height: auto; margin-top: 16px; border-top: 1px solid #dbdbdb; }
+
+
+
+
+
+
+
+.results-collection-block { width: 100%; height: auto; border-bottom: 1px solid #f74623; padding-bottom: 15px; }
+
+.results-collection { margin-top: 12px; }
+
+.results-collection .collection-header { width: 100%; height: 25px; position: relative; }
+
+.results-collection .collection-header:hover { cursor: pointer; }
+
+.results-collection .collection-header h2 { margin-left: 1%; font-size: 22px; line-height: 24px; text-transform: uppercase; color: #27aad6; }
+
+.results-collection .measures-row h3 { font-size: 20px; line-height: 22px; margin-left: 1%; }
+
+.results-collection .collection-header:after { content: ""; display: block; width: 0; height: 0; border-style: solid; border-width: 7px 7.5px 0; border-color: #27aad6 transparent transparent; position: absolute; right: 10px; top: 16px; }
+
+.results-collection.active .collection-header:after { width: 0; height: 0; border-style: solid; border-width: 0 7.5px 7px; border-color: transparent transparent #27aad6; }
+
+.results-collection.active .results-row,
+.results-collection.active .measures-row { display: block; }
+
+.results-collection .results-row,
+.results-collection .measures-row { display: none; }
+
+
+
+
+
+
+
+
+
+
+.measures-row .race-title { width: 63%; float: left; text-align: left; margin-top: 1%; margin-left: 1%; font-size: 18px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; }
+
+.measures-row .precincts-reporting { width: 33%; float: right; text-align: right; margin-top: 1%; margin-right: 1%; font-size: 15px; line-height: 18px; font-style: normal; font-weight: 400; color: #898989; }

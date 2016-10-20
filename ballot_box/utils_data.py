@@ -132,6 +132,9 @@ class Framer(object):
         """
         calculate a percent or return false
         """
+        logger.debug(dividend)
+        logger.debug(divisor)
+
         dividend = self._to_num(dividend)
         divisor = self._to_num(divisor)
         if dividend["convert"] == True and divisor["convert"] == True:
