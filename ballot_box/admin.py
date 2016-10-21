@@ -212,6 +212,8 @@ class BallotMeasureAdmin(admin.ModelAdmin):
     )
 
     list_filter = (
+        "contest__election",
+        "contest__resultsource",
         "poss_error",
         "fullname",
     )
@@ -289,9 +291,10 @@ class CandidateAdmin(admin.ModelAdmin):
     )
 
     list_filter = (
+        "contest__election",
+        "contest__resultsource",
         "poss_error",
         "party",
-        "contest",
     )
 
     search_fields = (
@@ -366,6 +369,8 @@ class JudicialCandidateAdmin(admin.ModelAdmin):
     list_per_page = 15
 
     list_filter = (
+        "contest__election",
+        "contest__resultsource",
         "poss_error",
         "fullname",
     )
