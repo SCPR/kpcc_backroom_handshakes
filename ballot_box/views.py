@@ -22,7 +22,11 @@ logger = logging.getLogger("kpcc_backroom_handshakes")
 
 class FeaturedIndex(ListView):
     model = Contest
-    template_name = "ballot_box/featured.html"
+    template_name = "ballot_box/featured_races.html"
+
+    def get_object(self):
+        object = super(FeaturedIndex, self).get_object()
+        return object
 
     def get_context_data(self, **kwargs):
         context = super(FeaturedIndex, self).get_context_data(**kwargs)
@@ -37,7 +41,7 @@ class FeaturedIndex(ListView):
 
 class BakedFeaturedIndex(BuildableListView):
     model = Contest
-    template_name = "ballot_box/featured.html"
+    template_name = "ballot_box/featured_races.html"
     build_path = "results/featured.html"
 
     def get_object(self):
@@ -57,7 +61,11 @@ class BakedFeaturedIndex(BuildableListView):
 
 class ResultIndex(ListView):
     model = Contest
-    template_name = "ballot_box/list.html"
+    template_name = "ballot_box/list_races.html"
+
+    def get_object(self):
+        object = super(ResultIndex, self).get_object()
+        return object
 
     def get_context_data(self, **kwargs):
         context = super(ResultIndex, self).get_context_data(**kwargs)
@@ -90,7 +98,7 @@ class ResultIndex(ListView):
 
 class BakedResultsIndex(BuildableListView):
     model = Contest
-    template_name = "ballot_box/list.html"
+    template_name = "ballot_box/list_races.html"
     build_path = "results/all.html"
 
     def get_object(self):
