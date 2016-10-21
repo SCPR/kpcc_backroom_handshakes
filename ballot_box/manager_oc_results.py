@@ -82,11 +82,11 @@ class BuildOcResults(object):
                 update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
                 update_this = election.test_results
                 if update_this == False:
-                    logger.debug(
+                    logger.info(
                         "\n*****\nwe have newer data in the database so let's delete these files\n*****")
                     os.remove(latest_path)
                 else:
-                    logger.debug(
+                    logger.info(
                         "\n*****\nwe have new data to save and we'll update timestamps in the database\n*****")
                     saver._update_result_timestamps(src, file_timestamp)
                     races = soup.find_all("ContestTotal")
@@ -110,9 +110,9 @@ class BuildOcResults(object):
                                 race_log += saver.make_contest(result.office, result.contest)
                                 for candidate in result.candidates:
                                     race_log += saver.make_candidate(result.contest, candidate)
-                    logger.debug(race_log)
+                    logger.info(race_log)
                     os.remove(latest_path)
-                    logger.debug("\n*****\nwe've finished processing orange county results\n*****")
+                    logger.info("\n*****\nwe've finished processing orange county results\n*****")
             else:
                 logger.error("XML file to parse is not at expected location")
 

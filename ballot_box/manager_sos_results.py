@@ -51,7 +51,7 @@ class BuildSosResults(object):
         self.retrieve._found_required_files(src, data_directory)
         self.retrieve._unzip_latest_file(src, data_directory)
         self.retrieve.log_message += "*** Ending Request ***\n"
-        logger.debug(self.retrieve.log_message)
+        logger.info(self.retrieve.log_message)
 
     def parse_results_file(self, src, data_directory):
         """
@@ -73,10 +73,10 @@ class BuildSosResults(object):
                 else:
                     update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
                 if update_this == False:
-                    logger.debug("\n*****\nwe have newer data in the database so let's delete these files\n*****")
+                    logger.info("\n*****\nwe have newer data in the database so let's delete these files\n*****")
                     os.remove(latest_path)
                 else:
-                    logger.debug("\n*****\nwe have new data so we'll update timestamps in the database\n*****")
+                    logger.info("\n*****\nwe have new data so we'll update timestamps in the database\n*****")
                     saver._update_result_timestamps(src, file_timestamp)
                     races = soup.find_all("Contest")
                     race_log = "\n"
@@ -114,9 +114,9 @@ class BuildSosResults(object):
                             race_log += saver.make_contest(result.office, result.contest)
                             for candidate in result.candidates:
                                 race_log += saver.make_candidate(result.contest, candidate)
-                    logger.debug(race_log)
+                    logger.info(race_log)
                     os.remove(latest_path)
-                    logger.debug(
+                    logger.info(
                         "\n*****\nwe've finished processing sos results\n*****")
             else:
                 logger.error("XML file to parse is not at expected location")
