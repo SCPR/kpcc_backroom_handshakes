@@ -256,6 +256,12 @@ class Namefixer(object):
             "col":"college"
         }
 
+        self.county_exceptions = {
+            "judge":"judge",
+            "county measure":"measure",
+            "supervisor":"supervisor"
+        }
+
     def _fix(self,string):
         for p, r in self.patterns.iteritems():
             if p == "no":
@@ -279,3 +285,9 @@ class Namefixer(object):
                 search = re.compile(p + r'(?=\s|$)',flags=re.IGNORECASE)
                 string = re.sub(search,r,string)
         return string
+
+    def _affix_county(self,county,contest):
+        for p, r in self.county_exceptions.iteritems():
+            search = re.compile(p,flags=re.IGNORECASE)
+            contest = re.sub(search,county + ' ' + r,contest)
+        return contest

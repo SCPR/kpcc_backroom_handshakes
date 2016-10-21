@@ -729,6 +729,10 @@ class LacProcessMethods(object):
                 contestname = "State Assembly District %s" % (strip_district)
             elif "SUPERVISOR" in contest['contest_title']:
                 contestname = "Supervisor District %s" % (strip_district)
+                contestname = fixer._affix_county(county_name,contestname)
+            elif "COUNTY MEASURE" in contest['contest_title']:
+                contestname = fixer._affix_county(county_name,contestname)
+                print(contestname)
             elif "U.S. REPRESENTATIVE" in contest['contest_title']:
                 contestname = "U.S. House of Representatives District %s" % (
                     strip_district)
@@ -770,6 +774,7 @@ class LacProcessMethods(object):
             elif "JUDGE-SUPERIOR COURT" in contest['contest_title']:
                 contestname = "Judge Superior Court %s" % (
                     contest['contest_title_cont'].title())
+                contestname = fixer._affix_county(county_name,contestname)
             else:
                 contestname = "%s %s" % (contest['contest_title'].title(), contest[
                                          'contest_title_cont'].title())
