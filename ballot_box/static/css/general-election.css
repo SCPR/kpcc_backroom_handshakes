@@ -26,11 +26,13 @@ header.election-status { width: 25%; float: right; height: auto; margin-bottom: 
 
 .buttons ul li:hover { background-color: #27aad6; color: #ffffff; cursor: pointer; }
 
+.buttons ul li a { display: block; }
+
 .label { font-size: 15px; line-height: 28px; font-style: normal; font-weight: 500; margin-top: 10px; margin-bottom: 10px; }
 
 .results, .measures { border-top: 1px solid #f74623; }
 
-.measures { border-bottom: 1px solid #f74623; }
+.measures { border-bottom: 1px solid #f74623; padding-bottom: 36px; }
 
 .results-block { width: 50%; height: auto; float: left; }
 
@@ -51,7 +53,7 @@ header.election-status { width: 25%; float: right; height: auto; margin-bottom: 
 
 .measures .results-block { width: 100%; float: none; }
 
-.measures-block { width: 50%; height: auto; float: left; border-bottom: 1px solid #dbdbdb; margin-top: 24px; }
+.measures-block { width: 50%; height: auto; float: left; border-bottom: 1px solid #dbdbdb; margin-top: 24px; padding-bottom: 18px; }
 
 /*.measures-row:last-child { border-bottom: 1px solid #dbdbdb; }*/
 
@@ -62,21 +64,22 @@ header.election-status { width: 25%; float: right; height: auto; margin-bottom: 
 .measures-block .result .measure,
 .measures-row .result .measure { width: 75%; float: left; }
 
-.measures-block .result .votes,
-.measures-row .result .votes { width: 25%; float: right; }
+.measures-block .result .votes { width: 20%; float: right; margin-left: 5%; }
+
+.measures-row .result .votes { width: 15%; float: right; margin-left: 10%; }
 
 .measures-block .result .votes dl.yes,
-.measures-row .result .votes dl.yes { width: 45%; float: left; margin-right: 5%; }
+.measures-row .result .votes dl.yes { width: 50%; float: left; margin-right: 0%; }
 
 .measures-block .result .votes dl.no,
-.measures-row .result .votes dl.no { width: 45%; float: right; margin-left: 5%; }
+.measures-row .result .votes dl.no { width: 50%; float: right; margin-left: 0%; }
 
 .img-circle {
     border-radius: 50%;
  }
 
 /* typography */
-.hero-election { font-family: "franklin-gothic-urw", "Avenir Next", "Avenir", Arial, sans-serif; }
+.hero-election { font-family: "franklin-gothic-urw", "proxima-nova", Arial, sans-serif; }
 
 header h1 { font-size: 30px; line-height: 36px; font-style: normal; font-weight: 300; color: #fa440f; }
 
