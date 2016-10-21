@@ -41,9 +41,9 @@ class Saver(object):
                 }
             )
             if created:
-                log_message += "* %s created\n" % (office["officeslug"])
-            else:
-                log_message += "* %s exists\n" % (office["officeslug"])
+                log_message += "* CREATED OFFICE: %s \n" % (office["officeslug"])
+            # else:
+            #     log_message += "* %s exists\n" % (office["officeslug"])
         except Exception, exception:
             error_output = "%s %s" % (exception, office["officeslug"])
             logger.error(error_output)
@@ -84,9 +84,9 @@ class Saver(object):
                 }
             )
             if created:
-                log_message += "\t* %s created\n" % (contest["contestid"])
-            else:
-                log_message += "\t* %s exists but we updated figures\n" % (contest["contestid"])
+                log_message += "\t* CREATED CONTEST: %s\n" % (contest["contestid"])
+            # else:
+            #     log_message += "\t* %s exists but we updated figures\n" % (contest["contestid"])
         except Exception, exception:
             error_output = "%s %s" % (exception, contest["contestid"])
             logger.error(error_output)
@@ -119,9 +119,9 @@ class Saver(object):
                 }
             )
             if created:
-                log_message += "\t\t* %s created\n" % (judicial["judgeid"])
+                log_message += "\t\t* CREATED JUDGE: %s\n" % (judicial["judgeid"])
             else:
-                log_message += "\t\t* %s exists but we updated figures\n" % (judicial["judgeid"])
+                log_message += "\t\t* UPDATED JUDICIAL VOTES: %s\n" % (judicial["judgeid"])
         except Exception, exception:
             error_output = "%s %s" % (exception, judicial["judgeid"])
             logger.error(error_output)
@@ -139,6 +139,15 @@ class Saver(object):
             logger.error(error_output)
             raise
         try:
+            presave = this_contest.ballotmeasure_set.get(measureid=measure["measureid"])
+            if presave.yespct:
+                preyespct = "%0.1f" % (presave.yespct * 100)
+            else:
+                preyespct = None
+            if presave.nopct:
+                prenopct = "%0.1f" % (presave.nopct * 100)
+            else:
+                prenopct = None
             obj, created = this_contest.ballotmeasure_set.update_or_create(
                 measureid=measure["measureid"],
                 defaults={
@@ -153,9 +162,9 @@ class Saver(object):
                 }
             )
             if created:
-                log_message += "\t\t* %s created\n" % (measure["measureid"])
+                log_message += "\t\t* CREATED MEASURE: %s\n" % (measure["measureid"])
             else:
-                log_message += "\t\t* %s exists but we updated figures\n" % (measure["measureid"])
+                log_message += "\t\t* UPDATED %s:\n\t\t\t* Yes from %s%% to %s%%.\n\t\t\t* No from %s%% to %s%%.\n" % (this_contest.contestname, preyespct, measure["yespct"], prenopct, measure["nopct"])
         except Exception, exception:
             error_output = "%s %s" % (exception, measure["measureid"])
             logger.error(error_output)
@@ -173,6 +182,11 @@ class Saver(object):
             logger.error(error_output)
             raise
         try:
+            presave = this_contest.candidate_set.get(candidateid=candidate["candidateid"])
+            if presave.votepct:
+                prevotepct = "%0.1f" % (presave.votepct * 100)
+            else:
+                prevotepct = None
             obj, created = this_contest.candidate_set.update_or_create(
                 candidateid=candidate["candidateid"],
                 defaults={
@@ -188,9 +202,9 @@ class Saver(object):
                 }
             )
             if created:
-                log_message += "\t\t* %s created\n" % (candidate["candidateid"])
+                log_message += "\t\t* CREATED CANDIDATE: %s\n" % (candidate["candidateid"])
             else:
-                log_message += "\t\t* %s exists but we updated figures\n" % (candidate["candidateid"])
+                log_message += "\t\t* UPDATED %s: %s from %s%% to %s%%\n" % (this_contest.contestname, candidate["fullname"], prevotepct, candidate["votepct"])
         except Exception, exception:
             error_output = "%s %s" % (exception, candidate["candidateid"])
             logger.error(error_output)
