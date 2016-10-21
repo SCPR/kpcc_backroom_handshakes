@@ -82,12 +82,10 @@ class BuildOcResults(object):
                 update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
                 update_this = election.test_results
                 if update_this == False:
-                    logger.info(
-                        "\n*****\nwe have newer data in the database so let's delete these files\n*****")
+                    logger.info("\n*****\nwe have newer data in the database so let's delete these files\n*****")
                     os.remove(latest_path)
                 else:
-                    logger.info(
-                        "\n*****\nwe have new data to save and we'll update timestamps in the database\n*****")
+                    logger.info("\n*****\nwe have new data to save and we'll update timestamps in the database\n*****")
                     saver._update_result_timestamps(src, file_timestamp)
                     races = soup.find_all("ContestTotal")
                     race_log = "\n"
@@ -98,7 +96,7 @@ class BuildOcResults(object):
                                 this is a proposition
                                 """
                                 result = compiler._compile_measure(race, election, src)
-                                # race_log += saver.make_office(result.office)
+                                race_log += saver.make_office(result.office)
                                 race_log += saver.make_contest(result.office, result.contest)
                                 race_log += saver.make_measure(result.contest, result.measure)
                             else:
@@ -106,7 +104,7 @@ class BuildOcResults(object):
                                 this is a non-judicial candidate
                                 """
                                 result = compiler._compile_candidate(race, election, src)
-                                # race_log += saver.make_office(result.office)
+                                race_log += saver.make_office(result.office)
                                 race_log += saver.make_contest(result.office, result.contest)
                                 for candidate in result.candidates:
                                     race_log += saver.make_candidate(result.contest, candidate)
@@ -136,31 +134,23 @@ class BuildResults(object):
             fullname_idx = self.framer._find_nth(contestname, " - ", 1) + 3
         elif race_id == "150":
             officename_idx = self.framer._find_nth(contestname, " - ", 2)
-            officename = unicode(
-                contestname[:officename_idx].replace(" - ", " "))
+            officename = unicode(contestname[:officename_idx].replace(" - ", " "))
             fullname_idx = self.framer._find_nth(contestname, " - ", 2) + 3
         fullname = unicode(contestname[fullname_idx:])
         level = "california"
-        # seatnum = self.framer._get_prop_number(race.ContestIdentifier.attrs["IdNumber"], race_id)
         seatnum = None
         is_statewide = True
         precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
         precinctsreport = r.find(attrs={"Id": "PR"}).contents[0]
         reporttype = r.find(attrs={"Id": "RT"}).contents[0]
-        yescount = self.framer._to_num(r.find_all(
-            "Selection")[0].ValidVotes.contents[0])["value"]
-        yespct = self.framer._to_num(
-            r.find(attrs={"Id": "PYV"}).contents[0])["value"]
-        nocount = self.framer._to_num(r.find_all(
-            "Selection")[1].ValidVotes.contents[0])["value"]
-        nopct = self.framer._to_num(
-            r.find(attrs={"Id": "PNV"}).contents[0])["value"]
+        yescount = self.framer._to_num(r.find_all("Selection")[0].ValidVotes.contents[0])["value"]
+        yespct = self.framer._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
+        nocount = self.framer._to_num(r.find_all("Selection")[1].ValidVotes.contents[0])["value"]
+        nopct = self.framer._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
         self.framer.office["officename"] = officename
         self.framer.office["officeslug"] = slugify(officename)
         self.framer.office["active"] = True
         self.framer.office["officeid"] = self.framer.office["officeslug"]
-        # self.framer.office["officeid"] = self.saver._make_office_id(
-        #     src.source_short, self.framer.office["officeslug"])
         self.framer.contest["election_id"] = election.id
         self.framer.contest["resultsource_id"] = src.id
         self.framer.contest["seatnum"] = seatnum
@@ -187,10 +177,8 @@ class BuildResults(object):
             raise Exception("precinctsreporting is not a number")
         self.framer.contest["precinctsreportingpct"] = self.framer._calc_pct(
             self.framer.contest["precinctsreporting"], self.framer.contest["precinctstotal"])
-        self.framer.contest["votersregistered"] = self.framer._to_num(None)[
-            "value"]
-        self.framer.contest["votersturnout"] = self.framer._to_num(None)[
-            "value"]
+        self.framer.contest["votersregistered"] = self.framer._to_num(None)["value"]
+        self.framer.contest["votersturnout"] = self.framer._to_num(None)["value"]
         self.framer.contest["contestname"] = self.framer.office["officename"]
         self.framer.contest["contestdescription"] = None
         if race_id == "140":

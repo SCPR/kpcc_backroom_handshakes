@@ -604,8 +604,7 @@ class LacProcessMethods(object):
                     framer.contest["contestid"],
                     framer.judicial["judicialslug"],
                 )
-                race_log += saver.make_judicial(framer.contest,
-                                                framer.judicial)
+                race_log += saver.make_judicial(framer.contest, framer.judicial)
 
         elif contest['is_ballot_measure']:
             """ this is a ballot measure """
@@ -616,7 +615,6 @@ class LacProcessMethods(object):
                             ).replace("MEASURE", "Measure")
             else:
                 fullname = (contest['contest_title']).title()
-                # contestname = (contest['contest_title']).title()
             officename = framer._concat(
                 this_type,
                 contestname,
@@ -776,8 +774,7 @@ class LacProcessMethods(object):
                     contest['contest_title_cont'].title())
                 contestname = fixer._affix_county(county_name,contestname)
             else:
-                contestname = "%s %s" % (contest['contest_title'].title(), contest[
-                                         'contest_title_cont'].title())
+                contestname = "%s %s" % (contest['contest_title'].title(), contest['contest_title_cont'].title())
             # if level == "county":
             #     contestname = "%s %s" % (county_name, contestname)
             framer.office["officename"] = contestname.replace(".", "")

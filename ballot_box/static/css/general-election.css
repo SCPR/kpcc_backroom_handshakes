@@ -216,3 +216,40 @@ header p { font-size: 15px; line-height: 18px; font-style: italic; font-weight: 
 .measures-row .race-title { width: 63%; float: left; text-align: left; margin-top: 1%; margin-left: 1%; font-size: 18px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; }
 
 .measures-row .precincts-reporting { width: 33%; float: right; text-align: right; margin-top: 1%; margin-right: 1%; font-size: 15px; line-height: 18px; font-style: normal; font-weight: 400; color: #898989; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* embeddable race styles */
+.embed { height: auto; }
+.embed-block { width: 98%; margin-top: 30px;  margin-left: 1%; margin-right: 1%; }
+.embed-block header { width: 100%; height: auto; margin-top: 6px; margin-bottom: 36px; padding-bottom: 16px; border-bottom: 1px solid #dbdbdb; }
+.embed-block header h2 { font-size: 30px; line-height: 30px; font-style: normal; font-weight: 300; color: #fa440f; margin-bottom: 18px; }
+.embed-block .result { width: 98%; height: auto; margin-left: 1%; margin-right: 1%; margin-bottom: 16px; }
+
+.embed-block .result .yes { width: 48%; height: auto; float: left; margin-right: 2%; }
+.embed-block .result .no { width: 48%; height: auto; float: right; margin-left: 2%; }
+
+.embed-block .result .yes span { width: 50%; height: auto; float: left; }
+.embed-block .result .no span { width: 50%; height: auto; float: left; }
+
+.embed-block .result .candidate { width: 70%; float: left; }
+.embed-block .result .candidate .candidate-name { font-size: 18px; line-height: 16px; font-style: normal; font-weight: 400; color: #363636; }
+.embed-block .result .votes { width: 30%; float: right; }
+.embed-block .result .votes .votepct { font-size: 20px; line-height: 30px; font-weight: 500; margin-top: 0px; }
+.embed-block .branded-image { width: 100%; height: auto; display: block; padding-top: 18px; padding-bottom: 24px; margin-top: 18px; border-top: 1px solid #31abd4; }
+.embed-block .branded-image img { float: left; width: 156px; height: 15px; }
+.embed-block .branded-image p { float: right; font-size: 16px; line-height: 18px; font-style: normal; font-weight: 500; color: #00acd6; text-align: right; }
