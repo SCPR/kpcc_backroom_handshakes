@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import localtime
 from ballot_box.utils_files import Retriever
-from ballot_box.utils_data import Framer
+from ballot_box.utils_data import Framer,Namefixer
 from ballot_box.utils_import import Saver
 from ballot_box.lac_schemas import *
 from election_registrar.models import ResultSource, Election
@@ -496,6 +496,7 @@ class LacProcessMethods(object):
         """ import candidates, measures, office and contest info from compiled data """
         saver = Saver()
         framer = Framer()
+        fixer = Namefixer()
         contest = contest_package['contest_details']
         candidates = contest_package['candidates']
         measures = contest_package['measures']
@@ -554,7 +555,7 @@ class LacProcessMethods(object):
                 framer.contest["votersregistered"] = None
                 raise Exception("votersregistered is not a number")
             framer.contest["votersturnout"] = None
-            framer.contest["contestname"] = framer.office["officename"]
+            framer.contest["contestname"] = fixer._fix(contestname) # framer.office["officename"]
             framer.contest["contestdescription"] = None
             framer.contest["contestid"] = saver._make_contest_id(
                 election.electionid,
@@ -615,7 +616,7 @@ class LacProcessMethods(object):
                             ).replace("MEASURE", "Measure")
             else:
                 fullname = (contest['contest_title']).title()
-                contestname = (contest['contest_title']).title()
+                # contestname = (contest['contest_title']).title()
             officename = framer._concat(
                 this_type,
                 contestname,
@@ -666,7 +667,7 @@ class LacProcessMethods(object):
                 raise Exception(
                     "votersregistered is not a number")
             framer.contest["votersturnout"] = None
-            framer.contest["contestname"] = framer.office["officename"]
+            framer.contest["contestname"] = fixer._fix(contestname) # framer.office["officename"]
             framer.contest["contestdescription"] = None
             framer.contest["contestid"] = saver._make_contest_id(
                 election.electionid,
@@ -772,8 +773,8 @@ class LacProcessMethods(object):
             else:
                 contestname = "%s %s" % (contest['contest_title'].title(), contest[
                                          'contest_title_cont'].title())
-            if level == "county":
-                contestname = "%s %s" % (county_name, contestname)
+            # if level == "county":
+            #     contestname = "%s %s" % (county_name, contestname)
             framer.office["officename"] = contestname.replace(".", "")
             framer.office["officeslug"] = slugify(framer.office["officename"])
             framer.office["active"] = True
@@ -817,8 +818,7 @@ class LacProcessMethods(object):
                 framer.contest["votersregistered"] = None
                 raise Exception("votersregistered is not a number")
             framer.contest["votersturnout"] = None
-            framer.contest["contestname"] = framer.office[
-                "officename"]
+            framer.contest["contestname"] = fixer._fix(contestname) # framer.office["officename"]
             try:
                 framer.contest["contestdescription"] = contest[
                     'vote_for_text'].capitalize() + ' ' + contest['vote_for_number']
