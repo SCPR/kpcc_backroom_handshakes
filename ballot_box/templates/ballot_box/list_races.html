@@ -1,0 +1,194 @@
+{% extends "ballot_box/base.html" %}
+{% load static from staticfiles %}
+{% load humanize %}
+{% load ballot_box_template_tags %}
+
+{% block extra_css %}
+    <!--
+    <link rel="stylesheet" href="http://basehold.it/18/255/42/85/0.5">
+    -->
+    <link href="{% static 'css/reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/general-election.css' %}" media="screen" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block display_block %}
+    <!-- i was built at {{ timestamp }} using django-bakery -->
+    <div class="hero-election">
+        {% include "ballot_box/inc_header.html" %}
+        {% include "ballot_box/inc_buttons.html" %}
+        <div class="row-fluid results">
+            <!-- begin national races block -->
+            {% if national_races %}
+                <div class="results-collection-block">
+                    <div class="results-collection clearfix">
+                        <div class="collection-header"><h2>National Races</h2></div>
+                        {% for contest in national_races %}
+                            <div class="results-row clearfix">
+                                <header>
+                                    <h2 class="race-title">{{ contest.contestname }}</h2>
+                                    <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
+                                </header>
+                                {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
+                                    <div class="candidate-block">
+                                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party }}){% endif %}
+                                            {% if candidate.incumbent == True %}
+                                                <br /> <span class="blurb-text">INCUMBENT</span>
+                                            {% endif %}
+                                        </h3>
+                                        <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%
+                                            {% if contest.contestid == 'general-2016-11-08-sos-statewide-president' %}
+                                                <br /> <span class="blurb-text">of california voters</span>
+                                            {% endif %}
+                                        </h3>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            <!-- begin state races block -->
+            {% if state_races %}
+                <div class="results-collection-block">
+                    <div class="results-collection clearfix">
+                        <div class="collection-header"><h2>State Races</h2></div>
+                        {% for contest in state_races %}
+                            <div class="results-row clearfix">
+                                <header>
+                                    <h2 class="race-title">{{ contest.contestname }}</h2>
+                                    <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
+                                </header>
+                                {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
+                                    <div class="candidate-block">
+                                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party }}){% endif %}
+                                            {% if candidate.incumbent == True %}
+                                                <br /> <span class="blurb-text">INCUMBENT</span>
+                                            {% endif %}
+                                        </h3>
+                                        <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%
+                                            {% if contest.contestid == 'general-2016-11-08-sos-statewide-president' %}
+                                                <br /> <span class="blurb-text">of california voters</span>
+                                            {% endif %}
+                                        </h3>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            <!-- begin local races block -->
+            {% if local_races %}
+                <div class="results-collection-block">
+                    <div class="results-collection clearfix">
+                        <div class="collection-header"><h2>Local Races</h2></div>
+                        {% for contest in local_races %}
+                            <div class="results-row clearfix">
+                                <header>
+                                    <h2 class="race-title">{{ contest.contestname }}</h2>
+                                    <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
+                                </header>
+                                {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
+                                    <div class="candidate-block">
+                                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party }}){% endif %}
+                                            {% if candidate.incumbent == True %}
+                                                <br /> <span class="blurb-text">INCUMBENT</span>
+                                            {% endif %}
+                                        </h3>
+                                        <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%
+                                            {% if contest.contestid == 'general-2016-11-08-sos-statewide-president' %}
+                                                <br /> <span class="blurb-text">of california voters</span>
+                                            {% endif %}
+                                        </h3>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            <!-- begin state measures block -->
+            {% if state_measures %}
+                <div class="results-collection-block">
+                    <div class="results-collection clearfix">
+                        <div class="collection-header"><h2>State Ballot Measures</h2></div>
+                        {% for measure in state_measures %}
+                            <div class="measures-row">
+                                {% for this in measure.ballotmeasure_set.all %}
+                                    <div class="result clearfix">
+                                        <div class="measure">
+                                            <dl class="measure-name">
+                                                <dt>{{ this.fullname }}&mdash;{{ measure.contestdescription }}</dt>
+                                                <dd><span class="blurb-text">{{ measure.precinctsreportingpct|percentage|floatformat:0 }}% reporting</span></dd>
+                                            </dl>
+                                        </div>
+                                        <div class="votes">
+                                            <dl class="yes">
+                                                <dt class="align-center">{{ this.yespct|percentage|floatformat:0 }}%</dt>
+                                                <dd class="align-center">Yes</dd>
+                                            </dl>
+                                            <dl class="no">
+                                                <dt class="align-center">{{ this.nopct|percentage|floatformat:0 }}%</dt>
+                                                <dd class="align-center">No</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            <!-- begin local measures block -->
+            {% if local_measures %}
+                <div class="results-collection-block">
+                    <div class="results-collection clearfix">
+                        <div class="collection-header"><h2>Local Ballot Measures</h2></div>
+                        {% for measure in local_measures %}
+                            <div class="measures-row clearfix">
+                                <header>
+                                    <h2 class="race-title">{{ measure.contestname }}</h2>
+                                    <h2 class="precincts-reporting">{{ measure.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
+                                </header>
+                                {% for this in measure.ballotmeasure_set.all %}
+                                    <div class="result clearfix">
+                                        <div class="measure">
+                                            <dl class="measure-name">
+                                                <dt>{{ this.fullname }}&mdash;{{ measure.contestdescription }}</dt>
+                                                <dd></dd>
+                                            </dl>
+                                        </div>
+                                        <div class="votes">
+                                            <dl class="yes">
+                                                <dt class="align-center">{{ this.yespct|percentage|floatformat:0 }}%</dt>
+                                                <dd class="align-center">Yes</dd>
+                                            </dl>
+                                            <dl class="no">
+                                                <dt class="align-center">{{ this.nopct|percentage|floatformat:0 }}%</dt>
+                                                <dd class="align-center">No</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            $("li#top-races").removeClass("selected");
+            $("li#all-races").addClass("selected");
+
+            $(".collection-header").click(function() {
+                $(this).parent().toggleClass("active");
+            });
+        });
+    </script>
+{% endblock %}
