@@ -243,6 +243,10 @@ header p { font-size: 15px; line-height: 18px; font-style: italic; font-weight: 
 .embed-block .result .yes { width: 48%; height: auto; float: left; margin-right: 2%; }
 .embed-block .result .no { width: 48%; height: auto; float: right; margin-left: 2%; }
 
+.embed-block .candidate-name { font-size: 18px; line-height: 18px; font-style: normal; font-weight: 400; color: #363636; }
+
+.embed-block .votepct { font-size: 18px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; }
+
 .embed-block .result .yes span { width: 50%; height: auto; float: left; }
 .embed-block .result .no span { width: 50%; height: auto; float: left; }
 
