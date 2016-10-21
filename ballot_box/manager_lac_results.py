@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import localtime
 from ballot_box.utils_files import Retriever
-from ballot_box.utils_data import Framer,Namefixer
+from ballot_box.utils_data import Framer, Namefixer
 from ballot_box.utils_import import Saver
 from ballot_box.lac_schemas import *
 from election_registrar.models import ResultSource, Election
@@ -54,7 +54,7 @@ class BuildLacResults(object):
         self.retrieve._found_required_files(src, data_directory)
         self.retrieve._unzip_latest_file(src, data_directory)
         self.retrieve.log_message += "*** Ending Request ***\n"
-        logger.debug(self.retrieve.log_message)
+        logger.info(self.retrieve.log_message)
 
     def parse_results_file(self, src, data_directory):
         """
@@ -90,10 +90,10 @@ class BuildLacResults(object):
                     else:
                         update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
                     if update_this == False:
-                        logger.debug("\n*****\nwe have newer data in the database so let's delete these files\n*****")
+                        logger.info("\n*****\nwe have newer data in the database so let's delete these files\n*****")
                         os.remove(latest_path)
                     else:
-                        logger.debug("\n*****\nwe have new data to save and we'll update timestamps in the database\n*****")
+                        logger.info("\n*****\nwe have new data to save and we'll update timestamps in the database\n*****")
                         saver._update_result_timestamps(src, file_timestamp)
                         title = process.dictify_records_and_return(
                             election_title)
@@ -115,7 +115,7 @@ class BuildLacResults(object):
                                 contest = process.compile_contest_results(records)
                                 process.update_database(contest, election, src)
                         os.remove(latest_path)
-                        logger.debug("we've finished processing lac results")
+                        logger.info("we've finished processing lac results")
                 else:
                     logger.error("unable to determine whether this data is newer than what we already have.")
 
@@ -875,7 +875,7 @@ class LacProcessMethods(object):
                     framer.candidate["candidateslug"],
                 )
                 race_log += saver.make_candidate(framer.contest, framer.candidate)
-        logger.debug(race_log)
+        logger.info(race_log)
 
     def check_if_recall_or_nonpartisan(self, records):
         """
