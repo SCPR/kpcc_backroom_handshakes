@@ -11,24 +11,6 @@ cache_timer = 60 * 5
 urlpatterns = [
 
     url(
-        r"(?P<electionid>[-\w]+)/results/featured/?$",
-        cache_page(cache_timer)(FeaturedIndex.as_view()),
-        name="featured-index"
-    ),
-
-    # url(
-    #     r"(?P<electionid>[-\w]+)/results/featured/redesign/?$",
-    #     cache_page(cache_timer)(RedesignIndex.as_view()),
-    #     name="redesign-index"
-    # ),
-
-    url(
-        r"(?P<electionid>[-\w]+)/results/featured/index.html$",
-        cache_page(cache_timer)(BakedFeaturedIndex.as_view()),
-        name="baked-featured"
-    ),
-
-    url(
         r"(?P<electionid>[-\w]+)/results/all/?$",
         cache_page(cache_timer)(ResultIndex.as_view()),
         name="result-index"
@@ -41,15 +23,27 @@ urlpatterns = [
     ),
 
     url(
+        r"(?P<electionid>[-\w]+)/results/featured/?$",
+        cache_page(cache_timer)(FeaturedIndex.as_view()),
+        name="featured-index"
+    ),
+
+    url(
+        r"(?P<electionid>[-\w]+)/results/featured/index.html$",
+        cache_page(cache_timer)(BakedFeaturedIndex.as_view()),
+        name="baked-featured"
+    ),
+
+    url(
         r"(?P<electionid>[-\w]+)/results$",
         RedirectView.as_view(url="results/all/", permanent=False),
-        name="result-index"
+        name="result-index-redirect"
     ),
 
     url(
         r"(?P<electionid>[-\w]+)/results/$",
         RedirectView.as_view(url="all/", permanent=False),
-        name="result-index"
+        name="result-index-redirect"
     ),
 
 ]

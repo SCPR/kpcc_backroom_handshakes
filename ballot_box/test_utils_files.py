@@ -30,11 +30,8 @@ class TestFileRetrival(TestCase):
         """
         setup some variables for our tests
         """
-
         self.date_object = datetime.datetime.now()
-
         self.date_string = self.date_object.strftime("%Y_%m_%d_%H_%M_%S")
-
         self.sources = ResultSource.objects.all()
 
     def test_a_download_chain(self):
@@ -42,11 +39,7 @@ class TestFileRetrival(TestCase):
         initiate a series of functions based on a list of data sources that will eventually be defined in the database
         """
         logger.debug("running file download tests")
-
         data_directory = "%s/ballot_box/data_dump/" % (settings.BASE_DIR)
-
-        logger.debug(self.sources)
-
         for src in self.sources:
             if src.source_active == True:
                 self.Test_request_results_and_save(src, data_directory)
