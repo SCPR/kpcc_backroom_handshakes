@@ -214,3 +214,68 @@ class Checker(object):
             return True
         else:
             return False
+
+class Namefixer(object):
+    """
+    """
+
+    def __init__(self, **kwargs):
+        """
+        """
+        self.patterns = {
+            "muni":"municipal",
+            "bd":"board",
+            "dist":"district",
+            "cr":"center",
+            "wtr":"water",
+            "div":"division",
+            "vly":"valley",
+            "gov":"governing",
+            "gbm":"governing board member",
+            "tr":"trustee",
+            "no":["no.","north"],
+            "co":"county",
+            "gen":"general",
+            "mun":"municipal",
+            "comm":"community",
+            "unif":"unified",
+            "replenish":"replenishment district",
+            "so":"southern",
+            "cal":"california",
+            "spc":"special",
+            "spec":"special",
+            "authy":"authority",
+            "mt":"mountains",
+            "rec":"recreation",
+            "con":"conservation",
+            "sch":"school",
+            "coll":"college",
+            "usd":"unified school district",
+            "cty":"city",
+            "com":"community",
+            "col":"college"
+        }
+
+    def _fix(self,string):
+        for p, r in self.patterns.iteritems():
+            if p == "no":
+                number = re.compile(p + r'(\s[0-9])',flags=re.IGNORECASE)
+                north = re.compile(p + r'(\s[a-zA-Z])',flags=re.IGNORECASE)
+                if re.search(number,string):
+                    string = re.sub(number,r[0]+r'\1',string)
+                elif re.search(north,string):
+                    string = re.sub(north,r[1]+r'\1',string)
+            elif p == "cal":
+                local = re.compile(r'(?<=lo)' + p,flags=re.IGNORECASE)
+                california = re.compile(p + r'(?=\s|$)',flags=re.IGNORECASE)
+                if re.search(local,string):
+                    pass
+                else:
+                    string = re.sub(california,r,string)
+            elif p == "tr":
+                search = re.compile(r'(?<=\s)' + p + r'(?=\s|$)',flags=re.IGNORECASE)
+                string = re.sub(search,r,string)
+            else:
+                search = re.compile(p + r'(?=\s|$)',flags=re.IGNORECASE)
+                string = re.sub(search,r,string)
+        return string
