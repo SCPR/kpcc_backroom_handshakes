@@ -497,11 +497,24 @@ class LacProcessMethods(object):
         saver = Saver()
         framer = Framer()
         fixer = Namefixer()
+
+        county_name = "Los Angeles County"
+
         contest = contest_package['contest_details']
         candidates = contest_package['candidates']
         measures = contest_package['measures']
         judges = contest_package['judges']
         race_log = "\n"
+
+        # Check level of contest (i.e. local, statewide)
+        if "U.S." in contest['contest_title'] or "STATE" in contest['contest_title']:
+            level = "california"
+            framer.contest["is_statewide"] = True
+        else:
+            level = "county"
+            framer.contest["is_statewide"] = False
+        framer.contest["level"] = level
+
         if contest['is_judicial_contest']:
             """ This is a judicial appointee """
             if "SUPREME COURT" in contest["contest_title"]:
@@ -610,6 +623,8 @@ class LacProcessMethods(object):
             """ this is a ballot measure """
             this_type = "Measure"
             contestname = (contest['contest_title']).title()
+            if "COUNTY MEASURE" in contest['contest_title']:
+                contestname = fixer._affix_county(county_name,contestname)
             if contest['contest_title_cont']:
                 fullname = (contest['contest_title_cont']
                             ).replace("MEASURE", "Measure")
@@ -620,7 +635,7 @@ class LacProcessMethods(object):
                 contestname,
                 delimiter="-",
             )
-            level = None
+            # level = None
             framer.office["officename"] = officename
             framer.office["officeslug"] = slugify(officename)
             framer.office["active"] = True
@@ -634,8 +649,7 @@ class LacProcessMethods(object):
             framer.contest["seatnum"] = None
             framer.contest["is_uncontested"] = False
             framer.contest["is_national"] = False
-            framer.contest["is_statewide"] = False
-            framer.contest["level"] = "county"
+            # framer.contest["is_statewide"] = False
             framer.contest["is_ballot_measure"] = True
             framer.contest["is_judicial"] = False
             framer.contest["is_runoff"] = False
@@ -714,23 +728,12 @@ class LacProcessMethods(object):
         else:
             """ this is a candidate for elected office """
             strip_district = contest['district'].lstrip("0")
-            if "U.S." in contest['contest_title'] or "STATE" in contest['contest_title']:
-                level = "california"
-                framer.contest["is_statewide"] = True
-            else:
-                level = "county"
-                county_name = "Los Angeles County"
-                framer.contest["is_statewide"] = False
-            framer.contest["level"] = level
             framer.contest["seatnum"] = "1010101"
             if contest['contest_title'] == "MEMBER OF THE ASSEMBLY":
                 contestname = "State Assembly District %s" % (strip_district)
             elif "SUPERVISOR" in contest['contest_title']:
                 contestname = "Supervisor District %s" % (strip_district)
                 contestname = fixer._affix_county(county_name,contestname)
-            elif "COUNTY MEASURE" in contest['contest_title']:
-                contestname = fixer._affix_county(county_name,contestname)
-                print(contestname)
             elif "U.S. REPRESENTATIVE" in contest['contest_title']:
                 contestname = "U.S. House of Representatives District %s" % (
                     strip_district)
