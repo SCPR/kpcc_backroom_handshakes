@@ -100,7 +100,7 @@ class ResultIndex(ListView):
             is_display_priority=True).filter(is_ballot_measure=False).filter(
                 Q(contestid__contains="sos-districtwide-state-senate") |
                 Q(contestid__contains="sos-districtwide-state-assembly")
-        ).order_by("contestname")
+        )
         context["local_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
             is_display_priority=True).filter(is_ballot_measure=False).filter(
                 Q(resultsource__source_short="lac") |
