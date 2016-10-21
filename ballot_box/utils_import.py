@@ -161,6 +161,10 @@ class Saver(object):
                 prenopct = "%0.1f" % (presave.nopct * 100)
             else:
                 prenopct = None
+        except Exception, exception:
+            error_output = "ALERT: %s" % (exception)
+            logger.error(error_output)
+        try:
             obj, created = this_contest.ballotmeasure_set.update_or_create(
                 measureid=measure["measureid"],
                 defaults={
@@ -200,6 +204,10 @@ class Saver(object):
                 prevotepct = "%0.1f" % (presave.votepct * 100)
             else:
                 prevotepct = None
+        except Exception, exception:
+            error_output = "ALERT: %s" % (exception)
+            logger.error(error_output)
+        try:
             obj, created = this_contest.candidate_set.update_or_create(
                 candidateid=candidate["candidateid"],
                 defaults={
