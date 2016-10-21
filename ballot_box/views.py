@@ -20,6 +20,24 @@ import logging
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
 
+class EmbeddedDetail(DetailView):
+    model = Contest
+    template_name = "ballot_box/embedded_race.html"
+    slug_field = "contestid"
+
+    def get_object(self):
+        object = super(EmbeddedDetail, self).get_object()
+        return object
+
+    def get_context_data(self, **kwargs):
+        context = super(EmbeddedDetail, self).get_context_data(**kwargs)
+        context["electionid"] = self.kwargs["electionid"]
+        context["contestid"] = self.kwargs["slug"]
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        context["contest"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(contestid=context["contestid"]).first()
+        return context
+
+
 class FeaturedIndex(ListView):
     model = Contest
     template_name = "ballot_box/featured_races.html"

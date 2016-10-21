@@ -1,0 +1,56 @@
+{% extends "ballot_box/base.html" %}
+{% load static from staticfiles %}
+{% load humanize %}
+{% load ballot_box_template_tags %}
+
+{% block extra_css %}
+    <!--
+    <link rel="stylesheet" href="http://basehold.it/18/255/42/85/0.5">
+    -->
+    <link href="{% static 'css/reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/general-election.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .embed-block { width: 98%; margin-top: 30px;  margin-left: 1%; margin-right: 1%; }
+        .embed-block header { width: 100%; height: auto; margin-top: 6px; margin-bottom: 36px; padding-bottom: 16px; border-bottom: 1px solid #dbdbdb; }
+        .embed-block header h2 { font-size: 30px; line-height: 30px; font-style: normal; font-weight: 300; color: #fa440f; margin-bottom: 18px; }
+        .embed-block .result { width: 100%; height: auto; margin-bottom: 30px; }
+        .embed-block .result:last-child { padding-bottom: 30px; border-bottom: 1px solid #dbdbdb; }
+        .embed-block .result .candidate { width: 70%; float: left; }
+        .embed-block .result .candidate .candidate-name { font-size: 18px; line-height: 16px; font-style: normal; font-weight: 400; color: #363636; }
+        .embed-block .result .votes { width: 30%; float: right; }
+        .embed-block .result .votes .votepct { margin-top: 0px; }
+    </style>
+{% endblock %}
+
+{% block display_block %}
+    <div class="row-fluid embed clearfix">
+        <div class="embed-block">
+            {% if contest.is_ballot_measure = True %}
+                <h1>Ballot Measure</h1>
+            {% else %}
+                <header>
+                    <h2 class="race-title">{{ contest.contestname }}</h2>
+                    <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</p>
+                </header>
+                {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
+                    <div class="result clearfix">
+                        <div class="candidate">
+                            <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party }}){% endif %}</h3>
+                        </div>
+                        <div class="votes">
+                            <h3 class="votepct align-right">{{ candidate.votepct|percentage|floatformat:0 }}%
+                                {% if contest.contestid == 'general-2016-11-08-sos-statewide-president' %}
+                                    <br /> <span class="blurb-text">of california voters</span>
+                                {% endif %}
+                            </h3>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="branded-image">
+                <img class="img-circle" src="http://placehold.it/48x48" />
+                <p>See All Results</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

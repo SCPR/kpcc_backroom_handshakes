@@ -2,13 +2,19 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.views.generic import RedirectView
 from django.views.decorators.cache import cache_page
-from .views import FeaturedIndex, ResultIndex, BakedFeaturedIndex, BakedResultsIndex
+from .views import EmbeddedDetail, ResultIndex, BakedResultsIndex, FeaturedIndex, BakedFeaturedIndex
 
 app_name = "ballot_box"
 
 cache_timer = 60 * 5
 
 urlpatterns = [
+
+    url(
+        r"(?P<electionid>[-\w]+)/results/(?P<slug>[-\w]+)/?$",
+        cache_page(cache_timer)(EmbeddedDetail.as_view()),
+        name="embedded_detail"
+    ),
 
     url(
         r"(?P<electionid>[-\w]+)/results/all/?$",
