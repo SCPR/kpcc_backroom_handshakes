@@ -77,7 +77,7 @@ class Saver(object):
                     "reporttype": contest["reporttype"],
                     "precinctstotal": contest["precinctstotal"],
                     "precinctsreporting": contest["precinctsreporting"],
-                    "precinctsreportingpct": contest["precinctsreportingpct"] / 100,
+                    "precinctsreportingpct": contest["precinctsreportingpct"],
                     "votersregistered": contest["votersregistered"],
                     "votersturnout": contest["votersturnout"],
                     "poss_error": contest["poss_error"],
