@@ -4,29 +4,41 @@
 {% load ballot_box_template_tags %}
 
 {% block extra_css %}
-    <!--
-    <link rel="stylesheet" href="http://basehold.it/18/255/42/85/0.5">
-    -->
-    <link href="{% static 'css/reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/general-election-reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
     <link href="{% static 'css/general-election.css' %}" media="screen" rel="stylesheet" type="text/css" />
-    <style type="text/css">
-        .embed-block { width: 98%; margin-top: 30px;  margin-left: 1%; margin-right: 1%; }
-        .embed-block header { width: 100%; height: auto; margin-top: 6px; margin-bottom: 36px; padding-bottom: 16px; border-bottom: 1px solid #dbdbdb; }
-        .embed-block header h2 { font-size: 30px; line-height: 30px; font-style: normal; font-weight: 300; color: #fa440f; margin-bottom: 18px; }
-        .embed-block .result { width: 100%; height: auto; margin-bottom: 30px; }
-        .embed-block .result:last-child { padding-bottom: 30px; border-bottom: 1px solid #dbdbdb; }
-        .embed-block .result .candidate { width: 70%; float: left; }
-        .embed-block .result .candidate .candidate-name { font-size: 18px; line-height: 16px; font-style: normal; font-weight: 400; color: #363636; }
-        .embed-block .result .votes { width: 30%; float: right; }
-        .embed-block .result .votes .votepct { margin-top: 0px; }
-    </style>
 {% endblock %}
 
 {% block display_block %}
     <div class="row-fluid embed clearfix">
         <div class="embed-block">
             {% if contest.is_ballot_measure = True %}
-                <h1>Ballot Measure</h1>
+
+                <header>
+                    <h2 class="race-title">{{ contest.contestname }}</h2>
+                    <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</p>
+                </header>
+
+
+
+
+                {% for measure in contest.ballotmeasure_set.all %}
+                    <div class="result clearfix">
+                        <div class="yes">
+                            <span class="align-left candidate-name">Yes</span>
+                            <span class="align-right votepct">{{ measure.yespct|percentage|floatformat:0 }}%</span>
+                        </div>
+                        <div class="no">
+                            <span class="align-left candidate-name">No</span>
+                            <span class="align-right votepct">{{ measure.nopct|percentage|floatformat:0 }}%</span>
+                        </div>
+                    </div>
+                {% endfor %}
+
+
+
+
+
+
             {% else %}
                 <header>
                     <h2 class="race-title">{{ contest.contestname }}</h2>
@@ -47,9 +59,9 @@
                     </div>
                 {% endfor %}
             {% endif %}
-            <div class="branded-image">
-                <img class="img-circle" src="http://placehold.it/48x48" />
-                <p>See All Results</p>
+            <div class="branded-image clearfix">
+                <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
+                <p><a href="#">See All Results &gt;</a></p>
             </div>
         </div>
     </div>
