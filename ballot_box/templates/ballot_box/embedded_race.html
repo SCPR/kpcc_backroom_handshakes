@@ -9,6 +9,11 @@
 {% endblock %}
 
 {% block display_block %}
+
+    {% if timestamp %}
+    <!-- i was built at {{ timestamp }} using django-bakery -->
+    {% endif %}
+
     <div class="row-fluid embed clearfix">
         <div class="embed-block">
             {% if contest.is_ballot_measure = True %}

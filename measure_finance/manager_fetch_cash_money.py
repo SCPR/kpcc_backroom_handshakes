@@ -62,8 +62,7 @@ class BuildDonationCharts(object):
         election = Election.objects.filter(electionid=self.this_election).first()
         for measure in self.list_of_measures:
             requested_url = "%s%s" % (self.api_url, measure)
-            response = requests.get(
-                requested_url, headers=self.request_headers)
+            response = requests.get(requested_url, headers=self.request_headers)
             measure_data = response.json()["measure"]
             identifying_information = measure_data["official_identifier"].split(" ")
             measure_data["official_identifier"] = "Proposition %s" % (identifying_information[1])
@@ -131,7 +130,7 @@ class Saver(object):
             error_output = "%s %s" % (exception, measure["official_title"])
             logger.error(error_output)
             raise
-        logger.debug(log_message)
+        logger.info(log_message)
         return log_message
 
     def make_measure_contributor(self, measure):
@@ -187,7 +186,7 @@ class Saver(object):
             error_output = "%s %s" % (exception, contrib["finance_top_id"])
             logger.error(error_output)
             raise
-        logger.debug(log_message)
+        logger.info(log_message)
         return log_message
 
     def make_measure_total(self, measure):
@@ -231,7 +230,7 @@ class Saver(object):
             error_output = "%s %s" % (exception, position["finance_id"])
             logger.error(error_output)
             raise
-        logger.debug(log_message)
+        logger.info(log_message)
         return log_message
 
 
@@ -447,15 +446,12 @@ class Checker(object):
         if hasattr(obj, "votepct"):
             sane_data.append(self._eval_part_of_whole(obj.votepct, 100))
         if hasattr(obj, "votecount"):
-            sane_data.append(self._eval_part_of_whole(
-                obj.votecount, kwargs["totalvotes"]))
+            sane_data.append(self._eval_part_of_whole(obj.votecount, kwargs["totalvotes"]))
         if hasattr(obj, "precinctsreporting") and hasattr(obj, "precinctstotal"):
-            sane_data.append(self._eval_part_of_whole(
-                obj.precinctsreporting, obj.precinctstotal))
+            sane_data.append(self._eval_part_of_whole(obj.precinctsreporting, obj.precinctstotal))
             if obj.precinctsreporting == obj.precinctstotal and obj.precinctsreportingpct != 1.0:
                 sane_data.append(False)
-            sane_data.append(self._eval_part_of_whole(
-                obj.precinctsreportingpct, 1.0))
+            sane_data.append(self._eval_part_of_whole(obj.precinctsreportingpct, 1.0))
         if hasattr(obj, "votersturnout"):
             sane_data.append(self._eval_part_of_whole(obj.votersturnout, 1.0))
         if hasattr(obj, "yescount") and hasattr(obj, "nocount"):

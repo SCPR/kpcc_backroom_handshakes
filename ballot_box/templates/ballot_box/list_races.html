@@ -12,7 +12,11 @@
 {% endblock %}
 
 {% block display_block %}
+
+    {% if timestamp %}
     <!-- i was built at {{ timestamp }} using django-bakery -->
+    {% endif %}
+
     <div class="hero-election">
         {% include "ballot_box/inc_header.html" %}
         {% include "ballot_box/inc_buttons.html" %}

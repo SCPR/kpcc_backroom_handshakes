@@ -12,7 +12,11 @@
 {% endblock %}
 
 {% block display_block %}
+
+    {% if timestamp %}
     <!-- i was built at {{ timestamp }} using django-bakery -->
+    {% endif %}
+
     <div class="hero-election">
         {% include "ballot_box/inc_header.html" %}
         {% include "ballot_box/inc_buttons.html" %}
@@ -76,14 +80,4 @@
             {% endif %}
         </div>
     </div>
-{% endblock %}
-
-{% block extra_js %}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $(".collection-header").click(function() {
-                $(this).parent().toggleClass("active");
-            });
-        });
-    </script>
 {% endblock %}
