@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext, Context, loader
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest, Http404
+from django.utils.decorators import method_decorator
 from django.views.decorators.clickjacking import xframe_options_exempt, xframe_options_sameorigin
 from django.views.generic import View, ListView, DetailView
 from bakery.views import BuildableListView, BuildableDetailView
@@ -34,6 +35,46 @@ class EmbeddedDetail(DetailView):
         context["electionid"] = self.kwargs["electionid"]
         context["contestid"] = self.kwargs["slug"]
         context["contest"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(contestid=context["contestid"]).first()
+        return context
+
+
+@method_decorator(xframe_options_exempt, name='dispatch')
+class BakedEmbeddedDetail(BuildableDetailView):
+    model = Contest
+    template_name = "ballot_box/embedded_race.html"
+    slug_field = "contestid"
+    sub_directory = "results/"
+
+    def get_object(self):
+        object = super(BakedEmbeddedDetail, self).get_object()
+        return object
+
+    def get_url(self, obj):
+        """
+        the url at which the detail page should appear.
+        """
+        return "/%s" % (obj.contestid)
+
+    def get_build_path(self, obj):
+        """
+        used to determine where to build the detail page. override this if you
+        would like your detail page at a different location. by default it
+        will be built at get_url() + "index.html"
+        """
+        path = os.path.join(settings.BUILD_DIR, self.sub_directory, self.get_url(obj)[1:])
+        os.path.exists(path) or os.makedirs(path)
+        return os.path.join(path, "index.html")
+
+    def dispatch(self, *args, **kwargs):
+        return super(BakedEmbeddedDetail, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(BakedEmbeddedDetail, self).get_context_data(**kwargs)
+        context["electionid"] = "general-2016-11-08"
+        context["baked"] = True
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        context["contestid"] = self.kwargs["slug"]
+        context["contest"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(contestid=context["contestid"]).filter(is_display_priority=True).first()
         return context
 
 
