@@ -67,6 +67,7 @@ class BakedFeaturedIndex(BuildableListView):
     def get_context_data(self, **kwargs):
         context = super(BakedFeaturedIndex, self).get_context_data(**kwargs)
         context["electionid"] = "general-2016-11-08"
+        context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
         context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
@@ -126,6 +127,7 @@ class BakedResultsIndex(BuildableListView):
     def get_context_data(self, **kwargs):
         context = super(BakedResultsIndex, self).get_context_data(**kwargs)
         context["electionid"] = "general-2016-11-08"
+        context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_display_priority=True)
         context["national_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(

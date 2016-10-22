@@ -35,5 +35,5 @@ if settings.DEBUG:
         url(r'^__debug__/', include(debug_toolbar.urls)),
     )
 
-if settings.DEBUG and settings.MEDIA_ROOT:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG and settings.MEDIA_ROOT:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
