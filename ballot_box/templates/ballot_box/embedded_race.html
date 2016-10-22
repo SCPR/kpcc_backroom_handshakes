@@ -62,7 +62,11 @@
                 {% endfor %}
             {% endif %}
             <div class="branded-image clearfix">
+            {% if baked == True %}
+                <img src="http://162.243.135.6/static/assets/kpcc-votergameplan-mark-horizontal.png" />
+            {% else %}
                 <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
+            {% endif %}
                 <p><a href="#">See All Results &gt;</a></p>
             </div>
         </div>
