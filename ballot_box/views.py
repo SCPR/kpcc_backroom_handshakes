@@ -40,10 +40,11 @@ class EmbeddedDetail(DetailView):
 
 @method_decorator(xframe_options_exempt, name='dispatch')
 class BakedEmbeddedDetail(BuildableDetailView):
-    model = Contest
+    # model = Contest
     template_name = "ballot_box/embedded_race.html"
     slug_field = "contestid"
-    sub_directory = "results/"
+    electionid = "general-2016-11-08"
+    sub_directory = "%s/" % (electionid)
 
     def get_object(self):
         object = super(BakedEmbeddedDetail, self).get_object()
@@ -68,13 +69,14 @@ class BakedEmbeddedDetail(BuildableDetailView):
     def dispatch(self, *args, **kwargs):
         return super(BakedEmbeddedDetail, self).dispatch(*args, **kwargs)
 
+    def get_queryset(self):
+        return Contest.objects.filter(election__electionid=self.electionid).filter(is_display_priority=True)
+
     def get_context_data(self, **kwargs):
         context = super(BakedEmbeddedDetail, self).get_context_data(**kwargs)
-        context["electionid"] = "general-2016-11-08"
+        context["electionid"] = self.electionid
         context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        context["contestid"] = self.kwargs["slug"]
-        context["contest"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(contestid=context["contestid"]).filter(is_display_priority=True).first()
         return context
 
 
@@ -99,7 +101,8 @@ class FeaturedIndex(ListView):
 class BakedFeaturedIndex(BuildableListView):
     model = Contest
     template_name = "ballot_box/featured_races.html"
-    build_path = "results/featured.html"
+    electionid = "general-2016-11-08"
+    build_path = "%s/featured.html" % (electionid)
 
     def get_object(self):
         object = super(BakedFeaturedIndex, self).get_object()
@@ -107,7 +110,7 @@ class BakedFeaturedIndex(BuildableListView):
 
     def get_context_data(self, **kwargs):
         context = super(BakedFeaturedIndex, self).get_context_data(**kwargs)
-        context["electionid"] = "general-2016-11-08"
+        context["electionid"] = self.electionid
         context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
@@ -159,7 +162,8 @@ class ResultIndex(ListView):
 class BakedResultsIndex(BuildableListView):
     model = Contest
     template_name = "ballot_box/list_races.html"
-    build_path = "results/all.html"
+    electionid = "general-2016-11-08"
+    build_path = "%s/all.html" % (electionid)
 
     def get_object(self):
         object = super(BakedResultsIndex, self).get_object()
@@ -167,7 +171,7 @@ class BakedResultsIndex(BuildableListView):
 
     def get_context_data(self, **kwargs):
         context = super(BakedResultsIndex, self).get_context_data(**kwargs)
-        context["electionid"] = "general-2016-11-08"
+        context["electionid"] = self.electionid
         context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_display_priority=True)
