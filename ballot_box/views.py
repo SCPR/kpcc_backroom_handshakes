@@ -44,7 +44,7 @@ class BakedEmbeddedDetail(BuildableDetailView):
     template_name = "ballot_box/embedded_race.html"
     slug_field = "contestid"
     electionid = "general-2016-11-08"
-    sub_directory = "%s/" % (electionid)
+    sub_directory = "results/%s/" % (electionid)
 
     def get_object(self):
         object = super(BakedEmbeddedDetail, self).get_object()
@@ -102,7 +102,7 @@ class BakedFeaturedIndex(BuildableListView):
     model = Contest
     template_name = "ballot_box/featured_races.html"
     electionid = "general-2016-11-08"
-    build_path = "%s/featured.html" % (electionid)
+    build_path = "results/%s/featured.html" % (electionid)
 
     def get_object(self):
         object = super(BakedFeaturedIndex, self).get_object()
@@ -164,7 +164,7 @@ class BakedResultsIndex(BuildableListView):
     model = Contest
     template_name = "ballot_box/list_races.html"
     electionid = "general-2016-11-08"
-    build_path = "%s/all.html" % (electionid)
+    build_path = "results/%s/all.html" % (electionid)
 
     def get_object(self):
         object = super(BakedResultsIndex, self).get_object()
