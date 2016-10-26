@@ -62,6 +62,7 @@ class BuildOcResults(object):
         self.retrieve._found_required_files(src, data_directory)
         self.retrieve._unzip_latest_file(src, data_directory)
         self.retrieve.log_message += "*** Ending Request ***\n"
+        logger.info(self.retrieve.log_message)
 
     def parse_results_file(self, src, data_directory):
         """
@@ -69,8 +70,7 @@ class BuildOcResults(object):
         saver = Saver()
         compiler = BuildResults()
         latest_directory = "%s%s_latest" % (data_directory, src.source_short)
-        election = Election.objects.filter(
-            test_results=True, electionid=src.election.electionid).first()
+        election = Election.objects.filter(electionid=src.election.electionid).first()
         for file in src.source_files.split(", "):
             latest_path = os.path.join(latest_directory, file)
             file_exists = os.path.isfile(latest_path)
@@ -79,8 +79,10 @@ class BuildOcResults(object):
                 soup = BeautifulSoup(open(latest_path), "xml")
                 file_timestring = unicode(soup.CumulativeRptHeader.ReportHeader.attrs["run_date"])
                 file_timestamp = parse(file_timestring, dayfirst=False).datetime
-                update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
-                update_this = election.test_results
+                if self.testing == True:
+                    update_this = self.testing
+                else:
+                    update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
                 if update_this == False:
                     logger.info("\n*****\nwe have newer data in the database so let's delete these files\n*****")
                     os.remove(latest_path)
@@ -90,24 +92,23 @@ class BuildOcResults(object):
                     races = soup.find_all("ContestTotal")
                     race_log = "\n"
                     for race in races:
-                        if race.attrs["race_id"] in self.race_ids:
-                            if race.attrs["contest_type"] == "MS":
-                                """
-                                this is a proposition
-                                """
-                                result = compiler._compile_measure(race, election, src)
-                                race_log += saver.make_office(result.office)
-                                race_log += saver.make_contest(result.office, result.contest)
-                                race_log += saver.make_measure(result.contest, result.measure)
-                            else:
-                                """
-                                this is a non-judicial candidate
-                                """
-                                result = compiler._compile_candidate(race, election, src)
-                                race_log += saver.make_office(result.office)
-                                race_log += saver.make_contest(result.office, result.contest)
-                                for candidate in result.candidates:
-                                    race_log += saver.make_candidate(result.contest, candidate)
+                        if race.attrs["contest_type"] == "MS":
+                            """
+                            this is a proposition
+                            """
+                            result = compiler._compile_measure(race, election, src)
+                            race_log += saver.make_office(result.office)
+                            race_log += saver.make_contest(result.office, result.contest)
+                            race_log += saver.make_measure(result.contest, result.measure)
+                        else:
+                            """
+                            this is a non-judicial candidate
+                            """
+                            result = compiler._compile_candidate(race, election, src)
+                            race_log += saver.make_office(result.office)
+                            race_log += saver.make_contest(result.office, result.contest)
+                            for candidate in result.candidates:
+                                race_log += saver.make_candidate(result.contest, candidate)
                     logger.info(race_log)
                     os.remove(latest_path)
                     logger.info("\n*****\nwe've finished processing orange county results\n*****")
