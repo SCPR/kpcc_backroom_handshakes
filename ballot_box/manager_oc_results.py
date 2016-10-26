@@ -33,24 +33,13 @@ class BuildOcResults(object):
 
     testing = elections[0].test_results
 
-    race_ids = [
-        "742",
-        "743",
-        "745",
-        "746",
-        "747",
-        "748",
-        "749",
-        "750",
-    ]
-
     def _init(self, *args, **kwargs):
         """
         """
         for src in self.sources:
             self.get_results_file(src, self.data_directory)
             self.parse_results_file(src, self.data_directory)
-        self.retrieve._build_and_move_results()
+        # self.retrieve._build_and_move_results()
 
     def get_results_file(self, src, data_directory):
         """
