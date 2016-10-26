@@ -326,6 +326,10 @@ class BuildResults(object):
         contestname = unicode(" ".join(race.ContestName.stripped_strings))
         officename_idx = self.framer._find_nth(contestname, " - ", 1)
         officename = unicode(contestname[:officename_idx].replace(".", ""))
+        if "United States Representative" in officename:
+            officename = officename.replace("United States Representative", "US House of Representatives")
+        if "State Assembly Member" in officename:
+            officename = officename.replace("State Assembly Member", "State Assembly")
         level_idx = self.framer._find_nth(contestname, " - ", 1) + 3
         level = unicode(contestname[level_idx:].replace(" Results", "").lower())
         seatnum = None
