@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
+from django.views.generic import RedirectView
 from django.contrib import admin
 from tastypie.api import Api
 from kpcc_backroom_handshakes.api import CandidateResource, MeasureResource, JudicialResource, ContestResource
@@ -27,6 +28,7 @@ urlpatterns = [
     url(r"^elections/", include("ballot_box.urls", namespace="ballot-box")),
     url(r"^elections/", include("measure_finance.urls", namespace="campaign-finance")),
     url(r"^elections/", include("election_registrar.urls", namespace="elections")),
+    # url(r"^", RedirectView.as_view(url="elections/", permanent=False)),
 ]
 
 if settings.DEBUG:
@@ -34,6 +36,3 @@ if settings.DEBUG:
     urlpatterns += patterns('',
         url(r'^__debug__/', include(debug_toolbar.urls)),
     )
-
-# if settings.DEBUG and settings.MEDIA_ROOT:
-#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
