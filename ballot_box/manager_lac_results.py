@@ -571,7 +571,7 @@ class LacProcessMethods(object):
             framer.contest["contestname"] = fixer._fix(contestname) # framer.office["officename"]
             framer.contest["contestdescription"] = None
             framer.contest["contestid"] = saver._make_contest_id(
-                election.electionid,
+                # election.electionid,
                 src.source_short,
                 framer.contest["level"],
                 framer.office["officeslug"],
@@ -682,7 +682,7 @@ class LacProcessMethods(object):
             framer.contest["contestname"] = fixer._fix(contestname) # framer.office["officename"]
             framer.contest["contestdescription"] = None
             framer.contest["contestid"] = saver._make_contest_id(
-                election.electionid,
+                # election.electionid,
                 src.source_short,
                 framer.contest["level"],
                 framer.office["officeslug"],
@@ -830,7 +830,7 @@ class LacProcessMethods(object):
             except:
                 framer.contest["contestdescription"] = None
             framer.contest["contestid"] = saver._make_contest_id(
-                election.electionid,
+                # election.electionid,
                 src.source_short,
                 framer.contest["level"],
                 framer.office["officeslug"],

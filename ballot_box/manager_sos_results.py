@@ -189,7 +189,7 @@ class BuildResults(object):
         self.framer.contest["contestdescription"] = None
         if race_id == "140":
             self.framer.contest["contestid"] = self.saver._make_contest_id(
-                election.electionid,
+                # election.electionid,
                 src.source_short,
                 self.framer.contest["level"],
                 self.framer.office["officeslug"],
@@ -211,7 +211,7 @@ class BuildResults(object):
             )
         elif race_id == "150":
             self.framer.contest["contestid"] = self.saver._make_contest_id(
-                election.electionid,
+                # election.electionid,
                 src.source_short,
                 self.framer.contest["level"],
                 self.framer.office["officeslug"],
@@ -297,7 +297,7 @@ class BuildResults(object):
         )
         self.framer.contest["contestdescription"] = description
         self.framer.contest["contestid"] = self.saver._make_contest_id(
-            election.electionid,
+            # election.electionid,
             src.source_short,
             self.framer.contest["level"],
             self.framer.office["officeslug"],
@@ -369,7 +369,7 @@ class BuildResults(object):
         self.framer.contest["contestname"] = self.framer.office["officename"]
         self.framer.contest["contestdescription"] = None
         self.framer.contest["contestid"] = self.saver._make_contest_id(
-            election.electionid,
+            # election.electionid,
             src.source_short,
             self.framer.contest["level"],
             self.framer.office["officeslug"],

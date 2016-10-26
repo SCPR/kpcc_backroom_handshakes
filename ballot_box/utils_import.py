@@ -285,7 +285,7 @@ class Saver(object):
         """
         framer = Framer()
         required_keys = [
-            "electionid",
+            # "electionid",
             "source_short",
             "level",
             "officeslug",
