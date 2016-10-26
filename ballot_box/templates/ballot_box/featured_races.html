@@ -24,7 +24,9 @@
 
     <div class="hero-election">
         {% include "ballot_box/inc_header.html" %}
-        {% include "ballot_box/inc_buttons.html" %}
+        {% if is_homepage == False %}
+            {% include "ballot_box/inc_buttons.html" %}
+        {% endif %}
         {% if featured_races %}
             <div class="row-fluid results clearfix">
                 {% for contest in featured_races %}

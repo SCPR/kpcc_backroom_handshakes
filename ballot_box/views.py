@@ -80,6 +80,48 @@ class BakedEmbeddedDetail(BuildableDetailView):
         return context
 
 
+class HomepageIndex(ListView):
+    model = Contest
+    template_name = "ballot_box/featured_races.html"
+
+    def get_object(self):
+        object = super(HomepageIndex, self).get_object()
+        return object
+
+    def get_context_data(self, **kwargs):
+        context = super(HomepageIndex, self).get_context_data(**kwargs)
+        context["is_homepage"] = True
+        context["electionid"] = self.kwargs["electionid"]
+        queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
+        context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
+        context["featured_measures"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=True)
+        context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(source_short="sos").first()
+        return context
+
+
+class BakedHomepageIndex(BuildableListView):
+    model = Contest
+    template_name = "ballot_box/featured_races.html"
+    electionid = "general-2016-11-08"
+    build_path = "results/%s/homepage.html" % (electionid)
+
+    def get_object(self):
+        object = super(BakedHomepageIndex, self).get_object()
+        return object
+
+    def get_context_data(self, **kwargs):
+        context = super(BakedHomepageIndex, self).get_context_data(**kwargs)
+        context["is_homepage"] = True
+        context["electionid"] = self.electionid
+        context["baked"] = True
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
+        context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
+        context["featured_measures"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=True)
+        context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(source_short="sos").first()
+        return context
+
+
 class FeaturedIndex(ListView):
     model = Contest
     template_name = "ballot_box/featured_races.html"
@@ -90,6 +132,7 @@ class FeaturedIndex(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(FeaturedIndex, self).get_context_data(**kwargs)
+        context["is_homepage"] = False
         context["electionid"] = self.kwargs["electionid"]
         queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
         context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
@@ -110,6 +153,7 @@ class BakedFeaturedIndex(BuildableListView):
 
     def get_context_data(self, **kwargs):
         context = super(BakedFeaturedIndex, self).get_context_data(**kwargs)
+        context["is_homepage"] = False
         context["electionid"] = self.electionid
         context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
