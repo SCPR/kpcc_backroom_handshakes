@@ -46,7 +46,7 @@ class Saver(object):
             #     log_message += "* %s exists\n" % (office["officeslug"])
         except Exception, exception:
             error_output = "%s %s" % (exception, office["officeslug"])
-            logger.error(error_output)
+            logger.debug(error_output)
             raise
         return log_message
 
@@ -58,7 +58,7 @@ class Saver(object):
             this_office = Office.objects.get(officeid=office["officeid"])
         except Exception, exception:
             error_output = "%s %s" % (exception, office["officeid"])
-            logger.error(error_output)
+            logger.debug(error_output)
             raise
         try:
             obj, created = this_office.contest_set.update_or_create(
@@ -89,7 +89,7 @@ class Saver(object):
             #     log_message += "\t* %s exists but we updated figures\n" % (contest["contestid"])
         except Exception, exception:
             error_output = "%s %s" % (exception, contest["contestid"])
-            logger.error(error_output)
+            logger.debug(error_output)
             raise
         return log_message
 
@@ -101,7 +101,7 @@ class Saver(object):
             this_contest = Contest.objects.get(contestid=contest["contestid"])
         except Exception, exception:
             error_output = "%s %s" % (exception, contest["contestid"])
-            logger.error(error_output)
+            logger.debug(error_output)
             raise
         try:
             presave = this_contest.judicialcandidate_set.get(judgeid=judicial["judgeid"])
@@ -115,7 +115,7 @@ class Saver(object):
                 prenopct = None
         except Exception, exception:
             error_output = "ALERT: %s" % (exception)
-            logger.error(error_output)
+            logger.debug(error_output)
         try:
             obj, created = this_contest.judicialcandidate_set.update_or_create(
                 judgeid=judicial["judgeid"],
@@ -137,7 +137,7 @@ class Saver(object):
                 log_message += "\t\t* UPDATED %s: %s from %s%% to %s%%\n" % (this_contest.contestname, judicial["fullname"], prevotepct, judicial["votepct"])
         except Exception, exception:
             error_output = "%s %s" % (exception, judicial["judgeid"])
-            logger.error(error_output)
+            logger.debug(error_output)
             raise
         return log_message
 
@@ -149,7 +149,7 @@ class Saver(object):
             this_contest = Contest.objects.get(contestid=contest["contestid"])
         except Exception, exception:
             error_output = "%s %s" % (exception, contest["contestid"])
-            logger.error(error_output)
+            logger.debug(error_output)
             raise
         try:
             presave = this_contest.ballotmeasure_set.get(measureid=measure["measureid"])
@@ -163,7 +163,7 @@ class Saver(object):
                 prenopct = None
         except Exception, exception:
             error_output = "ALERT: %s" % (exception)
-            logger.error(error_output)
+            logger.debug(error_output)
         try:
             obj, created = this_contest.ballotmeasure_set.update_or_create(
                 measureid=measure["measureid"],
@@ -184,7 +184,7 @@ class Saver(object):
                 log_message += "\t\t* UPDATED %s:\n\t\t\t* Yes from %s%% to %s%%.\n\t\t\t* No from %s%% to %s%%.\n" % (this_contest.contestname, preyespct, measure["yespct"], prenopct, measure["nopct"])
         except Exception, exception:
             error_output = "%s %s" % (exception, measure["measureid"])
-            logger.error(error_output)
+            logger.debug(error_output)
             raise
         return log_message
 
@@ -196,7 +196,7 @@ class Saver(object):
             this_contest = Contest.objects.get(contestid=contest["contestid"])
         except Exception, exception:
             error_output = "%s %s" % (exception, contest["contestid"])
-            logger.error(error_output)
+            logger.debug(error_output)
             raise
         try:
             presave = this_contest.candidate_set.get(candidateid=candidate["candidateid"])
@@ -206,7 +206,7 @@ class Saver(object):
                 prevotepct = None
         except Exception, exception:
             error_output = "ALERT: %s" % (exception)
-            logger.error(error_output)
+            logger.debug(error_output)
         try:
             obj, created = this_contest.candidate_set.update_or_create(
                 candidateid=candidate["candidateid"],
@@ -228,7 +228,7 @@ class Saver(object):
                 log_message += "\t\t* UPDATED %s: %s from %s%% to %s%%\n" % (this_contest.contestname, candidate["fullname"], prevotepct, candidate["votepct"])
         except Exception, exception:
             error_output = "%s %s" % (exception, candidate["candidateid"])
-            logger.error(error_output)
+            logger.debug(error_output)
             raise
         return log_message
 
