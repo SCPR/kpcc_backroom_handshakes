@@ -1,5 +1,5 @@
 {% extends "ballot_box/base.html" %}
-{% load static from staticfiles %}
+{% load static %}
 {% load humanize %}
 {% load ballot_box_template_tags %}
 
@@ -29,14 +29,14 @@
             {% for contest in featured_races %}
                 <div class="results-block">
                     <header>
-                        <h2 class="race-title">{{ contest.contestname }}</h2>
+                        <h2 class="race-title">{{ contest.contestname|title }}</h2>
                         <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
                     </header>
                     {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
                         <div class="result">
                             <div class="candidate clearfix">
-                                <img class="img-circle" src="http://placehold.it/48x48" />
-                                <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party }}){% endif %}</h3>
+                                <img class="img-circle" src="{% static '' %}/assets/{{ candidate.candidateid }}.png" />
+                                <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
                             </div>
                             <div class="votes">
                                 <h3 class="votepct align-right">{{ candidate.votepct|percentage|floatformat:0 }}%

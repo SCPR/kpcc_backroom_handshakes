@@ -26,17 +26,17 @@
             <!-- begin national races block -->
             {% if national_races %}
                 <div class="results-collection-block">
-                    <div class="results-collection clearfix">
+                    <div class="results-collection clearfix active">
                         <div class="collection-header"><h2>National Races</h2></div>
                         {% for contest in national_races %}
                             <div class="results-row clearfix">
                                 <header>
-                                    <h2 class="race-title">{{ contest.contestname }}</h2>
+                                    <h2 class="race-title">{{ contest.contestname|title }}</h2>
                                     <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
                                 </header>
                                 {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
-                                    <div class="candidate-block">
-                                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party }}){% endif %}
+                                    <div class="candidate-block clearfix">
+                                        <h3 class="candidate-name">{{ candidate.fullname|title }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}
                                             {% if candidate.incumbent == True %}
                                                 <br /> <span class="blurb-text">INCUMBENT</span>
                                             {% endif %}
@@ -65,8 +65,8 @@
                                     <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
                                 </header>
                                 {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
-                                    <div class="candidate-block">
-                                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party }}){% endif %}
+                                    <div class="candidate-block clearfix">
+                                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}
                                             {% if candidate.incumbent == True %}
                                                 <br /> <span class="blurb-text">INCUMBENT</span>
                                             {% endif %}
@@ -95,8 +95,8 @@
                                     <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
                                 </header>
                                 {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
-                                    <div class="candidate-block">
-                                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party }}){% endif %}
+                                    <div class="candidate-block clearfix">
+                                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}
                                             {% if candidate.incumbent == True %}
                                                 <br /> <span class="blurb-text">INCUMBENT</span>
                                             {% endif %}
@@ -117,15 +117,15 @@
                 <div class="results-collection-block">
                     <div class="results-collection clearfix">
                         <div class="collection-header"><h2>Orange County Races</h2></div>
-                        {% for contest in lac_races %}
+                        {% for contest in oc_races %}
                             <div class="results-row clearfix">
                                 <header>
                                     <h2 class="race-title">{{ contest.contestname }}</h2>
                                     <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
                                 </header>
                                 {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
-                                    <div class="candidate-block">
-                                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party }}){% endif %}
+                                    <div class="candidate-block clearfix">
+                                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}
                                             {% if candidate.incumbent == True %}
                                                 <br /> <span class="blurb-text">INCUMBENT</span>
                                             {% endif %}

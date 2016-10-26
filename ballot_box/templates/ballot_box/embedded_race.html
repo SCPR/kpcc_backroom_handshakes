@@ -26,7 +26,7 @@
         <div class="embed-block">
             {% if contest.is_ballot_measure = True %}
                 <header>
-                    <h2 class="race-title">{{ contest.contestname }}</h2>
+                    <h2 class="race-title">{{ contest.contestname|title }}</h2>
                     <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</p>
                 </header>
                 {% for measure in contest.ballotmeasure_set.all %}
@@ -49,7 +49,7 @@
                 {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
                     <div class="result clearfix">
                         <div class="candidate">
-                            <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party }}){% endif %}</h3>
+                            <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
                         </div>
                         <div class="votes">
                             <h3 class="votepct align-right">{{ candidate.votepct|percentage|floatformat:0 }}%
