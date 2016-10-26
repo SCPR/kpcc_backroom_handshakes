@@ -67,6 +67,13 @@ def load_ballot_box():
     local("python manage.py loaddata ballot_box/fixtures/ballot_box.json")
 
 
+def load_primary_data():
+    """
+    shortcut to load ballot box data fixtures
+    """
+    local("python manage.py loaddata ballot_box/fixtures/primary_data.json")
+
+
 def dump_registrar():
     """
     shortcut to dump data from ballot box as fixtures
