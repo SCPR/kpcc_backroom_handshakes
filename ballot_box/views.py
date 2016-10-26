@@ -156,6 +156,7 @@ class ResultIndex(ListView):
             Q(resultsource__source_short="lac") |
             Q(resultsource__source_short="oc")
         ).order_by("contestname")
+        context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(source_short="sos").first()
         return context
 
 
@@ -199,4 +200,5 @@ class BakedResultsIndex(BuildableListView):
             Q(resultsource__source_short="lac") |
             Q(resultsource__source_short="oc")
         ).order_by("contestname")
+        context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(source_short="sos").first()
         return context
