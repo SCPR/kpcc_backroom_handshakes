@@ -27,8 +27,16 @@
 {% block twitter_description %}These charts displays the top donors supporting and opposing California's numerous ballot measures. Voters cast their choice on Nov. 8, 2016.{% endblock %}
 <!-- end meta -->
 
-{% block css_overrides %}
+
+{% block extra_css %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
+    {% if baked == True %}
+        <link href="http://162.243.135.6/static/css/reset.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="http://162.243.135.6/static/css/styles.css" media="screen" rel="stylesheet" type="text/css" />
+    {% else %}
+        <link href="{% static 'css/reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
+        <link href="{% static 'css/styles.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    {% endif %}
 {% endblock %}
 
 {% block page_content %}

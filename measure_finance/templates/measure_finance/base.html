@@ -40,9 +40,7 @@
         <!-- end meta -->
 
         <!-- begin css -->
-        <link href="{% static 'css/reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
-        <link href="{% static 'css/styles.css' %}" media="screen" rel="stylesheet" type="text/css" />
-        {% block css_overrides %}{% endblock %}
+        {% block extra_css %}{% endblock %}
         <!-- end css -->
 
         <!-- html5 shim and respond.js ie8 support of html5 elements and media queries -->

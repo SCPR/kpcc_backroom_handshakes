@@ -56,6 +56,7 @@ class InitialDetailView(BuildableDetailView):
 
     def get_context_data(self, **kwargs):
         context = super(InitialDetailView, self).get_context_data(**kwargs)
+        context["baked"] = True
         aggregate_contribs = MeasureTotal.objects.filter(measure_id=self.object.id)
         context["total_support"] = aggregate_contribs.filter(support="Yes").first()
         if context["total_support"]:

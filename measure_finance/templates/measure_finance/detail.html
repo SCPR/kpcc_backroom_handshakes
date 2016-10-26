@@ -1,6 +1,6 @@
 {% extends "measure_finance/base.html" %}
 
-{% load static from staticfiles %}
+{% load static %}
 {% load measure_finance_template_tags %}
 
 <!-- begin meta -->
@@ -26,6 +26,16 @@
 
 {% block twitter_description %}This chart displays the top donors supporting and opposing California's {{ object.official_identifier }}: {{ object.official_title }}. Voters cast their choice on Nov. 8, 2016.{% endblock %}
 <!-- end meta -->
+
+{% block extra_css %}
+    {% if baked == True %}
+        <link href="http://162.243.135.6/static/css/reset.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="http://162.243.135.6/static/css/styles.css" media="screen" rel="stylesheet" type="text/css" />
+    {% else %}
+        <link href="{% static 'css/reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
+        <link href="{% static 'css/styles.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    {% endif %}
+{% endblock %}
 
 {% block contributions_chart_config %}
     <script>
@@ -164,13 +174,22 @@
                 </li>
             </div>
             <div class="logo">
-                <img src="{% static 'images/maplight_logo_partner.png' %}" />
+                {% if baked == True %}
+                    <img src="http://162.243.135.6/static/images/maplight_logo_partner.png" />
+                {% else %}
+                    <img src="{% static 'images/maplight_logo_partner.png' %}" />
+                {% endif %}
             </div>
         </footer>
     </div>
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'scripts/d3.js' %}"></script>
-    <script src="{% static 'scripts/app.js' %}"></script>
+    {% if baked == True %}
+        <script src="http://162.243.135.6/static/scripts/d3.js"></script>
+        <script src="http://162.243.135.6/static/scripts/app.js"></script>
+    {% else %}
+        <script src="{% static 'scripts/d3.js' %}"></script>
+        <script src="{% static 'scripts/app.js' %}"></script>
+    {% endif %}
 {% endblock %}
