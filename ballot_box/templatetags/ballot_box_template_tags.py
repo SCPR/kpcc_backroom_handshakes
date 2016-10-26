@@ -37,7 +37,27 @@ def percentage(value):
     else:
         return "%s" % (value*100)
 
+@register.filter
+def convert_political_party(value):
+    if value == "American Independent":
+        output = "AI"
+    elif value == "Republican":
+        output = "R"
+    elif value == "Democrat":
+        output = "D"
+    elif value == "Peace And Freedom":
+        output = "PF"
+    elif value == "Libertarian":
+        output = "L"
+    elif value == "Green":
+        output = "G"
+    elif value == "Republican , American Independent":
+        output = "R"
+    else:
+        output = None
+    return output
 
 register.filter(currency)
 register.filter(neg_to_posi)
 register.filter(percentage)
+register.filter(convert_political_party)
