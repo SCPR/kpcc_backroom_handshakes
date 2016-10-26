@@ -22,9 +22,9 @@
     <!-- i was built at {{ timestamp }} using django-bakery -->
     {% endif %}
 
-    <div class="row-fluid embed clearfix">
-        <div class="embed-block">
-            {% if contest.is_ballot_measure = True %}
+    {% if contest.is_ballot_measure = True %}
+        <div class="row-fluid embed embed-measure clearfix">
+            <div class="embed-block">
                 <header>
                     <h2 class="race-title">{{ contest.contestname|title }}</h2>
                     <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</p>
@@ -41,7 +41,19 @@
                         </div>
                     </div>
                 {% endfor %}
-            {% else %}
+                <div class="branded-image clearfix">
+                    {% if baked == True %}
+                        <img src="http://162.243.135.6/static/assets/kpcc-votergameplan-mark-horizontal.png" />
+                    {% else %}
+                        <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
+                    {% endif %}
+                        <p><a href="#">See All Results &gt;</a></p>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row-fluid embed embed-race clearfix">
+            <div class="embed-block">
                 <header>
                     <h2 class="race-title">{{ contest.contestname }}</h2>
                     <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</p>
@@ -60,15 +72,15 @@
                         </div>
                     </div>
                 {% endfor %}
-            {% endif %}
-            <div class="branded-image clearfix">
-            {% if baked == True %}
-                <img src="http://162.243.135.6/static/assets/kpcc-votergameplan-mark-horizontal.png" />
-            {% else %}
-                <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
-            {% endif %}
-                <p><a href="#">See All Results &gt;</a></p>
+                <div class="branded-image clearfix">
+                    {% if baked == True %}
+                        <img src="http://162.243.135.6/static/assets/kpcc-votergameplan-mark-horizontal.png" />
+                    {% else %}
+                        <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
+                    {% endif %}
+                        <p><a href="#">See All Results &gt;</a></p>
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}
