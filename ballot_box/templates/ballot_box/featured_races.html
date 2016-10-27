@@ -1,12 +1,9 @@
-{% extends "ballot_box/base.html" %}
+{% extends "ballot_box/_base.html" %}
 {% load static %}
 {% load humanize %}
 {% load ballot_box_template_tags %}
 
 {% block extra_css %}
-    <!--
-    <link rel="stylesheet" href="http://basehold.it/18/255/42/85/0.5">
-    -->
     {% if baked == True %}
         <link href="http://162.243.135.6/static/css/reset.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="http://162.243.135.6/static/css/general-election.css" media="screen" rel="stylesheet" type="text/css" />
