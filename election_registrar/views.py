@@ -24,10 +24,6 @@ class ElectionIndexView(BuildableListView):
     queryset = Election.objects.order_by("-election_date")
     template_name = "election_registrar/index.html"
 
-    # def get_context_data(self, **kwargs):
-        # context = super(ElectionIndexView, self).get_context_data(**kwargs)
-        # return context
-
 
 class ElectionDetailView(BuildableDetailView):
     """ """
@@ -39,24 +35,9 @@ class ElectionDetailView(BuildableDetailView):
         object = super(ElectionDetailView, self).get_object()
         return object
 
-    # def get_url(self, obj):
-    #     """
-    #     the url at which the detail page should appear.
-    #     """
-    #     return "/%s" % (obj.official_identifier_slug)
-
-    # def get_build_path(self, obj):
-    #     """
-    #     used to determine where to build the detail page. override this if you
-    #     would like your detail page at a different location. by default it
-    #     will be built at get_url() + "index.html"
-    #     """
-    #     path = os.path.join(settings.BUILD_DIR, self.sub_directory, self.get_url(obj)[1:])
-    #     os.path.exists(path) or os.makedirs(path)
-    #     return os.path.join(path, "index.html")
-
     def get_context_data(self, **kwargs):
         context = super(ElectionDetailView, self).get_context_data(**kwargs)
         context["result_sources"] = ResultSource.objects.filter(election__id=context["election"].id)
-        context["contests"] = Contest.objects.filter(election__id=context["election"].id)
+        context["contests"] = Contest.objects.filter(election__id=context["election"].id).filter(
+            is_display_priority=True)
         return context
