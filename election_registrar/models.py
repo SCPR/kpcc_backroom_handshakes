@@ -30,6 +30,7 @@ class Election(models.Model):
     live_results = models.BooleanField("Are These Live Results", default=False)
     election_date = models.DateField("Date of the Election", null=True, blank=True)
     poll_close_at = models.DateTimeField("Time Polls Close", null=True, blank=True)
+    election_caveats = models.TextField("Audience-facing display of election status", null=True, blank=True)
     national = models.BooleanField("Is National Election?", default=False)
     created = models.DateTimeField("Date Created", auto_now_add=True)
     modified = models.DateTimeField("Date Modified", auto_now=True)
