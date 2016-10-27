@@ -1,0 +1,16 @@
+{% load static %}
+{% load humanize %}
+{% load ballot_box_template_tags %}
+
+<div class="results-row clearfix">
+    <header>
+        <h2 class="race-title">{{ contest.contestname|title }}</h2>
+        <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
+    </header>
+    {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
+        <div class="result-item clearfix">
+            <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
+            <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">of california voters</span>{% endif %}</span></h3>
+        </div>
+    {% endfor %}
+</div>
