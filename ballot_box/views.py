@@ -166,7 +166,7 @@ class BakedFeaturedIndex(BuildableListView):
 
 class ResultIndex(ListView):
     model = Contest
-    template_name = "ballot_box/list_races.html"
+    template_name = "ballot_box/all_races.html"
 
     def get_object(self):
         object = super(ResultIndex, self).get_object()
@@ -179,8 +179,9 @@ class ResultIndex(ListView):
         context["national_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
             is_display_priority=True).filter(is_ballot_measure=False).filter(
                 Q(contestid__contains="sos-statewide-president") |
-                Q(contestid__contains="sos-statewide-us-senate") |
-                Q(contestid__contains="sos-districtwide-united-states-representative")
+                Q(contestid__contains="sos-districtwide-us-house-of-representatives") |
+                Q(contestid__contains="sos-statewide-us-senate")
+
         ).order_by("contestname")
         context["state_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
             is_display_priority=True).filter(is_ballot_measure=False).filter(
@@ -206,7 +207,7 @@ class ResultIndex(ListView):
 
 class BakedResultsIndex(BuildableListView):
     model = Contest
-    template_name = "ballot_box/list_races.html"
+    template_name = "ballot_box/all_races.html"
     electionid = "general-2016-11-08"
     build_path = "results/%s/all.html" % (electionid)
 

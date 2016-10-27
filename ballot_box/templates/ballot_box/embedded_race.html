@@ -30,7 +30,7 @@
                     <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</p>
                 </header>
                 {% for measure in contest.ballotmeasure_set.all %}
-                    <div class="result clearfix">
+                    <div class="result-item clearfix">
                         <div class="yes">
                             <span class="align-left candidate-name">Yes</span>
                             <span class="align-right votepct">{{ measure.yespct|percentage|floatformat:0 }}%</span>
@@ -55,21 +55,13 @@
         <div class="row-fluid embed embed-race clearfix">
             <div class="embed-block">
                 <header>
-                    <h2 class="race-title">{{ contest.contestname }}</h2>
+                    <h2 class="race-title">{{ contest.contestname|title }}</h2>
                     <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</p>
                 </header>
                 {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
-                    <div class="result clearfix">
-                        <div class="candidate">
-                            <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
-                        </div>
-                        <div class="votes">
-                            <h3 class="votepct align-right">{{ candidate.votepct|percentage|floatformat:0 }}%
-                                {% if contest.contestid == 'general-2016-11-08-sos-statewide-president' %}
-                                    <br /> <span class="blurb-text">of california voters</span>
-                                {% endif %}
-                            </h3>
-                        </div>
+                    <div class="result-item clearfix">
+                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
+                        <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">of california voters</span>{% endif %}</span></h3>
                     </div>
                 {% endfor %}
                 <div class="branded-image clearfix">

@@ -33,22 +33,14 @@
                             <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
                         </header>
                         {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
-                            <div class="result">
-                                <div class="candidate clearfix">
-                                    {% if baked == True %}
-                                        <img class="img-circle" src="http://162.243.135.6/static/assets/{{ candidate.candidateid }}.png" />
-                                    {% else %}
-                                        <img class="img-circle" src="{% static '' %}/assets/{{ candidate.candidateid }}.png" />
-                                    {% endif %}
-                                    <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
-                                </div>
-                                <div class="votes">
-                                    <h3 class="votepct align-right">{{ candidate.votepct|percentage|floatformat:0 }}%
-                                        {% if contest.contestid == 'general-2016-11-08-sos-statewide-president' %}
-                                            <br /> <span class="blurb-text">of california voters</span>
-                                        {% endif %}
-                                    </h3>
-                                </div>
+                            <div class="result-item clearfix">
+                                {% if baked == True %}
+                                    <img src="http://162.243.135.6/static/assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
+                                {% else %}
+                                    <img src="{% static '' %}/assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
+                                {% endif %}
+                                <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
+                                <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">of california voters</span>{% endif %}</span></h3>
                             </div>
                         {% endfor %}
                     </div>
@@ -57,36 +49,34 @@
         {% endif %}
         {% if featured_measures %}
             <div class="row-fluid measures clearfix">
-                    <div class="results-block">
-                        <header>
-                            <h2 class="race-title">Ballot Measures</h2>
-                            <h2 class="precincts-reporting">{{ featured_measures.0.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
-                        </header>
-                        {% for measure in featured_measures %}
-                            <div class="measures-block">
-                                {% for this in measure.ballotmeasure_set.all %}
-                                    <div class="result">
-                                        <div class="measure">
-                                            <dl class="measure-name">
-                                                <dt>{{ this.fullname }}</dt>
-                                                <dd>{{ measure.contestdescription }}</dd>
-                                            </dl>
-                                        </div>
-                                        <div class="votes">
-                                            <dl class="yes">
-                                                <dt class="align-center">{{ this.yespct|percentage|floatformat:0 }}%</dt>
-                                                <dd class="align-center">Yes</dd>
-                                            </dl>
-                                            <dl class="no">
-                                                <dt class="align-center">{{ this.nopct|percentage|floatformat:0 }}%</dt>
-                                                <dd class="align-center">No</dd>
-                                            </dl>
-                                        </div>
-                                    </div>
-                                {% endfor %}
+                <div class="results-block clearfix">
+                    <header>
+                        <h2 class="race-title">Ballot Measures</h2>
+                        <h2 class="precincts-reporting">{{ featured_measures.0.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
+                    </header>
+                    {% for measure in featured_measures %}
+                        {% for this in measure.ballotmeasure_set.all %}
+                            <div class="result-item clearfix">
+                                <div class="measure-name">
+                                    <dl>
+                                        <dt>{{ this.fullname }}</dt>
+                                        <dd>{{ measure.contestdescription }}</dd>
+                                    </dl>
+                                </div>
+                                <div class="measure-votes clearfix">
+                                    <dl class="yes">
+                                        <dt>{{ this.yespct|percentage|floatformat:0 }}%</dt>
+                                        <dd>Yes</dd>
+                                    </dl>
+                                    <dl class="no">
+                                        <dt>{{ this.nopct|percentage|floatformat:0 }}%</dt>
+                                        <dd>No</dd>
+                                    </dl>
+                                </div>
                             </div>
                         {% endfor %}
-                    </div>
+                    {% endfor %}
+                </div>
             </div>
         {% endif %}
     </div>
