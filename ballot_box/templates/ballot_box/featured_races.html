@@ -30,7 +30,7 @@
                     <div class="results-block">
                         <header>
                             <h2 class="race-title">{{ contest.contestname|title }}</h2>
-                            <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
+                            <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</h2>
                         </header>
                         {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
                             <div class="result-item clearfix">
@@ -52,7 +52,7 @@
                 <div class="results-block clearfix">
                     <header>
                         <h2 class="race-title">Ballot Measures</h2>
-                        <h2 class="precincts-reporting">{{ featured_measures.0.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
+                        <h2 class="precincts-reporting">{{ featured_measures.0.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</h2>
                     </header>
                     {% for measure in featured_measures %}
                         {% for this in measure.ballotmeasure_set.all %}

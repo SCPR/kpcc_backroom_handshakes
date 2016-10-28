@@ -27,7 +27,7 @@
             <div class="embed-block">
                 <header>
                     <h2 class="race-title">{{ contest.contestname|title }}</h2>
-                    <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</p>
+                    <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</p>
                 </header>
                 {% for measure in contest.ballotmeasure_set.all %}
                     <div class="result-item clearfix">
@@ -56,7 +56,7 @@
             <div class="embed-block">
                 <header>
                     <h2 class="race-title">{{ contest.contestname|title }}</h2>
-                    <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</p>
+                    <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</p>
                 </header>
                 {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
                     <div class="result-item clearfix">

@@ -78,7 +78,7 @@
                                         <div class="measure-name">
                                             <dl>
                                                 <dt>{{ this.fullname }}&mdash;{{ measure.contestdescription }}</dt>
-                                                <dd><span class="blurb-text">{{ measure.precinctsreportingpct|percentage|floatformat:0 }}% reporting</span></dd>
+                                                <dd><span class="blurb-text">{{ measure.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</span></dd>
                                             </dl>
                                         </div>
                                         <div class="measure-votes clearfix">
@@ -107,14 +107,14 @@
                             <div class="measures-row clearfix">
                                 <header>
                                     <h2 class="race-title">{{ contest.contestname|title }}</h2>
-                                    <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</h2>
+                                    <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</h2>
                                 </header>
                                 {% for this in contest.ballotmeasure_set.all %}
                                     <div class="result-item clearfix">
                                         <div class="measure-name">
                                             <dl>
                                                 <dt>{{ this.fullname }}&mdash;{{ contest.contestdescription }}</dt>
-                                                <dd><span class="blurb-text">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% reporting</span></dd>
+                                                <dd><span class="blurb-text">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</span></dd>
                                             </dl>
                                         </div>
                                         <div class="measure-votes clearfix">
