@@ -40,6 +40,7 @@ class ElectionAdmin(admin.ModelAdmin):
         "election_date",
         "electionid",
         "poll_close_at",
+        "election_caveats",
         "test_results",
         "live_results",
         "national",

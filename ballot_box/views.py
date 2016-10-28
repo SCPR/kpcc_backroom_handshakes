@@ -32,6 +32,9 @@ class EmbeddedDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(EmbeddedDetail, self).get_context_data(**kwargs)
+        context["is_homepage"] = False
+        context["baked"] = False
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.kwargs["electionid"]
         context["contestid"] = self.kwargs["slug"]
         context["contest"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(contestid=context["contestid"]).first()
@@ -74,9 +77,10 @@ class BakedEmbeddedDetail(BuildableDetailView):
 
     def get_context_data(self, **kwargs):
         context = super(BakedEmbeddedDetail, self).get_context_data(**kwargs)
-        context["electionid"] = self.electionid
+        context["is_homepage"] = False
         context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        context["electionid"] = self.electionid
         return context
 
 
@@ -91,7 +95,10 @@ class HomepageIndex(ListView):
     def get_context_data(self, **kwargs):
         context = super(HomepageIndex, self).get_context_data(**kwargs)
         context["is_homepage"] = True
+        context["baked"] = False
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.kwargs["electionid"]
+        context["caveat"] = Election.objects.filter(electionid=context["electionid"]).first().election_caveats
         queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
         context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
         context["featured_measures"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=True)
@@ -112,9 +119,10 @@ class BakedHomepageIndex(BuildableListView):
     def get_context_data(self, **kwargs):
         context = super(BakedHomepageIndex, self).get_context_data(**kwargs)
         context["is_homepage"] = True
-        context["electionid"] = self.electionid
         context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        context["electionid"] = self.electionid
+        context["caveat"] = Election.objects.filter(electionid=context["electionid"]).first().election_caveats
         queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
         context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
         context["featured_measures"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=True)
@@ -133,7 +141,10 @@ class FeaturedIndex(ListView):
     def get_context_data(self, **kwargs):
         context = super(FeaturedIndex, self).get_context_data(**kwargs)
         context["is_homepage"] = False
+        context["baked"] = False
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.kwargs["electionid"]
+        context["caveat"] = Election.objects.filter(electionid=context["electionid"]).first().election_caveats
         queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
         context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
         context["featured_measures"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=True)
@@ -154,9 +165,10 @@ class BakedFeaturedIndex(BuildableListView):
     def get_context_data(self, **kwargs):
         context = super(BakedFeaturedIndex, self).get_context_data(**kwargs)
         context["is_homepage"] = False
-        context["electionid"] = self.electionid
         context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        context["electionid"] = self.electionid
+        context["caveat"] = Election.objects.filter(electionid=context["electionid"]).first().election_caveats
         queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
         context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
         context["featured_measures"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=True)
@@ -174,7 +186,11 @@ class ResultIndex(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ResultIndex, self).get_context_data(**kwargs)
+        context["is_homepage"] = False
+        context["baked"] = False
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.kwargs["electionid"]
+        context["caveat"] = Election.objects.filter(electionid=context["electionid"]).first().election_caveats
         queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_display_priority=True)
         context["national_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
             is_display_priority=True).filter(is_ballot_measure=False).filter(
@@ -217,9 +233,11 @@ class BakedResultsIndex(BuildableListView):
 
     def get_context_data(self, **kwargs):
         context = super(BakedResultsIndex, self).get_context_data(**kwargs)
-        context["electionid"] = self.electionid
+        context["is_homepage"] = False
         context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        context["electionid"] = self.electionid
+        context["caveat"] = Election.objects.filter(electionid=context["electionid"]).first().election_caveats
         queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_display_priority=True)
         context["national_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
             is_display_priority=True).filter(is_ballot_measure=False).filter(

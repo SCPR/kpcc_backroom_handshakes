@@ -43,6 +43,11 @@
                                 <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">of california voters</span>{% endif %}</span></h3>
                             </div>
                         {% endfor %}
+                        <h3 class="npr-link">
+                            {% if contest.contestid == 'sos-statewide-president' %}
+                                <a class="blurb-text" href="#">See National Results on NPR.org &gt;</a>
+                            {% endif %}
+                        </h3>
                     </div>
                 {% endfor %}
             </div>
