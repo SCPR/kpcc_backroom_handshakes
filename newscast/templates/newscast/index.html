@@ -1,0 +1,21 @@
+{% extends "newscast/_base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block page_content %}
+    <div class="jumbotron text-center">
+        <h1>Topic</h1>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="list-inline">
+                    {% for topic in topic_list %}
+                        <li><a href="{% url 'newscast:newscast_detail' topic.topicslug %}">{{ topic.topicname|title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
