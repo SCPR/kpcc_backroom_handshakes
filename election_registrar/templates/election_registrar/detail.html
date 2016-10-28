@@ -28,7 +28,6 @@
                         <p><code>&lt;iframe width="100%" height="320" scrolling="no" frameborder="no" src="http://{{ request.get_host }}{% url 'ballot_box:baked-embedded_detail' election.electionid contest.contestid %}"&gt;&lt;/iframe&gt;</code></p>
                     {% endif %}
 
-                    {% comment %}
                     <ul>
                         {% if contest.candidate_set.all %}
                             {% for candidate in contest.candidate_set.all %}
@@ -36,7 +35,6 @@
                             {% endfor %}
                         {% endif %}
                     </ul>
-                    {% endcomment %}
 
                 </div>
             {% endfor %}
