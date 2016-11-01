@@ -3,10 +3,31 @@
 {% load humanize %}
 {% load ballot_box_template_tags %}
 
+<!-- begin meta -->
+{% block title %}KPCC {{ contest.contestname|title }} Results for the Nov. 8 Election | scpr.org{% endblock %}
+
+{% block description %}The results for the {{ contest.contestname|title }} race in the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
+
+{% block keywords %}{{ contest.contestname|title }}, California{% endblock %}
+
+{% block og_title %}KPCC {{ contest.contestname|title }} Results for the Nov. 8 Election | scpr.org{% endblock %}
+
+{% comment %}
+    {% block og_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
+{% endcomment %}
+
+{% block og_description %}The results for the {{ contest.contestname|title }} race in the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
+
+{% comment %}
+{% block twitter_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
+{% endcomment %}
+
+{% block twitter_title %}KPCC {{ contest.contestname|title }} Results for the Nov. 8 Election | scpr.org{% endblock %}
+
+{% block twitter_description %}The results for the {{ contest.contestname|title }} race in the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
+<!-- end meta -->
+
 {% block extra_css %}
-    <!--
-    <link rel="stylesheet" href="http://basehold.it/18/255/42/85/0.5">
-    -->
     {% if baked == True %}
         <link href="http://162.243.135.6/static/css/general-election-reset.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="http://162.243.135.6/static/css/general-election.css" media="screen" rel="stylesheet" type="text/css" />

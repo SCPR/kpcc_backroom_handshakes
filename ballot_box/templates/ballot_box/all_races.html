@@ -3,6 +3,30 @@
 {% load humanize %}
 {% load ballot_box_template_tags %}
 
+<!-- begin meta -->
+{% block title %}KPCC Results for the Nov. 8 Election | scpr.org{% endblock %}
+
+{% block description %}Results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
+
+{% block keywords %}California{% endblock %}
+
+{% block og_title %}KPCC Results for the Nov. 8 Election | scpr.org{% endblock %}
+
+{% comment %}
+    {% block og_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
+{% endcomment %}
+
+{% block og_description %}Results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
+
+{% comment %}
+{% block twitter_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
+{% endcomment %}
+
+{% block twitter_title %}KPCC Results for the Nov. 8 Election | scpr.org{% endblock %}
+
+{% block twitter_description %}Results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
+<!-- end meta -->
+
 {% block extra_css %}
     {% if baked == True %}
         <link href="http://162.243.135.6/static/css/reset.css" media="screen" rel="stylesheet" type="text/css" />
@@ -113,7 +137,11 @@
                                     <div class="result-item clearfix">
                                         <div class="measure-name">
                                             <dl>
-                                                <dt>{{ this.fullname }}&mdash;{{ contest.contestdescription }}</dt>
+                                                {% if this.description %}
+                                                    <dt>{{ this.fullname }}&mdash;{{ this.description }}</dt>
+                                                {% else %}
+                                                    <dt>{{ this.fullname }}</dt>
+                                                {% endif %}
                                                 <dd><span class="blurb-text">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</span></dd>
                                             </dl>
                                         </div>
@@ -141,10 +169,8 @@
 {% block extra_js %}
     <script type="text/javascript">
         $(document).ready(function(){
-
             $("li#top-races").removeClass("selected");
             $("li#all-races").addClass("selected");
-
             $(".collection-header").click(function() {
                 $(this).parent().toggleClass("active");
             });

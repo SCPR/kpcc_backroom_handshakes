@@ -3,6 +3,30 @@
 {% load humanize %}
 {% load ballot_box_template_tags %}
 
+<!-- begin meta -->
+{% block title %}KPCC Featured Results for the Nov. 8 Election | scpr.org{% endblock %}
+
+{% block description %}Featured results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
+
+{% block keywords %}California, {% for contest in featured_races %}{{ contest.contestname|title }},{% endfor %}{% endblock %}
+
+{% block og_title %}KPCC Featured Results for the Nov. 8 Election | scpr.org{% endblock %}
+
+{% comment %}
+    {% block og_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
+{% endcomment %}
+
+{% block og_description %}Featured results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
+
+{% comment %}
+{% block twitter_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
+{% endcomment %}
+
+{% block twitter_title %}KPCC Featured Results for the Nov. 8 Election | scpr.org{% endblock %}
+
+{% block twitter_description %}Featured results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
+<!-- end meta -->
+
 {% block extra_css %}
     {% if baked == True %}
         <link href="http://162.243.135.6/static/css/reset.css" media="screen" rel="stylesheet" type="text/css" />
