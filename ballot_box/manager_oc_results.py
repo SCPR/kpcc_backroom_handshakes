@@ -89,6 +89,11 @@ class BuildOcResults(object):
                             race_log += saver.make_office(result.office)
                             race_log += saver.make_contest(result.office, result.contest)
                             race_log += saver.make_measure(result.contest, result.measure)
+                        # elif race.attrs["contest_type"] == "??":
+                        #     """
+                        #     this is a judicial race
+                        #     """
+                        #     pass
                         else:
                             """
                             this is a non-judicial candidate
@@ -111,6 +116,35 @@ class BuildResults(object):
     saver = Saver()
     framer = Framer()
 
+    state_measures = [
+        "1480",
+        "1481",
+        "1482",
+        "1483",
+        "1484",
+        "1485",
+        "1486",
+        "1487",
+        "1488",
+        "1489",
+        "1490",
+        "1491",
+        "1492",
+        "1493",
+        "1494",
+        "1495",
+        "1496"
+    ]
+
+    local_recall = [
+        "1473",
+        "1475",
+    ]
+
+    local_measures = [
+        "1530"
+    ]
+
     def _compile_judicial(self, race, race_id, election, src):
         """
         """
@@ -127,7 +161,7 @@ class BuildResults(object):
             officename = unicode(contestname[:officename_idx].replace(" - ", " "))
             fullname_idx = self.framer._find_nth(contestname, " - ", 2) + 3
         fullname = unicode(contestname[fullname_idx:])
-        level = "california"
+        level = "county"
         seatnum = None
         is_statewide = True
         precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
@@ -220,16 +254,48 @@ class BuildResults(object):
     def _compile_measure(self, race, election, src):
         """
         """
-        this_type = "Proposition"
-        fullname = unicode(race.attrs["contest_title"])
-        description = unicode(race.attrs["contest_title"])
-        prop_num = unicode(race.attrs["race_seq_nbr"])
-        officename = self.framer._concat(
-            this_type,
-            prop_num,
-            delimiter=" ",
-        )
-        level = None
+        r = race
+        if r.attrs["race_id"] in self.local_measures:
+            this_type = "Measure"
+            split_this = True
+            race.attrs["contest_title"] = "TT-Mesa Water District Advisory Vote"
+        elif race.attrs["race_id"] in self.state_measures:
+            this_type = "Proposition"
+            split_this = True
+        elif race.attrs["race_id"] in self.local_recall:
+            this_type = ""
+            split_this = False
+            race.attrs["contest_title"] = race.attrs["contest_title"].replace("(removed) ", "")
+            race.attrs["contest_title"] = race.attrs["contest_title"].replace("?", "")
+        else:
+            this_type = "Measure"
+            split_this = True
+        contest_title = unicode(race.attrs["contest_title"])
+        if split_this == True:
+            split_name = contest_title.split("-")
+            prop_num = split_name[0]
+            measure_fullname = "%s %s" % (this_type, prop_num)
+        else:
+            split_name = contest_title
+            prop_num = this_type
+            measure_fullname = "%s" % (split_name)
+        if this_type == "Proposition":
+            officename = self.framer._concat(
+                this_type,
+                prop_num,
+                delimiter=" ",
+            )
+        elif this_type == "Measure":
+            officename = self.framer._concat(
+                split_name[1],
+                delimiter=" ",
+            )
+        else:
+            officename = self.framer._concat(
+                split_name,
+                delimiter=" ",
+            )
+        level = "county"
         seatnum = None
         precinctstotal = race.attrs["total_precincts"]
         precinctsreport = race.attrs["counted_precincts"]
@@ -239,8 +305,7 @@ class BuildResults(object):
         total = yescount + nocount
         yespct = self.framer._calc_pct(yescount, total)
         nopct = self.framer._calc_pct(nocount, total)
-        poss_error = False
-        self.framer.office["officename"] = unicode(officename)
+        self.framer.office["officename"] = officename
         self.framer.office["officeslug"] = slugify(officename)
         self.framer.office["active"] = True
         self.framer.office["officeid"] = self.framer.office["officeslug"]
@@ -249,13 +314,13 @@ class BuildResults(object):
         self.framer.contest["seatnum"] = seatnum
         self.framer.contest["is_uncontested"] = False
         self.framer.contest["is_national"] = False
-        self.framer.contest["is_statewide"] = True
-        self.framer.contest["level"] = "california"
+        self.framer.contest["is_statewide"] = False
+        self.framer.contest["level"] = level
         self.framer.contest["is_ballot_measure"] = True
         self.framer.contest["is_judicial"] = False
         self.framer.contest["is_runoff"] = False
         self.framer.contest["reporttype"] = None
-        self.framer.contest["poss_error"] = poss_error
+        self.framer.contest["poss_error"] = False
         if self.framer._to_num(precinctstotal)["convert"] == True:
             pt = self.framer._to_num(precinctstotal)["value"]
             self.framer.contest["precinctstotal"] = pt
@@ -276,40 +341,80 @@ class BuildResults(object):
         self.framer.contest["votersturnout"] = self.framer._to_num(None)["value"]
         self.framer.contest["contestname"] = self.framer._concat(
             officename,
-            fullname,
             delimiter=" ",
         )
-        self.framer.contest["contestdescription"] = description
+        self.framer.contest["contestdescription"] = self.framer._concat(
+            officename,
+            this_type,
+            delimiter=" ",
+        )
         self.framer.contest["contestid"] = self.saver._make_contest_id(
-            # election.electionid,
             src.source_short,
             self.framer.contest["level"],
             self.framer.office["officeslug"],
         )
         self.framer.measure["ballotorder"] = None
-        self.framer.measure["fullname"] = officename
-        self.framer.measure["measureslug"] = slugify(self.framer.contest["contestname"])
-        self.framer.measure["description"] = description
+        self.framer.measure["fullname"] = measure_fullname
+        self.framer.measure["description"] = None
         self.framer.measure["yescount"] = yescount
         self.framer.measure["yespct"] = yespct
         self.framer.measure["nocount"] = nocount
         self.framer.measure["nopct"] = nopct
-        self.framer.measure["poss_error"] = poss_error
-        self.framer.measure["measureid"] = self.saver._make_this_id(
-            "measure",
-            self.framer.contest["contestid"],
-            slugify(self.framer.measure["description"]),
-        )
+        self.framer.measure["poss_error"] = False
+        if this_type == "Proposition":
+            self.framer.measure["measureid"] = self.saver._make_this_id(
+                "measure",
+                "%s-%s" % (src.source_short, self.framer.contest["level"]),
+                slugify(measure_fullname),
+            )
+        elif this_type == "":
+            self.framer.measure["measureid"] = self.saver._make_this_id(
+                "measure",
+                src.source_short,
+                slugify(measure_fullname),
+            )
+        else:
+            self.framer.measure["measureid"] = self.saver._make_this_id(
+                "measure",
+                self.framer.contest["contestid"],
+                slugify(measure_fullname),
+            )
         return self.framer
 
     def _compile_candidate(self, race, election, src):
         """
         """
-        this_type = "Candidate"
-        officename = unicode(race.attrs["contest_title"])
-        description = unicode(race.attrs["contest_title"])
-        prop_num = unicode(race.attrs["race_seq_nbr"])
-        level = "Orange"
+        this_type = "candidate"
+        officename = unicode(race.attrs["contest_title"].title())
+        if "United States Representative" in officename:
+            cleaning_name = officename.replace("United States Representative", "US House of Representatives")
+            cleaning_name = cleaning_name.replace(" District", "")
+            cleaning_name = cleaning_name.replace("US House of Representatives ", "")
+            district_seat = cleaning_name[0:2]
+            officename = "US House of Representatives District %s" % (district_seat)
+        if "Member Of The State Assembly" in officename:
+            cleaning_name = officename.replace("Member Of The State Assembly", "State Assembly")
+            cleaning_name = cleaning_name.replace(" District", "")
+            cleaning_name = cleaning_name.replace("State Assembly ", "")
+            district_seat = cleaning_name[0:2]
+            officename = "State Assembly District %s" % (district_seat)
+        if "State Senator" in officename:
+            cleaning_name = officename.replace("State Senator", "State Senate")
+            cleaning_name = cleaning_name.replace(" District", "")
+            cleaning_name = cleaning_name.replace("State Senate ", "")
+            district_seat = cleaning_name[0:2]
+            officename = "State Senate District %s" % (district_seat)
+        if "United States Senator" in officename:
+            officename = "US Senate"
+        if "President And Vice President" in officename:
+            officename = "President-Vice President"
+
+
+
+
+        description = unicode(officename)
+        prop_num = None
+        level = "county"
         seatnum = None
         precinctstotal = race.attrs["total_precincts"]
         precinctsreport = race.attrs["counted_precincts"]
@@ -349,12 +454,12 @@ class BuildResults(object):
         )
         self.framer.contest["votersregistered"] = self.framer._to_num(race.attrs["reg_voters"])["value"]
         self.framer.contest["votersturnout"] = self.framer._to_num(None)["value"]
-        self.framer.contest["contestname"] = "%s %s" % (level, self.framer.office["officename"])
+        self.framer.contest["contestname"] = self.framer.office["officename"]
         self.framer.contest["contestdescription"] = None
         self.framer.contest["contestid"] = self.saver._make_contest_id(
             # election.electionid,
             src.source_short,
-            self.framer.contest["level"].lower(),
+            self.framer.contest["level"],
             self.framer.office["officeslug"],
         )
         self.framer.candidates = []
@@ -384,7 +489,7 @@ class BuildResults(object):
             self.framer.candidates.append(this_candidate)
         return self.framer
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     task_run = BuildSosResults()
     task_run._init()
     print "\nTask finished at %s\n" % str(datetime.datetime.now())
