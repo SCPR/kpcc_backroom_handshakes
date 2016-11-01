@@ -112,8 +112,8 @@ class BuildLacResults(object):
                             if skip:
                                 pass
                             else:
-                                contest = process.compile_contest_results(records)
-                                process.update_database(contest, election, src)
+                                contest_package = process.compile_contest_results(records)
+                                process.update_database(contest_package, election, src)
                         os.remove(latest_path)
                         logger.info("we've finished processing lac results")
                 else:
@@ -334,36 +334,26 @@ class LacProcessMethods(object):
         for record in stats:
             if record['record_type'] == 'ST':
                 election_info['statistical_text'] = record['statistical_text']
-                election_info['statistical_text_cont'] = record[
-                    'statistical_text_cont']
+                election_info['statistical_text_cont'] = record['statistical_text_cont']
 
             elif record['record_type'] == 'AB':
-                election_info['absentee_total_text'] = record[
-                    'absentee_total_text']
-                election_info['absentee_total'] = record[
-                    'absentee_total'].replace(',', '')
+                election_info['absentee_total_text'] = record['absentee_total_text']
+                election_info['absentee_total'] = record['absentee_total'].replace(',', '')
 
             elif record['record_type'] == 'BC':
-                election_info['vote_by_mail_ballots'] = record[
-                    'vote_by_mail_ballots'].replace(',', '')
-                election_info['ballots_cast'] = record[
-                    'ballots_cast'].replace(',', '')
+                election_info['vote_by_mail_ballots'] = record['vote_by_mail_ballots'].replace(',', '')
+                election_info['ballots_cast'] = record['ballots_cast'].replace(',', '')
                 election_info['percent_turnout'] = record['percent_turnout']
 
             elif record['record_type'] == 'PR':
                 if 'ELECTION STATISTICS' in record['record_type']:
                     pass
                 else:
-                    election_info['total_precinct_text'] = record[
-                        'total_precinct_text']
-                    election_info['total_precincts'] = record[
-                        'total_precincts'].replace(',', '')
-                    election_info['precincts_reporting_text'] = record[
-                        'precincts_reporting_text']
-                    election_info['precincts_reporting'] = record[
-                        'precincts_reporting'].replace(',', '')
-                    election_info['percent_precincts_reporting'] = record[
-                        'percent_precincts_reporting']
+                    election_info['total_precinct_text'] = record['total_precinct_text']
+                    election_info['total_precincts'] = record['total_precincts'].replace(',', '')
+                    election_info['precincts_reporting_text'] = record['precincts_reporting_text']
+                    election_info['precincts_reporting'] = record['precincts_reporting'].replace(',', '')
+                    election_info['percent_precincts_reporting'] = record['percent_precincts_reporting']
 
             elif record['record_type'] == 'DR':
                 election_info['registration'] = record['registration']
@@ -497,9 +487,7 @@ class LacProcessMethods(object):
         saver = Saver()
         framer = Framer()
         fixer = Namefixer()
-
         county_name = "Los Angeles County"
-
         contest = contest_package['contest_details']
         candidates = contest_package['candidates']
         measures = contest_package['measures']
@@ -514,7 +502,6 @@ class LacProcessMethods(object):
             level = "county"
             framer.contest["is_statewide"] = False
         framer.contest["level"] = level
-
         if contest['is_judicial_contest']:
             """ This is a judicial appointee """
             if "SUPREME COURT" in contest["contest_title"]:
@@ -528,10 +515,6 @@ class LacProcessMethods(object):
             framer.office["officeslug"] = slugify(officename)
             framer.office["active"] = True
             framer.office["officeid"] = framer.office["officeslug"]
-            framer.office["officeid"] = saver._make_office_id(
-                src.source_short,
-                framer.office["officeslug"],
-            )
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
             framer.contest["seatnum"] = None
@@ -618,38 +601,52 @@ class LacProcessMethods(object):
                     framer.judicial["judicialslug"],
                 )
                 race_log += saver.make_judicial(framer.contest, framer.judicial)
-
         elif contest['is_ballot_measure']:
             """ this is a ballot measure """
-            this_type = "Measure"
-            contestname = (contest['contest_title']).title()
-            if "COUNTY MEASURE" in contest['contest_title']:
-                contestname = fixer._affix_county(county_name,contestname)
-            if contest['contest_title_cont']:
-                fullname = (contest['contest_title_cont']
-                            ).replace("MEASURE", "Measure")
+            framer.contest["level"] = "county"
+            framer.contest["is_statewide"] = False
+            contestname = contest['contest_title']
+            if contest["contest_id"] == "00":
+                if contestname == "COUNTY MEASURE A":
+                    this_type = "Measure"
+                    contestname = "%swide" % (county_name)
+                    contest['contest_title_cont'] = "Measure A"
+                else:
+                    this_type = "Proposition"
+                contestname = contestname.replace("STATE MEASURE", "Proposition")
             else:
-                fullname = (contest['contest_title']).title()
-            officename = framer._concat(
-                this_type,
-                contestname,
-                delimiter="-",
-            )
-            # level = None
+                this_type = "Measure"
+                contestname = fixer._fix(contestname)
+            contestname = contestname.title()
+            if contestname == "Metro Transportation Authority":
+                contestname = "%swide" % (county_name)
+            if contest['contest_title_cont']:
+                fullname = (contest['contest_title_cont']).replace("MEASURE", "Measure")
+            else:
+                fullname = contestname
+            if contest["contest_id"] == "00":
+                description = None
+                officename = framer._concat(
+                    # this_type,
+                    contestname,
+                    delimiter="-",
+                )
+            else:
+                description = "%s %ss" % (contestname, this_type)
+                officename = framer._concat(
+                    # this_type,
+                    contestname,
+                    delimiter="-",
+                )
             framer.office["officename"] = officename
             framer.office["officeslug"] = slugify(officename)
             framer.office["active"] = True
             framer.office["officeid"] = framer.office["officeslug"]
-            framer.office["officeid"] = saver._make_office_id(
-                src.source_short,
-                framer.office["officeslug"],
-            )
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
             framer.contest["seatnum"] = None
             framer.contest["is_uncontested"] = False
             framer.contest["is_national"] = False
-            # framer.contest["is_statewide"] = False
             framer.contest["is_ballot_measure"] = True
             framer.contest["is_judicial"] = False
             framer.contest["is_runoff"] = False
@@ -679,8 +676,8 @@ class LacProcessMethods(object):
                 raise Exception(
                     "votersregistered is not a number")
             framer.contest["votersturnout"] = None
-            framer.contest["contestname"] = fixer._fix(contestname) # framer.office["officename"]
-            framer.contest["contestdescription"] = None
+            framer.contest["contestname"] = contestname
+            framer.contest["contestdescription"] = description
             framer.contest["contestid"] = saver._make_contest_id(
                 # election.electionid,
                 src.source_short,
@@ -780,14 +777,16 @@ class LacProcessMethods(object):
                 contestname = "%s %s" % (contest['contest_title'].title(), contest['contest_title_cont'].title())
             # if level == "county":
             #     contestname = "%s %s" % (county_name, contestname)
+
+
             framer.office["officename"] = contestname.replace(".", "")
             framer.office["officeslug"] = slugify(framer.office["officename"])
             framer.office["active"] = True
             framer.office["officeid"] = framer.office["officeslug"]
-            framer.office["officeid"] = saver._make_office_id(
-                src.source_short,
-                framer.office["officeslug"],
-            )
+
+
+
+
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
             if len(candidates) < 2:

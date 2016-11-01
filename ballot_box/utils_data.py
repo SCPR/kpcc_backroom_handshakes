@@ -262,7 +262,26 @@ class Namefixer(object):
             "supervisor":"supervisor"
         }
 
-    def _fix(self,string):
+        self.statewide_props = {
+            "lac-county-proposition-proposition-51": "Proposition 51 K-12 and Community College Facilities",
+            "lac-county-proposition-proposition-52": "Proposition 52 Medi-Cal Hospital Fee Program",
+            "lac-county-proposition-proposition-53": "Proposition 53 Voter Approval of Revenue Bonds",
+            "lac-county-proposition-proposition-54": "Proposition 54 Legislative Procedure Requirements",
+            "lac-county-proposition-proposition-55": "Proposition 55 Tax Extension for Education and Healthcare",
+            "lac-county-proposition-proposition-56": "Proposition 56 Cigarette Tax",
+            "lac-county-proposition-proposition-57": "Proposition 57 Criminal Sentences & Juvenile Crime Proceedings",
+            "lac-county-proposition-proposition-58": "Proposition 58 English Proficiency Multilingual Education",
+            "lac-county-proposition-proposition-59": "Proposition 59 Corporate Political Spending Advisory Question",
+            "lac-county-proposition-proposition-60": "Proposition 60 Adult Film Condom Requirements",
+            "lac-county-proposition-proposition-61": "Proposition 61 State Prescription Drug Purchase Standards",
+            "lac-county-proposition-proposition-62": "Proposition 62 Repeal of Death Penalty",
+            "lac-county-proposition-proposition-63": "Proposition 63 Firearms and Ammunition Sales",
+            "lac-county-proposition-proposition-64": "Proposition 64 Marijuana Legalization",
+            "lac-county-proposition-proposition-65": "Proposition 65 Carryout Bag Charges",
+            "lac-county-proposition-proposition-66": "Proposition 66 Death Penalty Procedure Time Limits",
+        }
+
+    def _fix(self, string):
         for p, r in self.patterns.iteritems():
             if p == "no":
                 number = re.compile(p + r'(\s[0-9])',flags=re.IGNORECASE)
@@ -286,8 +305,8 @@ class Namefixer(object):
                 string = re.sub(search,r,string)
         return string
 
-    def _affix_county(self,county,contest):
+    def _affix_county(self, county, contest):
         for p, r in self.county_exceptions.iteritems():
-            search = re.compile(p,flags=re.IGNORECASE)
+            search = re.compile(p, flags=re.IGNORECASE)
             contest = re.sub(search,county + ' ' + r,contest)
         return contest
