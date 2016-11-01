@@ -27,10 +27,10 @@ DATABASES = {
 SECRET_KEY = CONFIG["secret_key"]
 
 # twitter api though should change this
-TWITTER_CONSUMER_KEY         = CONFIG["api"]["twitter"]["consumer_key"]
-TWITTER_CONSUMER_SECRET      = CONFIG["api"]["twitter"]["consumer_secret"]
-TWITTER_ACCESS_TOKEN         = CONFIG["api"]["twitter"]["access_token"]
-TWITTER_ACCESS_TOKEN_SECRET  = CONFIG["api"]["twitter"]["access_token_secret"]
+TWITTER_CONSUMER_KEY = CONFIG["api"]["twitter"]["consumer_key"]
+TWITTER_CONSUMER_SECRET = CONFIG["api"]["twitter"]["consumer_secret"]
+TWITTER_ACCESS_TOKEN = CONFIG["api"]["twitter"]["access_token"]
+TWITTER_ACCESS_TOKEN_SECRET = CONFIG["api"]["twitter"]["access_token_secret"]
 LOCAL_TWITTER_TIMEZONE = pytz.timezone("US/Pacific")
 TWITTER_TIMEZONE = timezone("UTC")
 
@@ -189,6 +189,10 @@ if "build" in CONFIG:
     BUILD_DIR = os.path.join(STATIC_ROOT, CONFIG["build"]["build_dir"])
     BAKERY_VIEWS = tuple(CONFIG["build"]["views"])
     URL_PATH = ""
+    AWS_BUCKET_NAME = CONFIG["build"]["aws_bucket_name"]
+    AWS_ACCESS_KEY_ID = CONFIG["build"]["aws_access_key_id"]
+    AWS_SECRET_ACCESS_KEY = CONFIG["build"]["aws_secret_access_key"]
+    AWS_S3_HOST = CONFIG["build"]["aws_s3_host"]
     BAKERY_CACHE_CONTROL = {
         'text/html': 300,
         'application/javascript': 86400
