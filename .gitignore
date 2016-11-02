@@ -70,3 +70,4 @@ locustfile.py
 config/newrelic.ini
 config*
 scratch*
+_IGNORE_/
