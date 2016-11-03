@@ -23,9 +23,9 @@
                 <div class="col-xs-6 col-sm-6 col-md-12 col-lg-12 race-block">
                     <h4 class="title">{{ contest.contestname }}</h4>
                     {% if contest.is_ballot_measure = True %}
-                        <p><code>&lt;iframe width="100%" height="260" scrolling="no" frameborder="no" src="https://elections.scpr.org{% url 'ballot_box:baked-embedded_detail' election.electionid contest.contestid %}"&gt;&lt;/iframe&gt;</code></p>
+                        <p><code>&lt;iframe width="100%" height="260" scrolling="no" frameborder="no" src="https://elections.scpr.org/{{ election.electionid }}/{{ contest.contestid }}/index.html"&gt;&lt;/iframe&gt;</code></p>
                     {% else %}
-                        <p><code>&lt;iframe width="100%" height="320" scrolling="no" frameborder="no" src="https://elections.scpr.org{% url 'ballot_box:baked-embedded_detail' election.electionid contest.contestid %}"&gt;&lt;/iframe&gt;</code></p>
+                        <p><code>&lt;iframe width="100%" height="320" scrolling="no" frameborder="no" src="https://elections.scpr.org/{{ election.electionid }}/{{ contest.contestid }}/index.html"&gt;&lt;/iframe&gt;</code></p>
                     {% endif %}
 
                     <ul>
