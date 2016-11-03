@@ -51,7 +51,8 @@ class ResultSourceAdmin(admin.ModelAdmin):
     list_display = (
         "source_name",
         "source_active",
-        "source_created"
+        "ready_to_build",
+        "source_latest",
     )
 
     list_per_page = 15

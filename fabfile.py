@@ -235,6 +235,13 @@ def publish():
     local("python manage.py publish")
 
 
+def elex_night_s3():
+    """
+    shortcut for running all management commands to fetch results
+    """
+    local("python manage.py build_and_publish")
+
+
 def commit(message='updates'):
     with lcd(settings.DEPLOY_DIR):
         try:

@@ -256,4 +256,4 @@ class Retriever(object):
         management.call_command("build")
         logger.debug("publishing views")
         management.call_command("publish")
-        logger.debug("Finshed - Hurrah!!")
+        logger.debug("Finished - Hurrah!!")
