@@ -249,9 +249,11 @@ class Retriever(object):
                     done = False
                     return False
 
-
     def _build_and_move_results(self):
         """
         """
+        logger.debug("Building views")
         management.call_command("build")
+        logger.debug("publishing views")
         management.call_command("publish")
+        logger.debug("Finshed - Hurrah!!")
