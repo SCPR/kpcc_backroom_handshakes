@@ -194,8 +194,8 @@ if "build" in CONFIG:
     AWS_SECRET_ACCESS_KEY = CONFIG["build"]["aws_secret_access_key"]
     AWS_S3_HOST = CONFIG["build"]["aws_s3_host"]
     BAKERY_CACHE_CONTROL = {
-        'text/html': 300,
-        'application/javascript': 86400
+        'text/html': CONFIG["build"]["bakery_cache_control"]["html"],
+        'application/javascript': CONFIG["build"]["bakery_cache_control"]["javascript"]
     }
 
 # A sample logging configuration. The only tangible logging
