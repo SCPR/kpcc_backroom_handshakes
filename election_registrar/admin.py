@@ -68,6 +68,19 @@ class ResultSourceAdmin(admin.ModelAdmin):
         "source_slug": ("source_name",)
     }
 
+    fields = (
+      "election",
+      "source_name",
+      "source_short",
+      "source_slug",
+      "source_url",
+      "source_active",
+      "source_type",
+      "source_files",
+      "ready_to_build",
+      "source_latest",
+    )
+
     actions = [
         "set_active",
         "set_not_active",
