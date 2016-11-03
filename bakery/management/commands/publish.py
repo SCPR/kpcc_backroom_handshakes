@@ -10,8 +10,8 @@ from bakery import DEFAULT_GZIP_CONTENT_TYPES
 from django.core.urlresolvers import get_callable
 from django.core.management.base import BaseCommand, CommandError
 from boto.s3.connection import S3Connection, OrdinaryCallingFormat
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger("kpcc_backroom_handshakes")
 
 class Command(BaseCommand):
     help = "Syncs the build directory with Amazon s3 bucket"

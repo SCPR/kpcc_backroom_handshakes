@@ -9,12 +9,11 @@ import posixpath
 import re
 import stat
 from six.moves.urllib.parse import unquote
-from email.Utils import parsedate_tz, mktime_tz
 from django.template import loader
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseNotModified
 from django.template import Template, Context, TemplateDoesNotExist
-from django.utils.http import http_date
+from django.utils.http import http_date, parse_http_date
 
 
 def serve(request, path, document_root=None, show_indexes=False, default=''):
@@ -54,7 +53,6 @@ def serve(request, path, document_root=None, show_indexes=False, default=''):
         newpath = os.path.join(newpath, part).replace('\\', '/')
     if newpath and path != newpath:
         return HttpResponseRedirect(newpath)
-    print document_root, newpath
     fullpath = os.path.join(document_root, newpath)
     if os.path.isdir(fullpath) and default:
         defaultpath = os.path.join(fullpath, default)
@@ -71,12 +69,12 @@ def serve(request, path, document_root=None, show_indexes=False, default=''):
     mimetype = mimetypes.guess_type(fullpath)[0] or 'application/octet-stream'
     if not was_modified_since(request.META.get('HTTP_IF_MODIFIED_SINCE'),
                               statobj[stat.ST_MTIME], statobj[stat.ST_SIZE]):
-        if django.VERSION > (1,6):
+        if django.VERSION > (1, 6):
             return HttpResponseNotModified(content_type=mimetype)
         else:
             return HttpResponseNotModified(mimetype=mimetype)
     contents = open(fullpath, 'rb').read()
-    if django.VERSION > (1,6):
+    if django.VERSION > (1, 6):
         response = HttpResponse(contents, content_type=mimetype)
     else:
         response = HttpResponse(contents, mimetype=mimetype)
@@ -136,14 +134,11 @@ def directory_index(path, fullpath):
 def was_modified_since(header=None, mtime=0, size=0):
     """
     Was something modified since the user last downloaded it?
-
     header
       This is the value of the If-Modified-Since header.  If this is None,
       I'll just return True.
-
     mtime
       This is the modification time of the item we're talking about.
-
     size
       This is the size of the item we're talking about.
     """
@@ -152,12 +147,12 @@ def was_modified_since(header=None, mtime=0, size=0):
             raise ValueError
         matches = re.match(r"^([^;]+)(; length=([0-9]+))?$", header,
                            re.IGNORECASE)
-        header_mtime = mktime_tz(parsedate_tz(matches.group(1)))
+        header_mtime = parse_http_date(matches.group(1))
         header_len = matches.group(3)
         if header_len and int(header_len) != size:
             raise ValueError
-        if mtime > header_mtime:
+        if int(mtime) > header_mtime:
             raise ValueError
-    except (AttributeError, ValueError):
+    except (AttributeError, ValueError, OverflowError):
         return True
     return False

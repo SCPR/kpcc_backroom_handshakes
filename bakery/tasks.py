@@ -2,12 +2,13 @@ import logging
 from django.conf import settings
 from django.core import management
 from django.contrib.contenttypes.models import ContentType
-logger = logging.getLogger(__name__)
+
+logger = logging.getLogger("kpcc_backroom_handshakes")
+
 try:
     from celery import shared_task
 except ImportError:
     raise ImportError("celery must be installed to use django-bakery's tasks")
-
 
 @shared_task()
 def publish_object(content_type_pk, obj_pk):
@@ -26,7 +27,8 @@ def publish_object(content_type_pk, obj_pk):
         # Run the `publish` management command unless the
         # ALLOW_BAKERY_AUTO_PUBLISHING variable is explictly set to False.
         if not getattr(settings, 'ALLOW_BAKERY_AUTO_PUBLISHING', True):
-            logger.info("Not running publish command because ALLOW_BAKERY_AUTO_PUBLISHING is False")
+            logger.info("Not running publish command because \
+ALLOW_BAKERY_AUTO_PUBLISHING is False")
         else:
             management.call_command("publish")
     except Exception:
@@ -51,7 +53,8 @@ def unpublish_object(content_type_pk, obj_pk):
         # Run the `publish` management command unless the
         # ALLOW_BAKERY_AUTO_PUBLISHING variable is explictly set to False.
         if not getattr(settings, 'ALLOW_BAKERY_AUTO_PUBLISHING', True):
-            logger.info("Not running publish command because \ ALLOW_BAKERY_AUTO_PUBLISHING is False")
+            logger.info("Not running publish command because \
+ALLOW_BAKERY_AUTO_PUBLISHING is False")
         else:
             management.call_command("publish")
     except Exception:

@@ -197,6 +197,7 @@ if "build" in CONFIG:
         'text/html': CONFIG["build"]["bakery_cache_control"]["html"],
         'application/javascript': CONFIG["build"]["bakery_cache_control"]["javascript"]
     }
+    STATIC_TO_IGNORE = tuple(CONFIG["build"]["static_to_ignore"])
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

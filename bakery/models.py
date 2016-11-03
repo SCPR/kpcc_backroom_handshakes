@@ -7,7 +7,6 @@ method, like the BuildableDetailView included in this app.
 """
 from django.db import models
 from django.db import transaction
-from django.contrib.contenttypes.models import ContentType
 
 
 class BuildableModel(models.Model):
@@ -120,6 +119,7 @@ class AutoPublishingBuildableModel(BuildableModel):
         Save with keyword argument obj.save(publish=False) to skip the process.
         """
         from bakery import tasks
+        from django.contrib.contenttypes.models import ContentType
         # if obj.save(publish=False) has been passed, we skip everything.
         if not kwargs.pop('publish', True):
             super(AutoPublishingBuildableModel, self).save(*args, **kwargs)
@@ -154,13 +154,7 @@ class AutoPublishingBuildableModel(BuildableModel):
             # Now, no matter what, save it normally inside of a dedicated
             # database transaction so that we are sure that the save will
             # be complete before we trigger any task
-            if hasattr(transaction, 'atomic'):
-                # For >= Django 1.6
-                transaction_manager = getattr(transaction, 'atomic')
-            else:
-                # For < Django 1.6
-                transaction_manager = getattr(transaction, 'commit_on_success')
-            with transaction_manager():
+            with transaction.atomic():
                 super(AutoPublishingBuildableModel, self).save(*args, **kwargs)
             # Finally, depending on the action, fire off a task
             ct = ContentType.objects.get_for_model(self.__class__)
@@ -176,6 +170,7 @@ class AutoPublishingBuildableModel(BuildableModel):
         Save with keyword argument obj.delete(unpublish=False) to skip it.
         """
         from bakery import tasks
+        from django.contrib.contenttypes.models import ContentType
         # if obj.save(unpublish=False) has been passed, we skip the task.
         unpublish = kwargs.pop('unpublish', True)
         # Delete it from the database
