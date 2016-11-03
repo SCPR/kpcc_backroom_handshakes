@@ -59,12 +59,9 @@ class ResultSource(models.Model):
     source_type = models.CharField("Ext Of File Or Type Of Source", max_length=255, null=False, blank=False)
     source_files = ListField("Results Files We Want", null=True, blank=True)
     source_latest = models.DateTimeField("Latest Results From", null=True, blank=True)
+    ready_to_build = models.BooleanField("Build This Source", default=False)
     source_created = models.DateTimeField("Date Created", auto_now_add=True)
     source_modified = models.DateTimeField("Date Modified", auto_now=True)
-    # parsed_json
-    # next_request
-    # datafile
-    # results_level
 
     def __unicode__(self):
         return self.source_name
