@@ -254,3 +254,4 @@ class Retriever(object):
         """
         """
         management.call_command("build")
+        management.call_command("publish")
