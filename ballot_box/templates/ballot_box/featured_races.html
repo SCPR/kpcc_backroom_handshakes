@@ -29,8 +29,8 @@
 
 {% block extra_css %}
     {% if baked == True %}
-        <link href="http://162.243.135.6/static/css/reset.css" media="screen" rel="stylesheet" type="text/css" />
-        <link href="http://162.243.135.6/static/css/general-election.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="/static/css/reset.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="/static/css/general-election.css" media="screen" rel="stylesheet" type="text/css" />
     {% else %}
         <link href="{% static 'css/reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
         <link href="{% static 'css/general-election.css' %}" media="screen" rel="stylesheet" type="text/css" />
@@ -59,7 +59,7 @@
                         {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
                             <div class="result-item clearfix">
                                 {% if baked == True %}
-                                    <img src="http://162.243.135.6/static/assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
+                                    <img src="/static/assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
                                 {% else %}
                                     <img src="{% static '' %}assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
                                 {% endif %}

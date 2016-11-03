@@ -29,8 +29,8 @@
 
 {% block extra_css %}
     {% if baked == True %}
-        <link href="http://162.243.135.6/static/css/general-election-reset.css" media="screen" rel="stylesheet" type="text/css" />
-        <link href="http://162.243.135.6/static/css/general-election.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="/static/css/general-election-reset.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="/static/css/general-election.css" media="screen" rel="stylesheet" type="text/css" />
     {% else %}
         <link href="{% static 'css/general-election-reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
         <link href="{% static 'css/general-election.css' %}" media="screen" rel="stylesheet" type="text/css" />
@@ -64,7 +64,7 @@
                 {% endfor %}
                 <div class="branded-image clearfix">
                     {% if baked == True %}
-                        <img src="http://162.243.135.6/static/assets/kpcc-votergameplan-mark-horizontal.png" />
+                        <img src="/static/assets/kpcc-votergameplan-mark-horizontal.png" />
                     {% else %}
                         <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
                     {% endif %}
@@ -87,7 +87,7 @@
                 {% endfor %}
                 <div class="branded-image clearfix">
                     {% if baked == True %}
-                        <img src="http://162.243.135.6/static/assets/kpcc-votergameplan-mark-horizontal.png" />
+                        <img src="/static/assets/kpcc-votergameplan-mark-horizontal.png" />
                     {% else %}
                         <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
                     {% endif %}
