@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import division
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -78,75 +79,19 @@ class BuildSbcResults(object):
                 file_timestamp = None
                 logger.info("\n*****\nUpdating...\n*****")
                 saver._update_result_timestamps(src, datetime.datetime.now())
+                election_info = process.compile_election_stats(election_stats)
+                # print election_info
                 for r in races:
                     contest_package = process.compile_contest_results(races[r])
-                    print contest_package
-                # process.update_database(contest_package, election, src)
+                    # print contest_package
+                    process.update_database(contest_package, election, src)
+                os.remove(latest_path)
                 logger.info("we've finished processing sbc results")
-                # output_data_analysis_to_file(rows)
-
-def output_data_analysis_to_file(data):
-    contestlist = []
-    for d in data:
-        contestname = d["CONTEST_ID"] + ": " + d["CONTEST_FULL_NAME"]
-        if contestname in contestlist:
-            pass
-        else:
-            contestlist.append(contestname)
-
-    keys = []
-    for d in data:
-        for r in d:
-            if r not in keys:
-                keys.append(r)
-
-    values_per_key = {}
-    for k in keys:
-        value_set = []
-        for row in data:
-            for fieldname in row:
-                if fieldname == k:
-                    if row[fieldname] not in value_set:
-                        value_set.append(row[fieldname])
-        values_per_key[k] = value_set
-
-    wfile = "%s/_IGNORE_/scratch" % (settings.BASE_DIR)
-    with open(wfile, "w") as f:
-        f.write("**CONTEST INDEX:\n\nCONTEST_ID: CONTEST_FULL_NAME\n")
-        for c in contestlist:
-            f.write(c + "\n")
-        for key in values_per_key:
-            f.write("\n* Field Name: " + key + "\n")
-            f.write("Unique Value Count: " + str(len(values_per_key[key])))
-            f.write("\nValues: ")
-            for value in values_per_key[key][:-1]:
-                f.write(value + ", ")
-            f.write(values_per_key[key][-1] + "\n\n")
-
-        f.write("**ALL CONTESTS:")
-        for d in data:
-            f.write("\n\n")
-            for i in d:
-                f.write(i + ": " + d[i] + "\n")
-
 
 
 class SbcProcessMethods(object):
     """
     """
-
-    def open_results_file_and_get_races(self, file):
-        """
-        """
-        rows = []
-        with open(file, "r") as f:
-            for line in f:
-                record_type = line[3:5]
-                if record_type == "EF":
-                    break
-                else:
-                    rows.append(line)
-        return rows
 
     def get_race_ids_from(self, rows):
         """
@@ -190,46 +135,53 @@ class SbcProcessMethods(object):
                 races[rid] = race_rows
         return [races, election_info]
 
-    def compile_election_stats(self, title, stats):
+    def compile_election_stats(self, stats):
         """Fetches records that contain overall election title and stats."""
-        election_info = {'description': ''}
-        for record in title:
-            if record['record_type'] == 'ET':
-                if election_info['description'] == '':
-                    election_info['description'] = record['election_text']
-                else:
-                    election_info['description'] = election_info[
-                        'description'] + ' | ' + record['election_text']
-            elif record['record_type'] == 'TD':
-                election_info['election_id'] = record['election_id']
-                election_info['time'] = record['time']
-                election_info['date'] = record['date']
+        election_info = {}
+        election_info['registration'] = None
+        election_info['precinct_ballots_cast'] = None
+        election_info['vote_by_mail_ballots_cast'] = None
+
         for record in stats:
-            if record['record_type'] == 'ST':
-                election_info['statistical_text'] = record['statistical_text']
-                election_info['statistical_text_cont'] = record['statistical_text_cont']
+            if not election_info['registration']:
+                election_info['registration'] = record['CONTEST_TOTAL']
 
-            elif record['record_type'] == 'AB':
-                election_info['absentee_total_text'] = record['absentee_total_text']
-                election_info['absentee_total'] = record['absentee_total'].replace(',', '')
-
-            elif record['record_type'] == 'BC':
-                election_info['vote_by_mail_ballots'] = record['vote_by_mail_ballots'].replace(',', '')
-                election_info['ballots_cast'] = record['ballots_cast'].replace(',', '')
-                election_info['percent_turnout'] = record['percent_turnout']
-
-            elif record['record_type'] == 'PR':
-                if 'ELECTION STATISTICS' in record['record_type']:
-                    pass
+            if record['CANDIDATE_FULL_NAME'] == 'Precinct Turnout':
+                election_info['precinct_ballots_cast'] = record['TOTAL']
+                if election_info['registration'] and election_info['registration'] != "0":
+                    raw_percent = 100*(float(record['TOTAL'])/float(election_info['registration']))
+                    rounded_percent = "%.2f" % raw_percent
+                    election_info['precinct_turnout'] = rounded_percent
                 else:
-                    election_info['total_precinct_text'] = record['total_precinct_text']
-                    election_info['total_precincts'] = record['total_precincts'].replace(',', '')
-                    election_info['precincts_reporting_text'] = record['precincts_reporting_text']
-                    election_info['precincts_reporting'] = record['precincts_reporting'].replace(',', '')
-                    election_info['percent_precincts_reporting'] = record['percent_precincts_reporting']
+                    election_info['precinct_turnout'] = 0.00
 
-            elif record['record_type'] == 'DR':
-                election_info['registration'] = record['registration']
+            elif record['CANDIDATE_FULL_NAME'] == 'Vote by Mail Turnout':
+                election_info['vote_by_mail_ballots_cast'] = record['TOTAL']
+                if election_info['registration'] and election_info['registration'] != "0":
+                    raw_percent = 100*(float(record['TOTAL'])/float(election_info['registration']))
+                    rounded_percent = "%.2f" % raw_percent
+                    election_info['votebymail_turnout'] = rounded_percent
+                else:
+                    election_info['votebymail_turnout'] = 0.00
+
+            # Calculate overall turnout
+            if election_info['precinct_ballots_cast'] and election_info['vote_by_mail_ballots_cast']:
+                election_info['total_turnout'] = float(election_info['precinct_ballots_cast']) + float(election_info['vote_by_mail_ballots_cast'])
+                if election_info['registration'] and election_info['registration'] != "0":
+                    raw_percent = 100*(float(election_info['total_turnout'])/float(election_info['registration']))
+                    rounded_percent = "%.2f" % raw_percent
+                    election_info['overall_percent_turnout'] = rounded_percent
+                else:
+                    election_info['overall_percent_turnout'] = 0.00
+
+                """ INFO WE'VE GOTTEN FROM OTHER ELECTION OFFICIALS
+                    BUT SO FAR NOT SAN BERNARDINO """
+                # election_info['absentee_total'] = record['absentee_total'].replace(',', '')
+                # election_info['registration'] = record['registration']
+                # election_info['election_id']
+                # election_info['time']
+                # election_info['date']
+
         return election_info
 
     def compile_contest_results(self, records):
@@ -349,10 +301,10 @@ class SbcProcessMethods(object):
                     for m in measures:
                         if m['measure_id'] == measure['measure_id']:
                             already_exists = True
-                            if record['CANDIDATE_FULL_NAME'] == "YES":
+                            if "YES" in record['CANDIDATE_FULL_NAME']:
                                 m['yes_votes'] = record['TOTAL']
                                 m['yes_percent'] = rounded_percent
-                            elif record['CANDIDATE_FULL_NAME'] == "NO":
+                            elif "NO" in record['CANDIDATE_FULL_NAME']:
                                 m['no_votes'] = record['TOTAL']
                                 m['no_percent'] = rounded_percent
 
@@ -361,13 +313,13 @@ class SbcProcessMethods(object):
                 else:
                     # Prep new measure
                     measure['measure_name'] = record['CONTEST_FULL_NAME']
-                    measure['CANDIDATE_ORDER'] = record['CANDIDATE_ORDER']
-                    measure['CANDIDATE_TYPE'] = record['CANDIDATE_TYPE']
+                    measure['measure_order'] = record['CANDIDATE_ORDER']
+                    measure['measure_type'] = record['CANDIDATE_TYPE']
                     measure['cf_cand_class'] = record['cf_cand_class']
-                    if record['CANDIDATE_FULL_NAME'] == "YES":
+                    if "YES" in record['CANDIDATE_FULL_NAME']:
                         measure['yes_votes'] = record['TOTAL']
                         measure['yes_percent'] = rounded_percent
-                    elif record['CANDIDATE_FULL_NAME'] == "NO":
+                    elif "NO" in record['CANDIDATE_FULL_NAME']:
                         measure['no_votes'] = record['TOTAL']
                         measure['no_percent'] = rounded_percent
                     measures.append(measure)
@@ -397,7 +349,7 @@ class SbcProcessMethods(object):
         saver = Saver()
         framer = Framer()
         fixer = Namefixer()
-        county_name = "Los Angeles County"
+        county_name = "San Bernardino County"
         contest = contest_package['contest_details']
         candidates = contest_package['candidates']
         measures = contest_package['measures']
@@ -405,15 +357,17 @@ class SbcProcessMethods(object):
         race_log = "\n"
 
         # Check level of contest (i.e. local, statewide)
-        if "U.S." in contest['contest_title'] or "STATE" in contest['contest_title']:
+        if "United States" in contest['CONTEST_FULL_NAME'] or "STATE" in contest['CONTEST_FULL_NAME']:
             level = "california"
             framer.contest["is_statewide"] = True
         else:
             level = "county"
             framer.contest["is_statewide"] = False
         framer.contest["level"] = level
+
+        """ Need to deal with judicial contests in future elections.. None in 2016 general
         if contest['is_judicial_contest']:
-            """ This is a judicial appointee """
+            # This is a judicial appointee
             if "SUPREME COURT" in contest["contest_title"]:
                 contestname = "Supreme Court"
             elif "APPELLATE COURT" in contest["contest_title"]:
@@ -511,43 +465,25 @@ class SbcProcessMethods(object):
                     framer.judicial["judicialslug"],
                 )
                 race_log += saver.make_judicial(framer.contest, framer.judicial)
-        elif contest['is_ballot_measure']:
+        """
+        if contest['is_ballot_measure']:
             """ this is a ballot measure """
             framer.contest["level"] = "county"
             framer.contest["is_statewide"] = False
-            contestname = contest['contest_title']
-            if contest["contest_id"] == "00":
-                if contestname == "COUNTY MEASURE A":
-                    this_type = "Measure"
-                    contestname = "%swide" % (county_name)
-                    contest['contest_title_cont'] = "Measure A"
-                else:
-                    this_type = "Proposition"
-                contestname = contestname.replace("STATE MEASURE", "Proposition")
+            contestname = contest['CONTEST_FULL_NAME']
+            if "Proposition" in contestname:
+                this_type = "Proposition"
+                contestname = contestname.replace("STATE ", "")
             else:
                 this_type = "Measure"
                 contestname = fixer._fix(contestname)
-            contestname = contestname.title()
-            if contestname == "Metro Transportation Authority":
-                contestname = "%swide" % (county_name)
-            if contest['contest_title_cont']:
-                fullname = (contest['contest_title_cont']).replace("MEASURE", "Measure")
-            else:
-                fullname = contestname
-            if contest["contest_id"] == "00":
-                description = None
-                officename = framer._concat(
-                    # this_type,
-                    contestname,
-                    delimiter="-",
-                )
-            else:
-                description = "%s %ss" % (contestname, this_type)
-                officename = framer._concat(
-                    # this_type,
-                    contestname,
-                    delimiter="-",
-                )
+            description = ""
+            officename = framer._concat(
+                # this_type,
+                contestname,
+                delimiter="-",
+            )
+            fullname = contestname
             framer.office["officename"] = officename
             framer.office["officeslug"] = slugify(officename)
             framer.office["active"] = True
@@ -562,14 +498,14 @@ class SbcProcessMethods(object):
             framer.contest["is_runoff"] = False
             framer.contest["reporttype"] = None
             framer.contest["poss_error"] = False
-            if framer._to_num(contest['total_precincts'])["convert"] == True:
-                pt = framer._to_num(contest['total_precincts'])["value"]
+            if framer._to_num(contest['TOTAL_PRECINCTS'])["convert"] == True:
+                pt = framer._to_num(contest['TOTAL_PRECINCTS'])["value"]
                 framer.contest["precinctstotal"] = pt
             else:
                 framer.contest["precinctstotal"] = None
                 raise Exception("precinctstotal is not a number")
-            if framer._to_num(contest['precincts_reporting'])["convert"] == True:
-                pr = framer._to_num(contest['precincts_reporting'])["value"]
+            if framer._to_num(contest['PROCESSED_DONE'])["convert"] == True:
+                pr = framer._to_num(contest['PROCESSED_DONE'])["value"]
                 framer.contest["precinctsreporting"] = pr
             else:
                 framer.contest["precinctsreporting"] = None
@@ -578,13 +514,13 @@ class SbcProcessMethods(object):
                 framer.contest["precinctsreporting"],
                 framer.contest["precinctstotal"]
             )
-            if framer._to_num(contest['registration'])["convert"] == True:
-                framer.contest["votersregistered"] = framer._to_num(
-                    contest['registration'])["value"]
-            else:
-                framer.contest["votersregistered"] = None
-                raise Exception(
-                    "votersregistered is not a number")
+            # if framer._to_num(contest['registration'])["convert"] == True:
+            #     framer.contest["votersregistered"] = framer._to_num(
+            #         contest['registration'])["value"]
+            # else:
+            #     framer.contest["votersregistered"] = None
+            #     raise Exception(
+            #         "votersregistered is not a number")
             framer.contest["votersturnout"] = None
             framer.contest["contestname"] = contestname
             framer.contest["contestdescription"] = description
@@ -597,10 +533,10 @@ class SbcProcessMethods(object):
             race_log += saver.make_office(framer.office)
             race_log += saver.make_contest(framer.office, framer.contest)
             for measure in measures:
-                framer.measure["ballotorder"] = None
+                framer.measure["ballotorder"] = measure["measure_order"]
                 framer.measure["fullname"] = fullname
                 framer.measure["measureslug"] = slugify(fullname)
-                framer.measure["description"] = measure['measure_text'].title()
+                framer.measure["description"] = ""
                 framer.measure["poss_error"] = False
                 if framer._to_num(measure['yes_votes'])["convert"] == True:
                     yescount = framer._to_num(measure['yes_votes'])["value"]
@@ -634,68 +570,27 @@ class SbcProcessMethods(object):
                 race_log += saver.make_measure(framer.contest, framer.measure)
         else:
             """ this is a candidate for elected office """
-            strip_district = contest['district'].lstrip("0")
+            # strip_district = contest['district'].lstrip("0")
             framer.contest["seatnum"] = "1010101"
-            if contest['contest_title'] == "MEMBER OF THE ASSEMBLY":
-                contestname = "State Assembly District %s" % (strip_district)
-            elif "SUPERVISOR" in contest['contest_title']:
-                contestname = "Supervisor District %s" % (strip_district)
-                contestname = fixer._affix_county(county_name,contestname)
-            elif "U.S. REPRESENTATIVE" in contest['contest_title']:
-                contestname = "U.S. House of Representatives District %s" % (
-                    strip_district)
-            elif "DELEGATES" in contest['contest_title']:
-                designation = contest['contest_title_cont'].replace(
-                    "CONGRESSIONAL DISTRICT-", "")
-                if designation == "REP":
-                    this_desig = "Republican"
-                elif designation == "DEM":
-                    this_desig = "Democratic"
-                else:
-                    this_desig = None
-                contestname = "%s Presidential Primary Delegates - CD%s" % (
-                    this_desig, strip_district)
-            elif "STATE SENATOR" in contest['contest_title']:
-                contestname = "State Senate District %s" % (strip_district)
-            elif "UNITED STATES SENATOR" in contest["contest_title"]:
-                contestname = "US Senate"
-            elif "PRESIDENTIAL PREFERENCE" in contest['contest_title']:
-                designation = contest['contest_title_cont'].upper()
-                if designation == "AI":
-                    this_desig = "American Independent"
-                elif designation == "REP":
-                    this_desig = "Republican"
-                elif designation == "DEM":
-                    this_desig = "Democratic"
-                elif designation == "PF":
-                    this_desig = "Peace And Freedom"
-                elif designation == "LIB":
-                    this_desig = "Libertarian"
-                elif designation == "GRN":
-                    this_desig = "Green"
-                else:
-                    this_desig = None
-                contestname = "%s Presidential Primary" % (this_desig)
-            elif "PARTY COUNTY COMMITTEE" in contest['contest_title']:
-                contestname = "%s Party County Committee District %s" % (
-                    contest['party_name'].capitalize(), strip_district)
-            elif "JUDGE-SUPERIOR COURT" in contest['contest_title']:
-                contestname = "Judge Superior Court %s" % (
-                    contest['contest_title_cont'].title())
-                contestname = fixer._affix_county(county_name,contestname)
-            else:
-                contestname = "%s %s" % (contest['contest_title'].title(), contest['contest_title_cont'].title())
-            # if level == "county":
-            #     contestname = "%s %s" % (county_name, contestname)
-
+            contestname = contest['CONTEST_FULL_NAME']
+            if "Member of the State Assembly" in contestname:
+                contestname = "SAN BERNARDINO %s" % (contestname)
+            elif "Supervisor" in contestname:
+                contestname = county_name + " " + contestname
+            elif "United States Representative" in contestname:
+                contestname = "SAN BERNARDINO %s" % (
+                    contestname)
+            elif "State Senator" in contestname:
+                contestname = "SAN BERNARDINO %s" % (contestname)
+            elif "United States Senator" in contestname:
+                contestname = "SAN BERNARDINO %s" % (contestname)
+            elif "Judge of the Superior Court" in contestname:
+                contestname = county_name + " " + contestname
 
             framer.office["officename"] = contestname.replace(".", "")
             framer.office["officeslug"] = slugify(framer.office["officename"])
             framer.office["active"] = True
             framer.office["officeid"] = framer.office["officeslug"]
-
-
-
 
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
@@ -709,14 +604,14 @@ class SbcProcessMethods(object):
             framer.contest["is_runoff"] = False
             framer.contest["reporttype"] = None
             framer.contest["poss_error"] = False
-            if framer._to_num(contest['total_precincts'])["convert"] == True:
-                pt = framer._to_num(contest['total_precincts'])["value"]
+            if framer._to_num(contest['TOTAL_PRECINCTS'])["convert"] == True:
+                pt = framer._to_num(contest['TOTAL_PRECINCTS'])["value"]
                 framer.contest["precinctstotal"] = pt
             else:
                 framer.contest["precinctstotal"] = None
                 raise Exception("precinctstotal is not a number")
-            if framer._to_num(contest['precincts_reporting'])["convert"] == True:
-                pr = framer._to_num(contest['precincts_reporting'])["value"]
+            if framer._to_num(contest['PROCESSED_DONE'])["convert"] == True:
+                pr = framer._to_num(contest['PROCESSED_DONE'])["value"]
                 framer.contest["precinctsreporting"] = pr
             else:
                 framer.contest["precinctsreporting"] = None
@@ -725,18 +620,17 @@ class SbcProcessMethods(object):
                 framer.contest["precinctsreporting"],
                 framer.contest["precinctstotal"]
             )
-            if framer._to_num(contest['registration'])["convert"] == True:
-                framer.contest["votersregistered"] = framer._to_num(
-                    contest['registration'])["value"]
-            else:
-                framer.contest["votersregistered"] = None
-                raise Exception("votersregistered is not a number")
+            # if framer._to_num(contest['registration'])["convert"] == True:
+            #     framer.contest["votersregistered"] = framer._to_num(
+            #         contest['registration'])["value"]
+            # else:
+            #     framer.contest["votersregistered"] = None
+            #     raise Exception("votersregistered is not a number")
             framer.contest["votersturnout"] = None
             framer.contest["contestname"] = fixer._fix(contestname) # framer.office["officename"]
-            try:
-                framer.contest["contestdescription"] = contest[
-                    'vote_for_text'].capitalize() + ' ' + contest['vote_for_number']
-            except:
+            if int(contest["VOTE_FOR"]) > 1:
+                framer.contest["contestdescription"] = "Vote for " + contest["VOTE_FOR"]
+            else:
                 framer.contest["contestdescription"] = None
             framer.contest["contestid"] = saver._make_contest_id(
                 # election.electionid,
@@ -747,23 +641,29 @@ class SbcProcessMethods(object):
             race_log += saver.make_office(framer.office)
             race_log += saver.make_contest(framer.office, framer.contest)
             for candidate in candidates:
-                fullname = candidate['candidate_name'].title()
-                party = candidate['party_short']
-                if party == "REP":
-                    party = "Republican"
-                elif party == "DEM":
-                    party = "Democrat"
-                elif party == "AI":
-                    party = "American Independent"
-                elif party == "PF":
-                    party = "Peace And Freedom"
-                elif party == "LIB":
-                    party = "Libertarian"
-                elif party == "GRN":
+                recoded_name = candidate['CANDIDATE_FULL_NAME'].decode('iso-8859-1').encode('utf8')
+                recoded_name = lower_case_accents(recoded_name)
+                if " - " in recoded_name:
+                    fullname = recoded_name.split(" - ")[1].title()
+                else:
+                    fullname = recoded_name.title()
+
+                party_id = candidate['CANDIDATE_PARTY_ID']
+                if party_id == "2":
+                    party = "Democratic"
+                elif party_id == "3":
                     party = "Green"
-                elif party == "NP":
-                    party = "No Party Preference"
-                framer.candidate["ballotorder"] = None
+                elif party_id == "4":
+                    party = "Libertarian"
+                elif party_id == "5":
+                    party = "Peace and Freedom"
+                elif party_id == "6":
+                    party = "Republican"
+                elif party_id == "8":
+                    party = "Republican"
+                else:
+                    party = ""
+                framer.candidate["ballotorder"] = candidate["CANDIDATE_ORDER"]
                 framer.candidate["firstname"] = None
                 framer.candidate["lastname"] = None
                 framer.candidate["fullname"] = fullname
@@ -771,18 +671,22 @@ class SbcProcessMethods(object):
                 framer.candidate["party"] = party
                 framer.candidate["incumbent"] = False
                 framer.candidate["poss_error"] = False
-                if framer._to_num(candidate['votes'])["convert"] == True:
-                    framer.candidate["votecount"] = framer._to_num(candidate['votes'])[
+                if framer._to_num(candidate['TOTAL'])["convert"] == True:
+                    framer.candidate["votecount"] = framer._to_num(candidate['TOTAL'])[
                         "value"]
                 else:
                     framer.candidate["votecount"] = None
                     raise Exception("votecount is not a number")
-                if framer._to_num(candidate['percent_of_vote'])["convert"] == True:
-                    framer.candidate["votepct"] = framer._to_num(
-                        candidate['percent_of_vote'])["value"]
+                if contest["CONTEST_TOTAL"] != "0":
+                    if framer._to_num(contest['CONTEST_TOTAL'])["convert"] == True:
+                        vote_total = framer._to_num(contest['CONTEST_TOTAL'])["value"]
+                        framer.candidate["votepct"] = framer._calc_pct(
+                            framer.candidate["votecount"],
+                            vote_total
+                        )
                 else:
                     framer.candidate["votepct"] = None
-                    raise Exception("votepct is not a number")
+                    logger.debug("No votes have been cast in " + contestname + " or votepct is not a number")
                 framer.candidate["candidateid"] = saver._make_this_id(
                     "candidate",
                     framer.contest["contestid"],
@@ -905,6 +809,13 @@ class SbcProcessMethods(object):
         # else:
         #     report += 'N/A\n'
         print report
+
+def lower_case_accents(string):
+    subs = ('ÂÁÀÄÊÉÈËÏÍÎÖÓÔÖÚÙÛÑÇ', 'âáàäêéèëïíîöóôöúùûñç')
+    newstring = string
+    for s in range(len(subs[0])):
+        newstring = re.sub(subs[0][s], subs[1][s], newstring)
+    return newstring
 
 if __name__ == '__main__':
     task_run = BuildSbcResults()
