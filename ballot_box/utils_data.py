@@ -316,7 +316,7 @@ class Namefixer(object):
         return contest
 
     def _titlecase_with_accents(self, string):
-        subs = ('ABCDEFGHIJKLMNOPQRSTUVWXYZÂÁÀÄÊÉÈËÏÍÎÖÓÔÖÚÙÛÑÇ', 'abcdefghijklmnopqrstuvwxyzâáàäêéèëïíîöóôöúùûñç')
+        subs = ('ABCDEFGHIJKLMNOPQRSTUVWXYZÂÁÀÄÃÊÉÈËÏÍÎÖÓÔÖÚÙÛÑÇ', 'abcdefghijklmnopqrstuvwxyzâáàäãêéèëïíîöóôöúùûñç')
         string = string.split(" ")
         titlecase = []
         for word in string:
@@ -324,9 +324,14 @@ class Namefixer(object):
                 titlecase.append(word)
             else:
                 quoted = False
+
+                # More individual character exceptions
+                if "¡" in word:
+                    word = re.sub("¡", "", word)
                 if "'" in word or "\"" in word:
                     word = re.sub(r'\'|\"',"",word)
                     quoted = True
+
                 first_letter = word[0]
                 new_word = word
                 for s in range(len(subs[0])):
