@@ -385,7 +385,8 @@ class BuildResults(object):
         self.framer.candidates = []
         for candidate in r.find_all("Selection"):
             this_candidate = {}
-            fullname = unicode(candidate.Candidate.CandidateFullName.PersonFullName.contents[0])
+            fullname = candidate.Candidate.CandidateFullName.PersonFullName.contents[0].encode('utf8')
+            fullname = self.fixer._titlecase_with_accents(fullname)
             party = unicode(candidate.AffiliationIdentifier.RegisteredName.contents[0])
             if party == "Democratic":
                 party = "Democrat"

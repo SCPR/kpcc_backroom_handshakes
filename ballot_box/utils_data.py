@@ -333,25 +333,26 @@ class Namefixer(object):
         string = string.split(" ")
         titlecase = []
         for word in string:
-            if word == "II" or word == "III" or word == "IV":
-                titlecase.append(word)
-            else:
-                quoted = False
+            if word:
+                if word == "II" or word == "III" or word == "IV":
+                    titlecase.append(word)
+                else:
+                    quoted = False
 
-                # More individual character exceptions
-                if "¡" in word:
-                    word = re.sub("¡", "", word)
-                if "'" in word or "\"" in word:
-                    word = re.sub(r'\'|\"',"",word)
-                    quoted = True
+                    # More individual character exceptions
+                    if "¡" in word:
+                        word = re.sub("¡", "", word)
+                    if "'" in word or "\"" in word:
+                        word = re.sub(r'\'|\"',"",word)
+                        quoted = True
 
-                first_letter = word[0]
-                new_word = word
-                for s in range(len(subs[0])):
-                    new_word = re.sub(subs[0][s], subs[1][s], new_word)
-                titled_word = first_letter + new_word[1:]
-                if quoted:
-                    titled_word = "'" + titled_word + "'"
-                titlecase.append(titled_word)
+                    first_letter = word[0]
+                    new_word = word
+                    for s in range(len(subs[0])):
+                        new_word = re.sub(subs[0][s], subs[1][s], new_word)
+                    titled_word = first_letter + new_word[1:]
+                    if quoted:
+                        titled_word = "'" + titled_word + "'"
+                    titlecase.append(titled_word)
         newstring = " ".join(titlecase)
         return newstring
