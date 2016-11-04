@@ -480,7 +480,8 @@ class BuildResults(object):
         self.framer.candidates = []
         for candidate in race.find_all("ChoiceTotal"):
             this_candidate = {}
-            fullname = unicode(candidate.attrs["candidate_name"].title())
+            fullname = candidate.attrs["candidate_name"].encode('utf8')
+            fullname = self.fixer._titlecase_with_accents(fullname)
             party = unicode(candidate.attrs["party"].title())
             if party == "Democratic":
                 party = "Democrat"

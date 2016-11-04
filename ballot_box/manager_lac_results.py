@@ -534,7 +534,7 @@ class LacProcessMethods(object):
             race_log += saver.make_office(framer.office)
             race_log += saver.make_contest(framer.office, framer.contest)
             for judge in judges:
-                fullname = judge["judicial_name"].title()
+                fullname = fixer._titlecase_with_accents(judge["judicial_name"].encode('utf8'))
                 framer.judicial["firstname"] = None
                 framer.judicial["lastname"] = None
                 framer.judicial["ballotorder"] = None
@@ -805,7 +805,7 @@ class LacProcessMethods(object):
             race_log += saver.make_office(framer.office)
             race_log += saver.make_contest(framer.office, framer.contest)
             for candidate in candidates:
-                fullname = candidate["candidate_name"].title()
+                fullname = fixer._titlecase_with_accents(candidate["candidate_name"].encode('utf8'))
                 party = candidate["party_short"]
                 if party == "REP":
                     party = "Republican"
