@@ -99,9 +99,13 @@ class HomepageIndex(ListView):
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.kwargs["electionid"]
         context["caveat"] = Election.objects.filter(electionid=context["electionid"]).first().election_caveats
-        queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
+        queryset = Contest.objects.filter(election__electionid=context["electionid"])
         context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
         context["featured_measures"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=True)
+        context["local_measures"] = queryset.filter(is_ballot_measure=True).filter(
+            Q(contestid__contains="lac-county-los-angeles-countywide") |
+            Q(contestid__contains="lac-county-los-angeles-city-special-municipal")
+        )
         context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(source_short="sos").first()
         return context
 
@@ -123,9 +127,13 @@ class BakedHomepageIndex(BuildableListView):
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.electionid
         context["caveat"] = Election.objects.filter(electionid=context["electionid"]).first().election_caveats
-        queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
+        queryset = Contest.objects.filter(election__electionid=context["electionid"])
         context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
         context["featured_measures"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=True)
+        context["local_measures"] = queryset.filter(is_ballot_measure=True).filter(
+            Q(contestid__contains="lac-county-los-angeles-countywide") |
+            Q(contestid__contains="lac-county-los-angeles-city-special-municipal")
+        )
         context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(source_short="sos").first()
         return context
 
@@ -145,9 +153,13 @@ class FeaturedIndex(ListView):
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.kwargs["electionid"]
         context["caveat"] = Election.objects.filter(electionid=context["electionid"]).first().election_caveats
-        queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
+        queryset = Contest.objects.filter(election__electionid=context["electionid"])
         context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
         context["featured_measures"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=True)
+        context["local_measures"] = queryset.filter(is_ballot_measure=True).filter(
+            Q(contestid__contains="lac-county-los-angeles-countywide") |
+            Q(contestid__contains="lac-county-los-angeles-city-special-municipal")
+        )
         context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(source_short="sos").first()
         return context
 
@@ -169,9 +181,13 @@ class BakedFeaturedIndex(BuildableListView):
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.electionid
         context["caveat"] = Election.objects.filter(electionid=context["electionid"]).first().election_caveats
-        queryset = Contest.objects.filter(election__electionid=context["electionid"]).filter(is_homepage_priority=True)
+        queryset = Contest.objects.filter(election__electionid=context["electionid"])
         context["featured_races"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=False)
         context["featured_measures"] = queryset.filter(is_homepage_priority=True).filter(is_ballot_measure=True)
+        context["local_measures"] = queryset.filter(is_ballot_measure=True).filter(
+            Q(contestid__contains="lac-county-los-angeles-countywide") |
+            Q(contestid__contains="lac-county-los-angeles-city-special-municipal")
+        )
         context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(source_short="sos").first()
         return context
 

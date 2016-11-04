@@ -32,18 +32,16 @@
         <link href="/static/css/reset.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="/static/css/general-election.css" media="screen" rel="stylesheet" type="text/css" />
     {% else %}
-        <link href="{% static 'css/reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
+        <link href="{% static 'css/general-election-reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
         <link href="{% static 'css/general-election.css' %}" media="screen" rel="stylesheet" type="text/css" />
     {% endif %}
 {% endblock %}
 
 {% block display_block %}
-
-    {% if timestamp %}
-    <!-- i was built at {{ timestamp }} using django-bakery -->
-    {% endif %}
-
     <div class="hero-election">
+        {% if timestamp %}
+        <!-- i was built at {{ timestamp }} using django-bakery -->
+        {% endif %}
         {% include "ballot_box/inc_header.html" %}
         {% include "ballot_box/inc_buttons.html" %}
         <div class="row-fluid results">
@@ -102,7 +100,7 @@
                                         <div class="measure-name">
                                             <dl>
                                                 <dt>{{ this.fullname }}&mdash;{{ measure.contestdescription }}</dt>
-                                                <dd><span class="blurb-text">{{ measure.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</span></dd>
+                                                <dd><span class="blurb-text">{{ measure.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</span></dd>
                                             </dl>
                                         </div>
                                         <div class="measure-votes clearfix">
@@ -131,7 +129,7 @@
                             <div class="measures-row clearfix">
                                 <header>
                                     <h2 class="race-title">{{ contest.contestname|title }}</h2>
-                                    <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</h2>
+                                    <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</h2>
                                 </header>
                                 {% for this in contest.ballotmeasure_set.all %}
                                     <div class="result-item clearfix">
@@ -142,7 +140,7 @@
                                                 {% else %}
                                                     <dt>{{ this.fullname }}</dt>
                                                 {% endif %}
-                                                <dd><span class="blurb-text">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</span></dd>
+                                                <dd><span class="blurb-text">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</span></dd>
                                             </dl>
                                         </div>
                                         <div class="measure-votes clearfix">
