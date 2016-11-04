@@ -148,31 +148,31 @@ class SbcProcessMethods(object):
 
             if record['CANDIDATE_FULL_NAME'] == 'Precinct Turnout':
                 election_info['precinct_ballots_cast'] = record['TOTAL']
-                if election_info['registration'] and election_info['registration'] != "0":
-                    raw_percent = 100*(float(record['TOTAL'])/float(election_info['registration']))
-                    rounded_percent = "%.2f" % raw_percent
-                    election_info['precinct_turnout'] = rounded_percent
-                else:
-                    election_info['precinct_turnout'] = 0.00
+                # if election_info['registration'] and election_info['registration'] != "0":
+                #     raw_percent = 100*(float(record['TOTAL'])/float(election_info['registration']))
+                #     rounded_percent = "%.2f" % raw_percent
+                #     election_info['precinct_turnout'] = rounded_percent
+                # else:
+                #     election_info['precinct_turnout'] = 0.00
 
             elif record['CANDIDATE_FULL_NAME'] == 'Vote by Mail Turnout':
                 election_info['vote_by_mail_ballots_cast'] = record['TOTAL']
-                if election_info['registration'] and election_info['registration'] != "0":
-                    raw_percent = 100*(float(record['TOTAL'])/float(election_info['registration']))
-                    rounded_percent = "%.2f" % raw_percent
-                    election_info['votebymail_turnout'] = rounded_percent
-                else:
-                    election_info['votebymail_turnout'] = 0.00
+                # if election_info['registration'] and election_info['registration'] != "0":
+                #     raw_percent = 100*(float(record['TOTAL'])/float(election_info['registration']))
+                #     rounded_percent = "%.2f" % raw_percent
+                #     election_info['votebymail_turnout'] = rounded_percent
+                # else:
+                #     election_info['votebymail_turnout'] = 0.00
 
             # Calculate overall turnout
             if election_info['precinct_ballots_cast'] and election_info['vote_by_mail_ballots_cast']:
                 election_info['total_turnout'] = float(election_info['precinct_ballots_cast']) + float(election_info['vote_by_mail_ballots_cast'])
-                if election_info['registration'] and election_info['registration'] != "0":
-                    raw_percent = 100*(float(election_info['total_turnout'])/float(election_info['registration']))
-                    rounded_percent = "%.2f" % raw_percent
-                    election_info['overall_percent_turnout'] = rounded_percent
-                else:
-                    election_info['overall_percent_turnout'] = 0.00
+                # if election_info['registration'] and election_info['registration'] != "0":
+                #     raw_percent = 100*(float(election_info['total_turnout'])/float(election_info['registration']))
+                #     rounded_percent = "%.2f" % raw_percent
+                #     election_info['overall_percent_turnout'] = rounded_percent
+                # else:
+                #     election_info['overall_percent_turnout'] = 0.00
 
                 """ INFO WE'VE GOTTEN FROM OTHER ELECTION OFFICIALS
                     BUT SO FAR NOT SAN BERNARDINO """
@@ -193,11 +193,11 @@ class SbcProcessMethods(object):
         candidates = []
         judge_candidates = []
         for record in records:
-            if record['CONTEST_TOTAL'] == "0":
-                rounded_percent = 0.00
-            else:
-                raw_percent = 100*(float(record['TOTAL'])/float(record['CONTEST_TOTAL']))
-                rounded_percent = "%.2f" % raw_percent
+            # if record['CONTEST_TOTAL'] == "0":
+            #     rounded_percent = 0.00
+            # else:
+            #     raw_percent = 100*(float(record['TOTAL'])/float(record['CONTEST_TOTAL']))
+            #     rounded_percent = "%.2f" % raw_percent
 
             try:
                 contest['CONTEST_FULL_NAME']
@@ -277,7 +277,7 @@ class SbcProcessMethods(object):
                 candidate['CANDIDATE_TYPE'] = record['CANDIDATE_TYPE']
                 candidate['cf_cand_class'] = record['cf_cand_class']
                 candidate['CANDIDATE_PARTY_ID'] = record['CANDIDATE_PARTY_ID']
-                candidate['percent_of_vote'] = rounded_percent
+                # candidate['percent_of_vote'] = rounded_percent
                 candidates.append(candidate)
 
 
@@ -303,10 +303,10 @@ class SbcProcessMethods(object):
                             already_exists = True
                             if "YES" in record['CANDIDATE_FULL_NAME']:
                                 m['yes_votes'] = record['TOTAL']
-                                m['yes_percent'] = rounded_percent
+                                # m['yes_percent'] = rounded_percent
                             elif "NO" in record['CANDIDATE_FULL_NAME']:
                                 m['no_votes'] = record['TOTAL']
-                                m['no_percent'] = rounded_percent
+                                # m['no_percent'] = rounded_percent
 
                 if already_exists:
                     pass
@@ -318,10 +318,10 @@ class SbcProcessMethods(object):
                     measure['cf_cand_class'] = record['cf_cand_class']
                     if "YES" in record['CANDIDATE_FULL_NAME']:
                         measure['yes_votes'] = record['TOTAL']
-                        measure['yes_percent'] = rounded_percent
+                        # measure['yes_percent'] = rounded_percent
                     elif "NO" in record['CANDIDATE_FULL_NAME']:
                         measure['no_votes'] = record['TOTAL']
-                        measure['no_percent'] = rounded_percent
+                        # measure['no_percent'] = rounded_percent
                     measures.append(measure)
 
             """ NEED TO GET EXAMPLE OF JUDICIAL CONFIRMATION CANDIDATES
@@ -355,6 +355,11 @@ class SbcProcessMethods(object):
         measures = contest_package['measures']
         judges = contest_package['judges']
         race_log = "\n"
+        if framer._to_num(contest['CONTEST_TOTAL'])["convert"] == True:
+            total_contest_votes = framer._to_num(contest['CONTEST_TOTAL'])["value"]
+        else:
+            total_contest_votes = None
+            raise Exception("total_contest_votes is not a number")
 
         # Check level of contest (i.e. local, statewide)
         if "United States" in contest['CONTEST_FULL_NAME'] or "STATE" in contest['CONTEST_FULL_NAME']:
@@ -544,24 +549,20 @@ class SbcProcessMethods(object):
                 else:
                     framer.measure["yescount"] = None
                     raise Exception("yescount is not a number")
-                if framer._to_num(measure['yes_percent'])["convert"] == True:
-                    yespct = framer._to_num(measure['yes_percent'])["value"]
-                    framer.measure["yespct"] = yespct
-                else:
-                    framer.measure["yespct"] = None
-                    raise Exception("yespct is not a number")
+                framer.measure["yespct"] = framer._calc_pct(
+                    framer.measure["yescount"],
+                    total_contest_votes
+                )
                 if framer._to_num(measure['no_votes'])["convert"] == True:
                     nocount = framer._to_num(measure['no_votes'])["value"]
                     framer.measure["nocount"] = nocount
                 else:
                     framer.measure["nocount"] = None
                     raise Exception("nocount is not a number")
-                if framer._to_num(measure['no_percent'])["convert"] == True:
-                    nopct = framer._to_num(measure['no_percent'])["value"]
-                    framer.measure["nopct"] = nopct
-                else:
-                    framer.measure["nopct"] = None
-                    raise Exception("nopct is not a number")
+                framer.measure["nopct"] = framer._calc_pct(
+                    framer.measure['nocount'],
+                    total_contest_votes
+                )
                 framer.measure["measureid"] = saver._make_this_id(
                     "measure",
                     framer.contest["contestid"],
@@ -641,12 +642,11 @@ class SbcProcessMethods(object):
             race_log += saver.make_office(framer.office)
             race_log += saver.make_contest(framer.office, framer.contest)
             for candidate in candidates:
-                recoded_name = candidate['CANDIDATE_FULL_NAME'].decode('iso-8859-1').encode('utf8')
-                recoded_name = lower_case_accents(recoded_name)
-                if " - " in recoded_name:
-                    fullname = recoded_name.split(" - ")[1].title()
-                else:
-                    fullname = recoded_name.title()
+                fullname = candidate['CANDIDATE_FULL_NAME']
+                if " - " in fullname:
+                    fullname = fullname.split(" - ")[1]
+                fullname = fullname.decode('iso-8859-1').encode('utf8')
+                fullname = titlecase_with_accents(fullname)
 
                 party_id = candidate['CANDIDATE_PARTY_ID']
                 if party_id == "2":
@@ -677,15 +677,16 @@ class SbcProcessMethods(object):
                 else:
                     framer.candidate["votecount"] = None
                     raise Exception("votecount is not a number")
-                if contest["CONTEST_TOTAL"] != "0":
-                    if framer._to_num(contest['CONTEST_TOTAL'])["convert"] == True:
-                        vote_total = framer._to_num(contest['CONTEST_TOTAL'])["value"]
-                        framer.candidate["votepct"] = framer._calc_pct(
-                            framer.candidate["votecount"],
-                            vote_total
-                        )
+                if total_contest_votes > 0:
+                    framer.candidate["votepct"] = framer._calc_pct(
+                        framer.candidate["votecount"],
+                        total_contest_votes
+                    )
+                    print framer.candidate["fullname"]
+                    print total_contest_votes
+                    print framer.candidate["votepct"]
                 else:
-                    framer.candidate["votepct"] = None
+                    framer.candidate["votepct"] = 0.00
                     logger.debug("No votes have been cast in " + contestname + " or votepct is not a number")
                 framer.candidate["candidateid"] = saver._make_this_id(
                     "candidate",
@@ -810,12 +811,30 @@ class SbcProcessMethods(object):
         #     report += 'N/A\n'
         print report
 
-def lower_case_accents(string):
-    subs = ('ÂÁÀÄÊÉÈËÏÍÎÖÓÔÖÚÙÛÑÇ', 'âáàäêéèëïíîöóôöúùûñç')
-    newstring = string
-    for s in range(len(subs[0])):
-        newstring = re.sub(subs[0][s], subs[1][s], newstring)
+def titlecase_with_accents(string):
+    subs = ('ABCDEFGHIJKLMNOPQRSTUVWXYZÂÁÀÄÊÉÈËÏÍÎÖÓÔÖÚÙÛÑÇ', 'abcdefghijklmnopqrstuvwxyzâáàäêéèëïíîöóôöúùûñç')
+    uppercase = string.split(" ")
+    titlecase = []
+    for word in uppercase:
+        quoted = False
+        if "'" in word or "\"" in word:
+            word = re.sub(r'\'|\"',"",word)
+            quoted = True
+        first_letter = word[0]
+        new_word = word
+        for s in range(len(subs[0])):
+            new_word = re.sub(subs[0][s], subs[1][s], new_word)
+        titled_word = first_letter + new_word[1:]
+        if quoted:
+            titled_word = "'" + titled_word + "'"
+        titlecase.append(titled_word)
+    newstring = " ".join(titlecase)
     return newstring
+
+    # newstring = string
+    # for s in range(len(subs[0])):
+    #     newstring = re.sub(subs[0][s], subs[1][s], newstring)
+    # return newstring
 
 if __name__ == '__main__':
     task_run = BuildSbcResults()
