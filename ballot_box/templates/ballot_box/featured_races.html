@@ -51,7 +51,7 @@
                 {% for contest in featured_races %}
                     <div class="results-block">
                         <header>
-                            <h2 class="race-title">{{ contest.contestname|title }}{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">State of California</span>{% endif %}</h2>
+                            <h2 class="race-title">{{ contest.contestname|title }}{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">State of California only</span>{% endif %}</h2>
                             <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</h2>
                         </header>
                         {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
