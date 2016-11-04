@@ -518,7 +518,7 @@ class SbcProcessMethods(object):
             framer.contest["precinctsreportingpct"] = framer._calc_pct(
                 framer.contest["precinctsreporting"],
                 framer.contest["precinctstotal"]
-            )
+            )*100
             # if framer._to_num(contest['registration'])["convert"] == True:
             #     framer.contest["votersregistered"] = framer._to_num(
             #         contest['registration'])["value"]
@@ -552,7 +552,7 @@ class SbcProcessMethods(object):
                 framer.measure["yespct"] = framer._calc_pct(
                     framer.measure["yescount"],
                     total_contest_votes
-                )
+                )*100
                 if framer._to_num(measure['no_votes'])["convert"] == True:
                     nocount = framer._to_num(measure['no_votes'])["value"]
                     framer.measure["nocount"] = nocount
@@ -562,7 +562,7 @@ class SbcProcessMethods(object):
                 framer.measure["nopct"] = framer._calc_pct(
                     framer.measure['nocount'],
                     total_contest_votes
-                )
+                )*100
                 framer.measure["measureid"] = saver._make_this_id(
                     "measure",
                     framer.contest["contestid"],
@@ -620,7 +620,7 @@ class SbcProcessMethods(object):
             framer.contest["precinctsreportingpct"] = framer._calc_pct(
                 framer.contest["precinctsreporting"],
                 framer.contest["precinctstotal"]
-            )
+            )*100
             # if framer._to_num(contest['registration'])["convert"] == True:
             #     framer.contest["votersregistered"] = framer._to_num(
             #         contest['registration'])["value"]
@@ -646,7 +646,8 @@ class SbcProcessMethods(object):
                 if " - " in fullname:
                     fullname = fullname.split(" - ")[1]
                 fullname = fullname.decode('iso-8859-1').encode('utf8')
-                fullname = titlecase_with_accents(fullname)
+                fixer = Namefixer()
+                fullname = fixer._titlecase_with_accents(fullname)
 
                 party_id = candidate['CANDIDATE_PARTY_ID']
                 if party_id == "2":
@@ -681,10 +682,7 @@ class SbcProcessMethods(object):
                     framer.candidate["votepct"] = framer._calc_pct(
                         framer.candidate["votecount"],
                         total_contest_votes
-                    )
-                    print framer.candidate["fullname"]
-                    print total_contest_votes
-                    print framer.candidate["votepct"]
+                    )*100
                 else:
                     framer.candidate["votepct"] = 0.00
                     logger.debug("No votes have been cast in " + contestname + " or votepct is not a number")
@@ -810,31 +808,6 @@ class SbcProcessMethods(object):
         # else:
         #     report += 'N/A\n'
         print report
-
-def titlecase_with_accents(string):
-    subs = ('ABCDEFGHIJKLMNOPQRSTUVWXYZÂÁÀÄÊÉÈËÏÍÎÖÓÔÖÚÙÛÑÇ', 'abcdefghijklmnopqrstuvwxyzâáàäêéèëïíîöóôöúùûñç')
-    uppercase = string.split(" ")
-    titlecase = []
-    for word in uppercase:
-        quoted = False
-        if "'" in word or "\"" in word:
-            word = re.sub(r'\'|\"',"",word)
-            quoted = True
-        first_letter = word[0]
-        new_word = word
-        for s in range(len(subs[0])):
-            new_word = re.sub(subs[0][s], subs[1][s], new_word)
-        titled_word = first_letter + new_word[1:]
-        if quoted:
-            titled_word = "'" + titled_word + "'"
-        titlecase.append(titled_word)
-    newstring = " ".join(titlecase)
-    return newstring
-
-    # newstring = string
-    # for s in range(len(subs[0])):
-    #     newstring = re.sub(subs[0][s], subs[1][s], newstring)
-    # return newstring
 
 if __name__ == '__main__':
     task_run = BuildSbcResults()
