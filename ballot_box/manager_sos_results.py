@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import division
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import localtime
 from ballot_box.utils_files import Retriever
-from ballot_box.utils_data import Framer
+from ballot_box.utils_data import Framer, Namefixer
 from ballot_box.utils_import import Saver
 from election_registrar.models import ResultSource, Election
 import logging
@@ -39,7 +41,8 @@ class BuildSosResults(object):
         for src in self.sources:
             self.get_results_file(src, self.data_directory)
             self.parse_results_file(src, self.data_directory)
-        self.retrieve._build_and_move_results()
+            src.ready_to_build = True
+            src.save(update_fields=["ready_to_build"])
 
     def get_results_file(self, src, data_directory):
         """
@@ -126,6 +129,7 @@ class BuildResults(object):
     """
     saver = Saver()
     framer = Framer()
+    fixer = Namefixer()
 
     def _compile_judicial(self, race, race_id, election, src):
         """
@@ -405,7 +409,7 @@ class BuildResults(object):
             self.framer.candidates.append(this_candidate)
         return self.framer
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     task_run = BuildSosResults()
     task_run._init()
     print "\nTask finished at %s\n" % str(datetime.datetime.now())

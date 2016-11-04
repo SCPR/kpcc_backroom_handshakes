@@ -4,8 +4,8 @@ from django.conf import settings
 from bakery.views import BuildableMixin
 from django.test.client import RequestFactory
 from django.contrib.syndication.views import Feed
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger("kpcc_backroom_handshakes")
 
 class BuildableFeed(Feed, BuildableMixin):
     """

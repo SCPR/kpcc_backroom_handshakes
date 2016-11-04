@@ -51,7 +51,8 @@ class ResultSourceAdmin(admin.ModelAdmin):
     list_display = (
         "source_name",
         "source_active",
-        "source_created"
+        "ready_to_build",
+        "source_latest",
     )
 
     list_per_page = 15
@@ -67,6 +68,19 @@ class ResultSourceAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         "source_slug": ("source_name",)
     }
+
+    fields = (
+      "election",
+      "source_name",
+      "source_short",
+      "source_slug",
+      "source_url",
+      "source_active",
+      "source_type",
+      "source_files",
+      "ready_to_build",
+      "source_latest",
+    )
 
     actions = [
         "set_active",

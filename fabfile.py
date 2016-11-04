@@ -35,11 +35,17 @@ CONFIG_YML = os.path.join(PROJECT_PATH, "development.yml")
 CONFIG = yaml.load(open(CONFIG_YML))
 
 env.hosts = CONFIG["deployment_env"]["hosts"]
+
 env.project_name = CONFIG["deployment_env"]["project_name"]
+
 env.local_branch = CONFIG["deployment_env"]["local_branch"]
+
 env.remote_ref = CONFIG["deployment_env"]["remote_ref"]
+
 env.requirements_file = CONFIG["deployment_env"]["requirements_file"]
+
 env.use_ssh_config = CONFIG["deployment_env"]["use_ssh_config"]
+
 env.code_dir = CONFIG["deployment_env"]["code_dir"]
 
 logger = logging.getLogger("root")
@@ -228,6 +234,17 @@ def build():
 
 def buildserver():
     local("python manage.py buildserver")
+
+
+def publish():
+    local("python manage.py publish")
+
+
+def elex_night_s3():
+    """
+    shortcut for running all management commands to fetch results
+    """
+    local("python manage.py build_and_publish")
 
 
 def commit(message='updates'):

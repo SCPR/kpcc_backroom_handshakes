@@ -149,6 +149,19 @@ class Framer(object):
         output = int(format_value)
         return output
 
+    def _convert_district_number(self, value):
+        if "St District" in value:
+            output = value.replace("St District", "st District")
+        elif "Nd District" in value:
+            output = value.replace("Nd District", "nd District")
+        elif "Rd District" in value:
+            output = value.replace("Rd District", "rd District")
+        elif "Th District" in value:
+            output = value.replace("Th District", "th District")
+        else:
+            output = value
+        return output
+
     def _find_nth(self, haystack, needle, n):
         start = haystack.find(needle)
         while start >= 0 and n > 1:

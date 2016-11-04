@@ -6,96 +6,84 @@ import shutil
 import logging
 import mimetypes
 from django.conf import settings
-from optparse import make_option
 from django.core import management
 from bakery import DEFAULT_GZIP_CONTENT_TYPES
 from django.core.urlresolvers import get_callable
-from django.core.exceptions import ViewDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
-custom_options = (
-    make_option(
-        "--build-dir",
-        action="store",
-        dest="build_dir",
-        default='',
-        help="Specify the path of the build directory. Will use settings.BUILD_DIR by default."
-    ),
-    make_option(
-        "--keep-build-dir",
-        action="store_true",
-        dest="keep_build_dir",
-        default=False,
-        help="Skip initializing the build directory before building files."
-    ),
-    make_option(
-        "--skip-static",
-        action="store_true",
-        dest="skip_static",
-        default=False,
-        help="Skip collecting the static files when building."
-    ),
-    make_option(
-        "--skip-media",
-        action="store_true",
-        dest="skip_media",
-        default=False,
-        help="Skip collecting the media files when building."
-    ),
-)
-
-
 class Command(BaseCommand):
     help = 'Bake out a site as flat files in the build directory'
-    option_list = BaseCommand.option_list + custom_options
-    build_unconfig_msg = "Build directory unconfigured. Set BUILD_DIR in settings.py or provide it with --build-dir"
-    views_unconfig_msg = "Bakery views unconfigured. Set BAKERY_VIEWS in settings.py or provide a list as arguments."
+    build_unconfig_msg = "Build directory unconfigured. Set BUILD_DIR in \
+settings.py or provide it with --build-dir"
+    views_unconfig_msg = "Bakery views unconfigured. Set BAKERY_VIEWS in \
+settings.py or provide a list as arguments."
+
+    def add_arguments(self, parser):
+        parser.add_argument('view_list', nargs='*', type=str, default=[])
+        parser.add_argument(
+            "--build-dir",
+            action="store",
+            dest="build_dir",
+            default='',
+            help="Specify the path of the build directory. \
+Will use settings.BUILD_DIR by default."
+        )
+        parser.add_argument(
+            "--keep-build-dir",
+            action="store_true",
+            dest="keep_build_dir",
+            default=False,
+            help="Skip initializing the build directory before building files."
+        )
+        parser.add_argument(
+            "--skip-static",
+            action="store_true",
+            dest="skip_static",
+            default=False,
+            help="Skip collecting the static files when building."
+        )
+        parser.add_argument(
+            "--skip-media",
+            action="store_true",
+            dest="skip_media",
+            default=False,
+            help="Skip collecting the media files when building."
+        )
 
     def handle(self, *args, **options):
         """
-        making it happen.
+        Making it happen.
         """
+        logger.info("Build started")
 
-        logger.info("Starting to build HTML page")
-
-        # set options
+        # Set options
         self.set_options(*args, **options)
 
-        """
-        not the best solution and can revisit
-        but it is a working solution to commment
-        """
+        # Get the build directory ready
+        if not options.get("keep_build_dir"):
+            self.init_build_dir()
 
-        # get the build directory ready
-        # if not options.get("keep_build_dir"):
-        #     self.init_build_dir()
+        # Build up static files
+        if not options.get("skip_static"):
+            self.build_static()
 
-        # build up static files
-        # if not options.get("skip_static"):
-        #     self.build_static()
-
-        # build the media directory
+        # Build the media directory
         # if not options.get("skip_media"):
         #     self.build_media()
 
-        if os.path.exists(self.build_dir):
-            pass
-        else:
-            os.makedirs(self.build_dir)
-
-        # build views
+        # Build views
         self.build_views()
 
-        # close out
-        logger.info("Finished building HTML page")
+        # Close out
+        logger.info("Build finished")
 
     def set_options(self, *args, **options):
         """
         Configure a few global options before things get going.
         """
-        self.verbosity = int(options.get('verbosity'))
+        self.verbosity = int(options.get('verbosity', 1))
 
         # Figure out what build directory to use
         if options.get("build_dir"):
@@ -107,8 +95,8 @@ class Command(BaseCommand):
             self.build_dir = settings.BUILD_DIR
 
         # Figure out what views we'll be using
-        if args:
-            self.view_list = args
+        if options['view_list']:
+            self.view_list = options['view_list']
         else:
             if not hasattr(settings, 'BAKERY_VIEWS'):
                 raise CommandError(self.views_unconfig_msg)
@@ -133,32 +121,25 @@ class Command(BaseCommand):
         Builds the static files directory as well as robots.txt and favicon.ico
         """
         logger.debug("Building static directory")
-
         if self.verbosity > 1:
             six.print_("Building static directory")
-
         management.call_command(
             "collectstatic",
-            "-i admin",
-            interactive = False,
-            verbosity = 0
+            interactive=False,
+            verbosity=0
         )
-
         target_dir = os.path.join(self.build_dir, settings.STATIC_URL[1:])
 
+        ignore_patterns = settings.STATIC_TO_IGNORE
+
         if os.path.exists(settings.STATIC_ROOT) and settings.STATIC_URL:
-            # if gzip isn't enabled, just copy the tree straight over
+            # if gzip is enabled
             if getattr(settings, 'BAKERY_GZIP', False):
                 self.copytree_and_gzip(settings.STATIC_ROOT, target_dir)
+            # else just copy the tree straight over
             else:
-                list_of_static_dirs = os.listdir(settings.STATIC_ROOT)
-                logger.debug(list_of_static_dirs)
-                for dir in list_of_static_dirs:
-                    if dir != "monthly_water_reports":
-                        git_rid_of = "%s/%s" % (settings.STATIC_ROOT, dir)
-                        logger.debug("Deleting unneeded %s" % (dir))
-                        shutil.rmtree(git_rid_of)
-                shutil.copytree(settings.STATIC_ROOT, target_dir)
+                shutil.copytree(settings.STATIC_ROOT, target_dir, ignore=shutil.ignore_patterns(*ignore_patterns))
+
 
         # If they exist in the static directory, copy the robots.txt
         # and favicon.ico files down to the root so they will work
@@ -187,24 +168,19 @@ class Command(BaseCommand):
         if self.verbosity > 1:
             six.print_("Building media directory")
         if os.path.exists(settings.MEDIA_ROOT) and settings.MEDIA_URL:
-            shutil.copytree(
-                settings.MEDIA_ROOT,
-                os.path.join(self.build_dir, settings.MEDIA_URL[1:])
-            )
+            shutil.copytree(settings.MEDIA_ROOT, os.path.join(self.build_dir, settings.MEDIA_URL[1:]))
 
     def build_views(self):
         """
-        bake out specified buildable views.
-        then loop through and run them all
+        Bake out specified buildable views.
         """
+        # Then loop through and run them all
         for view_str in self.view_list:
+            # logger.debug("Building %s" % view_str)
             if self.verbosity > 1:
                 six.print_("Building %s" % view_str)
-            try:
-                view = get_callable(view_str)
-                view().build_method()
-            except (TypeError, ViewDoesNotExist):
-                raise CommandError("View %s does not work." % view_str)
+            view = get_callable(view_str)
+            view().build_method()
 
     def copytree_and_gzip(self, source_dir, target_dir):
         """
@@ -237,7 +213,7 @@ class Command(BaseCommand):
                 content_type = mimetypes.guess_type(og_file)[0]
 
                 # If it isn't a file want to gzip...
-                if not content_type in gzip_file_match:
+                if content_type not in gzip_file_match:
                     # just copy it to the target.
                     shutil.copy(og_file, dest_path)
 

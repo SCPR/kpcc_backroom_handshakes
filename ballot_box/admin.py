@@ -96,9 +96,9 @@ class ContestAdmin(admin.ModelAdmin):
         "contestname",
         "is_display_priority",
         "is_homepage_priority",
-        # "get_candidate_count",
+        "get_candidate_count",
         "precincts_reporting_pct",
-        # "votersturnout",
+        "votersturnout",
         "resultsource",
         "poss_error",
     )

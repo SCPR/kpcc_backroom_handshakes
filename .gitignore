@@ -71,3 +71,4 @@ config/newrelic.ini
 config*
 scratch*
 _IGNORE_/
+latest_build/
