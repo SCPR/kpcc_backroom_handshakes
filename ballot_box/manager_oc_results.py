@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import division
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import localtime
 from ballot_box.utils_files import Retriever
-from ballot_box.utils_data import Framer
+from ballot_box.utils_data import Framer, Namefixer
 from ballot_box.utils_import import Saver
 from election_registrar.models import ResultSource, Election
 import logging
@@ -116,6 +118,7 @@ class BuildResults(object):
     """
     saver = Saver()
     framer = Framer()
+    fixer = Namefixer()
 
     state_measures = [
         "1480",
@@ -272,6 +275,11 @@ class BuildResults(object):
             this_type = "Measure"
             split_this = True
         contest_title = unicode(race.attrs["contest_title"])
+
+
+        print contest_title
+
+
         if split_this == True:
             split_name = contest_title.split("-")
             prop_num = split_name[0]
@@ -280,6 +288,12 @@ class BuildResults(object):
             split_name = contest_title
             prop_num = this_type
             measure_fullname = "%s" % (split_name)
+
+
+
+
+
+
         if this_type == "Proposition":
             officename = self.framer._concat(
                 this_type,

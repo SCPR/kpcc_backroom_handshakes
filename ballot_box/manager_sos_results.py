@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import division
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import localtime
 from ballot_box.utils_files import Retriever
-from ballot_box.utils_data import Framer
+from ballot_box.utils_data import Framer, Namefixer
 from ballot_box.utils_import import Saver
 from election_registrar.models import ResultSource, Election
 import logging
@@ -127,6 +129,7 @@ class BuildResults(object):
     """
     saver = Saver()
     framer = Framer()
+    fixer = Namefixer()
 
     def _compile_judicial(self, race, race_id, election, src):
         """
