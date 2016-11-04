@@ -298,11 +298,15 @@ class Namefixer(object):
         for p, r in self.patterns.iteritems():
             if p == "no":
                 number = re.compile(p + r'(\s[0-9])',flags=re.IGNORECASE)
-                north = re.compile(p + r'(\s[a-zA-Z])',flags=re.IGNORECASE)
+                # north = re.compile(p + r'(\s[a-zA-Z])',flags=re.IGNORECASE)
+                north = re.compile(r'(\s)' + p + r'(\s[a-zA-Z])',flags=re.IGNORECASE)
+                bernardino = re.compile(r'(?<=bernardi)' + p,flags=re.IGNORECASE)
                 if re.search(number,string):
                     string = re.sub(number,r[0]+r'\1',string)
                 elif re.search(north,string):
                     string = re.sub(north,r[1]+r'\1',string)
+                elif re.search(bernardino,string):
+                    pass
             elif p == "cal":
                 local = re.compile(r'(?<=lo)' + p,flags=re.IGNORECASE)
                 california = re.compile(p + r'(?=\s|$)',flags=re.IGNORECASE)
@@ -323,3 +327,26 @@ class Namefixer(object):
             search = re.compile(p, flags=re.IGNORECASE)
             contest = re.sub(search,county + ' ' + r,contest)
         return contest
+
+    def _titlecase_with_accents(self, string):
+        subs = ('ABCDEFGHIJKLMNOPQRSTUVWXYZÂÁÀÄÊÉÈËÏÍÎÖÓÔÖÚÙÛÑÇ', 'abcdefghijklmnopqrstuvwxyzâáàäêéèëïíîöóôöúùûñç')
+        string = string.split(" ")
+        titlecase = []
+        for word in string:
+            if word == "II" or word == "III" or word == "IV":
+                titlecase.append(word)
+            else:
+                quoted = False
+                if "'" in word or "\"" in word:
+                    word = re.sub(r'\'|\"',"",word)
+                    quoted = True
+                first_letter = word[0]
+                new_word = word
+                for s in range(len(subs[0])):
+                    new_word = re.sub(subs[0][s], subs[1][s], new_word)
+                titled_word = first_letter + new_word[1:]
+                if quoted:
+                    titled_word = "'" + titled_word + "'"
+                titlecase.append(titled_word)
+        newstring = " ".join(titlecase)
+        return newstring

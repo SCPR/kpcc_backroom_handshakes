@@ -70,4 +70,5 @@ locustfile.py
 config/newrelic.ini
 config*
 scratch*
-latest_build/*
+_IGNORE_/
+latest_build/

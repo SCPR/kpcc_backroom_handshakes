@@ -107,6 +107,11 @@ def fetch_lac():
     """
     local("python manage.py fetch_lac_results")
 
+def fetch_sbc():
+    """
+    shortcut for running the management command to fetch sos results
+    """
+    local("python manage.py fetch_sbc_results")
 
 def fetch_oc():
     """
