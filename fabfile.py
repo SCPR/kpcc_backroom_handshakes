@@ -58,6 +58,13 @@ logging.basicConfig(
 data functions
 """
 
+def dump_primary_data():
+    """
+    shortcut to load ballot box data fixtures
+    """
+    local("python manage.py dumpdata ballot_box > ballot_box/fixtures/primary_data.json")
+
+
 def load_primary_data():
     """
     shortcut to load ballot box data fixtures
