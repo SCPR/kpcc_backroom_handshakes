@@ -61,7 +61,7 @@ set a ``get_absolute_url`` method on the %s model or override the %s view's \
         }
 
     def build_object(self, obj):
-        logger.info("Building %s" % obj)
+        logger.debug("Building %s" % obj)
         self.request = RequestFactory().get(self.get_url(obj))
         self.set_kwargs(obj)
         path = self.get_build_path(obj)
@@ -74,7 +74,7 @@ set a ``get_absolute_url`` method on the %s model or override the %s view's \
         """
         Deletes the directory at self.get_build_path.
         """
-        logger.info("Unbuilding %s" % obj)
+        logger.debug("Unbuilding %s" % obj)
         path = os.path.split(self.get_build_path(obj))[0]
         if os.path.exists(path):
             shutil.rmtree(path)
