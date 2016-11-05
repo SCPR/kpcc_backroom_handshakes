@@ -225,7 +225,8 @@ class Saver(object):
             if created:
                 log_message += "\t\t* CREATED CANDIDATE: %s\n" % (candidate["candidateid"])
             else:
-                log_message += "\t\t* UPDATED %s: %s from %s%% to %s%%\n" % (this_contest.contestname, unicode(candidate["fullname"]), prevotepct, candidate["votepct"])
+                outputname = candidate["fullname"].decode("utf8")
+                log_message += "\t\t* UPDATED %s: %s from %s%% to %s%%\n" % (this_contest.contestname, outputname, prevotepct, candidate["votepct"])
         except Exception, exception:
             error_output = "%s %s" % (exception, candidate["candidateid"])
             logger.debug(error_output)
