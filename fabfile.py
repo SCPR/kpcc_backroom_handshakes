@@ -58,6 +58,26 @@ logging.basicConfig(
 data functions
 """
 
+def load_primary_data():
+    """
+    shortcut to load ballot box data fixtures
+    """
+    local("python manage.py loaddata ballot_box/fixtures/primary_data.json")
+
+
+def dump_elex_night():
+    """
+    shortcut to dump data from ballot box as fixtures
+    """
+    local("python manage.py dumpdata ballot_box > ballot_box/fixtures/elex_night_contests_v1.json")
+
+
+def load_elex_night():
+    """
+    shortcut to load ballot box data fixtures
+    """
+    local("python manage.py loaddata ballot_box/fixtures/elex_night_contests_v1.json")
+
 
 def dump_ballot_box():
     """
@@ -71,13 +91,6 @@ def load_ballot_box():
     shortcut to load ballot box data fixtures
     """
     local("python manage.py loaddata ballot_box/fixtures/ballot_box.json")
-
-
-def load_primary_data():
-    """
-    shortcut to load ballot box data fixtures
-    """
-    local("python manage.py loaddata ballot_box/fixtures/primary_data.json")
 
 
 def dump_registrar():
@@ -133,6 +146,18 @@ def fetch_maplight():
     """
     """
     local("python manage.py fetch_measure_finance")
+
+
+def zero_it():
+    """
+    """
+    local("python manage.py zero_out_data")
+
+
+def election_night():
+    """
+    """
+    local("python manage.py election_night")
 
 
 """
