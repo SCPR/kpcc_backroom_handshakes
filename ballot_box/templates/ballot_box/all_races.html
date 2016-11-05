@@ -175,12 +175,15 @@
 {% endblock %}
 
 {% block extra_js %}
+    <script type="text/javascript" src="//pym.nprapps.org/pym.v1.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+            var pymChild = new pym.Child({id: "homepage"});
             $("li#top-races").removeClass("selected");
             $("li#all-races").addClass("selected");
             $(".collection-header").click(function() {
                 $(this).parent().toggleClass("active");
+                pymChild.sendHeight();
             });
         });
     </script>

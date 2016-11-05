@@ -136,12 +136,21 @@
                                     </div>
                                 </div>
                             {% endif %}
-
-
                         {% endfor %}
                     {% endfor %}
                 </div>
             </div>
         {% endif %}
     </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript" src="//pym.nprapps.org/pym.v1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var pymChild = new pym.Child({id: "homepage"});
+            $("li#top-races").addClass("selected");
+            $("li#all-races").removeClass("selected");
+        });
+    </script>
 {% endblock %}

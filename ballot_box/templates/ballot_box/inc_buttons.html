@@ -1,8 +1,8 @@
 <div class="row-fluid buttons clearfix">
     <ul>
     {% if baked == True %}
-        <a href="javascript:void(0)"><li id="featured" class="selected"><span class="label">Top Races</span></li></a>
-        <a href="javascript:void(0)"><li id="all"><span class="label">All Races</span></li></a>
+        <a href="https://elections.scpr.org/general-2016-11-08/results/featured.html"><li id="featured" class="selected"><span class="label">Top Races</span></li></a>
+        <a href="https://elections.scpr.org/general-2016-11-08/results/all.html"><li id="all"><span class="label">All Races</span></li></a>
     {% else %}
         <a href="{% url 'ballot_box:featured-index' electionid %}/"><li id="top-races" class="selected"><span class="label">Top Races</span></li></a>
         <a href="{% url 'ballot_box:result-index' electionid %}/"><li id="all-races"><span class="label">All Races</span></li></a>

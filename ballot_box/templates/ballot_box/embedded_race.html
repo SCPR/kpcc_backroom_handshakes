@@ -60,37 +60,48 @@
                         </div>
                     </div>
                 {% endfor %}
-                <div class="branded-image clearfix">
-                    {% if baked == True %}
-                        <img src="/static/assets/kpcc-votergameplan-mark-horizontal.png" />
-                    {% else %}
-                        <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
-                    {% endif %}
-                        <p><a href="#">See All Results &gt;</a></p>
-                </div>
+            </div>
+            <div class="branded-image clearfix">
+                {% if baked == True %}
+                    <img src="/static/assets/kpcc-votergameplan-mark-horizontal.png" />
+                {% else %}
+                    <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
+                {% endif %}
+                    <p><a href="http://www.scpr.org/elections/2016/general/">See State &amp; Local Results &gt;</a></p>
             </div>
         </div>
     {% else %}
-        <div class="row-fluid embed embed-race clearfix">
-            <div class="embed-block">
+        {% if contest.candidate_set.all|length > 8 %}
+            <div class="row-fluid embed embed-race clearfix" style="height: 420px; max-height: 420px; min-height: 420px;">
+        {% elif contest.candidate_set.all|length <= 8 %}
+            <div class="row-fluid embed embed-race clearfix" style="height: 330px; max-height: 330px; min-height: 330px;">
+        {% endif %}
+            <div class="embed-block clearfix">
                 <header>
                     <h2 class="race-title">{{ contest.contestname|title }}</h2>
                     <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</p>
                 </header>
-                {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
-                    <div class="result-item clearfix">
-                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
-                        <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">of california voters</span>{% endif %}</span></h3>
-                    </div>
-                {% endfor %}
-                <div class="branded-image clearfix">
-                    {% if baked == True %}
-                        <img src="/static/assets/kpcc-votergameplan-mark-horizontal.png" />
+                {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct" %}
+                    {% if contest.candidate_set.all|length > 3 %}
+                        <div class="result-grid clearfix">
+                            <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
+                            <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">of california voters</span>{% endif %}</span></h3>
+                        </div>
                     {% else %}
-                        <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
+                        <div class="result-item clearfix">
+                            <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
+                            <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">of california voters</span>{% endif %}</span></h3>
+                        </div>
                     {% endif %}
-                        <p><a href="#">See State &amp; Local Results &gt;</a></p>
-                </div>
+                {% endfor %}
+            </div>
+            <div class="branded-image clearfix">
+                {% if baked == True %}
+                    <img src="/static/assets/kpcc-votergameplan-mark-horizontal.png" />
+                {% else %}
+                    <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
+                {% endif %}
+                    <p><a href="http://www.scpr.org/elections/2016/general/">See State &amp; Local Results &gt;</a></p>
             </div>
         </div>
     {% endif %}
