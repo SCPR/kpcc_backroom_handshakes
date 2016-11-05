@@ -31,7 +31,7 @@ class Saver(object):
         """
         log_message = ""
         try:
-            obj, created = Office.objects.update_or_create(
+            obj, created = Office.objects.get_or_create(
                 officeid=office["officeid"],
                 defaults={
                     "name": office["officename"],
