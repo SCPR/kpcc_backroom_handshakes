@@ -33,9 +33,9 @@ class Command(BaseCommand):
             retrieve = Retriever()
             retrieve._build_and_move_results()
             for src in sources:
-                logger.debug("Resetting %s to False in advance of next build" % (src.source_name))
+                logger.info("Resetting %s to False in advance of next build" % (src.source_name))
                 src.ready_to_build = False
                 src.save(update_fields=["ready_to_build"])
         else:
-            logger.debug("None of the results sources are ready to build just yet")
+            logger.info("None of the results sources are ready to build just yet")
         self.stdout.write("\nTask finished at %s\n" % str(datetime.datetime.now()))

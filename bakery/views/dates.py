@@ -47,7 +47,7 @@ class BuildableArchiveIndexView(ArchiveIndexView, BuildableMixin):
         return self.build_queryset
 
     def build_queryset(self):
-        logger.debug("Building %s" % self.build_path)
+        logger.info("Building %s" % self.build_path)
         self.request = RequestFactory().get(self.build_path)
         self.prep_directory(self.build_path)
         path = os.path.join(settings.BUILD_DIR, self.build_path)
@@ -122,7 +122,7 @@ class BuildableYearArchiveView(YearArchiveView, BuildableMixin):
         Deletes the directory at self.get_build_path.
         """
         self.year = str(dt.year)
-        logger.debug("Unbuilding %s" % self.year)
+        logger.info("Unbuilding %s" % self.year)
         path = os.path.split(self.get_build_path())[0]
         if os.path.exists(path):
             shutil.rmtree(path)
@@ -188,7 +188,7 @@ class BuildableMonthArchiveView(MonthArchiveView, BuildableMixin):
         """
         self.month = str(dt.month)
         self.year = str(dt.year)
-        logger.debug("Building %s-%s" % (self.year, self.month))
+        logger.info("Building %s-%s" % (self.year, self.month))
         self.request = RequestFactory().get(self.get_url())
         path = self.get_build_path()
         self.build_file(path, self.get_content())
@@ -207,7 +207,7 @@ class BuildableMonthArchiveView(MonthArchiveView, BuildableMixin):
         """
         self.year = str(dt.year)
         self.month = str(dt.month)
-        logger.debug("Building %s-%s" % (self.year, self.month))
+        logger.info("Building %s-%s" % (self.year, self.month))
         path = os.path.split(self.get_build_path())[0]
         if os.path.exists(path):
             shutil.rmtree(path)
@@ -287,7 +287,7 @@ class BuildableDayArchiveView(DayArchiveView, BuildableMixin):
         self.month = str(dt.month)
         self.year = str(dt.year)
         self.day = str(dt.day)
-        logger.debug("Building %s-%s-%s" % (self.year, self.month, self.day))
+        logger.info("Building %s-%s-%s" % (self.year, self.month, self.day))
         self.request = RequestFactory().get(self.get_url())
         path = self.get_build_path()
         self.build_file(path, self.get_content())
@@ -307,7 +307,7 @@ class BuildableDayArchiveView(DayArchiveView, BuildableMixin):
         self.year = str(dt.year)
         self.month = str(dt.month)
         self.day = str(dt.day)
-        logger.debug("Building %s-%s-%s" % (self.year, self.month, self.day))
+        logger.info("Building %s-%s-%s" % (self.year, self.month, self.day))
         path = os.path.split(self.get_build_path())[0]
         if os.path.exists(path):
             shutil.rmtree(path)

@@ -38,7 +38,7 @@ class BuildableListView(ListView, BuildableMixin):
         return self.build_queryset
 
     def build_queryset(self):
-        logger.debug("Building %s" % self.build_path)
+        logger.info("Building %s" % self.build_path)
         self.request = RequestFactory().get(self.build_path)
         self.prep_directory(self.build_path)
         path = os.path.join(settings.BUILD_DIR, self.build_path)
