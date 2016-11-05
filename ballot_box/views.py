@@ -227,10 +227,15 @@ class ResultIndex(ListView):
             is_display_priority=True).filter(is_ballot_measure=False).filter(
                 Q(resultsource__source_short="oc")
         ).order_by("contestname")
+        context["sbc_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
+            is_display_priority=True).filter(is_ballot_measure=False).filter(
+                Q(resultsource__source_short="sbc")
+        ).order_by("contestname")
         context["state_measures"] = queryset.filter(is_ballot_measure=True).filter(resultsource__source_short="sos").order_by("contestname")
         context["local_measures"] = queryset.filter(is_ballot_measure=True).filter(
             Q(resultsource__source_short="lac") |
-            Q(resultsource__source_short="oc")
+            Q(resultsource__source_short="oc")|
+            Q(resultsource__source_short="sbc")
         ).order_by("contestname")
         context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(source_short="sos").first()
         return context

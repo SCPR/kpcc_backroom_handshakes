@@ -88,6 +88,16 @@
                     </div>
                 </div>
             {% endif %}
+            {% if sbc_races %}
+                <div class="collection-row">
+                    <div class="collection-block clearfix">
+                        <div class="collection-header"><h2>San Bernardino County Races</h2></div>
+                        {% for contest in sbc_races %}
+                            {% include "ballot_box/inc_results_row.html" %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
             <!-- begin state measures block -->
             {% if state_measures %}
                 <div class="collection-row">
