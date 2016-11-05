@@ -47,6 +47,8 @@ def convert_political_party(value):
         output = "D"
     elif value == "Peace And Freedom":
         output = "PF"
+    elif value == "Peace and Freedom":
+        output = "PF"
     elif value == "Libertarian":
         output = "L"
     elif value == "Green":
