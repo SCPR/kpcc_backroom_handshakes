@@ -6,7 +6,7 @@
 * { margin: 0; padding: 0; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
 .clearfix:after { content: " "; visibility: hidden; display: block; height: 0; clear: both; }
 .hero-election { width: 100%; max-width: 100%; border-top: 1px solid #31abd4; padding-bottom: 18px; font-family: "franklin-gothic-urw", "proxima-nova", Arial, sans-serif; }
-.hero-election .row-fluid { width: 694px; margin-left: auto; margin-right: auto; zoom: 1; }
+.hero-election .row-fluid { /*width: 694px; margin-left: auto; margin-right: auto;*/ width: 98%; margin-left: 1%; margin-right: 1%; zoom: 1; }
 .hero-election .blurb-text { font-size: 10px; line-height: 12px; font-style: normal; font-weight: 500; color: #898989; text-transform: uppercase; }
 
 /* page header include */
@@ -49,7 +49,8 @@
 .measures .results-block header .race-title { width: 49%; float: left; text-align: left; margin-left: 1%; font-size: 18px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; }
 .measures .results-block header .precincts-reporting { width: 49%; float: right; text-align: right; margin-right: 1%; font-size: 15px; line-height: 18px; font-style: normal; font-weight: 400; color: #898989; }
 .measures .results-block .result-item { width: 48%; height: auto; min-height: 89px; float: left; margin-left: 1%; margin-right: 1%; margin-top: 16px; margin-bottom: 16px; padding-bottom: 24px; }
-.measures .results-block .result-item:nth-child(n+1) { border-bottom: 1px solid #dbdbdb; }
+.measures .results-block .result-item { border-bottom: 1px solid #dbdbdb; }
+.measures .results-block .result-item:nth-child(n+6) { border-bottom: 0px solid #ffffff; }
 .measures .results-block .result-item .measure-name { width: 65%; float: left; }
 .measures .results-block .result-item .measure-name dl dt { font-size: 18px; line-height: 18px; font-style: normal; font-weight: 400; color: #363636; }
 .measures .results-block .result-item .measure-name dl dd { font-size: 15px; line-height: 18px; font-style: normal; font-weight: 400; color: #898989; margin-top: 10px; }
