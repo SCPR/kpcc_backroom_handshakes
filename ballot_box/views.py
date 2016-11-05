@@ -213,7 +213,7 @@ class ResultIndex(ListView):
                 Q(contestid__contains="sos-statewide-president") |
                 Q(contestid__contains="sos-statewide-us-senate") |
                 Q(contestid__contains="sos-districtwide-us-house-of-representatives")
-        ).order_by("contestname")
+        )
         context["state_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
             is_display_priority=True).filter(is_ballot_measure=False).filter(
                 Q(contestid__contains="sos-districtwide-state-senate") |
