@@ -279,7 +279,7 @@ LOGGING = {
 
 
                 # slack-info used to log to slack
-                # "slack-info",
+                "slack-info",
 
 
             ],
