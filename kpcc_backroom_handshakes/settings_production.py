@@ -274,12 +274,12 @@ LOGGING = {
             "handlers": [
                 "console",
                 "mail_admins",
-                # "slack-error",
                 # "slack-debug",
 
 
                 # slack-info used to log to slack
                 "slack-info",
+                "slack-error",
 
 
             ],
