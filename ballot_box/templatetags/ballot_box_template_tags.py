@@ -1,4 +1,4 @@
-from django.contrib.humanize.templatetags.humanize import intcomma
+from django.contrib.humanize.templatetags.humanize import intcomma, ordinal
 from django.template import Library, Context
 from django.conf import settings
 from django.utils.timezone import utc
@@ -59,7 +59,26 @@ def convert_political_party(value):
         output = None
     return output
 
+@register.simple_tag
+def ordinalize_name(contest):
+    if "sos-districtwide-us-house-of-representatives" in contest.contestid:
+        str_to_remove = "US House of Representatives District"
+        suffix = "Congressional District"
+    elif "sos-districtwide-state-senate" in contest.contestid:
+        str_to_remove = "State Senate District"
+        suffix = "State Senate District"
+    elif "sos-districtwide-state-assembly" in contest.contestid:
+        str_to_remove = "State Assembly District"
+        suffix = "State Assembly District"
+    else:
+        pass
+    value = contest.contestname.lower()
+    district_number = value.replace(str_to_remove.lower(), "")
+    output = "California's %s %s" % (ordinal(district_number), suffix)
+    return output
+
 register.filter(currency)
 register.filter(neg_to_posi)
 register.filter(percentage)
 register.filter(convert_political_party)
+register.filter(ordinalize_name)
