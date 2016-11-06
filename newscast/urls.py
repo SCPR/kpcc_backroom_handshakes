@@ -7,6 +7,6 @@ from newscast.views import NewscastIndexView, NewscastDetailView
 app_name = "newscast"
 
 urlpatterns = [
-    url(r"(?P<slug>[-\w]+)/$", NewscastDetailView.as_view(), name="newscast_detail"),
-    url(r"$", NewscastIndexView.as_view(), name="newscast_list"),
+    url(r"(?P<electionid>[-\w]+)/playlist/(?P<slug>[-\w]+)/$", NewscastDetailView.as_view(), name="newscast_detail"),
+    url(r"(?P<electionid>[-\w]+)/playlist/$", NewscastIndexView.as_view(), name="newscast_list"),
 ]

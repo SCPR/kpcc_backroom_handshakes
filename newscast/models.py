@@ -30,3 +30,19 @@ class Topic(models.Model):
 
     def save(self, *args, **kwargs):
         super(Topic, self).save(*args, **kwargs)
+
+
+class ContestContext(models.Model):
+    election = models.ForeignKey(registrar.Election)
+    local_interest = models.BooleanField("We're Interested In This?", default=False)
+    contestid = models.CharField("Contest ID", max_length=255, null=True, blank=True)
+    cities_counties_list = ListField("Cities and Counties", null=True, blank=True)
+    description = models.TextField("About This Contest", null=True, blank=True)
+    created = models.DateTimeField("Date Created", auto_now_add=True)
+    modified = models.DateTimeField("Date Modified", auto_now=True)
+
+    def __unicode__(self):
+        return self.contestid
+
+    def save(self, *args, **kwargs):
+        super(ContestContext, self).save(*args, **kwargs)

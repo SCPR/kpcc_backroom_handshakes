@@ -14,6 +14,7 @@
                     <li id="race-measures-embeds" class="selected"><a target="_blank" href="{% url 'election_registrar:detail' election.electionid %}"><span class="label">Races & Measures Embeds</span></a></li>
                     <li id="top-races"><a target="_blank" href="{% url 'ballot_box:featured-index' election.electionid %}/"><span class="label">Top Results</span></a></li>
                     <li id="all-races"><a target="_blank" href="{% url 'ballot_box:result-index' election.electionid %}/"><span class="label">All Results</span></a></li>
+                    <li id="playlist-topics"><a target="_blank" href="{% url 'newscast:newscast_list' election.electionid %}"><span class="label">Newscast Playlists</span></a></li>
                     <li id="prop-finance-embeds"><a target="_blank" href="{% url 'measure_finance:measure-index' election.electionid %}/"><span class="label">Prop Finance Chart Embeds</span></a></li>
                 </ul>
             </div>

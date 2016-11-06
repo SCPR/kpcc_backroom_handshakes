@@ -1,17 +1,24 @@
 {% extends "newscast/_base.html" %}
 {% load static %}
 {% load humanize %}
+{% load ballot_box_template_tags %}
+
+{% block extra_css %}
+    <link href="{% static 'css/general-election-reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/general-election.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/newscast-dashboard.css' %}" media="screen" rel="stylesheet" type="text/css" />
+{% endblock %}
 
 {% block page_content %}
     <div class="jumbotron text-center">
-        <h1>Topic</h1>
+        <h1>Threads We're Tracking</h1>
     </div>
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <ul class="list-inline">
                     {% for topic in topic_list %}
-                        <li><a href="{% url 'newscast:newscast_detail' topic.topicslug %}">{{ topic.topicname|title }}</a></li>
+                        <li><a href="{% url 'newscast:newscast_detail' topic.election.electionid topic.topicslug %}">{{ topic.topicname|title }}</a></li>
                     {% endfor %}
                 </ul>
             </div>

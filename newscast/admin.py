@@ -53,4 +53,32 @@ class TopicAdmin(admin.ModelAdmin):
         "description",
     )
 
+
+class ContextAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "contestid",
+        "election",
+    )
+
+    list_per_page = 15
+
+    list_filter = ("election",)
+
+    search_fields = ("contestid",)
+
+    ordering = ("contestid",)
+
+    save_on_top = True
+
+    save_as = True
+
+    fields = (
+        "election",
+        "contestid",
+        "cities_counties_list",
+        "description",
+    )
+
 admin.site.register(Topic, TopicAdmin)
+admin.site.register(ContestContext, ContextAdmin)

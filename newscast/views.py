@@ -38,5 +38,14 @@ class NewscastDetailView(BuildableDetailView):
     def get_context_data(self, **kwargs):
         context = super(NewscastDetailView, self).get_context_data(**kwargs)
         context["topicslug"] = self.kwargs["slug"]
-        context["topic_contests"] = Topic.objects.filter(topicslug=context["topicslug"])
+        context["topic"] = Topic.objects.filter(topicslug=context["topicslug"]).first()
+        context["contests"] = context["topic"].contest.all()
+        logger.debug(context["contests"])
+        for contest in context["contests"]:
+            try:
+                contextualize = ContestContext.objects.filter(contestid=contest.contestid).first()
+                contest.geography = contextualize.cities_counties_list
+            except:
+                contest.geography = None
         return context
+
