@@ -155,6 +155,12 @@ def fetch_maplight():
     local("python manage.py fetch_measure_finance")
 
 
+def set_elex_night():
+    """
+    """
+    local("python manage.py set_featured_contests")
+
+
 def zero_it():
     """
     """
