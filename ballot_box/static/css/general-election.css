@@ -15,6 +15,7 @@
 .topper header h2,
 .results-block h2,
 .results-row h2 { width: 35%; float: right; text-align: right; margin-right: 0%; font-size: 15px; line-height: 18px; font-style: italic; font-weight: 400; color: #45AAD2; }
+.results-block h2 { width: 100%; float: none; text-align: right; margin-right: 0%; font-size: 15px; line-height: 18px; font-style: italic; font-weight: 400; color: #45AAD2; }
 .topper header.election-header { width: 100%; height: auto; margin-bottom: 16px; }
 .topper header.election-status { width: 100%; height: auto; margin-bottom: 16px; }
 .caveat header.election-description { width: 100%; height: auto; margin-bottom: 16px; }
@@ -32,7 +33,7 @@
 
 /* featured candidate styles */
 .results { border-top: 1px solid #f74623; }
-.results .results-block { width: 50%; height: auto; min-height: 355px; float: left; margin-bottom: 16px; }
+.results .results-block { width: 50%; height: auto; min-height: 330px; float: left; margin-bottom: 16px; }
 .results .results-block:nth-child(n+3) { border-top: 1px solid #dbdbdb; }
 .results .results-block h3.npr-link { float: right; margin-right: 2%; }
 .results .results-block h3.npr-link a { text-align: right; color: #45AAD2; }
