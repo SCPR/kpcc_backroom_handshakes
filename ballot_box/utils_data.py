@@ -276,22 +276,23 @@ class Namefixer(object):
         }
 
         self.statewide_props = {
-            "lac-county-proposition-proposition-51": "Proposition 51 K-12 and Community College Facilities",
-            "lac-county-proposition-proposition-52": "Proposition 52 Medi-Cal Hospital Fee Program",
-            "lac-county-proposition-proposition-53": "Proposition 53 Voter Approval of Revenue Bonds",
-            "lac-county-proposition-proposition-54": "Proposition 54 Legislative Procedure Requirements",
-            "lac-county-proposition-proposition-55": "Proposition 55 Tax Extension for Education and Healthcare",
-            "lac-county-proposition-proposition-56": "Proposition 56 Cigarette Tax",
-            "lac-county-proposition-proposition-57": "Proposition 57 Criminal Sentences & Juvenile Crime Proceedings",
-            "lac-county-proposition-proposition-58": "Proposition 58 English Proficiency Multilingual Education",
-            "lac-county-proposition-proposition-59": "Proposition 59 Corporate Political Spending Advisory Question",
-            "lac-county-proposition-proposition-60": "Proposition 60 Adult Film Condom Requirements",
-            "lac-county-proposition-proposition-61": "Proposition 61 State Prescription Drug Purchase Standards",
-            "lac-county-proposition-proposition-62": "Proposition 62 Repeal of Death Penalty",
-            "lac-county-proposition-proposition-63": "Proposition 63 Firearms and Ammunition Sales",
-            "lac-county-proposition-proposition-64": "Proposition 64 Marijuana Legalization",
-            "lac-county-proposition-proposition-65": "Proposition 65 Carryout Bag Charges",
-            "lac-county-proposition-proposition-66": "Proposition 66 Death Penalty Procedure Time Limits",
+            "51": "K-12 and Community College Facilities",
+            "52": "Medi-Cal Hospital Fee Program",
+            "53": "Voter Approval of Revenue Bonds",
+            "54": "Legislative Procedure Requirements",
+            "55": "Tax Extension for Education and Healthcare",
+            "56": "Cigarette Tax",
+            "57": "Criminal Sentences & Juvenile Crime Proceedings",
+            "58": "English Proficiency Multilingual Education",
+            "59": "Corporate Political Spending Advisory Question",
+            "60": "Adult Film Condom Requirements",
+            "61": "State Prescription Drug Purchase Standards",
+            "62": "Repeal of Death Penalty",
+            "63": "Firearms and Ammunition Sales",
+            "64": "Marijuana Legalization",
+            "65": "Carryout Bag Charges",
+            "66": "Death Penalty Procedure Time Limits",
+            "67": "Ban on Single-use Plastic Bags",
         }
 
     def _fix(self, string):
@@ -345,7 +346,6 @@ class Namefixer(object):
                     if "'" in word or "\"" in word:
                         word = re.sub(r'\'|\"',"",word)
                         quoted = True
-
                     first_letter = word[0]
                     new_word = word
                     for s in range(len(subs[0])):
@@ -356,3 +356,46 @@ class Namefixer(object):
                     titlecase.append(titled_word)
         newstring = " ".join(titlecase)
         return newstring
+
+    def _fix_oc_props(self, type, string):
+        """
+        a helper method to deal with how orange county
+        is sending along the props and measures
+        for the 2016 general election
+        """
+        output = {}
+        string = string.replace("  ", " ")
+        if type == "Advisory Vote":
+            value = string.replace("Advisory Vote Only. ", "")
+            output["type"] = type
+            output["prop_num"] = value[0:2]
+            output["district"] = "Mesa Water District"
+            output["measure_fullname"] = "Advisory Vote TT"
+            output["description"] = value[3:].lower()
+        elif type == "Proposition":
+            output["type"] = type
+            output["prop_num"] = string[0:2]
+            output["measure_fullname"] = "%s %s" % (output["type"], output["prop_num"])
+            output["description"] = self.statewide_props[output["prop_num"]]
+        elif type == "Recall":
+            value = string.replace("(removed) ", "")
+            value = value.replace("?", "")
+            output["type"] = ""
+            output["prop_num"] = ""
+            output["district"] = "Yorba Linda Water District"
+            output["measure_fullname"] = value.lower()
+            output["description"] = value.lower()
+        elif type == "Measure":
+            dash_loco = string.index("-")
+            first_comma = string.find(",")
+            description_index = first_comma + 2
+            output["type"] = type
+            output["prop_num"] = string[0:dash_loco]
+            output["district"] = string[dash_loco:first_comma].replace("-", "")
+            output["measure_fullname"] = "%s %s" % (output["type"], output["prop_num"])
+            output["description"] = string[description_index:].lower()
+        output["type"] = unicode(output["type"])
+        output["prop_num"] = unicode(output["prop_num"])
+        output["measure_fullname"] = unicode(output["measure_fullname"])
+        output["description"] = unicode(output["description"])
+        return output

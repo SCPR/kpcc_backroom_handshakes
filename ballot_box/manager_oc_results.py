@@ -149,165 +149,143 @@ class BuildResults(object):
         "1530"
     ]
 
-    def _compile_judicial(self, race, race_id, election, src):
-        """
-        """
-        r = race.find("TotalVotes")
-        this_type = "judicial"
-        contestname = unicode(" ".join(race.ContestName.stripped_strings))
-        if race_id == "140":
-            officename_idx = self.framer._find_nth(contestname, " - ", 1)
-            officename = unicode(contestname[:officename_idx].replace(".", ""))
-            officename = unicode(officename.replace(" Justice", ""))
-            fullname_idx = self.framer._find_nth(contestname, " - ", 1) + 3
-        elif race_id == "150":
-            officename_idx = self.framer._find_nth(contestname, " - ", 2)
-            officename = unicode(contestname[:officename_idx].replace(" - ", " "))
-            fullname_idx = self.framer._find_nth(contestname, " - ", 2) + 3
-        fullname = unicode(contestname[fullname_idx:])
-        level = "county"
-        seatnum = None
-        is_statewide = True
-        precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
-        precinctsreport = r.find(attrs={"Id": "PR"}).contents[0]
-        reporttype = r.find(attrs={"Id": "RT"}).contents[0]
-        yescount = self.framer._to_num(r.find_all("Selection")[0].ValidVotes.contents[0])["value"]
-        yespct = self.framer._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
-        nocount = self.framer._to_num(r.find_all("Selection")[1].ValidVotes.contents[0])["value"]
-        nopct = self.framer._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
-        self.framer.office["officename"] = officename
-        self.framer.office["officeslug"] = slugify(officename)
-        self.framer.office["active"] = True
-        self.framer.office["officeid"] = self.framer.office["officeslug"]
-        self.framer.contest["election_id"] = election.id
-        self.framer.contest["resultsource_id"] = src.id
-        self.framer.contest["seatnum"] = seatnum
-        self.framer.contest["is_uncontested"] = False
-        self.framer.contest["is_national"] = False
-        self.framer.contest["is_statewide"] = True
-        self.framer.contest["level"] = level
-        self.framer.contest["is_ballot_measure"] = False
-        self.framer.contest["is_judicial"] = True
-        self.framer.contest["is_runoff"] = False
-        self.framer.contest["reporttype"] = None
-        self.framer.contest["poss_error"] = False
-        if self.framer._to_num(precinctstotal)["convert"] == True:
-            pt = self.framer._to_num(precinctstotal)["value"]
-            self.framer.contest["precinctstotal"] = pt
-        else:
-            self.framer.contest["precinctstotal"] = None
-            raise Exception("precinctstotal is not a number")
-        if self.framer._to_num(precinctsreport)["convert"] == True:
-            pr = self.framer._to_num(precinctsreport)["value"]
-            self.framer.contest["precinctsreporting"] = pr
-        else:
-            self.framer.contest["precinctsreporting"] = None
-            raise Exception("precinctsreporting is not a number")
-        self.framer.contest["precinctsreportingpct"] = self.framer._calc_pct(
-            self.framer.contest["precinctsreporting"], self.framer.contest["precinctstotal"])
-        self.framer.contest["votersregistered"] = self.framer._to_num(None)["value"]
-        self.framer.contest["votersturnout"] = self.framer._to_num(None)["value"]
-        self.framer.contest["contestname"] = self.framer.office["officename"]
-        self.framer.contest["contestdescription"] = None
-        if race_id == "140":
-            self.framer.contest["contestid"] = self.saver._make_contest_id(
-                # election.electionid,
-                src.source_short,
-                self.framer.contest["level"],
-                self.framer.office["officeslug"],
-            )
-            self.framer.judicial["ballotorder"] = None
-            self.framer.judicial["firstname"] = None
-            self.framer.judicial["lastname"] = None
-            self.framer.judicial["fullname"] = fullname
-            self.framer.judicial["judicialslug"] = slugify(fullname)
-            self.framer.judicial["yescount"] = yescount
-            self.framer.judicial["yespct"] = yespct
-            self.framer.judicial["nocount"] = nocount
-            self.framer.judicial["nopct"] = nopct
-            self.framer.judicial["poss_error"] = False
-            self.framer.judicial["judgeid"] = self.saver._make_this_id(
-                "judicial",
-                self.framer.contest["contestid"],
-                self.framer.judicial["judicialslug"],
-            )
-        elif race_id == "150":
-            self.framer.contest["contestid"] = self.saver._make_contest_id(
-                # election.electionid,
-                src.source_short,
-                self.framer.contest["level"],
-                self.framer.office["officeslug"],
-            )
-            self.framer.judicial["ballotorder"] = None
-            self.framer.judicial["firstname"] = None
-            self.framer.judicial["lastname"] = None
-            self.framer.judicial["fullname"] = fullname
-            self.framer.judicial["judicialslug"] = slugify(fullname)
-            self.framer.judicial["yescount"] = yescount
-            self.framer.judicial["yespct"] = yespct
-            self.framer.judicial["nocount"] = nocount
-            self.framer.judicial["nopct"] = nopct
-            self.framer.judicial["poss_error"] = False
-            self.framer.judicial["judgeid"] = self.saver._make_this_id(
-                "judicial",
-                self.framer.contest["contestid"],
-                self.framer.judicial["judicialslug"],
-            )
-        return self.framer
+    # def _compile_judicial(self, race, race_id, election, src):
+    #     """
+    #     """
+    #     r = race.find("TotalVotes")
+    #     this_type = "judicial"
+    #     contestname = unicode(" ".join(race.ContestName.stripped_strings))
+    #     if race_id == "140":
+    #         officename_idx = self.framer._find_nth(contestname, " - ", 1)
+    #         officename = unicode(contestname[:officename_idx].replace(".", ""))
+    #         officename = unicode(officename.replace(" Justice", ""))
+    #         fullname_idx = self.framer._find_nth(contestname, " - ", 1) + 3
+    #     elif race_id == "150":
+    #         officename_idx = self.framer._find_nth(contestname, " - ", 2)
+    #         officename = unicode(contestname[:officename_idx].replace(" - ", " "))
+    #         fullname_idx = self.framer._find_nth(contestname, " - ", 2) + 3
+    #     fullname = unicode(contestname[fullname_idx:])
+    #     level = "county"
+    #     seatnum = None
+    #     is_statewide = True
+    #     precinctstotal = r.find(attrs={"Id": "TP"}).contents[0]
+    #     precinctsreport = r.find(attrs={"Id": "PR"}).contents[0]
+    #     reporttype = r.find(attrs={"Id": "RT"}).contents[0]
+    #     yescount = self.framer._to_num(r.find_all("Selection")[0].ValidVotes.contents[0])["value"]
+    #     yespct = self.framer._to_num(r.find(attrs={"Id": "PYV"}).contents[0])["value"]
+    #     nocount = self.framer._to_num(r.find_all("Selection")[1].ValidVotes.contents[0])["value"]
+    #     nopct = self.framer._to_num(r.find(attrs={"Id": "PNV"}).contents[0])["value"]
+    #     self.framer.office["officename"] = officename
+    #     self.framer.office["officeslug"] = slugify(officename)
+    #     self.framer.office["active"] = True
+    #     self.framer.office["officeid"] = self.framer.office["officeslug"]
+    #     self.framer.contest["election_id"] = election.id
+    #     self.framer.contest["resultsource_id"] = src.id
+    #     self.framer.contest["seatnum"] = seatnum
+    #     self.framer.contest["is_uncontested"] = False
+    #     self.framer.contest["is_national"] = False
+    #     self.framer.contest["is_statewide"] = True
+    #     self.framer.contest["level"] = level
+    #     self.framer.contest["is_ballot_measure"] = False
+    #     self.framer.contest["is_judicial"] = True
+    #     self.framer.contest["is_runoff"] = False
+    #     self.framer.contest["reporttype"] = None
+    #     self.framer.contest["poss_error"] = False
+    #     if self.framer._to_num(precinctstotal)["convert"] == True:
+    #         pt = self.framer._to_num(precinctstotal)["value"]
+    #         self.framer.contest["precinctstotal"] = pt
+    #     else:
+    #         self.framer.contest["precinctstotal"] = None
+    #         raise Exception("precinctstotal is not a number")
+    #     if self.framer._to_num(precinctsreport)["convert"] == True:
+    #         pr = self.framer._to_num(precinctsreport)["value"]
+    #         self.framer.contest["precinctsreporting"] = pr
+    #     else:
+    #         self.framer.contest["precinctsreporting"] = None
+    #         raise Exception("precinctsreporting is not a number")
+    #     self.framer.contest["precinctsreportingpct"] = self.framer._calc_pct(
+    #         self.framer.contest["precinctsreporting"], self.framer.contest["precinctstotal"])
+    #     self.framer.contest["votersregistered"] = self.framer._to_num(None)["value"]
+    #     self.framer.contest["votersturnout"] = self.framer._to_num(None)["value"]
+    #     self.framer.contest["contestname"] = self.framer.office["officename"]
+    #     self.framer.contest["contestdescription"] = None
+    #     if race_id == "140":
+    #         self.framer.contest["contestid"] = self.saver._make_contest_id(
+    #             # election.electionid,
+    #             src.source_short,
+    #             self.framer.contest["level"],
+    #             self.framer.office["officeslug"],
+    #         )
+    #         self.framer.judicial["ballotorder"] = None
+    #         self.framer.judicial["firstname"] = None
+    #         self.framer.judicial["lastname"] = None
+    #         self.framer.judicial["fullname"] = fullname
+    #         self.framer.judicial["judicialslug"] = slugify(fullname)
+    #         self.framer.judicial["yescount"] = yescount
+    #         self.framer.judicial["yespct"] = yespct
+    #         self.framer.judicial["nocount"] = nocount
+    #         self.framer.judicial["nopct"] = nopct
+    #         self.framer.judicial["poss_error"] = False
+    #         self.framer.judicial["judgeid"] = self.saver._make_this_id(
+    #             "judicial",
+    #             self.framer.contest["contestid"],
+    #             self.framer.judicial["judicialslug"],
+    #         )
+    #     elif race_id == "150":
+    #         self.framer.contest["contestid"] = self.saver._make_contest_id(
+    #             # election.electionid,
+    #             src.source_short,
+    #             self.framer.contest["level"],
+    #             self.framer.office["officeslug"],
+    #         )
+    #         self.framer.judicial["ballotorder"] = None
+    #         self.framer.judicial["firstname"] = None
+    #         self.framer.judicial["lastname"] = None
+    #         self.framer.judicial["fullname"] = fullname
+    #         self.framer.judicial["judicialslug"] = slugify(fullname)
+    #         self.framer.judicial["yescount"] = yescount
+    #         self.framer.judicial["yespct"] = yespct
+    #         self.framer.judicial["nocount"] = nocount
+    #         self.framer.judicial["nopct"] = nopct
+    #         self.framer.judicial["poss_error"] = False
+    #         self.framer.judicial["judgeid"] = self.saver._make_this_id(
+    #             "judicial",
+    #             self.framer.contest["contestid"],
+    #             self.framer.judicial["judicialslug"],
+    #         )
+    #     return self.framer
 
     def _compile_measure(self, race, election, src):
         """
         """
         r = race
         if r.attrs["race_id"] in self.local_measures:
-            this_type = "Measure"
-            split_this = True
-            race.attrs["contest_title"] = "TT-Mesa Water District Advisory Vote"
+            this_type = "Advisory Vote"
         elif race.attrs["race_id"] in self.state_measures:
             this_type = "Proposition"
-            split_this = True
         elif race.attrs["race_id"] in self.local_recall:
-            this_type = ""
-            split_this = False
-            race.attrs["contest_title"] = race.attrs["contest_title"].replace("(removed) ", "")
-            race.attrs["contest_title"] = race.attrs["contest_title"].replace("?", "")
+            this_type = "Recall"
         else:
             this_type = "Measure"
-            split_this = True
-        contest_title = unicode(race.attrs["contest_title"])
-
-
-        print contest_title
-
-
-        if split_this == True:
-            split_name = contest_title.split("-")
-            prop_num = split_name[0]
-            measure_fullname = "%s %s" % (this_type, prop_num)
-        else:
-            split_name = contest_title
-            prop_num = this_type
-            measure_fullname = "%s" % (split_name)
-
-
-
-
-
-
+        fixed = self.fixer._fix_oc_props(this_type, race.attrs["contest_title"])
+        prop_num = fixed["prop_num"]
+        measure_fullname = fixed["measure_fullname"]
+        description = fixed["description"]
+        this_type = fixed["type"]
         if this_type == "Proposition":
             officename = self.framer._concat(
                 this_type,
                 prop_num,
                 delimiter=" ",
             )
-        elif this_type == "Measure":
+        elif this_type == "Measure" or this_type == "Advisory Vote":
             officename = self.framer._concat(
-                split_name[1],
+                fixed["district"],
                 delimiter=" ",
             )
         else:
             officename = self.framer._concat(
-                split_name,
+                fixed["district"],
                 delimiter=" ",
             )
         level = "county"
@@ -354,10 +332,45 @@ class BuildResults(object):
         )
         self.framer.contest["votersregistered"] = self.framer._to_num(race.attrs["reg_voters"])["value"]
         self.framer.contest["votersturnout"] = self.framer._to_num(None)["value"]
-        self.framer.contest["contestname"] = self.framer._concat(
-            officename,
-            delimiter=" ",
-        )
+        self.framer.measure["ballotorder"] = None
+        self.framer.measure["fullname"] = measure_fullname
+        self.framer.measure["description"] = description
+        self.framer.measure["yescount"] = yescount
+        self.framer.measure["yespct"] = yespct
+        self.framer.measure["nocount"] = nocount
+        self.framer.measure["nopct"] = nopct
+        self.framer.measure["poss_error"] = False
+        if this_type == "Proposition":
+            self.framer.contest["contestname"] = self.framer._concat(
+                officename,
+                delimiter=" ",
+            )
+            self.framer.measure["measureid"] = self.saver._make_this_id(
+                "measure",
+                "%s-%s" % (src.source_short, self.framer.contest["level"]),
+                slugify(measure_fullname),
+            )
+        elif this_type == "":
+            self.framer.contest["contestname"] = self.framer._concat(
+                officename,
+                delimiter=" ",
+            )
+            self.framer.measure["measureid"] = self.saver._make_this_id(
+                "measure",
+                "%s-%s-%s" % (src.source_short, self.framer.contest["level"], fixed["district"]),
+                slugify(measure_fullname),
+            )
+        else:
+            self.framer.contest["contestname"] = self.framer._concat(
+                officename,
+                delimiter=" ",
+            )
+            self.framer.measure["measureid"] = self.saver._make_this_id(
+                "measure",
+                "%s-%s-%s" % (src.source_short, self.framer.contest["level"], fixed["district"]),
+                slugify(measure_fullname),
+            )
+
         self.framer.contest["contestdescription"] = self.framer._concat(
             officename,
             this_type,
@@ -368,32 +381,6 @@ class BuildResults(object):
             self.framer.contest["level"],
             self.framer.office["officeslug"],
         )
-        self.framer.measure["ballotorder"] = None
-        self.framer.measure["fullname"] = measure_fullname
-        self.framer.measure["description"] = None
-        self.framer.measure["yescount"] = yescount
-        self.framer.measure["yespct"] = yespct
-        self.framer.measure["nocount"] = nocount
-        self.framer.measure["nopct"] = nopct
-        self.framer.measure["poss_error"] = False
-        if this_type == "Proposition":
-            self.framer.measure["measureid"] = self.saver._make_this_id(
-                "measure",
-                "%s-%s" % (src.source_short, self.framer.contest["level"]),
-                slugify(measure_fullname),
-            )
-        elif this_type == "":
-            self.framer.measure["measureid"] = self.saver._make_this_id(
-                "measure",
-                src.source_short,
-                slugify(measure_fullname),
-            )
-        else:
-            self.framer.measure["measureid"] = self.saver._make_this_id(
-                "measure",
-                self.framer.contest["contestid"],
-                slugify(measure_fullname),
-            )
         return self.framer
 
     def _compile_candidate(self, race, election, src):
@@ -423,10 +410,6 @@ class BuildResults(object):
             officename = "US Senate"
         if "President And Vice President" in officename:
             officename = "President-Vice President"
-
-
-
-
         description = unicode(officename)
         prop_num = None
         level = "county"
