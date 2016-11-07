@@ -479,17 +479,21 @@ class SbcProcessMethods(object):
             contestname = contest['CONTEST_FULL_NAME']
             if "Proposition" in contestname:
                 this_type = "Proposition"
-                contestname = contestname.replace("STATE ", "")
+                contestname = contestname.replace("State ", "")
+                measurename = contestname
             else:
                 this_type = "Measure"
                 contestname = fixer._fix(contestname)
-            description = ""
+                split_name = contestname.split(",")
+                contestname = split_name[0]
+                measurename = split_name[1]
             officename = framer._concat(
                 # this_type,
                 contestname,
                 delimiter="-",
             )
-            fullname = contestname
+            description = "%s Measure" % officename
+            fullname = measurename
             framer.office["officename"] = officename
             framer.office["officeslug"] = slugify(officename)
             framer.office["active"] = True
@@ -531,7 +535,6 @@ class SbcProcessMethods(object):
             framer.contest["contestname"] = contestname
             framer.contest["contestdescription"] = description
             framer.contest["contestid"] = saver._make_contest_id(
-                # election.electionid,
                 src.source_short,
                 framer.contest["level"],
                 framer.office["officeslug"],
@@ -567,7 +570,7 @@ class SbcProcessMethods(object):
                 framer.measure["measureid"] = saver._make_this_id(
                     "measure",
                     framer.contest["contestid"],
-                    measure['measure_id'].lower(),
+                    framer.measure["measureslug"],
                 )
                 race_log += saver.make_measure(framer.contest, framer.measure)
         else:
@@ -576,24 +579,21 @@ class SbcProcessMethods(object):
             framer.contest["seatnum"] = "1010101"
             contestname = contest['CONTEST_FULL_NAME']
             if "Member of the State Assembly" in contestname:
-                contestname = "SAN BERNARDINO %s" % (contestname)
+                contestname = contestname.replace("Member of the", "")
             elif "Supervisor" in contestname:
-                contestname = county_name + " " + contestname
+                contestname = "%s %s" % (county_name, contestname)
             elif "United States Representative" in contestname:
-                contestname = "SAN BERNARDINO %s" % (
-                    contestname)
+                contestname = contestname.replace("United States Representative,", "US House of Representatives")
             elif "State Senator" in contestname:
-                contestname = "SAN BERNARDINO %s" % (contestname)
+                contestname = contestname.replace("State Senator,", "State Senate")
             elif "United States Senator" in contestname:
-                contestname = "SAN BERNARDINO %s" % (contestname)
+                contestname = "US Senate"
             elif "Judge of the Superior Court" in contestname:
                 contestname = county_name + " " + contestname
-
             framer.office["officename"] = contestname.replace(".", "")
             framer.office["officeslug"] = slugify(framer.office["officename"])
             framer.office["active"] = True
             framer.office["officeid"] = framer.office["officeslug"]
-
             framer.contest["election_id"] = election.id
             framer.contest["resultsource_id"] = src.id
             if len(candidates) < 2:

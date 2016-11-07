@@ -46,3 +46,18 @@ class ContestContext(models.Model):
 
     def save(self, *args, **kwargs):
         super(ContestContext, self).save(*args, **kwargs)
+
+
+class CompareTurnout(models.Model):
+    election = models.ForeignKey(registrar.Election)
+    scope =
+    election_type =
+    formal_date =
+    year =
+    votecount = models.IntegerField("", null=True, blank=True)
+    votepct = models.FloatField("", null=True, blank=True)
+    registered_voters = models.IntegerField("", null=True, blank=True)
+    ballots_cast = models.IntegerField("", null=True, blank=True)
+    turnout = models.FloatField("", null=True, blank=True)
+    vote_by_mail_absentee_ballots = models.IntegerField("", null=True, blank=True)
+    data_source VARCHAR(92)
