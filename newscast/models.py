@@ -50,14 +50,15 @@ class ContestContext(models.Model):
 
 class CompareTurnout(models.Model):
     election = models.ForeignKey(registrar.Election)
-    scope =
-    election_type =
-    formal_date =
-    year =
-    votecount = models.IntegerField("", null=True, blank=True)
-    votepct = models.FloatField("", null=True, blank=True)
-    registered_voters = models.IntegerField("", null=True, blank=True)
-    ballots_cast = models.IntegerField("", null=True, blank=True)
-    turnout = models.FloatField("", null=True, blank=True)
-    vote_by_mail_absentee_ballots = models.IntegerField("", null=True, blank=True)
-    data_source VARCHAR(92)
+    scope = models.CharField("State or the County", max_length=255, null=True, blank=True)
+    election_type = models.CharField("Election Type", max_length=255, null=True, blank=True)
+    formal_date = models.DateField("Election Date", auto_now_add=True)
+    year = models.IntegerField("Election Year", null=True, blank=True)
+    registered_voters = models.IntegerField("Registered Voters", null=True, blank=True)
+    ballots_cast = models.IntegerField("Ballots Cast", null=True, blank=True)
+    turnout = models.FloatField("Turnout", null=True, blank=True)
+    vote_by_mail_ballots = models.IntegerField("Vote By Mail Ballots", null=True, blank=True)
+    vote_by_mail_percent = models.FloatField("Vote By Mail Percent", null=True, blank=True)
+    data_source = models.URLField("URL To Turnout Data", max_length=1024, null=True, blank=True)
+    created = models.DateTimeField("Date Created", auto_now_add=True)
+    modified = models.DateTimeField("Date Modified", auto_now=True)
