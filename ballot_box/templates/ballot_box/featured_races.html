@@ -51,7 +51,7 @@
                 {% for contest in featured_races %}
                     <div class="results-block">
                         <header>
-                            <h2 class="race-title">{{ contest.contestname|title }}{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">State of California only</span>{% endif %}</h2>
+                            <h2 class="race-title">{{ contest.contestname|title }}{% if contest.contestid == 'sos-statewide-president' %} - <span>State of California only</span>{% endif %}</h2>
                             <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</h2>
                         </header>
                         {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
@@ -67,7 +67,7 @@
                         {% endfor %}
                         <h3 class="npr-link">
                             {% if contest.contestid == 'sos-statewide-president' %}
-                                <a class="blurb-text" href="http://www.npr.org/templates/story/story.php?storyId=500927768&live=1" target="_blank">See National Results on NPR.org &gt;</a>
+                                <h2 class="align-right"><a href="http://www.npr.org/templates/story/story.php?storyId=500927768&live=1" target="_blank">See National Results on NPR.org &gt;</a></h2>
                             {% endif %}
                         </h3>
                     </div>

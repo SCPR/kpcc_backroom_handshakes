@@ -12,7 +12,9 @@
 /* page header include */
 .topper header { display: flex; display: -webkit-flex; align-items: center; margin-top: 16px; }
 .topper header h1 { width: 100%; float: left; text-align: left; margin-left: 0%; font-size: 30px; line-height: 36px; font-style: normal; font-weight: 300; color: #fa440f; }
-.topper header h2 { width: 35%; float: right; text-align: right; margin-right: 0%; font-size: 15px; line-height: 18px; font-style: italic; font-weight: 400; color: #45AAD2; }
+.topper header h2,
+.results-block h2,
+.results-row h2 { width: 35%; float: right; text-align: right; margin-right: 0%; font-size: 15px; line-height: 18px; font-style: italic; font-weight: 400; color: #45AAD2; }
 .topper header.election-header { width: 100%; height: auto; margin-bottom: 16px; }
 .topper header.election-status { width: 100%; height: auto; margin-bottom: 16px; }
 .caveat header.election-description { width: 100%; height: auto; margin-bottom: 16px; }

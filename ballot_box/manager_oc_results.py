@@ -452,7 +452,6 @@ class BuildResults(object):
         )
         self.framer.contest["votersregistered"] = self.framer._to_num(race.attrs["reg_voters"])["value"]
         self.framer.contest["votersturnout"] = self.framer._to_num(None)["value"]
-        self.framer.contest["contestname"] = self.framer.office["officename"]
         self.framer.contest["contestdescription"] = None
         self.framer.contest["contestid"] = self.saver._make_contest_id(
             # election.electionid,
@@ -460,6 +459,10 @@ class BuildResults(object):
             self.framer.contest["level"],
             self.framer.office["officeslug"],
         )
+        if self.framer.contest["contestid"] == "oc-county-county-supervisor-1st-district":
+            self.framer.contest["contestname"] = "Orange County Supervisor District 5"
+        else:
+            self.framer.contest["contestname"] = self.framer.office["officename"]
         self.framer.candidates = []
         for candidate in race.find_all("ChoiceTotal"):
             this_candidate = {}
