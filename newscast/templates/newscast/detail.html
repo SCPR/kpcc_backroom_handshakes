@@ -23,6 +23,8 @@
                             <h2 class="race-title">{% ordinalize_name contest %}</h2>
                             {% if contest.geography %}
                                 <h2 class="geography">District includes {{ contest.geography }}</h2>
+                            {% else %}
+                                <h2 class="geography">&nbsp;</h2>
                             {% endif %}
                             <h2 class="precincts-reporting">With {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting as of {{ contest.modified|date:"g:i a, N d, Y" }}</h2>
                             <h2 class="precincts-reporting">Source: {{ contest.resultsource }}</h2>
@@ -44,20 +46,24 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                    <div class="results-block measure-hack clearfix">
-                        <header>
-                            <h2 class="race-title">{{ contest.contestname|title }}</h2>
-                            <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</h2>
-                        </header>
-                        {% for this in contest.ballotmeasure_set.all %}
+                    {% for this in contest.ballotmeasure_set.all %}
+                        <div class="results-block measure-hack clearfix">
+                            <header>
+                                {% if contest.is_statewide == True %}
+                                    <h2 class="race-title">{{ contest.contestname|title }}</h2>
+                                {% else %}
+                                    <h2 class="race-title">{{ contest.contestname|title }} {{ this.fullname|title }}</h2>
+                                {% endif %}
+                                <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</h2>
+                            </header>
                             <div class="result-item dashboard-hack clearfix">
                                 <h3 class="candidate-name">Yes</h3>
                                 <h3 class="votepct">{{ this.yespct|percentage|floatformat:0 }}%</h3>
                                 <h3 class="candidate-name">No</h3>
                                 <h3 class="votepct">{{ this.nopct|percentage|floatformat:0 }}%</h3>
                             </div>
-                        {% endfor %}
-                    </div>
+                        </div>
+                    {% endfor %}
                 {% endif %}
             {% endfor %}
         </div>

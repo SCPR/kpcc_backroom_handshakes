@@ -64,17 +64,23 @@ def ordinalize_name(contest):
     if "sos-districtwide-us-house-of-representatives" in contest.contestid:
         str_to_remove = "US House of Representatives District"
         suffix = "Congressional District"
+        value = contest.contestname.lower()
+        district_number = value.replace(str_to_remove.lower(), "")
+        output = "California's %s %s" % (ordinal(district_number), suffix)
     elif "sos-districtwide-state-senate" in contest.contestid:
         str_to_remove = "State Senate District"
         suffix = "State Senate District"
+        value = contest.contestname.lower()
+        district_number = value.replace(str_to_remove.lower(), "")
+        output = "California's %s %s" % (ordinal(district_number), suffix)
     elif "sos-districtwide-state-assembly" in contest.contestid:
         str_to_remove = "State Assembly District"
         suffix = "State Assembly District"
+        value = contest.contestname.lower()
+        district_number = value.replace(str_to_remove.lower(), "")
+        output = "California's %s %s" % (ordinal(district_number), suffix)
     else:
-        pass
-    value = contest.contestname.lower()
-    district_number = value.replace(str_to_remove.lower(), "")
-    output = "California's %s %s" % (ordinal(district_number), suffix)
+        output = contest.contestname
     return output
 
 register.filter(currency)

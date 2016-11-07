@@ -17,8 +17,7 @@ from fabric.context_managers import lcd
 from fabric.colors import green
 from fabric.contrib import django
 
-os.environ[
-    "DJANGO_SETTINGS_MODULE"] = "kpcc_backroom_handshakes.settings_production"
+os.environ["DJANGO_SETTINGS_MODULE"] = "kpcc_backroom_handshakes.settings_production"
 
 from django.conf import settings
 
@@ -112,6 +111,20 @@ def load_registrar():
     shortcut to load ballot box data fixtures
     """
     local("python manage.py loaddata election_registrar/fixtures/election_registrar.json")
+
+
+def dump_playlist():
+    """
+    shortcut to dump data from ballot box as fixtures
+    """
+    local("python manage.py dumpdata newscast > newscast/fixtures/newscast-playlist.json")
+
+
+def load_playlist():
+    """
+    shortcut to dump data from ballot box as fixtures
+    """
+    local("python manage.py loaddata newscast/fixtures/newscast-playlist.json")
 
 
 def fetch_sos():

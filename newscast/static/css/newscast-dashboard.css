@@ -31,3 +31,5 @@
 .dashboard .results .results-block header .geography { width: 100%; float: left; text-align: left; text-align: left; margin-left: 2%; font-size: 16px; line-height: 26px; font-style: normal; font-weight: 400; color: #000000; max-width: 100%; margin-right: 0; }
 
 .dashboard .results .results-block header .precincts-reporting { width: 100%; float: left; text-align: left; text-align: left; margin-left: 2%; font-size: 16px; line-height: 26px; font-style: normal; font-weight: 400; color: #898989; max-width: 100%; margin-right: 0; }
+
+.dashboard li { font-size: 18px; line-height: 26px; font-style: normal; font-weight: 400; color: #898989; }

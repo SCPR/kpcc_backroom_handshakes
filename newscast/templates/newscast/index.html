@@ -15,13 +15,14 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <ul class="list-inline">
-                    {% for topic in topic_list %}
-                        <li><a href="{% url 'newscast:newscast_detail' topic.election.electionid topic.topicslug %}">{{ topic.topicname|title }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
+            {% for topic in topic_list %}
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                    <ul class="dashboard">
+                        <li><a href="{% url 'newscast:newscast_detail' topic.election.electionid topic.topicslug %}"><strong>{{ topic.topicname|title }}</strong><br />&nbsp;&nbsp;&nbsp;&nbsp;{{ topic.description }}</a></li>
+                    </ul>
+                    <hr>
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
