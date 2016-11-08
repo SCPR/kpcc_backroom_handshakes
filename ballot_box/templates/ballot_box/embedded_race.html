@@ -42,13 +42,18 @@
     <!-- i was built at {{ timestamp }} using django-bakery -->
     {% endif %}
     {% if contest.is_ballot_measure = True %}
-        <div class="row-fluid embed embed-measure clearfix">
+        {% if contest.candidate_set.all|length < 6 %}
+            <div class="row-fluid embed embed-measure clearfix" style="background: none;">
+        {% else %}
+            <div class="row-fluid embed embed-measure clearfix">
+        {% endif %}
             <div class="embed-block">
                 <header>
                     <h2 class="race-title">{{ contest.contestname|upper }}</h2>
                     <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</p>
                 </header>
                 {% for measure in contest.ballotmeasure_set.all %}
+                    <h3 class="measure-title">{{ measure.fullname }} - {{ measure.description|title }}</h2>
                     <div class="result-item clearfix">
                         <div class="yes">
                             <span class="align-left candidate-name">Yes</span>

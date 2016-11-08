@@ -24,11 +24,10 @@
                 <div class="col-xs-6 col-sm-6 col-md-12 col-lg-12 race-block">
                     <h4 class="title">{{ contest.contestname }}</h4>
                     {% if contest.is_ballot_measure = True %}
-                        <p><code>&lt;iframe width="100%" height="260" scrolling="no" frameborder="no" src="https://elections.scpr.org/{{ election.electionid }}/results/{{ contest.contestid }}/index.html"&gt;&lt;/iframe&gt;</code></p>
+                        <p><code>&lt;iframe width="100%" height="340" scrolling="no" frameborder="no" src="https://elections.scpr.org/{{ election.electionid }}/results/{{ contest.contestid }}/index.html"&gt;&lt;/iframe&gt;</code></p>
                     {% else %}
-                        <p><code>&lt;iframe width="100%" height="320" scrolling="no" frameborder="no" src="https://elections.scpr.org/{{ election.electionid }}/results/{{ contest.contestid }}/index.html"&gt;&lt;/iframe&gt;</code></p>
+                        <p><code>&lt;iframe width="100%" height="330" scrolling="no" frameborder="no" src="https://elections.scpr.org/{{ election.electionid }}/results/{{ contest.contestid }}/index.html"&gt;&lt;/iframe&gt;</code></p>
                     {% endif %}
-
                     <ul>
                         {% if contest.candidate_set.all %}
                             {% for candidate in contest.candidate_set.all %}
@@ -36,7 +35,6 @@
                             {% endfor %}
                         {% endif %}
                     </ul>
-
                 </div>
             {% endfor %}
         </div>
