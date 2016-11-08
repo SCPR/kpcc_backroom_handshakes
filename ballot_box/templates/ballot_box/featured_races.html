@@ -8,19 +8,15 @@
 
 {% block description %}Featured results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
 
-{% block keywords %}California, {% for contest in featured_races %}{{ contest.contestname|title }},{% endfor %}{% endblock %}
+{% block keywords %}California, Los Angeles County, {% for contest in featured_races %}{{ contest.contestname|title }}, {% endfor %}{% for contest in featured_measures %}{{ contest.contestname|title }}, {% endfor %}{% for measure in local_measures %}{% for this in measure.ballotmeasure_set.all %}{{ this.fullname }}, {% endfor %}{% endfor %}{% endblock %}
+
+{% block og_url %}{% if is_homepage == True %}https://elections.scpr.org/general-2016-11-08/results/homepage.html{% else %}https://elections.scpr.org/general-2016-11-08/results/featured.html{% endif %}{% endblock %}
 
 {% block og_title %}KPCC Featured Results for the Nov. 8 Election | scpr.org{% endblock %}
 
-{% comment %}
-    {% block og_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
-{% endcomment %}
-
 {% block og_description %}Featured results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
 
-{% comment %}
-{% block twitter_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
-{% endcomment %}
+{% block twitter_url %}{% if is_homepage == True %}https://elections.scpr.org/general-2016-11-08/results/homepage.html{% else %}https://elections.scpr.org/general-2016-11-08/results/featured.html{% endif %}{% endblock %}
 
 {% block twitter_title %}KPCC Featured Results for the Nov. 8 Election | scpr.org{% endblock %}
 
@@ -43,7 +39,7 @@
         <!-- i was built at {{ timestamp }} using django-bakery -->
         {% endif %}
         {% include "ballot_box/inc_header.html" %}
-        {% if is_homepage == False %}
+        {% if is_homepage != True %}
             {% include "ballot_box/inc_buttons.html" %}
         {% endif %}
         {% if featured_races %}
@@ -67,7 +63,7 @@
                         {% endfor %}
                         <h3 class="npr-link">
                             {% if contest.contestid == 'sos-statewide-president' %}
-                                <h2 class="align-right"><a href="http://www.npr.org/templates/story/story.php?storyId=500927768&live=1" target="_blank">See National Results on NPR.org &gt;</a></h2>
+                                <h2 class="align-right"><a href="http://www.npr.org/templates/story/story.php?storyId=500927768&live=1" target="_blank">See national results on NPR.org &gt;</a></h2>
                             {% endif %}
                         </h3>
                     </div>

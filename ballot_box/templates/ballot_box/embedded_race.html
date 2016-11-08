@@ -85,7 +85,7 @@
                 {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct" %}
                     {% if contest.candidate_set.all|length > 3 %}
                         <div class="result-grid clearfix">
-                            <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party != None %}({{ candidate.party|convert_political_party }}){% endif %}{% if candidate.incumbent == True %}<br /> <span class="blurb-text">Incumbent</span>{% endif %}</h3>
+                            <h3 class="candidate-name">{{ candidate.fullname }}{% if candidate.party|convert_political_party == False %}{% else %}({{ candidate.party|convert_political_party }}){% endif %}{% if candidate.incumbent == True %}<br /> <span class="blurb-text">Incumbent</span>{% endif %}</h3>
                             <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%</span></h3>
                         </div>
                     {% else %}
@@ -102,7 +102,7 @@
                 {% else %}
                     <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
                 {% endif %}
-                    <p><a href="http://www.scpr.org/elections/2016/general/">See State &amp; Local Results &gt;</a></p>
+                    <p><a href="http://www.scpr.org/elections/2016/general/" target="_blank">See State &amp; Local Results &gt;</a></p>
             </div>
         </div>
     {% endif %}

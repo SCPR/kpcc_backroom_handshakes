@@ -8,19 +8,15 @@
 
 {% block description %}Results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
 
-{% block keywords %}California{% endblock %}
+{% block keywords %}California, Los Angeles County, Orange County, San Bernardino County, US House of Representatives, California State Legislature, US Senate, city council, state ballot propositions, Los Angeles County measures, Orange County measures, San Bernardino County measures{% endblock %}
 
 {% block og_title %}KPCC Results for the Nov. 8 Election | scpr.org{% endblock %}
 
-{% comment %}
-    {% block og_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
-{% endcomment %}
+{% block og_url %}https://elections.scpr.org/general-2016-11-08/results/all.html{% endblock %}
 
 {% block og_description %}Results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
 
-{% comment %}
-{% block twitter_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
-{% endcomment %}
+{% block twitter_url %}https://elections.scpr.org/general-2016-11-08/results/all.html{% endblock %}
 
 {% block twitter_title %}KPCC Results for the Nov. 8 Election | scpr.org{% endblock %}
 
@@ -179,8 +175,8 @@
     <script type="text/javascript">
         $(document).ready(function(){
             var pymChild = new pym.Child({id: "homepage"});
-            $("li#top-races").removeClass("selected");
-            $("li#all-races").addClass("selected");
+            // $("li#top-races").removeClass("selected");
+            // $("li#all-races").addClass("selected");
             $(".collection-header").click(function() {
                 $(this).parent().toggleClass("active");
                 pymChild.sendHeight();

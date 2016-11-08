@@ -1,11 +1,21 @@
 <div class="row-fluid buttons clearfix">
     <ul>
     {% if baked == True %}
-        <a href="https://elections.scpr.org/general-2016-11-08/results/featured.html"><li id="featured" class="selected"><span class="label">Top Races</span></li></a>
-        <a href="https://elections.scpr.org/general-2016-11-08/results/all.html"><li id="all"><span class="label">All Races</span></li></a>
+        {% if is_homepage == True or is_featured == True %}
+            <a href="https://elections.scpr.org/general-2016-11-08/results/featured.html"><li id="featured" class="selected"><span class="label">Top Races</span></li></a>
+            <a href="https://elections.scpr.org/general-2016-11-08/results/all.html"><li id="all"><span class="label">All Races</span></li></a>
+        {% else %}
+            <a href="https://elections.scpr.org/general-2016-11-08/results/featured.html"><li id="featured"><span class="label">Top Races</span></li></a>
+            <a href="https://elections.scpr.org/general-2016-11-08/results/all.html"><li id="all" class="selected"><span class="label">All Races</span></li></a>
+        {% endif %}
     {% else %}
-        <a href="{% url 'ballot_box:featured-index' electionid %}/"><li id="top-races" class="selected"><span class="label">Top Races</span></li></a>
-        <a href="{% url 'ballot_box:result-index' electionid %}/"><li id="all-races"><span class="label">All Races</span></li></a>
+        {% if is_homepage == True or is_featured == True %}
+            <a href="{% url 'ballot_box:featured-index' electionid %}/"><li id="featured" class="selected"><span class="label">Top Races</span></li></a>
+            <a href="{% url 'ballot_box:result-index' electionid %}/"><li id="all"><span class="label">All Races</span></li></a>
+        {% else %}
+            <a href="{% url 'ballot_box:featured-index' electionid %}/"><li id="featured"><span class="label">Top Races</span></li></a>
+            <a href="{% url 'ballot_box:result-index' electionid %}/"><li id="all" class="selected"><span class="label">All Races</span></li></a>
+        {% endif %}
     {% endif %}
     </ul>
 </div>

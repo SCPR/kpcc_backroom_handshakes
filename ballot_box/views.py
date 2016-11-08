@@ -33,6 +33,8 @@ class EmbeddedDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(EmbeddedDetail, self).get_context_data(**kwargs)
         context["is_homepage"] = False
+        context["is_featured"] = False
+        context["is_all"] = False
         context["baked"] = False
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.kwargs["electionid"]
@@ -78,6 +80,8 @@ class BakedEmbeddedDetail(BuildableDetailView):
     def get_context_data(self, **kwargs):
         context = super(BakedEmbeddedDetail, self).get_context_data(**kwargs)
         context["is_homepage"] = False
+        context["is_featured"] = False
+        context["is_all"] = False
         context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.electionid
@@ -95,6 +99,8 @@ class HomepageIndex(ListView):
     def get_context_data(self, **kwargs):
         context = super(HomepageIndex, self).get_context_data(**kwargs)
         context["is_homepage"] = True
+        context["is_featured"] = False
+        context["is_all"] = False
         context["baked"] = False
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.kwargs["electionid"]
@@ -123,6 +129,8 @@ class BakedHomepageIndex(BuildableListView):
     def get_context_data(self, **kwargs):
         context = super(BakedHomepageIndex, self).get_context_data(**kwargs)
         context["is_homepage"] = True
+        context["is_featured"] = False
+        context["is_all"] = False
         context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.electionid
@@ -149,6 +157,8 @@ class FeaturedIndex(ListView):
     def get_context_data(self, **kwargs):
         context = super(FeaturedIndex, self).get_context_data(**kwargs)
         context["is_homepage"] = False
+        context["is_featured"] = True
+        context["is_all"] = False
         context["baked"] = False
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.kwargs["electionid"]
@@ -177,6 +187,8 @@ class BakedFeaturedIndex(BuildableListView):
     def get_context_data(self, **kwargs):
         context = super(BakedFeaturedIndex, self).get_context_data(**kwargs)
         context["is_homepage"] = False
+        context["is_featured"] = True
+        context["is_all"] = False
         context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.electionid
@@ -203,6 +215,8 @@ class ResultIndex(ListView):
     def get_context_data(self, **kwargs):
         context = super(ResultIndex, self).get_context_data(**kwargs)
         context["is_homepage"] = False
+        context["is_featured"] = False
+        context["is_all"] = True
         context["baked"] = False
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.kwargs["electionid"]
@@ -254,6 +268,8 @@ class BakedResultsIndex(BuildableListView):
     def get_context_data(self, **kwargs):
         context = super(BakedResultsIndex, self).get_context_data(**kwargs)
         context["is_homepage"] = False
+        context["is_featured"] = False
+        context["is_all"] = True
         context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.electionid
@@ -277,6 +293,10 @@ class BakedResultsIndex(BuildableListView):
         context["oc_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
             is_display_priority=True).filter(is_ballot_measure=False).filter(
                 Q(resultsource__source_short="oc")
+        ).order_by("contestname")
+        context["sbc_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
+            is_display_priority=True).filter(is_ballot_measure=False).filter(
+                Q(resultsource__source_short="sbc")
         ).order_by("contestname")
         context["state_measures"] = queryset.filter(is_ballot_measure=True).filter(resultsource__source_short="sos").order_by("contestname")
         context["local_measures"] = queryset.filter(is_ballot_measure=True).filter(

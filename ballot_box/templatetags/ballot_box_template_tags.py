@@ -56,7 +56,7 @@ def convert_political_party(value):
     elif value == "Republican , American Independent":
         output = "R"
     else:
-        output = None
+        output = False
     return output
 
 @register.simple_tag

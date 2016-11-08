@@ -33,7 +33,7 @@
 
 /* featured candidate styles */
 .results { border-top: 1px solid #f74623; }
-.results .results-block { width: 50%; height: auto; min-height: 330px; float: left; margin-bottom: 16px; }
+.results .results-block { width: 50%; height: auto; min-height: 345px; float: left; margin-bottom: 16px; }
 .results .results-block:nth-child(n+3) { border-top: 1px solid #dbdbdb; }
 .results .results-block h3.npr-link { float: right; margin-right: 2%; }
 .results .results-block h3.npr-link a { text-align: right; color: #45AAD2; }
@@ -240,9 +240,28 @@
     .embed .embed-block header h2 { font-size: 26px; line-height: 30px; font-style: normal; font-weight: 300; color: #fa440f; margin-bottom: 9px; }
 }
 
-@media screen and (max-width: 299px) {
-    .embed .embed-block { margin-top: 6px; }
-    .embed .embed-block header h2 { font-size: 24px; line-height: 24px; }
+@media screen and (max-width: 499px) {
+    .embed .embed-block .result-grid { min-height: 25px; }
+    .embed .embed-block header h2 { font-size: 24px; line-height: 26px; font-style: normal; font-weight: 300; color: #fa440f; margin-bottom: 9px; }
+    .embed .embed-block .result-grid .candidate-name { font-size: 16px; line-height: 18px; font-style: normal; font-weight: 400; color: #363636; float: left; width: 75%; }
+    .embed .embed-block .result-grid .votepct { font-size: 18px; line-height: 20px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; float: right; width: 25%; text-align: right; }
+}
+
+@media screen and (max-width: 370px) {
+
+    .embed .embed-block header { margin-bottom: 12px; padding-bottom: 8px; }
+    .embed-measure .branded-image img,
+    .embed-race .branded-image img { float: none; margin-bottom: 6px; }
+    .embed-measure .branded-image p,
+    .embed-race .branded-image p { float: none; text-align: left; }
+}
+
+@media screen and (max-width: 320px) {
+    .embed-measure, .embed-race { background: none; }
+    .embed .embed-block .result-grid { width: 100%; height: auto; min-height: 30px; float: none; height: auto; margin-left: 0%; margin-right: 0%; }
+    .embed .embed-block header h2 { font-size: 18px; line-height: 22px; }
+    .embed-measure .branded-image,
+    .embed-race .branded-image { padding-top: 8px; margin-top: 8px;}
     .embed-measure .branded-image img,
     .embed-race .branded-image img { float: none; margin-bottom: 6px; }
     .embed-measure .branded-image p,
