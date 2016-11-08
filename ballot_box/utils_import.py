@@ -66,9 +66,10 @@ class Saver(object):
                 resultsource_id=contest["resultsource_id"],
                 contestid=contest["contestid"],
                 defaults={
-                    "contestname": contest["contestname"],
+                    # don't overwrite admin edits
+                    # "contestname": contest["contestname"],
+                    # "contestdescription": contest["contestdescription"],
                     "seatnum": contest["seatnum"],
-                    "contestdescription": contest["contestdescription"],
                     "is_uncontested": contest["is_uncontested"],
                     "is_national": contest["is_national"],
                     "is_statewide": contest["is_statewide"],
@@ -123,7 +124,8 @@ class Saver(object):
                     "ballotorder": judicial["ballotorder"],
                     "firstname": judicial["firstname"],
                     "lastname": judicial["lastname"],
-                    "fullname": judicial["fullname"],
+                    # don't overwrite admin edits
+                    # "fullname": judicial["fullname"],
                     "yescount": judicial["yescount"],
                     "yespct": judicial["yespct"] / 100,
                     "nocount": judicial["nocount"],
@@ -169,8 +171,9 @@ class Saver(object):
                 measureid=measure["measureid"],
                 defaults={
                     "ballotorder": measure["ballotorder"],
-                    "fullname": measure["fullname"],
-                    "description": measure["description"],
+                    # don't overwrite admin edits
+                    # "fullname": measure["fullname"],
+                    # "description": measure["description"],
                     "yescount": measure["yescount"],
                     "yespct": measure["yespct"] / 100,
                     "nocount": measure["nocount"],
@@ -204,6 +207,14 @@ class Saver(object):
                 prevotepct = "%0.1f" % (presave.votepct * 100)
             else:
                 prevotepct = None
+            if presave.party:
+                candidate["party"] = presave.party
+            else:
+                pass
+            if presave.incumbent:
+                candidate["incumbent"] = presave.incumbent
+            else:
+                pass
         except Exception, exception:
             error_output = "ALERT: %s" % (exception)
             logger.debug(error_output)
@@ -214,7 +225,8 @@ class Saver(object):
                     "ballotorder": candidate["ballotorder"],
                     "firstname": candidate["firstname"],
                     "lastname": candidate["lastname"],
-                    "fullname": candidate["fullname"],
+                    # don't overwrite admin edits
+                    # "fullname": candidate["fullname"],
                     "party": candidate["party"],
                     "incumbent": candidate["incumbent"],
                     "votecount": candidate["votecount"],
