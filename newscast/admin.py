@@ -15,7 +15,12 @@ class ContestForm(forms.ModelForm):
         w = self.fields['contest'].widget
         choices = []
         for item in contests:
-            choices.append((item.id, item.contestname))
+            if item.is_ballot_measure == False:
+                choices.append((item.id, item.contestname))
+            else:
+                for measure in item.ballotmeasure_set.all():
+                    measure.fullname = "%s (%s)" % (measure.fullname, item.contestname)
+                    choices.append((item.id, measure.fullname))
         w.choices = choices
 
 
