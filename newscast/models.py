@@ -62,3 +62,27 @@ class CompareTurnout(models.Model):
     data_source = models.URLField("URL To Turnout Data", max_length=1024, null=True, blank=True)
     created = models.DateTimeField("Date Created", auto_now_add=True)
     modified = models.DateTimeField("Date Modified", auto_now=True)
+
+    def __unicode__(self):
+        return "%s %s" % (self.election_type, self.year)
+
+    def save(self, *args, **kwargs):
+        super(CompareTurnout, self).save(*args, **kwargs)
+
+
+class DataNugget(models.Model):
+    election = models.ForeignKey(registrar.Election)
+    scope = models.CharField("State or the County the nugget came from", max_length=255, null=True, blank=True)
+    nugget_text = models.TextField("Latest Update", null=True, blank=True)
+    nugget_date = models.DateField("Date of this Information")
+    nugget_source = models.CharField("Name of the Sources", max_length=255, null=True, blank=True)
+    nugget_link = models.URLField("URL To Source", max_length=1024, null=True, blank=True)
+    nugget_tags = ListField("Topic Tags", null=True, blank=True)
+    created = models.DateTimeField("Date Created", auto_now_add=True)
+    modified = models.DateTimeField("Date Modified", auto_now=True)
+
+    def __unicode__(self):
+        return self.nugget_source
+
+    def save(self, *args, **kwargs):
+        super(DataNugget, self).save(*args, **kwargs)
