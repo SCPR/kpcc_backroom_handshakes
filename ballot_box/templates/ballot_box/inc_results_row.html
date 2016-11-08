@@ -9,17 +9,13 @@
     </header>
     {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct" %}
         <div class="result-item clearfix">
-            <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
+            <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}{% if candidate.incumbent == True %}<br /> <span class="blurb-text">Incumbent</span>{% endif %}</h3>
             <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%</span></h3>
         </div>
     {% endfor %}
-
-
     <h3 class="npr-link">
         {% if contest.contestid == 'sos-statewide-president' %}
             <h2 class="align-right"><a href="http://www.npr.org/templates/story/story.php?storyId=500927768&live=1" target="_blank">See National Results on NPR.org &gt;</a></h2>
         {% endif %}
     </h3>
-
-
 </div>
