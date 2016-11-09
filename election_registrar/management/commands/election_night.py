@@ -16,17 +16,17 @@ class Command(BaseCommand):
     help = "Begin request to secretary of state for latest election results"
     def handle(self, *args, **options):
 
-        sos = BuildSosResults()
-        sos._init()
+        # sos = BuildSosResults()
+        # sos._init()
 
-        oc = BuildOcResults()
-        oc._init()
+        # oc = BuildOcResults()
+        # oc._init()
 
-        lac = BuildLacResults()
-        lac._init()
+        # lac = BuildLacResults()
+        # lac._init()
 
-        sbc = BuildSbcResults()
-        sbc._init()
+        # sbc = BuildSbcResults()
+        # sbc._init()
 
         sources = ResultSource.objects.filter(ready_to_build=True)
         if sources:
