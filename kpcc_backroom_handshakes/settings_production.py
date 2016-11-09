@@ -278,8 +278,8 @@ LOGGING = {
 
 
                 # slack-info used to log to slack
-                "slack-info",
-                "slack-error",
+                # "slack-info",
+                # "slack-error",
 
 
             ],
