@@ -693,7 +693,7 @@ class SbcProcessMethods(object):
                     framer.candidate["candidateslug"],
                 )
                 race_log += saver.make_candidate(framer.contest, framer.candidate)
-        logger.info(race_log)
+        #logger.info(race_log)
 
     def check_if_recall_or_nonpartisan(self, records):
         """

@@ -135,8 +135,8 @@ class Saver(object):
             )
             if created:
                 log_message += "\t\t* CREATED JUDGE: %s\n" % (judicial["judgeid"])
-            else:
-                log_message += "\t\t* UPDATED %s: %s from %s%% to %s%%\n" % (this_contest.contestname, judicial["fullname"], prevotepct, judicial["votepct"])
+            # else:
+            #     log_message += "\t\t* UPDATED %s: %s from %s%% to %s%%\n" % (this_contest.contestname, judicial["fullname"], prevotepct, judicial["votepct"])
         except Exception, exception:
             error_output = "%s %s" % (exception, judicial["judgeid"])
             logger.debug(error_output)
@@ -183,8 +183,8 @@ class Saver(object):
             )
             if created:
                 log_message += "\t\t* CREATED MEASURE: %s\n" % (measure["measureid"])
-            else:
-                log_message += "\t\t* UPDATED %s:\n\t\t\t* Yes from %s%% to %s%%.\n\t\t\t* No from %s%% to %s%%.\n" % (this_contest.contestname, preyespct, measure["yespct"], prenopct, measure["nopct"])
+            # else:
+            #     log_message += "\t\t* UPDATED %s:\n\t\t\t* Yes from %s%% to %s%%.\n\t\t\t* No from %s%% to %s%%.\n" % (this_contest.contestname, preyespct, measure["yespct"], prenopct, measure["nopct"])
         except Exception, exception:
             error_output = "%s %s" % (exception, measure["measureid"])
             logger.debug(error_output)
@@ -236,9 +236,9 @@ class Saver(object):
             )
             if created:
                 log_message += "\t\t* CREATED CANDIDATE: %s\n" % (candidate["candidateid"])
-            else:
-                outputname = candidate["fullname"].decode("utf8")
-                log_message += "\t\t* UPDATED %s: %s from %s%% to %s%%\n" % (this_contest.contestname, outputname, prevotepct, candidate["votepct"])
+            # else:
+            #     outputname = candidate["fullname"].decode("utf8")
+            #     log_message += "\t\t* UPDATED %s: %s from %s%% to %s%%\n" % (this_contest.contestname, outputname, prevotepct, candidate["votepct"])
         except Exception, exception:
             error_output = "%s %s" % (exception, candidate["candidateid"])
             logger.debug(error_output)

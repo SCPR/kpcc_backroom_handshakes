@@ -106,7 +106,7 @@ class BuildOcResults(object):
                             race_log += saver.make_contest(result.office, result.contest)
                             for candidate in result.candidates:
                                 race_log += saver.make_candidate(result.contest, candidate)
-                    logger.info(race_log)
+                    #logger.info(race_log)
                     os.remove(latest_path)
                     logger.info("\n*****\nwe've finished processing orange county results\n*****")
             else:
