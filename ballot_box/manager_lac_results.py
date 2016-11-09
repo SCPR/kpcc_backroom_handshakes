@@ -91,7 +91,8 @@ class BuildLacResults(object):
                     if self.testing == True:
                         update_this = self.testing
                     else:
-                        update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
+                        # update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
+                        update_this = True
                     if update_this == False:
                         logger.info("\n*****\nwe have newer data in the database so let's delete these files\n*****")
                         os.remove(latest_path)
