@@ -323,7 +323,7 @@ No content was changed on S3.")
         # access and write the contents from the file
         with open(filename, 'rb') as file_obj:
             if not self.dry_run:
-                logger.debug("uploading %s" % filename)
+                # logger.debug("uploading %s" % filename)
                 key.set_contents_from_file(
                     file_obj,
                     headers,
