@@ -50,7 +50,7 @@
                             <h2 class="race-title">{{ contest.contestname|title }}{% if contest.contestid == 'sos-statewide-president' %} - <span>State of California only</span>{% endif %}</h2>
                             <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</h2>
                         </header>
-                        {% for candidate in contest.candidate_set.all|slice:":2"|dictsortreversed:"votepct" %}
+                        {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct"|slice:":2" %}
                             <div class="result-item clearfix">
                                 {% if baked == True %}
                                     <img src="https://elections.scpr.org/static/assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
