@@ -1,0 +1,52 @@
+{% extends "newscast/_base.html" %}
+{% load static %}
+{% load humanize %}
+{% load ballot_box_template_tags %}
+
+{% block extra_css %}
+    <link href="{% static 'css/general-election-reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/general-election.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/newscast-dashboard.css' %}" media="screen" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_content %}
+    <div class="hero-election dashboard">
+        <div class="jumbotron text-center">
+            <h1>Close Races</h1>
+            <p>Showing {{ number_of_close_races }} races within 2.5 percentage points</p>
+        </div>
+        <div class="row-fluid results clearfix">
+            {% for contest in close_races %}
+                {% if contest.close_race == True %}
+                    <div class="results-block clearfix">
+                        <header class="newscast">
+                            <h2 class="race-title">{% ordinalize_name contest %}</h2>
+                            {% if contest.geography %}
+                                <h2 class="geography">District includes {{ contest.geography }}</h2>
+                            {% else %}
+                                <h2 class="geography">&nbsp;</h2>
+                            {% endif %}
+                            <h2 class="precincts-reporting">With {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting as of {{ contest.modified|date:"g:i a, N d, Y" }}</h2>
+                            <h2 class="precincts-reporting">Source: {{ contest.resultsource }}</h2>
+                        </header>
+                        {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct"|slice:"3" %}
+                            <div class="result-item clearfix">
+                                {% if contest.is_homepage_priority == True %}
+                                    {% if baked == True %}
+                                        <img src="http://162.243.135.6/static/assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
+                                    {% else %}
+                                        <img src="{% static '' %}/assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
+                                    {% endif %}
+                                {% else %}
+                                    <img src="{% static '' %}/assets/default_avatar.png" alt="{{ candidate.candidateid }}"/>
+                                {% endif %}
+                                <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}{% if candidate.incumbent == True %}<br /> <span class="blurb-text">Incumbent</span>{% endif %}</h3>
+                                <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">of california voters</span>{% endif %}</span></h3>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

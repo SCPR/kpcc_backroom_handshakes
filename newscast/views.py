@@ -10,8 +10,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormVi
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q, Avg, Max, Min, Sum, Count
 from django import forms
-from .models import *
 from newscast.models import *
+from ballot_box.models import *
 import os
 import time
 import datetime
@@ -49,3 +49,38 @@ class NewscastDetailView(BuildableDetailView):
                 contest.geography = None
         return context
 
+
+class NewscastCloseRacesView(BuildableListView):
+    """ """
+    queryset = Contest.objects.filter(is_display_priority=True)
+    template_name = "newscast/close.html"
+    electionid = "general-2016-11-08"
+
+    def get_context_data(self, **kwargs):
+        context = super(NewscastCloseRacesView, self).get_context_data(**kwargs)
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        context["electionid"] = self.electionid
+        context["close_races"] = []
+        context["target_races"] = self.queryset
+        for contest in context["target_races"]:
+            if contest.is_ballot_measure == False:
+                candidates = contest.candidate_set.all().order_by("-votepct")
+                if len(candidates) >= 2:
+                    if candidates[0].votepct == None or candidates[1].votepct == None:
+                        contest.close_race = False
+                    else:
+                        margin_points = (candidates[0].votepct - candidates[1].votepct) * 100
+                        if margin_points <= 2.5:
+                            contest.close_race = True
+                            context["close_races"].append(contest)
+                        else:
+                            contest.close_race = False
+                else:
+                    contest.close_race = False
+            try:
+                contextualize = ContestContext.objects.filter(contestid=contest.contestid).first()
+                contest.geography = contextualize.cities_counties_list
+            except:
+                contest.geography = None
+        context["number_of_close_races"] = len(context["close_races"])
+        return context
