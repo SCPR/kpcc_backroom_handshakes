@@ -55,6 +55,8 @@ def convert_political_party(value):
         output = "G"
     elif value == "Republican , American Independent":
         output = "R"
+    elif value == "No Party Preference":
+        output = "NPP"
     else:
         output = False
     return output
