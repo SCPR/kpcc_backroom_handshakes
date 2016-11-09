@@ -1,0 +1,40 @@
+{% extends "newscast/_base.html" %}
+{% load static %}
+{% load humanize %}
+{% load ballot_box_template_tags %}
+
+{% block extra_css %}
+    <link href="{% static 'css/general-election-reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/general-election.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/newscast-dashboard.css' %}" media="screen" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_content %}
+    <div class="hero-election dashboard">
+        <div class="jumbotron text-center">
+            <h1>Close Measures</h1>
+            <p>Showing {{ number_of_close_measures }} measures within 2.5 percentage points</p>
+        </div>
+        <div class="row-fluid results clearfix">
+            {% for measure in close_measures %}
+                <div class="results-block measure-hack clearfix">
+                    <header>
+                        {% if "Proposition 66" in measure.contestname %}
+                            <h2 class="race-title">{{ measure.fullname|title }} - {{ measure.description }}</h2>
+                            <h2 class="race-title">&nbsp;</h2>
+                        {% else %}
+                            <h2 class="race-title">{{ measure.contestname|title }} {{ measure.fullname|title }} - {{ measure.description }}</h2>
+                            <h2 class="precincts-reporting">{{ measure.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</h2>
+                        {% endif %}
+                    </header>
+                    <div class="result-item dashboard-hack clearfix">
+                        <h3 class="candidate-name">Yes</h3>
+                        <h3 class="votepct">{{ measure.yespct|percentage|floatformat:0 }}%</h3>
+                        <h3 class="candidate-name">No</h3>
+                        <h3 class="votepct">{{ measure.nopct|percentage|floatformat:0 }}%</h3>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

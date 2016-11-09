@@ -53,7 +53,7 @@ class NewscastDetailView(BuildableDetailView):
 class NewscastCloseRacesView(BuildableListView):
     """ """
     queryset = Contest.objects.filter(is_display_priority=True)
-    template_name = "newscast/close.html"
+    template_name = "newscast/close_races.html"
     electionid = "general-2016-11-08"
 
     def get_context_data(self, **kwargs):
@@ -83,4 +83,34 @@ class NewscastCloseRacesView(BuildableListView):
             except:
                 contest.geography = None
         context["number_of_close_races"] = len(context["close_races"])
+        return context
+
+class NewscastCloseMeasuresView(BuildableListView):
+    """ """
+    queryset = Contest.objects.filter(is_display_priority=True)
+    template_name = "newscast/close_measures.html"
+    electionid = "general-2016-11-08"
+
+    def get_context_data(self, **kwargs):
+        context = super(NewscastCloseMeasuresView, self).get_context_data(**kwargs)
+        context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        context["electionid"] = self.electionid
+        context["close_measures"] = []
+        context["target_measures"] = self.queryset
+        for contest in context["target_measures"]:
+            if contest.is_ballot_measure == True:
+                measures = contest.ballotmeasure_set.all()
+                for measure in measures:
+                    if measure.yespct == None or measure.nopct == None:
+                        measure.close_measure = False
+                    else:
+                        margin_points = (measure.yespct - measure.nopct) * 100
+                        if abs(margin_points) <= 2.5:
+                            measure.precinctsreportingpct = contest.precinctsreportingpct
+                            measure.contestname = contest.contestname
+                            measure.close_race = True
+                            context["close_measures"].append(measure)
+                        else:
+                            measure.close_race = False
+        context["number_of_close_measures"] = len(context["close_measures"])
         return context
