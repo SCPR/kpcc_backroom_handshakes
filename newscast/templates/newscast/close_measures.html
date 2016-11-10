@@ -28,10 +28,10 @@
                         {% endif %}
                     </header>
                     <div class="result-item dashboard-hack clearfix">
-                        <h3 class="candidate-name">Yes</h3>
-                        <h3 class="votepct">{{ measure.yespct|percentage|floatformat:0 }}%</h3>
-                        <h3 class="candidate-name">No</h3>
-                        <h3 class="votepct">{{ measure.nopct|percentage|floatformat:0 }}%</h3>
+                        <h3 class="candidate-name">Yes &mdash; {{ measure.yescount|intcomma }}</h3>
+                        <h3 class="votepct">{{ measure.yespct|percentage|floatformat:3 }}%</h3>
+                        <h3 class="candidate-name">No &mdash; {{ measure.nocount|intcomma }}</h3>
+                        <h3 class="votepct">{{ measure.nopct|percentage|floatformat:3 }}%</h3>
                     </div>
                 </div>
             {% endfor %}

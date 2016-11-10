@@ -1,0 +1,14 @@
+{% extends "newscast/_base.html" %}
+{% load static %}
+{% load humanize %}
+{% load ballot_box_template_tags %}
+
+{% block extra_css %}
+    <link href="{% static 'css/general-election-reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/general-election.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/newscast-dashboard.css' %}" media="screen" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_content %}
+    <h1>What?</h1>
+{% endblock %}
