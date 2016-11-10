@@ -40,8 +40,8 @@
                                 {% else %}
                                     <img src="{% static '' %}/assets/default_avatar.png" alt="{{ candidate.candidateid }}"/>
                                 {% endif %}
-                                <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}{% if candidate.incumbent == True %}<br /> <span class="blurb-text">Incumbent</span>{% endif %}</h3>
-                                <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">of california voters</span>{% endif %}</span></h3>
+                                <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}<br />{{ candidate.votecount|intcomma }} votes{% if candidate.incumbent == True %}<br /> <span class="blurb-text">Incumbent</span>{% endif %}</h3>
+                                <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:3 }}%</h3>
                             </div>
                         {% endfor %}
                     </div>
