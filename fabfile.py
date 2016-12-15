@@ -160,6 +160,7 @@ def fetch_all():
     local("python manage.py fetch_sos_results")
     local("python manage.py fetch_oc_results")
     local("python manage.py fetch_lac_results")
+    local("python manage.py fetch_sbc_results")
 
 
 def fetch_maplight():
