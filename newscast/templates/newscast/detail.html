@@ -1,20 +1,44 @@
-{% extends "newscast/_base.html" %}
+{% extends "kpcc_backroom_handshakes/_base.html" %}
 {% load static %}
 {% load humanize %}
 {% load ballot_box_template_tags %}
 
+{% block title %}{{ topic.topicname }}{% endblock %}
+{% block robots %}{% endblock %}
+{% block description %}{% endblock %}
+{% block keywords %}{% endblock %}
+{% block og_title %}{% endblock %}
+{% block og_site_name %}{% endblock %}
+{% block og_type %}{% endblock %}
+{% block og_image %}{% endblock %}
+{% block og_image_width %}{% endblock %}
+{% block og_image_height %}{% endblock %}
+{% block og_url %}{% endblock %}
+{% block og_description %}{% endblock %}
+{% block twitter_url %}{% endblock %}
+{% block twitter_domain %}{% endblock %}
+{% block twitter_site %}{% endblock %}
+{% block twitter_title %}{% endblock %}
+{% block twitter_description %}{% endblock %}
+{% block twitter_image %}{% endblock %}
+
 {% block extra_css %}
-    <link href="{% static 'css/general-election-reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
-    <link href="{% static 'css/general-election.css' %}" media="screen" rel="stylesheet" type="text/css" />
-    <link href="{% static 'css/newscast-dashboard.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/ballot-box.css' %}" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/newscast.css' %}" media="screen" rel="stylesheet" type="text/css" />
 {% endblock %}
 
-{% block page_content %}
+{% block data_details %}
     <div class="hero-election dashboard">
         <div class="jumbotron text-center">
             <h1>{{ topic.topicname }}</h1>
             <p>{{ topic.description }}</p>
         </div>
+    </div>
+{% endblock %}
+
+{% block data_visuals %}
+    <div class="hero-election dashboard">
         <div class="row-fluid results clearfix">
             {% for contest in contests %}
                 {% if contest.is_ballot_measure == False %}

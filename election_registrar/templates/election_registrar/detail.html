@@ -1,12 +1,43 @@
-{% extends "election_registrar/_base.html" %}
+{% extends "kpcc_backroom_handshakes/_base.html" %}
 {% load static %}
 {% load humanize %}
 
-{% block page_content %}
-    <div class="jumbotron text-center">
-        <h1>{{ election.electionid }}</h1>
-        <p>A preview of the races and candidates for the {{ election.electionid }} election</p>
+{% block title %}{{ election.electionid }} election{% endblock %}
+{% block robots %}{% endblock %}
+{% block description %}{% endblock %}
+{% block keywords %}{% endblock %}
+{% block og_title %}{% endblock %}
+{% block og_site_name %}{% endblock %}
+{% block og_type %}{% endblock %}
+{% block og_image %}{% endblock %}
+{% block og_image_width %}{% endblock %}
+{% block og_image_height %}{% endblock %}
+{% block og_url %}{% endblock %}
+{% block og_description %}{% endblock %}
+{% block twitter_url %}{% endblock %}
+{% block twitter_domain %}{% endblock %}
+{% block twitter_site %}{% endblock %}
+{% block twitter_title %}{% endblock %}
+{% block twitter_description %}{% endblock %}
+{% block twitter_image %}{% endblock %}
+
+{% block extra_css %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/registrar.css' %}" media="screen" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block data_details %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="jumbotron text-center">
+                <h1>{{ election.electionid }}</h1>
+                <p>A preview of the races and candidates for the {{ election.electionid }} election</p>
+            </div>
+        </div>
     </div>
+{% endblock %}
+
+{% block data_visuals %}
     <div class="container">
         <div class="row buttons">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

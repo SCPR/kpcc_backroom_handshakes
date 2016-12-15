@@ -1,49 +1,48 @@
-{% extends "measure_finance/base.html" %}
-
-{% load static from staticfiles %}
+{% extends "kpcc_backroom_handshakes/_base.html" %}
+{% load static %}
+{% load humanize %}
 {% load measure_finance_template_tags %}
 
 <!-- begin meta -->
 {% block title %}Charting contributions to California Ballot Measures | scpr.org{% endblock %}
-
+{% block robots %}{% endblock %}
 {% block description %}These charts displays the top donors supporting and opposing California's numerous ballot measures. Voters cast their choice on Nov. 8, 2016.{% endblock %}
-
 {% block keywords %}California, ballot measures, contributions, california counts{% endblock %}
-
 {% block og_title %}Charting contributions to California Ballot Measures | scpr.org{% endblock %}
-
 {% block og_site_name %}KPCC{% endblock %}
-
 {% block og_type %}website{% endblock %}
-
+{% block og_image %}{% endblock %}
+{% block og_image_width %}{% endblock %}
+{% block og_image_height %}{% endblock %}
 {% block og_url %}http://{{ request.get_host }}/elections/latest/measure-finance/{% endblock %}
-
 {% block og_description %}These charts displays the top donors supporting and opposing California's numerous ballot measures. Voters cast their choice on Nov. 8, 2016.{% endblock %}
-
 {% block twitter_url %}http://{{ request.get_host }}/elections/latest/measure-finance/{% endblock %}
-
+{% block twitter_domain %}{% endblock %}
+{% block twitter_site %}{% endblock %}
 {% block twitter_title %}Charting contributions to California Ballot Measures | scpr.org{% endblock %}
-
 {% block twitter_description %}These charts displays the top donors supporting and opposing California's numerous ballot measures. Voters cast their choice on Nov. 8, 2016.{% endblock %}
 <!-- end meta -->
 
-
 {% block extra_css %}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
     {% if baked == True %}
-        <link href="http://162.243.135.6/static/css/reset.css" media="screen" rel="stylesheet" type="text/css" />
-        <link href="http://162.243.135.6/static/css/styles.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="http://162.243.135.6/static/css/measure-finance.css" media="screen" rel="stylesheet" type="text/css" />
     {% else %}
-        <link href="{% static 'css/reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
-        <link href="{% static 'css/styles.css' %}" media="screen" rel="stylesheet" type="text/css" />
+        <link href="{% static 'css/measure-finance.css' %}" media="screen" rel="stylesheet" type="text/css" />
     {% endif %}
 {% endblock %}
 
-{% block page_content %}
-    <div class="jumbotron text-center">
-        <h1>Charting contributions to California Ballot Measures</h1>
-        <p>These charts are available to embed and are based on data from MapLight.</p>
+{% block data_details %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="jumbotron text-center">
+                <h1>Charting contributions to California Ballot Measures</h1>
+                <p>These charts are available to embed and are based on data from MapLight.</p>
+            </div>
+        </div>
     </div>
+{% endblock %}
+
+{% block data_visuals %}
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

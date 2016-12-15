@@ -1,39 +1,36 @@
-{% extends "ballot_box/_base.html" %}
+{% extends "kpcc_backroom_handshakes/_base.html" %}
 {% load static %}
 {% load humanize %}
 {% load ballot_box_template_tags %}
 
-<!-- begin meta -->
 {% block title %}KPCC Featured Results for the Nov. 8 Election | scpr.org{% endblock %}
-
+{% block robots %}{% endblock %}
 {% block description %}Featured results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
-
 {% block keywords %}California, Los Angeles County, {% for contest in featured_races %}{{ contest.contestname|title }}, {% endfor %}{% for contest in featured_measures %}{{ contest.contestname|title }}, {% endfor %}{% for measure in local_measures %}{% for this in measure.ballotmeasure_set.all %}{{ this.fullname }}, {% endfor %}{% endfor %}{% endblock %}
-
-{% block og_url %}{% if is_homepage == True %}https://elections.scpr.org/general-2016-11-08/results/homepage.html{% else %}https://elections.scpr.org/general-2016-11-08/results/featured.html{% endif %}{% endblock %}
-
 {% block og_title %}KPCC Featured Results for the Nov. 8 Election | scpr.org{% endblock %}
-
+{% block og_site_name %}{% endblock %}
+{% block og_type %}{% endblock %}
+{% block og_image %}http://162.243.135.6/static/assets/kpcc-votergameplan-mark-horizontal.png{% endblock %}
+{% block og_image_width %}1525{% endblock %}
+{% block og_image_height %}127{% endblock %}
+{% block og_url %}{% if is_homepage == True %}https://elections.scpr.org/general-2016-11-08/results/homepage.html{% else %}https://elections.scpr.org/general-2016-11-08/results/featured.html{% endif %}{% endblock %}
 {% block og_description %}Featured results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
-
 {% block twitter_url %}{% if is_homepage == True %}https://elections.scpr.org/general-2016-11-08/results/homepage.html{% else %}https://elections.scpr.org/general-2016-11-08/results/featured.html{% endif %}{% endblock %}
-
+{% block twitter_domain %}http://projects.scpr.org/{% endblock %}
+{% block twitter_site %}KPCC{% endblock %}
 {% block twitter_title %}KPCC Featured Results for the Nov. 8 Election | scpr.org{% endblock %}
-
 {% block twitter_description %}Featured results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
-<!-- end meta -->
+{% block twitter_image %}http://projects.scpr.org/static-files/v3-dependencies/images/kpcc-og-twitter-logo.png{% endblock %}
 
 {% block extra_css %}
     {% if baked == True %}
-        <link href="/static/css/general-election-reset.css" media="screen" rel="stylesheet" type="text/css" />
-        <link href="/static/css/general-election.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="/static/css/ballot-box.css" media="screen" rel="stylesheet" type="text/css" />
     {% else %}
-        <link href="{% static 'css/general-election-reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
-        <link href="{% static 'css/general-election.css' %}" media="screen" rel="stylesheet" type="text/css" />
+        <link href="{% static 'css/ballot-box.css' %}" media="screen" rel="stylesheet" type="text/css" />
     {% endif %}
 {% endblock %}
 
-{% block display_block %}
+{% block data_visuals %}
     <div class="hero-election">
         {% if timestamp %}
         <!-- i was built at {{ timestamp }} using django-bakery -->
@@ -140,7 +137,7 @@
     </div>
 {% endblock %}
 
-{% block extra_js %}
+{% block tail_js %}
     <script type="text/javascript" src="//pym.nprapps.org/pym.v1.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){

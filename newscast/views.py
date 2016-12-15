@@ -115,8 +115,3 @@ class NewscastCloseMeasuresView(BuildableListView):
                             measure.close_race = False
         context["number_of_close_measures"] = len(context["close_measures"])
         return context
-
-
-class NewscastMapView(BuildableListView):
-    queryset = Contest.objects.filter(is_display_priority=True)
-    template_name = "newscast/map.html"

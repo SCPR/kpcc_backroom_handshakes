@@ -1,49 +1,43 @@
-{% extends "measure_finance/base.html" %}
-
+{% extends "kpcc_backroom_handshakes/_base.html" %}
 {% load static %}
+{% load humanize %}
 {% load measure_finance_template_tags %}
 
 <!-- begin meta -->
 {% block title %}Charting contributions for and against California {{ object.official_identifier }} | scpr.org{% endblock %}
-
+{% block robots %}{% endblock %}
 {% block description %}This chart displays the top donors supporting and opposing California's {{ object.official_identifier }}: {{ object.official_title }}. Voters cast their choice on Nov. 8, 2016.{% endblock %}
-
 {% block keywords %}California, {{ object.official_identifier }}, {{ object.official_title }}, {% for support in supporting_contributions %}{{ support.name|title }},{% endfor %}{% for oppose in opposing_contributions %}{{ oppose.name|title }},{% endfor %}{% endblock %}
-
 {% block og_title %}Charting contributions for and against California {{ object.official_identifier }} | scpr.org{% endblock %}
-
 {% block og_site_name %}KPCC{% endblock %}
-
 {% block og_type %}website{% endblock %}
-
+{% block og_image %}{% endblock %}
+{% block og_image_width %}{% endblock %}
+{% block og_image_height %}{% endblock %}
 {% block og_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
-
 {% block og_description %}This chart displays the top donors supporting and opposing California's {{ object.official_identifier }}: {{ object.official_title }}. Voters cast their choice on Nov. 8, 2016.{% endblock %}
-
 {% block twitter_url %}http://{{ request.get_host }}{% url 'measure_finance:measure-detail' object.official_identifier_slug %}{% endblock %}
-
+{% block twitter_domain %}{% endblock %}
+{% block twitter_site %}{% endblock %}
 {% block twitter_title %}Charting contributions for and against California {{ object.official_identifier }} | scpr.org{% endblock %}
-
 {% block twitter_description %}This chart displays the top donors supporting and opposing California's {{ object.official_identifier }}: {{ object.official_title }}. Voters cast their choice on Nov. 8, 2016.{% endblock %}
 <!-- end meta -->
 
 {% block extra_css %}
     {% if baked == True %}
-        <link href="http://162.243.135.6/static/css/reset.css" media="screen" rel="stylesheet" type="text/css" />
-        <link href="http://162.243.135.6/static/css/styles.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="http://162.243.135.6/static/css/measure-finance.css" media="screen" rel="stylesheet" type="text/css" />
     {% else %}
-        <link href="{% static 'css/reset.css' %}" media="screen" rel="stylesheet" type="text/css" />
-        <link href="{% static 'css/styles.css' %}" media="screen" rel="stylesheet" type="text/css" />
+        <link href="{% static 'css/measure-finance.css' %}" media="screen" rel="stylesheet" type="text/css" />
     {% endif %}
 {% endblock %}
 
-{% block contributions_chart_config %}
+{% block head_js %}
     <script>
         var chartConfig = {{ chart_config|safe }};
     </script>
 {% endblock %}
 
-{% block page_content %}
+{% block data_visuals %}
     <div class="ledger">
         <header class="overline">
             <mark>
@@ -184,12 +178,12 @@
     </div>
 {% endblock %}
 
-{% block extra_js %}
+{% block tail_js %}
     {% if baked == True %}
         <script src="http://162.243.135.6/static/scripts/d3.js"></script>
-        <script src="http://162.243.135.6/static/scripts/app.js"></script>
+        <script src="http://162.243.135.6/static/scripts/measure-finanace-app.js"></script>
     {% else %}
         <script src="{% static 'scripts/d3.js' %}"></script>
-        <script src="{% static 'scripts/app.js' %}"></script>
+        <script src="{% static 'scripts/measure-finanace-app.js' %}"></script>
     {% endif %}
 {% endblock %}

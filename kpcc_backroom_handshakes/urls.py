@@ -25,6 +25,7 @@ urlpatterns = [
     url(r"^admin/", include(admin.site.urls)),
     url(r"^admin/", include("massadmin.urls")),
     url(r"^api/?", include(v1_api.urls)),
+    url(r"^elections/", include("rep_the_homeless.urls", namespace="rep-the-homeless")),
     url(r"^elections/", include("newscast.urls", namespace="newscast")),
     url(r"^elections/", include("ballot_box.urls", namespace="ballot-box")),
     url(r"^elections/", include("measure_finance.urls", namespace="campaign-finance")),
