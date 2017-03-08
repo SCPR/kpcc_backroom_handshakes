@@ -15,10 +15,8 @@ logger = logging.getLogger("kpcc_backroom_handshakes")
 
 class Command(BaseCommand):
     help = 'Bake out a site as flat files in the build directory'
-    build_unconfig_msg = "Build directory unconfigured. Set BUILD_DIR in \
-settings.py or provide it with --build-dir"
-    views_unconfig_msg = "Bakery views unconfigured. Set BAKERY_VIEWS in \
-settings.py or provide a list as arguments."
+    build_unconfig_msg = "Build directory unconfigured. Set BUILD_DIR in settings.py or provide it with --build-dir"
+    views_unconfig_msg = "Bakery views unconfigured. Set BAKERY_VIEWS in settings.py or provide a list as arguments."
 
     def add_arguments(self, parser):
         parser.add_argument('view_list', nargs='*', type=str, default=[])
@@ -27,8 +25,7 @@ settings.py or provide a list as arguments."
             action="store",
             dest="build_dir",
             default='',
-            help="Specify the path of the build directory. \
-Will use settings.BUILD_DIR by default."
+            help="Specify the path of the build directory. Will use settings.BUILD_DIR by default."
         )
         parser.add_argument(
             "--keep-build-dir",
@@ -129,9 +126,8 @@ Will use settings.BUILD_DIR by default."
             verbosity=0
         )
         target_dir = os.path.join(self.build_dir, settings.STATIC_URL[1:])
-
+        logger.debug(target_dir)
         ignore_patterns = settings.STATIC_TO_IGNORE
-
         if os.path.exists(settings.STATIC_ROOT) and settings.STATIC_URL:
             # if gzip is enabled
             if getattr(settings, 'BAKERY_GZIP', False):
@@ -139,7 +135,6 @@ Will use settings.BUILD_DIR by default."
             # else just copy the tree straight over
             else:
                 shutil.copytree(settings.STATIC_ROOT, target_dir, ignore=shutil.ignore_patterns(*ignore_patterns))
-
 
         # If they exist in the static directory, copy the robots.txt
         # and favicon.ico files down to the root so they will work
@@ -176,7 +171,6 @@ Will use settings.BUILD_DIR by default."
         """
         # Then loop through and run them all
         for view_str in self.view_list:
-            # logger.debug("Building %s" % view_str)
             if self.verbosity > 1:
                 six.print_("Building %s" % view_str)
             view = get_callable(view_str)
