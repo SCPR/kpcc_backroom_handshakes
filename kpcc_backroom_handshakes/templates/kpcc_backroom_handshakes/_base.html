@@ -40,14 +40,14 @@
         <!-- end meta -->
 
         <!-- begin css -->
-        <link href="{% static 'css/_reset.min.css' %}" media="screen" rel="stylesheet" type="text/css" />
+        <link href="//projects.scpr.org/static-files/_v4/css/reset.min.css" media="screen" rel="stylesheet" type="text/css" />
         {% block extra_css %}{% endblock %}
         <!-- end css -->
 
         <!-- begin base scripts -->
         <script src="https://use.typekit.net/cka2qre.js"></script>
         <script>try{Typekit.load({ async: true });}catch(e){}</script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="//projects.scpr.org/static-files/_v4/scripts/jquery.1.11.3.min.js"></script>
         {% block head_js %}{% endblock %}
         <!-- end base scripts -->
 
@@ -58,7 +58,6 @@
     <body>
         {% block data_details %}{% endblock %}
         {% block data_visuals %}{% endblock %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.5.3/modernizr.min.js"></script>
         {% block tail_js %}{% endblock %}
         {% include "kpcc_backroom_handshakes/kpcc_analytics.html" %}
     </body>
