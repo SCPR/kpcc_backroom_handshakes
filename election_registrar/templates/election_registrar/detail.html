@@ -62,7 +62,7 @@
                     <ul>
                         {% if contest.candidate_set.all %}
                             {% for candidate in contest.candidate_set.all %}
-                                <li>{{ candidate.fullname }}</li>
+                                <li class="candidate">{{ candidate.fullname }}</li>
                             {% endfor %}
                         {% endif %}
                     </ul>

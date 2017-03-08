@@ -62,7 +62,7 @@
                                         <img src="{% static '' %}/assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
                                     {% endif %}
                                 {% else %}
-                                    <img src="{% static '' %}/assets/default_avatar.png" alt="{{ candidate.candidateid }}"/>
+                                    <img src="//projects.scpr.org/static-files/_v4/images/default_avatar.png" alt="{{ candidate.candidateid }}"/>
                                 {% endif %}
                                 <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}{% if candidate.incumbent == True %}<br /> <span class="blurb-text">Incumbent</span>{% endif %}</h3>
                                 <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">of california voters</span>{% endif %}</span></h3>
