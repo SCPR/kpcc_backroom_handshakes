@@ -34,7 +34,7 @@ class Saver(object):
             obj, created = Office.objects.get_or_create(
                 officeid=office["officeid"],
                 defaults={
-                    "name": office["officename"],
+                    # "name": office["officename"],
                     "slug": office["officeslug"],
                     "active": office["active"],
                     "poss_error": False,
@@ -42,8 +42,8 @@ class Saver(object):
             )
             if created:
                 log_message += "* CREATED OFFICE: %s \n" % (office["officeslug"])
-            # else:
-            #     log_message += "* %s exists\n" % (office["officeslug"])
+            else:
+                log_message += "* %s exists\n" % (office["officeslug"])
         except Exception, exception:
             error_output = "%s %s" % (exception, office["officeslug"])
             logger.debug(error_output)
@@ -61,6 +61,9 @@ class Saver(object):
             logger.debug(error_output)
             raise
         try:
+
+            logger.debug(contest)
+
             obj, created = this_office.contest_set.update_or_create(
                 election_id=contest["election_id"],
                 resultsource_id=contest["resultsource_id"],
@@ -86,8 +89,8 @@ class Saver(object):
             )
             if created:
                 log_message += "\t* CREATED CONTEST: %s\n" % (contest["contestid"])
-            # else:
-            #     log_message += "\t* %s exists but we updated figures\n" % (contest["contestid"])
+            else:
+                log_message += "\t* %s exists but we updated figures\n" % (contest["contestid"])
         except Exception, exception:
             error_output = "%s %s" % (exception, contest["contestid"])
             logger.debug(error_output)
@@ -122,9 +125,9 @@ class Saver(object):
                 judgeid=judicial["judgeid"],
                 defaults={
                     "ballotorder": judicial["ballotorder"],
-                    "firstname": judicial["firstname"],
-                    "lastname": judicial["lastname"],
                     # don't overwrite admin edits
+                    # "firstname": judicial["firstname"],
+                    # "lastname": judicial["lastname"],
                     # "fullname": judicial["fullname"],
                     "yescount": judicial["yescount"],
                     "yespct": judicial["yespct"] / 100,
@@ -135,8 +138,8 @@ class Saver(object):
             )
             if created:
                 log_message += "\t\t* CREATED JUDGE: %s\n" % (judicial["judgeid"])
-            # else:
-            #     log_message += "\t\t* UPDATED %s: %s from %s%% to %s%%\n" % (this_contest.contestname, judicial["fullname"], prevotepct, judicial["votepct"])
+            else:
+                log_message += "\t\t* UPDATED %s: %s from %s%% to %s%%\n" % (this_contest.contestname, judicial["fullname"], prevotepct, judicial["votepct"])
         except Exception, exception:
             error_output = "%s %s" % (exception, judicial["judgeid"])
             logger.debug(error_output)
@@ -148,7 +151,7 @@ class Saver(object):
         """
         log_message = ""
         try:
-            this_contest = Contest.objects.get(contestid=contest["contestid"])
+            this_contest = Contest.objects.get(contestid=contest["contestid"], election_id=contest["election_id"])
         except Exception, exception:
             error_output = "%s %s" % (exception, contest["contestid"])
             logger.debug(error_output)
@@ -183,8 +186,8 @@ class Saver(object):
             )
             if created:
                 log_message += "\t\t* CREATED MEASURE: %s\n" % (measure["measureid"])
-            # else:
-            #     log_message += "\t\t* UPDATED %s:\n\t\t\t* Yes from %s%% to %s%%.\n\t\t\t* No from %s%% to %s%%.\n" % (this_contest.contestname, preyespct, measure["yespct"], prenopct, measure["nopct"])
+            else:
+                log_message += "\t\t* UPDATED %s:\n\t\t\t* Yes from %s%% to %s%%.\n\t\t\t* No from %s%% to %s%%.\n" % (this_contest.contestname, preyespct, measure["yespct"], prenopct, measure["nopct"])
         except Exception, exception:
             error_output = "%s %s" % (exception, measure["measureid"])
             logger.debug(error_output)
@@ -223,9 +226,9 @@ class Saver(object):
                 candidateid=candidate["candidateid"],
                 defaults={
                     "ballotorder": candidate["ballotorder"],
-                    "firstname": candidate["firstname"],
-                    "lastname": candidate["lastname"],
                     # don't overwrite admin edits
+                    # "firstname": candidate["firstname"],
+                    # "lastname": candidate["lastname"],
                     # "fullname": candidate["fullname"],
                     "party": candidate["party"],
                     "incumbent": candidate["incumbent"],
@@ -236,9 +239,9 @@ class Saver(object):
             )
             if created:
                 log_message += "\t\t* CREATED CANDIDATE: %s\n" % (candidate["candidateid"])
-            # else:
-            #     outputname = candidate["fullname"].decode("utf8")
-            #     log_message += "\t\t* UPDATED %s: %s from %s%% to %s%%\n" % (this_contest.contestname, outputname, prevotepct, candidate["votepct"])
+            else:
+                outputname = candidate["fullname"].decode("utf8")
+                log_message += "\t\t* UPDATED %s: %s from %s%% to %s%%\n" % (this_contest.contestname, outputname, prevotepct, candidate["votepct"])
         except Exception, exception:
             error_output = "%s %s" % (exception, candidate["candidateid"])
             logger.debug(error_output)
