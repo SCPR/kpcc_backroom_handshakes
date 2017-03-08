@@ -3,23 +3,23 @@
 {% load humanize %}
 {% load ballot_box_template_tags %}
 
-{% block title %}KPCC Featured Results for the Nov. 8 Election | scpr.org{% endblock %}
+{% block title %}Featured results for the {{ title }} | scpr.org{% endblock %}
 {% block robots %}{% endblock %}
-{% block description %}Featured results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
+{% block description %}Featured results for the {{ title }} brought to you by KPCC, 89.3FM{% endblock %}
 {% block keywords %}California, Los Angeles County, {% for contest in featured_races %}{{ contest.contestname|title }}, {% endfor %}{% for contest in featured_measures %}{{ contest.contestname|title }}, {% endfor %}{% for measure in local_measures %}{% for this in measure.ballotmeasure_set.all %}{{ this.fullname }}, {% endfor %}{% endfor %}{% endblock %}
-{% block og_title %}KPCC Featured Results for the Nov. 8 Election | scpr.org{% endblock %}
+{% block og_title %}Featured results for the {{ title }} | scpr.org{% endblock %}
 {% block og_site_name %}{% endblock %}
 {% block og_type %}{% endblock %}
-{% block og_image %}http://162.243.135.6/static/assets/kpcc-votergameplan-mark-horizontal.png{% endblock %}
+{% block og_image %}https://elections.scpr.org/static/assets/kpcc-votergameplan-mark-horizontal.png{% endblock %}
 {% block og_image_width %}1525{% endblock %}
 {% block og_image_height %}127{% endblock %}
-{% block og_url %}{% if is_homepage == True %}https://elections.scpr.org/general-2016-11-08/results/homepage.html{% else %}https://elections.scpr.org/general-2016-11-08/results/featured.html{% endif %}{% endblock %}
-{% block og_description %}Featured results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
-{% block twitter_url %}{% if is_homepage == True %}https://elections.scpr.org/general-2016-11-08/results/homepage.html{% else %}https://elections.scpr.org/general-2016-11-08/results/featured.html{% endif %}{% endblock %}
+{% block og_url %}{% if is_homepage == True %}https://elections.scpr.org/{{ electionid }}/results/homepage.html{% else %}https://elections.scpr.org/{{ electionid }}/results/featured.html{% endif %}{% endblock %}
+{% block og_description %}Featured results for the {{ title }} brought to you by KPCC, 89.3FM{% endblock %}
+{% block twitter_url %}{% if is_homepage == True %}https://elections.scpr.org/{{ electionid }}/results/homepage.html{% else %}https://elections.scpr.org/{{ electionid }}/results/featured.html{% endif %}{% endblock %}
 {% block twitter_domain %}http://projects.scpr.org/{% endblock %}
 {% block twitter_site %}KPCC{% endblock %}
-{% block twitter_title %}KPCC Featured Results for the Nov. 8 Election | scpr.org{% endblock %}
-{% block twitter_description %}Featured results for the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
+{% block twitter_title %}Featured results for the {{ title }} | scpr.org{% endblock %}
+{% block twitter_description %}Featured results for the {{ title }} brought to you by KPCC, 89.3FM{% endblock %}
 {% block twitter_image %}http://projects.scpr.org/static-files/v3-dependencies/images/kpcc-og-twitter-logo.png{% endblock %}
 
 {% block extra_css %}
@@ -42,28 +42,51 @@
         {% if featured_races %}
             <div class="row-fluid results clearfix">
                 {% for contest in featured_races %}
-                    <div class="results-block">
-                        <header>
-                            <h2 class="race-title">{{ contest.contestname|title }}{% if contest.contestid == 'sos-statewide-president' %} - <span>State of California only</span>{% endif %}</h2>
-                            <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</h2>
-                        </header>
-                        {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct"|slice:":2" %}
-                            <div class="result-item clearfix">
-                                {% if baked == True %}
-                                    <img src="https://elections.scpr.org/static/assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
-                                {% else %}
-                                    <img src="{% static '' %}assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
+                    {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct"|slice:":1" %}
+                        {% if candidate.candidate_image == True %}
+                            <div class="results-block">
+                                <header>
+                                    <h2 class="race-title">{{ contest.contestname|title }}{% if contest.contestid == 'sos-statewide-president' %} - <span>State of California only</span>{% endif %}</h2>
+                                    <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</h2>
+                                </header>
+                                {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct"|slice:":2" %}
+                                    <div class="result-item clearfix">
+                                        {% if baked == True %}
+                                            <img src="{{ candidate.candidate_image_url }}" alt="{{ candidate.fullname }}"/>
+                                        {% else %}
+                                            <img src="{% static '' %}assets/{{ candidate.candidateid }}.png" alt="{{ candidate.fullname }}"/>
+                                        {% endif %}
+                                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
+                                        <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%</span></h3>
+                                    </div>
+                                {% endfor %}
+                                {% if contest.contestid == 'sos-statewide-president' %}
+                                    <h3 class="npr-link">
+                                        <h2 class="align-right"><a href="http://www.npr.org/2016/11/08/500927768/2016-presidential-election-results-for-each-state" target="_blank">See national results on NPR.org &gt;</a></h2>
+                                    </h3>
                                 {% endif %}
-                                <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
-                                <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%</span></h3>
                             </div>
-                        {% endfor %}
-                        <h3 class="npr-link">
-                            {% if contest.contestid == 'sos-statewide-president' %}
-                                <h2 class="align-right"><a href="http://www.npr.org/2016/11/08/500927768/2016-presidential-election-results-for-each-state" target="_blank">See national results on NPR.org &gt;</a></h2>
-                            {% endif %}
-                        </h3>
-                    </div>
+                        {% else %}
+                            <div class="results-block-no-image">
+                                <header>
+                                    <h2 class="race-title">{{ contest.contestname|title }}{% if contest.contestid == 'sos-statewide-president' %} - <span>State of California only</span>{% endif %}</h2>
+                                    <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</h2>
+                                </header>
+                                {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct"|slice:":2" %}
+                                    <div class="result-item-no-image clearfix">
+                                        <div class="spacer"></div>
+                                        <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>
+                                        <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%</span></h3>
+                                    </div>
+                                {% endfor %}
+                                {% if contest.contestid == 'sos-statewide-president' %}
+                                    <h3 class="npr-link">
+                                        <h2 class="align-right"><a href="http://www.npr.org/2016/11/08/500927768/2016-presidential-election-results-for-each-state" target="_blank">See national results on NPR.org &gt;</a></h2>
+                                    </h3>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 {% endfor %}
             </div>
         {% endif %}

@@ -1,8 +1,8 @@
 <div class="row-fluid topper clearfix">
     <header class="election-header">
-        <h1>California 2016 General Election Results</h1>
+        <h1>{{ title|safe }}</h1>
         {% if is_homepage == True %}
-            <h2 class="align-right"><a href="http://www.scpr.org/elections/2016/general/" target="_blank">See State &amp; Local Results &gt;</a></h2>
+            <h2 class="align-right"><a href="{{ kpcc_page }}" target="_blank">See State &amp; Local Results &gt;</a></h2>
         {% endif %}
     </header>
     <header class="election-status">
