@@ -72,6 +72,8 @@ class BuildLacResults(object):
             file_has_size = os.path.getsize(latest_path)
             if file_exists == True and file_has_size > 0:
                 rows = process.open_results_file(latest_path)
+
+
                 race_ids = process.get_race_ids_from(rows)
                 election_package = process.collate_and_fetch_records_for_race(race_ids, rows)
                 races = election_package[0]
@@ -115,10 +117,10 @@ class BuildLacResults(object):
                             else:
                                 contest_package = process.compile_contest_results(records)
                                 process.update_database(contest_package, election, src)
-                        os.remove(latest_path)
-                        logger.info("we've finished processing lac results")
-                else:
-                    logger.error("unable to determine whether this data is newer than what we already have.")
+                #         os.remove(latest_path)
+                #         logger.info("we've finished processing lac results")
+                # else:
+                #     logger.error("unable to determine whether this data is newer than what we already have.")
 
 
 class LacProcessMethods(object):
@@ -469,7 +471,9 @@ class LacProcessMethods(object):
         measures = contest_package["measures"]
         judges = contest_package["judges"]
         race_log = "\n"
+        # """
         # Check level of contest (i.e. local, statewide)
+        # """
         if "U.S." in contest["contest_title"] or "STATE" in contest["contest_title"]:
             level = "county"
             framer.contest["is_statewide"] = True
@@ -478,7 +482,9 @@ class LacProcessMethods(object):
             framer.contest["is_statewide"] = False
         framer.contest["level"] = level
         if contest["is_judicial_contest"]:
-            """ This is a judicial appointee """
+            """
+            This is a judicial appointee
+            """
             if "SUPREME COURT" in contest["contest_title"]:
                 contestname = "Supreme Court"
             elif "APPELLATE COURT" in contest["contest_title"]:
@@ -525,7 +531,7 @@ class LacProcessMethods(object):
                 framer.contest["votersregistered"] = None
                 raise Exception("votersregistered is not a number")
             framer.contest["votersturnout"] = None
-            framer.contest["contestname"] = fixer._fix(contestname) # framer.office["officename"]
+            framer.contest["contestname"] = fixer._fix(contestname)
             framer.contest["contestdescription"] = None
             framer.contest["contestid"] = saver._make_contest_id(
                 src.source_short,
@@ -574,7 +580,9 @@ class LacProcessMethods(object):
                 )
                 race_log += saver.make_judicial(framer.contest, framer.judicial)
         elif contest["is_ballot_measure"]:
-            """ this is a ballot measure """
+            """
+            this is a ballot measure
+            """
             framer.contest["level"] = "county"
             framer.contest["is_statewide"] = False
             contestname = contest["contest_title"]
@@ -702,7 +710,9 @@ class LacProcessMethods(object):
                     )
                 race_log += saver.make_measure(framer.contest, framer.measure)
         else:
-            """ this is a candidate for elected office """
+            """
+            this is a candidate for elected office
+            """
             strip_district = contest["district"].lstrip("0")
             framer.contest["seatnum"] = "1010101"
             if contest["contest_title"] == "MEMBER OF THE ASSEMBLY":
@@ -846,7 +856,7 @@ class LacProcessMethods(object):
                     framer.candidate["candidateslug"],
                 )
                 race_log += saver.make_candidate(framer.contest, framer.candidate)
-        #logger.info(race_log)
+        logger.info(race_log)
 
     def check_if_recall_or_nonpartisan(self, records):
         """
