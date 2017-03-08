@@ -26,7 +26,6 @@ class ElectionIndexView(BuildableListView):
 
 
 class ElectionDetailView(BuildableDetailView):
-    """ """
     model = Election
     template_name = "election_registrar/detail.html"
     slug_field = "electionid"
@@ -35,9 +34,12 @@ class ElectionDetailView(BuildableDetailView):
         object = super(ElectionDetailView, self).get_object()
         return object
 
+    def get_url(self, obj):
+        return "/%s" % (obj.electionid)
+
     def get_context_data(self, **kwargs):
         context = super(ElectionDetailView, self).get_context_data(**kwargs)
         context["result_sources"] = ResultSource.objects.filter(election__id=context["election"].id)
         context["contests"] = Contest.objects.filter(election__id=context["election"].id).filter(
-            is_display_priority=True)
+            is_display_priority=True).order_by("contestname")
         return context
