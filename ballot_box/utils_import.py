@@ -61,9 +61,6 @@ class Saver(object):
             logger.debug(error_output)
             raise
         try:
-
-            logger.debug(contest)
-
             obj, created = this_office.contest_set.update_or_create(
                 election_id=contest["election_id"],
                 resultsource_id=contest["resultsource_id"],

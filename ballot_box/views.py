@@ -42,7 +42,7 @@ class EmbeddedDetail(DetailView):
         context["baked"] = False
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.kwargs["electionid"]
-        context["kpcc_page"] = Election.objects.filter(electionid=context["electionid"]).first().election_kpcc_page
+        context["election_meta"] = Election.objects.filter(electionid=context["electionid"]).first()
         context["contestid"] = self.kwargs["slug"]
         context["contest"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(contestid=context["contestid"]).first()
         return context
@@ -87,7 +87,7 @@ class BakedEmbeddedDetail(BuildableDetailView):
         context["baked"] = True
         context["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         context["electionid"] = self.electionid
-        context["kpcc_page"] = Election.objects.filter(electionid=context["electionid"]).first().election_kpcc_page
+        context["election_meta"] = Election.objects.filter(electionid=context["electionid"]).first()
         return context
 
 
