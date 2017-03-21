@@ -55,25 +55,25 @@ class Command(BaseCommand):
         """
         logger.info("Build started")
 
-        # Set options
+        # set options
         self.set_options(*args, **options)
 
-        # Get the build directory ready
+        # get the build directory ready
         if not options.get("keep_build_dir"):
             self.init_build_dir()
 
-        # Build up static files
+        # build up static files
         if not options.get("skip_static"):
             self.build_static()
 
-        # Build the media directory
-        # if not options.get("skip_media"):
-        #     self.build_media()
+        # build the media directory
+        if not options.get("skip_media"):
+            self.build_media()
 
-        # Build views
+        # build views
         self.build_views()
 
-        # Close out
+        # close out
         logger.info("Build finished")
 
     def set_options(self, *args, **options):
