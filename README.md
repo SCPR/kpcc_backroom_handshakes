@@ -12,11 +12,8 @@ Table of Contents
 * [Assumptions](#assumptions)
 * [Quickstart](#quickstart-to-get-up-and-running)
 * [Config and Settings](#config-and-settings)
-* ~~[How We Process And Update Data Each Month](#how-we-process-and-update-data-each-month)~~
-* ~~[How We Build The Project Each Month](#how-we-build-the-project-each-month)~~
-* ~~[How We Deploy The Project Each Month](#how-we-deploy-the-project-each-month)~~
-* ~~[Available Fabric Commands](#available-fabric-commands)~~
-* ~~[Building a Mac OS Python dev environment](#building-a-mac-os-python-dev-environment)~~
+* [Available Fabric Commands](#available-fabric-commands)
+* [Building A Mac OS Python Dev Environment](#building-a-mac-os-python-dev-environment)
 
 
 Assumptions
@@ -325,8 +322,8 @@ Available Fabric Commands
 
 ----
 
-Mac OS Python development environment
-=====================================
+Building A Mac OS Python Dev Environment
+========================================
 
 * Assumming [homebrew](https://brew.sh/) is installed...
 
