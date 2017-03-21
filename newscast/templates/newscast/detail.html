@@ -39,41 +39,47 @@
 
 {% block data_visuals %}
     <div class="hero-election dashboard">
-        <div class="row-fluid results clearfix">
-            {% for contest in contests %}
+        {% for contest in contests %}
+            <div class="row-fluid results playlist-row clearfix">
                 {% if contest.is_ballot_measure == False %}
-                    <div class="results-block clearfix">
+                    <div class="results-block playlist-block clearfix">
                         <header class="newscast">
                             <h2 class="race-title">{% ordinalize_name contest %}</h2>
                             {% if contest.geography %}
                                 <h2 class="geography">District includes {{ contest.geography }}</h2>
                             {% else %}
-                                <h2 class="geography">&nbsp;</h2>
                             {% endif %}
                             <h2 class="precincts-reporting">With {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting as of {{ contest.modified|date:"g:i a, N d, Y" }}</h2>
                             <h2 class="precincts-reporting">Source: {{ contest.resultsource }}</h2>
                         </header>
                         {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct"|slice:"5" %}
-                            <div class="result-item clearfix">
-                                {% if contest.is_homepage_priority == True %}
-                                    {% if baked == True %}
-                                        <img src="http://162.243.135.6/static/assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
+                            {% if candidate.candidate_image == True %}
+                                <div class="result-item playlist-item clearfix">
+                                    {% if contest.is_homepage_priority == True %}
+                                        {% if baked == True %}
+                                            <img src="http://elections.scpr.org/static/assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
+                                        {% else %}
+                                            <img src="{% static '' %}/assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
+                                        {% endif %}
                                     {% else %}
-                                        <img src="{% static '' %}/assets/{{ candidate.candidateid }}.png" alt="{{ candidate.candidateid }}"/>
+                                        <img src="//projects.scpr.org/static-files/_v4/images/default_avatar.png" alt="{{ candidate.candidateid }}"/>
                                     {% endif %}
-                                {% else %}
-                                    <img src="//projects.scpr.org/static-files/_v4/images/default_avatar.png" alt="{{ candidate.candidateid }}"/>
-                                {% endif %}
-                                <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}{% if candidate.incumbent == True %}<br /> <span class="blurb-text">Incumbent</span>{% endif %}</h3>
-                                <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">of california voters</span>{% endif %}</span></h3>
-                            </div>
+                                    <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}{% if candidate.incumbent == True %}<br /> <span class="blurb-text">Incumbent</span>{% endif %}</h3>
+                                    <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">of california voters</span>{% endif %}</span></h3>
+                                </div>
+                            {% else %}
+                                <div class="result-item playlist-item clearfix">
+                                    <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}{% if candidate.incumbent == True %}<br /> <span class="blurb-text">Incumbent</span>{% endif %}</h3>
+                                    <h3 class="votepct">{{ candidate.votepct|percentage|floatformat:0 }}%{% if contest.contestid == 'sos-statewide-president' %}<br /> <span class="blurb-text">of california voters</span>{% endif %}</span></h3>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 {% else %}
                     {% for this in contest.ballotmeasure_set.all %}
                         {% if "carson-city-special-municipal-tl-term-limits-for-offices" in this.measureid %}
                         {% else %}
-                            <div class="results-block measure-hack clearfix">
+                            <div class="results-block playlist-block measure-hack clearfix">
                                 <header>
                                     {% if contest.is_statewide == True %}
                                         <h2 class="race-title">{{ contest.contestname|title }}</h2>
@@ -84,7 +90,7 @@
                                     {% endif %}
                                     <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% precincts reporting</h2>
                                 </header>
-                                <div class="result-item dashboard-hack clearfix">
+                                <div class="result-item playlist-item dashboard-hack clearfix">
                                     <h3 class="candidate-name">Yes</h3>
                                     <h3 class="votepct">{{ this.yespct|percentage|floatformat:0 }}%</h3>
                                     <h3 class="candidate-name">No</h3>
@@ -94,7 +100,7 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

@@ -40,7 +40,6 @@ class NewscastDetailView(BuildableDetailView):
         context["topicslug"] = self.kwargs["slug"]
         context["topic"] = Topic.objects.filter(topicslug=context["topicslug"]).first()
         context["contests"] = context["topic"].contest.all()
-        logger.debug(context["contests"])
         for contest in context["contests"]:
             try:
                 contextualize = ContestContext.objects.filter(contestid=contest.contestid).first()
