@@ -67,7 +67,7 @@ Quickstart To Get Up And Running
         * Applying initial Django migrations: ```fab migrate```
         * Load initial data fixtures: ```fab load_fixtures```
         * Creating the Django superuser: ```python manage.py createsuperuser```
-        * Running the Django development server: ```fab run```
+        * Running the Django development server: ```fab lrun```
 
 * Navigate to ```http://127.0.0.1:8000/``` and you should arrive at the homepage that shows the elections we have processed using the application so far.
 
