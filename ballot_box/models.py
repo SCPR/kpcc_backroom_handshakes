@@ -100,6 +100,8 @@ class Candidate(models.Model):
     lastname = models.CharField("Candidate's Last Name", max_length=255, null=True, blank=True)
     fullname = models.CharField("Candidate's Full Name", max_length=255, null=True, blank=True)
     party = models.CharField("Political Party", max_length=255, null=True, blank=True)
+    candidate_image = models.BooleanField("Do We Have a Candidate Image?", default=False)
+    candidate_image_url = models.URLField("URL To Image", max_length=1024, null=True, blank=True)
     incumbent = models.BooleanField("Is Candidate An Incumbent?", default=False)
     votecount = models.IntegerField("Votes Received", null=True, blank=True)
     votepct = models.FloatField("Percent Of Total Votes", null=True, blank=True)

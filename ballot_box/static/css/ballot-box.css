@@ -36,16 +36,27 @@ body { background-color: #ffffff; font-family: "franklin-gothic-urw", "proxima-n
 /* featured candidate styles */
 .results { border-top: 1px solid #f74623; }
 .results .results-block { width: 50%; height: auto; min-height: 345px; float: left; margin-bottom: 16px; }
-.results .results-block:nth-child(n+3) { border-top: 1px solid #dbdbdb; }
-.results .results-block h3.npr-link { float: right; margin-right: 2%; }
-.results .results-block h3.npr-link a { text-align: right; color: #45AAD2; }
-.results .results-block header { width: 100%; height: auto; padding-top: 16px; padding-bottom: 16px; margin-bottom: 32px; background-color: #f6f6f6; display: flex; display: -webkit-flex; align-items: center; justify-content: center; }
-.results .results-block header .race-title { width: 63%; float: left; text-align: left; margin-left: 2%; font-size: 18px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; }
-.results .results-block header .precincts-reporting { width: 32%; max-width: 100px; float: right; text-align: right; margin-right: 3%; font-size: 15px; line-height: 18px; font-style: normal; font-weight: 400; color: #898989; }
+.results .results-block-no-image { width: 50%; height: auto; min-height: 180px; float: left; margin-bottom: 16px; }
+.results .results-block:nth-child(n+3),
+.results .results-block-no-image { border-top: 1px solid #dbdbdb; }
+.results .results-block h3.npr-link,
+.results .results-block-no-image h3.npr-link{ float: right; margin-right: 2%; }
+.results .results-block h3.npr-link a,
+.results .results-block-no-image h3.npr-link a { text-align: right; color: #45AAD2; }
+.results .results-block header,
+.results .results-block-no-image header { width: 100%; height: auto; padding-top: 16px; padding-bottom: 16px; margin-bottom: 32px; background-color: #f6f6f6; display: flex; display: -webkit-flex; align-items: center; justify-content: center; }
+.results .results-block header .race-title,
+.results .results-block-no-image header .race-title { width: 100%; float: left; text-align: left; margin-left: 2%; font-size: 18px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; }
+.results .results-block header .precincts-reporting,
+.results .results-block-no-image header .precincts-reporting { max-width: 100px; float: right; text-align: right; margin-right: 3%; font-size: 15px; line-height: 18px; font-style: normal; font-weight: 400; color: #898989; }
 .results .results-block .result-item { width: 100%; height: 100px; display: flex; display: -webkit-flex; align-items: center; }
+.results .results-block-no-image .result-item-no-image { width: 100%; height: 35px; display: flex; display: -webkit-flex; align-items: center; }
 .results .results-block .result-item img { width: 10%; min-width: 75px; height: auto; margin-left: 2%; margin-right: 5%; border-radius: 50%; }
-.results .results-block .result-item .candidate-name { font-size: 18px; line-height: 16px; font-style: normal; font-weight: 500; color: #363636; float: left; width: 70%; text-align: left; }
-.results .results-block .result-item .votepct { font-size: 22px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; float: right; width: 17%; margin-right: 3%; text-align: right; }
+.results .results-block-no-image .result-item-no-image .spacer { width: 2%; height: auto; margin-left: 0%; margin-right: 0%; }
+.results .results-block .result-item .candidate-name,
+.results .results-block-no-image .result-item-no-image .candidate-name { font-size: 18px; line-height: 16px; font-style: normal; font-weight: 500; color: #363636; float: left; width: 80%; text-align: left; }
+.results .results-block .result-item .votepct,
+.results .results-block-no-image .result-item-no-image .votepct { font-size: 22px; line-height: 18px; font-style: normal; font-weight: 500; color: #003a5c; text-transform: uppercase; float: right; width: 17%; margin-right: 3%; text-align: right; }
 
 /* featured measures styles */
 .measures { border-top: 1px solid #f74623; }
@@ -191,7 +202,7 @@ body { background-color: #ffffff; font-family: "franklin-gothic-urw", "proxima-n
 
 /* embeddable race styles */
 .embed-measure,
-.embed-race { width: 100%; max-width: 100%; background: #f6f6f6; padding-top: 10px; }
+.embed-race { width: 100%; max-width: 100%; /*background: #f6f6f6;*/ padding-top: 10px; }
 
 .embed-measure { height: 340px; max-height: 340px; min-height: 340px; }
 

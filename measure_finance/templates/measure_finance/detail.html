@@ -25,7 +25,7 @@
 
 {% block extra_css %}
     {% if baked == True %}
-        <link href="http://162.243.135.6/static/css/measure-finance.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="https://elections.scpr.org/static/css/measure-finance.css" media="screen" rel="stylesheet" type="text/css" />
     {% else %}
         <link href="{% static 'css/measure-finance.css' %}" media="screen" rel="stylesheet" type="text/css" />
     {% endif %}
@@ -169,7 +169,7 @@
             </div>
             <div class="logo">
                 {% if baked == True %}
-                    <img src="http://162.243.135.6/static/images/maplight_logo_partner.png" />
+                    <img src="https://elections.scpr.org/static/images/maplight_logo_partner.png" />
                 {% else %}
                     <img src="{% static 'images/maplight_logo_partner.png' %}" />
                 {% endif %}
@@ -179,11 +179,11 @@
 {% endblock %}
 
 {% block tail_js %}
+    <script src="//projects.scpr.org/static-files/_v4/scripts/modernizr.2.8.3.min.js"></script>
+    <script src="//projects.scpr.org/static-files/_v4/scripts/d3.3.4.11.js"></script>
     {% if baked == True %}
-        <script src="http://162.243.135.6/static/scripts/d3.js"></script>
-        <script src="http://162.243.135.6/static/scripts/measure-finanace-app.js"></script>
+        <script src="https://elections.scpr.org/static/scripts/measure-finanace-app.js"></script>
     {% else %}
-        <script src="{% static 'scripts/d3.js' %}"></script>
         <script src="{% static 'scripts/measure-finanace-app.js' %}"></script>
     {% endif %}
 {% endblock %}

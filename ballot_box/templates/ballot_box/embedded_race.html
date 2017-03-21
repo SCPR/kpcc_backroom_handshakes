@@ -3,23 +3,23 @@
 {% load humanize %}
 {% load ballot_box_template_tags %}
 
-{% block title %}KPCC {{ contest.contestname|title }} Results for the Nov. 8 Election | scpr.org{% endblock %}
+{% block title %}KPCC {{ contest.contestname|title }} results for the {{ title }} | scpr.org{% endblock %}
 {% block robots %}{% endblock %}
-{% block description %}The results for the {{ contest.contestname|title }} race in the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
+{% block description %}The results for the {{ contest.contestname|title }} race in the {{ title }} brought to you by KPCC, 89.3FM{% endblock %}
 {% block keywords %}{{ contest.contestname|title }}, California{% endblock %}
-{% block og_title %}KPCC {{ contest.contestname|title }} Results for the Nov. 8 Election | scpr.org{% endblock %}
+{% block og_title %}KPCC {{ contest.contestname|title }} results for the {{ title }} | scpr.org{% endblock %}
 {% block og_site_name %}{% endblock %}
 {% block og_type %}{% endblock %}
-{% block og_image %}http://162.243.135.6/static/assets/kpcc-votergameplan-mark-horizontal.png{% endblock %}
+{% block og_image %}https://elections.scpr.org/static/assets/kpcc-votergameplan-mark-horizontal.png{% endblock %}
 {% block og_image_width %}1525{% endblock %}
 {% block og_image_height %}127{% endblock %}
-{% block og_url %}https://elections.scpr.org/general-2016-11-08/results/all.html{% endblock %}
-{% block og_description %}The results for the {{ contest.contestname|title }} race in the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
-{% block twitter_url %}https://elections.scpr.org/general-2016-11-08/results/all.html{% endblock %}
+{% block og_url %}https://elections.scpr.org/{{ electionid }}/results/{{ contest.contestid }/index.html{% endblock %}
+{% block og_description %}The results for the {{ contest.contestname|title }} race in the {{ title }} brought to you by KPCC, 89.3FM{% endblock %}
+{% block twitter_url %}https://elections.scpr.org/{{ electionid }}/results/{{ contest.contestid }/index.html{% endblock %}
 {% block twitter_domain %}http://projects.scpr.org/{% endblock %}
 {% block twitter_site %}KPCC{% endblock %}
-{% block twitter_title %}KPCC {{ contest.contestname|title }} Results for the Nov. 8 Election | scpr.org{% endblock %}
-{% block twitter_description %}The results for the {{ contest.contestname|title }} race in the Nov. 8, 2016 General Election brought to you by KPCC, 89.3FM{% endblock %}
+{% block twitter_title %}KPCC {{ contest.contestname|title }} Results for the {{ title }} | scpr.org{% endblock %}
+{% block twitter_description %}The results for the {{ contest.contestname|title }} race in the {{ title }} brought to you by KPCC, 89.3FM{% endblock %}
 {% block twitter_image %}http://projects.scpr.org/static-files/v3-dependencies/images/kpcc-og-twitter-logo.png{% endblock %}
 
 {% block extra_css %}
@@ -43,7 +43,11 @@
             <div class="embed-block">
                 <header>
                     <h2 class="race-title">{{ contest.contestname|upper }}</h2>
-                    <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</p>
+                    {% if election_meta.resultsource_set.all.0.source_all_precincts == True %}
+                        <p class="blurb-text">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</p>
+                    {% else %}
+                        <p class="blurb-text">As of {{ contest.resultsource.source_latest|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</p>
+                    {% endif %}
                 </header>
                 {% for measure in contest.ballotmeasure_set.all %}
                     <h3 class="measure-title">{{ measure.fullname }} - {{ measure.description|title }}</h2>
@@ -65,7 +69,7 @@
                 {% else %}
                     <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
                 {% endif %}
-                    <p><a href="http://www.scpr.org/elections/2016/general/">See State &amp; Local Results &gt;</a></p>
+                    <p><a href="{{ election_meta.election_kpcc_page }}" target="_top">See State &amp; Local Results &gt;</a></p>
             </div>
         </div>
     {% else %}
@@ -77,7 +81,11 @@
             <div class="embed-block clearfix">
                 <header>
                     <h2 class="race-title">{{ contest.contestname|upper }}</h2>
-                    <p class="blurb-text">As of {{ contest.modified|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</p>
+                    {% if election_meta.resultsource_set.all.0.source_all_precincts == True %}
+                        <p class="blurb-text">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</p>
+                    {% else %}
+                        <p class="blurb-text">As of {{ contest.resultsource.source_latest|date:"g:i a, N d, Y" }} | {{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</p>
+                    {% endif %}
                     {% if contest.contestid == 'sos-statewide-president' %}<p class="blurb-text">State of California voters only.</p>{% endif %}
                 </header>
                 {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct" %}
@@ -100,7 +108,7 @@
                 {% else %}
                     <img src="{% static 'assets/kpcc-votergameplan-mark-horizontal.png' %}" />
                 {% endif %}
-                    <p><a href="http://www.scpr.org/elections/2016/general/" target="_blank">See State &amp; Local Results &gt;</a></p>
+                    <p><a href="{{ election_meta.election_kpcc_page }}" target="_top">See State &amp; Local Results &gt;</a></p>
             </div>
         </div>
     {% endif %}

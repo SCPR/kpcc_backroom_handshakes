@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core import management
 from django.core.management.base import BaseCommand
 import time
 import datetime
@@ -16,22 +17,29 @@ class Command(BaseCommand):
     help = "Begin request to secretary of state for latest election results"
     def handle(self, *args, **options):
 
+        lac = BuildLacResults()
+        lac._init()
+
         # sos = BuildSosResults()
         # sos._init()
 
         # oc = BuildOcResults()
         # oc._init()
 
-        # lac = BuildLacResults()
-        # lac._init()
-
         # sbc = BuildSbcResults()
         # sbc._init()
 
         sources = ResultSource.objects.filter(ready_to_build=True)
         if sources:
-            retrieve = Retriever()
-            retrieve._build_and_move_results()
+            # retrieve = Retriever()
+            # retrieve._build_and_move_results()
+
+            logger.debug("Building views")
+            management.call_command("build", keep_build_dir=True, skip_static=True)
+            logger.debug("publishing views")
+            management.call_command("publish")
+            logger.debug("Finished - Hurrah!!")
+
             for src in sources:
                 logger.info("Resetting %s to False in advance of next build" % (src.source_name))
                 src.ready_to_build = False

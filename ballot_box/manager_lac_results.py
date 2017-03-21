@@ -16,6 +16,7 @@ import os.path
 import shutil
 import operator
 import re
+import pytz
 from bs4 import BeautifulSoup
 from delorean import parse
 from slugify import slugify
@@ -79,6 +80,7 @@ class BuildLacResults(object):
                 election_stats = election_package[1]["stats"]
                 file_timestring = None
                 file_timestamp = None
+                pacific = pytz.timezone("US/Pacific")
                 for t in election_title:
                     if t[3:5] == "TD":
                         parser = TD_parser()
@@ -87,12 +89,11 @@ class BuildLacResults(object):
                         file_timestring = timestring
                 if file_timestring:
                     file_timestamp = parse(file_timestring, dayfirst=False).datetime
-                    file_timestamp = localtime(file_timestamp)
+                    file_timestamp = file_timestamp.replace(tzinfo=pacific)
                     if self.testing == True:
                         update_this = self.testing
                     else:
-                        # update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
-                        update_this = True
+                        update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
                     if update_this == False:
                         logger.info("\n*****\nwe have newer data in the database so let's delete these files\n*****")
                         os.remove(latest_path)
@@ -115,7 +116,6 @@ class BuildLacResults(object):
                             else:
                                 contest_package = process.compile_contest_results(records)
                                 process.update_database(contest_package, election, src)
-                        os.remove(latest_path)
                         logger.info("we've finished processing lac results")
                 else:
                     logger.error("unable to determine whether this data is newer than what we already have.")
@@ -469,7 +469,9 @@ class LacProcessMethods(object):
         measures = contest_package["measures"]
         judges = contest_package["judges"]
         race_log = "\n"
+        # """
         # Check level of contest (i.e. local, statewide)
+        # """
         if "U.S." in contest["contest_title"] or "STATE" in contest["contest_title"]:
             level = "county"
             framer.contest["is_statewide"] = True
@@ -478,7 +480,9 @@ class LacProcessMethods(object):
             framer.contest["is_statewide"] = False
         framer.contest["level"] = level
         if contest["is_judicial_contest"]:
-            """ This is a judicial appointee """
+            """
+            This is a judicial appointee
+            """
             if "SUPREME COURT" in contest["contest_title"]:
                 contestname = "Supreme Court"
             elif "APPELLATE COURT" in contest["contest_title"]:
@@ -525,7 +529,7 @@ class LacProcessMethods(object):
                 framer.contest["votersregistered"] = None
                 raise Exception("votersregistered is not a number")
             framer.contest["votersturnout"] = None
-            framer.contest["contestname"] = fixer._fix(contestname) # framer.office["officename"]
+            framer.contest["contestname"] = fixer._fix(contestname)
             framer.contest["contestdescription"] = None
             framer.contest["contestid"] = saver._make_contest_id(
                 src.source_short,
@@ -574,7 +578,9 @@ class LacProcessMethods(object):
                 )
                 race_log += saver.make_judicial(framer.contest, framer.judicial)
         elif contest["is_ballot_measure"]:
-            """ this is a ballot measure """
+            """
+            this is a ballot measure
+            """
             framer.contest["level"] = "county"
             framer.contest["is_statewide"] = False
             contestname = contest["contest_title"]
@@ -702,7 +708,9 @@ class LacProcessMethods(object):
                     )
                 race_log += saver.make_measure(framer.contest, framer.measure)
         else:
-            """ this is a candidate for elected office """
+            """
+            this is a candidate for elected office
+            """
             strip_district = contest["district"].lstrip("0")
             framer.contest["seatnum"] = "1010101"
             if contest["contest_title"] == "MEMBER OF THE ASSEMBLY":
@@ -846,7 +854,7 @@ class LacProcessMethods(object):
                     framer.candidate["candidateslug"],
                 )
                 race_log += saver.make_candidate(framer.contest, framer.candidate)
-        #logger.info(race_log)
+        # logger.info(race_log)
 
     def check_if_recall_or_nonpartisan(self, records):
         """

@@ -40,6 +40,8 @@ SLACK_API_KEY = CONFIG["api"]["slack"]["api_key"]
 # maplight api key
 MAP_LIGHT_API_KEY = CONFIG["api"]["maplight"]["api_key"]
 
+PRO_PUBLICA_API_KEY = CONFIG["api"]["propublica"]["api_key"]
+
 REQUEST_HEADERS = {
     "From": CONFIG["api"]["headers"]["from"],
     "User-agent": CONFIG["api"]["headers"]["user_agent"]
@@ -197,7 +199,11 @@ if "build" in CONFIG:
         'text/html': CONFIG["build"]["bakery_cache_control"]["html"],
         'application/javascript': CONFIG["build"]["bakery_cache_control"]["javascript"]
     }
+
     STATIC_TO_IGNORE = tuple(CONFIG["build"]["static_to_ignore"])
+    REPS_DATA_BUCKET = CONFIG["build"]["reps_data_bucket"]
+    REPS_DATA_JSON = CONFIG["build"]["reps_data_json"]
+    REPS_DATA_CSV = CONFIG["build"]["reps_data_csv"]
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

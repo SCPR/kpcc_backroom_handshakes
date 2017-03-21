@@ -2,11 +2,11 @@
     <ul>
     {% if baked == True %}
         {% if is_homepage == True or is_featured == True %}
-            <a href="https://elections.scpr.org/general-2016-11-08/results/featured.html"><li id="featured" class="selected"><span class="label">Top Races</span></li></a>
-            <a href="https://elections.scpr.org/general-2016-11-08/results/all.html"><li id="all"><span class="label">All Races</span></li></a>
+            <a href="https://elections.scpr.org/{{ electionid }}/results/featured.html"><li id="featured" class="selected"><span class="label">Top Races</span></li></a>
+            <a href="https://elections.scpr.org/{{ electionid }}/results/all.html"><li id="all"><span class="label">All Races</span></li></a>
         {% else %}
-            <a href="https://elections.scpr.org/general-2016-11-08/results/featured.html"><li id="featured"><span class="label">Top Races</span></li></a>
-            <a href="https://elections.scpr.org/general-2016-11-08/results/all.html"><li id="all" class="selected"><span class="label">All Races</span></li></a>
+            <a href="https://elections.scpr.org/{{ electionid }}/results/featured.html"><li id="featured"><span class="label">Top Races</span></li></a>
+            <a href="https://elections.scpr.org/{{ electionid }}/results/all.html"><li id="all" class="selected"><span class="label">All Races</span></li></a>
         {% endif %}
     {% else %}
         {% if is_homepage == True or is_featured == True %}

@@ -7,6 +7,6 @@ from election_registrar.views import ElectionIndexView, ElectionDetailView
 app_name = "election_registrar"
 
 urlpatterns = [
-    url(r"(?P<slug>[-\w]+)/$", ElectionDetailView.as_view(), name="detail"),
+    url(r"(?P<slug>[-\w]+)/?$", ElectionDetailView.as_view(), name="detail"),
     url(r"$", ElectionIndexView.as_view(), name="list"),
 ]

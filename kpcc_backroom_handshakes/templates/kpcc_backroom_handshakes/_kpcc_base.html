@@ -41,6 +41,9 @@
 
         <!-- begin css -->
         <link href="//projects.scpr.org/static-files/_v4/css/reset.min.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="//projects.scpr.org/static-files/_v4/css/jAlert.4.5.1.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="//projects.scpr.org/static-files/_v4/css/kpcc-header-footer.4.0.css" media="screen" rel="stylesheet" type="text/css" />
         {% block extra_css %}{% endblock %}
         <!-- end css -->
 
@@ -48,6 +51,8 @@
         <script src="https://use.typekit.net/cka2qre.js"></script>
         <script>try{Typekit.load({ async: true });}catch(e){}</script>
         <script src="//projects.scpr.org/static-files/_v4/scripts/jquery.1.11.3.min.js"></script>
+        <script src="//projects.scpr.org/static-files/_v4/scripts/jAlert.4.5.1.min.js"></script>
+        <script src="//projects.scpr.org/static-files/_v4/scripts/jAlert-functions.4.5.1.js"></script>
         {% block head_js %}{% endblock %}
         <!-- end base scripts -->
 
@@ -55,9 +60,18 @@
     <!-- end header -->
 
     <!-- begin body -->
-    <body>
-        {% block data_details %}{% endblock %}
-        {% block data_visuals %}{% endblock %}
+    <body class="minimal">
+        {% include "kpcc_backroom_handshakes/kpcc_header.html" %}
+        <div class="container data-container">
+            {% block data_details %}{% endblock %}
+            {% block data_visuals %}{% endblock %}
+            {% include "kpcc_backroom_handshakes/kpcc_footer.html" %}
+        </div>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="//projects.scpr.org/static-files/_v4/scripts/moment-with-locales.2.17.0.min.js"></script>
+        <script src="//projects.scpr.org/static-files/_v4/scripts/underscore-min.1.8.3.js"></script>
+        <script src="//projects.scpr.org/static-files/_v4/scripts/backbone-min.1.3.3.js"></script>
+        <script src="//projects.scpr.org/static-files/_v4/scripts/_application_functions.js"></script>
         {% block tail_js %}{% endblock %}
         {% include "kpcc_backroom_handshakes/kpcc_analytics.html" %}
     </body>

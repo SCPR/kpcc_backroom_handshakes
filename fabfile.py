@@ -230,17 +230,6 @@ def test():
 bootstrapping functions
 """
 
-
-def rename_files():
-    """
-    shortcut to install requirements from repository's requirements.txt
-    """
-    os.rename("kpcc_backroom_handshakes/settings_common.py.template",
-              "kpcc_backroom_handshakes/settings_common.py")
-    os.rename("kpcc_backroom_handshakes/settings_production.py.template",
-              "kpcc_backroom_handshakes/settings_production.py")
-
-
 def requirements():
     """
     shortcut to install requirements from repository's requirements.txt

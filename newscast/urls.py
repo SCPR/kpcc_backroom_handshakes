@@ -7,8 +7,8 @@ from newscast.views import NewscastIndexView, NewscastDetailView, NewscastCloseM
 app_name = "newscast"
 
 urlpatterns = [
-    url(r"(?P<electionid>[-\w]+)/playlist/close-measures/$", NewscastCloseMeasuresView.as_view(), name="newscast_close_measures"),
-    url(r"(?P<electionid>[-\w]+)/playlist/close-races/$", NewscastCloseRacesView.as_view(), name="newscast_close"),
-    url(r"(?P<electionid>[-\w]+)/playlist/(?P<slug>[-\w]+)/$", NewscastDetailView.as_view(), name="newscast_detail"),
-    url(r"(?P<electionid>[-\w]+)/playlist/$", NewscastIndexView.as_view(), name="newscast_list"),
+    url(r"(?P<electionid>[-\w]+)/playlist/close-measures/?$", NewscastCloseMeasuresView.as_view(), name="newscast_close_measures"),
+    url(r"(?P<electionid>[-\w]+)/playlist/close-races/?$", NewscastCloseRacesView.as_view(), name="newscast_close"),
+    url(r"(?P<electionid>[-\w]+)/playlist/(?P<slug>[-\w]+)/?$", NewscastDetailView.as_view(), name="newscast_detail"),
+    url(r"(?P<electionid>[-\w]+)/playlist/?$", NewscastIndexView.as_view(), name="newscast_list"),
 ]
