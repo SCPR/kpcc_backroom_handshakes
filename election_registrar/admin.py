@@ -78,6 +78,7 @@ class ResultSourceAdmin(admin.ModelAdmin):
       "source_slug",
       "source_url",
       "source_active",
+      "source_all_precincts",
       "source_type",
       "source_files",
       "ready_to_build",
