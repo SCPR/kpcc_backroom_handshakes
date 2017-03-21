@@ -9,12 +9,12 @@ internal_ips: "127.0.0.1"
 
 site_url: ""
 
-# default engine is mysql
+# default is mysql. is set in accountability_tracker/accountability_tracker/settings_production.py
 database:
   host: "127.0.0.1"
   port: 3306
   database: "kpcc_backroom_handshakes"
-  username: "root"
+  username: ""
   password: ""
 
 # optional if you intend to generate emails from an application
@@ -37,24 +37,24 @@ installed_apps:
 deployment_env:
   hosts: ""
   project_name: ""
-  local_branch: "master"
-  remote_ref: "origin/master"
-  requirements_file: "requirements.txt"
+  local_branch: ""
+  remote_ref: ""
+  requirements_file: ""
   use_ssh_config: True
   code_dir: ""
 
-# absolute path to build & deploy directory for django-bakery & deployment
+# required absolute path to the build & deploy directory for django-bakery and deployment
 build:
-  aws_bucket_name: "scpr-elections"
-  aws_access_key_id: "AKIAIYNZ47BNCEQ5NPCQ"
-  aws_secret_access_key: "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"
+  aws_bucket_name: ""
+  aws_access_key_id: ""
+  aws_secret_access_key: ""
   aws_s3_host: "s3-accelerate.amazonaws.com"
   bakery_gzip: True
   staging: False
   staging_prefix: None
   live_prefix: None
   deploy_dir: None
-  build_dir: "/Users/ckeller/_programming/2kpcc/_projects/kpcc_backroom_handshakes/latest_build/"
+  build_dir: None
   views:
     - "election_registrar.views.ElectionDetailView"
     - "ballot_box.views.BakedHomepageIndex"
@@ -62,9 +62,6 @@ build:
     - "ballot_box.views.BakedResultsIndex"
     - "ballot_box.views.BakedEmbeddedDetail"
     - "measure_finance.views.InitialDetailView"
-    # - "rep_stance.views.RepQueryIndex"
-    # - "rep_stance.views.RepAnswerIndex"
-    # - "rep_the_people.views.ContactRepIndexView"
 
   bakery_cache_control:
     html: 300
@@ -74,22 +71,16 @@ build:
     - "bootstrap"
     - "bootstrap-rtl"
     - "yaml"
-    - "congressional_data.csv"
-    - "congressional_data.json"
-    - "congressional_statements_refugee_ban.csv"
-    - "congressional_statements_refugee_ban.json"
-    - "congressional_district_cities.csv"
-    - "state_rep_data.csv"
-    - "state_rep_data.json"
 
 # api settings and keys for the application
 api:
 
+  # used for the slacker_log_handler to posts data to channel in kpcc's slack account
   slack:
     token: ""
     api_key: ""
 
-# required key for ProPublica's api: https://propublica.github.io/congress-api-docs/
+  # required key for propublica's api: https://propublica.github.io/congress-api-docs/
   propublica:
     api_key: ""
 

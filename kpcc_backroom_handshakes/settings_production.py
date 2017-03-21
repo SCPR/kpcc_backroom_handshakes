@@ -26,36 +26,28 @@ DATABASES = {
 
 SECRET_KEY = CONFIG["secret_key"]
 
-# twitter api though should change this
-TWITTER_CONSUMER_KEY = CONFIG["api"]["twitter"]["consumer_key"]
-TWITTER_CONSUMER_SECRET = CONFIG["api"]["twitter"]["consumer_secret"]
-TWITTER_ACCESS_TOKEN = CONFIG["api"]["twitter"]["access_token"]
-TWITTER_ACCESS_TOKEN_SECRET = CONFIG["api"]["twitter"]["access_token_secret"]
-LOCAL_TWITTER_TIMEZONE = pytz.timezone("US/Pacific")
-TWITTER_TIMEZONE = timezone("UTC")
+if "twitter" in CONFIG["api"]:
+    TWITTER_CONSUMER_KEY = CONFIG["api"]["twitter"]["consumer_key"]
+    TWITTER_CONSUMER_SECRET = CONFIG["api"]["twitter"]["consumer_secret"]
+    TWITTER_ACCESS_TOKEN = CONFIG["api"]["twitter"]["access_token"]
+    TWITTER_ACCESS_TOKEN_SECRET = CONFIG["api"]["twitter"]["access_token_secret"]
+    LOCAL_TWITTER_TIMEZONE = pytz.timezone("US/Pacific")
+    TWITTER_TIMEZONE = timezone("UTC")
 
-SLACK_TOKEN = CONFIG["api"]["slack"]["token"]
-SLACK_API_KEY = CONFIG["api"]["slack"]["api_key"]
+if "slack" in CONFIG["api"]:
+    SLACK_TOKEN = CONFIG["api"]["slack"]["token"]
+    SLACK_API_KEY = CONFIG["api"]["slack"]["api_key"]
 
-# maplight api key
-MAP_LIGHT_API_KEY = CONFIG["api"]["maplight"]["api_key"]
+if "maplight" in CONFIG["api"]:
+    MAP_LIGHT_API_KEY = CONFIG["api"]["maplight"]["api_key"]
 
-PRO_PUBLICA_API_KEY = CONFIG["api"]["propublica"]["api_key"]
+if "propublica" in CONFIG["api"]:
+    PRO_PUBLICA_API_KEY = CONFIG["api"]["propublica"]["api_key"]
 
 REQUEST_HEADERS = {
     "From": CONFIG["api"]["headers"]["from"],
     "User-agent": CONFIG["api"]["headers"]["user_agent"]
 }
-
-# assethost api token
-ASSETHOST_TOKEN_SECRET = CONFIG["api"]["assethost"]["token_secret"]
-
-# key for the public insight network
-PIN_NETWORK_API_KEY = CONFIG["api"]["pin_network"]["api_key"]
-
-# keys for the instagram
-INSTAGRAM_CLIENT_ID = CONFIG["api"]["instagram"]["instagram_client_id"]
-INSTAGRAM_CLIENT_SECRET = CONFIG["api"]["instagram"]["instagram_client_secret"]
 
 # auth to send out emails when models change
 if "email" in CONFIG:
@@ -71,62 +63,6 @@ if CONFIG["installed_apps"]:
     INSTALLED_APPS += tuple(CONFIG["installed_apps"])
 else:
     pass
-
-# # django debug toolbar configuration
-# if DEBUG_TOOLBAR == True:
-
-#     # debugging toolbar middleware
-#     MIDDLEWARE_CLASSES += (
-#         "debug_toolbar.middleware.DebugToolbarMiddleware",
-#     )
-
-#     # javascript panels for the development debugging toolbar
-#     DEBUG_TOOLBAR_PANELS = (
-#         "debug_toolbar.panels.versions.VersionsPanel",
-#         "debug_toolbar.panels.timer.TimerPanel",
-#         "debug_toolbar.panels.settings.SettingsPanel",
-#         "debug_toolbar.panels.headers.HeadersPanel",
-#         "debug_toolbar.panels.request.RequestPanel",
-#         "debug_toolbar.panels.profiling.ProfilingPanel",
-#         "debug_toolbar.panels.sql.SQLPanel",
-#         "debug_toolbar.panels.staticfiles.StaticFilesPanel",
-#         "debug_toolbar.panels.templates.TemplatesPanel",
-#         "debug_toolbar.panels.cache.CachePanel",
-#         "debug_toolbar.panels.signals.SignalsPanel",
-#         "debug_toolbar.panels.logging.LoggingPanel",
-#         "debug_toolbar.panels.redirects.RedirectsPanel",
-#     )
-
-#     # Debug toolbar app
-#     INSTALLED_APPS += ("debug_toolbar",)
-
-#     CONFIG_DEFAULTS = {
-#         "SHOW_COLLAPSED": False,
-#         "SQL_WARNING_THRESHOLD": 500,
-#         "INTERCEPT_REDIRECTS": False,
-#         "SHOW_TOOLBAR_CONFIG": (lambda: DEBUG)
-#     }
-
-#     CACHES = {
-#         "default": {
-#             "BACKEND": "django.core.cache.backends.dummy.DummyCache",
-#         }
-#     }
-
-# else:
-#     CACHES = {
-#         "default": {
-#             "BACKEND": "redis_cache.cache.RedisCache",
-#             "LOCATION": "%s:%s:%s" % (
-#                 CONFIG["cache"]["host"],
-#                 CONFIG["cache"]["port"],
-#                 CONFIG["cache"]["db"]
-#             ),
-#             "OPTIONS": {
-#                 "CLIENT_CLASS": "redis_cache.client.DefaultClient",
-#             }
-#         }
-#     }
 
 if DEBUG == True:
     CACHES = {
@@ -145,10 +81,6 @@ else:
             }
         }
     }
-
-# CACHE_MIDDLEWARE_ALIAS = "default"
-# CACHE_MIDDLEWARE_SECONDS = (60 * 10)
-# CACHE_MIDDLEWARE_KEY_PREFIX = ""
 
 # Python dotted path to the WSGI application used by Django"s runserver.
 WSGI_APPLICATION = "kpcc_backroom_handshakes.wsgi.application"
@@ -201,9 +133,6 @@ if "build" in CONFIG:
     }
 
     STATIC_TO_IGNORE = tuple(CONFIG["build"]["static_to_ignore"])
-    REPS_DATA_BUCKET = CONFIG["build"]["reps_data_bucket"]
-    REPS_DATA_JSON = CONFIG["build"]["reps_data_json"]
-    REPS_DATA_CSV = CONFIG["build"]["reps_data_csv"]
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -280,14 +209,7 @@ LOGGING = {
             "handlers": [
                 "console",
                 "mail_admins",
-                # "slack-debug",
-
-
-                # slack-info used to log to slack
                 "slack-info",
-                # "slack-error",
-
-
             ],
             "level": "DEBUG",
             "propagate": False,
