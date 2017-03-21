@@ -11,7 +11,7 @@ logger = logging.getLogger("kpcc_backroom_handshakes")
 class ContestForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ContestForm, self).__init__(*args, **kwargs)
-        contests = Contest.objects.filter(election__electionid="general-2016-11-08")
+        contests = Contest.objects.filter(election__electionid="primary-2017-03-07").order_by("contestname")
         w = self.fields['contest'].widget
         choices = []
         for item in contests:
