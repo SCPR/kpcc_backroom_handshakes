@@ -16,6 +16,7 @@ import os.path
 import shutil
 import operator
 import re
+import pytz
 from bs4 import BeautifulSoup
 from delorean import parse
 from slugify import slugify
@@ -72,8 +73,6 @@ class BuildLacResults(object):
             file_has_size = os.path.getsize(latest_path)
             if file_exists == True and file_has_size > 0:
                 rows = process.open_results_file(latest_path)
-
-
                 race_ids = process.get_race_ids_from(rows)
                 election_package = process.collate_and_fetch_records_for_race(race_ids, rows)
                 races = election_package[0]
@@ -81,6 +80,7 @@ class BuildLacResults(object):
                 election_stats = election_package[1]["stats"]
                 file_timestring = None
                 file_timestamp = None
+                pacific = pytz.timezone("US/Pacific")
                 for t in election_title:
                     if t[3:5] == "TD":
                         parser = TD_parser()
@@ -89,12 +89,11 @@ class BuildLacResults(object):
                         file_timestring = timestring
                 if file_timestring:
                     file_timestamp = parse(file_timestring, dayfirst=False).datetime
-                    file_timestamp = localtime(file_timestamp)
+                    file_timestamp = file_timestamp.replace(tzinfo=pacific)
                     if self.testing == True:
                         update_this = self.testing
                     else:
-                        # update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
-                        update_this = True
+                        update_this = saver._eval_timestamps(file_timestamp, src.source_latest)
                     if update_this == False:
                         logger.info("\n*****\nwe have newer data in the database so let's delete these files\n*****")
                         os.remove(latest_path)
@@ -117,10 +116,9 @@ class BuildLacResults(object):
                             else:
                                 contest_package = process.compile_contest_results(records)
                                 process.update_database(contest_package, election, src)
-                #         os.remove(latest_path)
-                #         logger.info("we've finished processing lac results")
-                # else:
-                #     logger.error("unable to determine whether this data is newer than what we already have.")
+                        logger.info("we've finished processing lac results")
+                else:
+                    logger.error("unable to determine whether this data is newer than what we already have.")
 
 
 class LacProcessMethods(object):
@@ -856,7 +854,7 @@ class LacProcessMethods(object):
                     framer.candidate["candidateslug"],
                 )
                 race_log += saver.make_candidate(framer.contest, framer.candidate)
-        logger.info(race_log)
+        # logger.info(race_log)
 
     def check_if_recall_or_nonpartisan(self, records):
         """
