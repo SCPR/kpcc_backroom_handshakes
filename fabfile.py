@@ -53,37 +53,66 @@ logging.basicConfig(
     level=logging.DEBUG
 )
 
+
 """
-data functions
+functions that fetch our election data from our sources
 """
 
-def dump_primary_data():
+def election_night():
     """
-    shortcut to load ballot box data fixtures
+    run this on election night to fetch data
+    from live elections and build out pages...
     """
-    local("python manage.py dumpdata ballot_box > ballot_box/fixtures/primary_data.json")
+    local("python manage.py election_night")
+
+def fetch_sos():
+    """
+    shortcut for running the management command to fetch
+    election results from the california secretary of state
+    """
+    local("python manage.py fetch_sos_results")
+
+def fetch_lac():
+    """
+    shortcut for running the management command to fetch
+    election results from the los angeles county
+    """
+    local("python manage.py fetch_lac_results")
+
+def fetch_sbc():
+    """
+    shortcut for running the management command to fetch
+    election results from the san bernardino county
+    """
+    local("python manage.py fetch_sbc_results")
+
+def fetch_oc():
+    """
+    shortcut for running the management command to fetch
+    election results from the orange county
+    """
+    local("python manage.py fetch_oc_results")
+
+def fetch_all():
+    """
+    shortcut for fetch results from all four primary sources
+    """
+    local("python manage.py fetch_sos_results")
+    local("python manage.py fetch_oc_results")
+    local("python manage.py fetch_lac_results")
+    local("python manage.py fetch_sbc_results")
+
+def fetch_maplight():
+    """
+    shortcut for fetch data from the maplight campaign finance api
+    but it's specific to the general-2016-11-08 election.
+    """
+    local("python manage.py fetch_measure_finance")
 
 
-def load_primary_data():
-    """
-    shortcut to load ballot box data fixtures
-    """
-    local("python manage.py loaddata ballot_box/fixtures/primary_data.json")
-
-
-def dump_elex_night():
-    """
-    shortcut to dump data from ballot box as fixtures
-    """
-    local("python manage.py dumpdata ballot_box > ballot_box/fixtures/elex_night_contests_v1.json")
-
-
-def load_elex_night():
-    """
-    shortcut to load ballot box data fixtures
-    """
-    local("python manage.py loaddata ballot_box/fixtures/elex_night_contests_v1.json")
-
+"""
+functions that dump and load existing election data from our applications
+"""
 
 def dump_ballot_box():
     """
@@ -91,13 +120,11 @@ def dump_ballot_box():
     """
     local("python manage.py dumpdata ballot_box > ballot_box/fixtures/ballot_box.json")
 
-
 def load_ballot_box():
     """
     shortcut to load ballot box data fixtures
     """
     local("python manage.py loaddata ballot_box/fixtures/ballot_box.json")
-
 
 def dump_registrar():
     """
@@ -105,13 +132,11 @@ def dump_registrar():
     """
     local("python manage.py dumpdata election_registrar > election_registrar/fixtures/election_registrar.json")
 
-
 def load_registrar():
     """
     shortcut to load ballot box data fixtures
     """
     local("python manage.py loaddata election_registrar/fixtures/election_registrar.json")
-
 
 def dump_playlist():
     """
@@ -119,78 +144,78 @@ def dump_playlist():
     """
     local("python manage.py dumpdata newscast > newscast/fixtures/newscast-playlist.json")
 
-
 def load_playlist():
     """
     shortcut to dump data from ballot box as fixtures
     """
     local("python manage.py loaddata newscast/fixtures/newscast-playlist.json")
 
+def dump_maplight():
+    """
+    shortcut to dump data from ballot box as fixtures
+    """
+    local("python manage.py dumpdata measure_finance > measure_finance/fixtures/measure_finance.json")
 
-def fetch_sos():
+def load_maplight():
     """
-    shortcut for running the management command to fetch sos results
+    shortcut to dump data from ballot box as fixtures
     """
-    local("python manage.py fetch_sos_results")
+    local("python manage.py loaddata measure_finance/fixtures/measure_finance.json")
 
+def dump_fixtures():
+    """
+    shortcut to dump all data fixtures with logging
+    """
+    logger.debug("Dumping data fixtures for %s django project" % (CONFIG["database"]["database"]))
+    dump_registrar()
+    logger.debug("Election data dumped")
+    dump_ballot_box()
+    logger.debug("Election results data dumped")
+    dump_playlist()
+    logger.debug("Newscast playlists data dumped")
+    dump_maplight()
+    logger.debug("Maplight measure finance data dumped")
 
-def fetch_lac():
+def load_fixtures():
     """
-    shortcut for running the management command to fetch sos results
+    shortcut to load all data fixtures with logging
     """
-    local("python manage.py fetch_lac_results")
-
-def fetch_sbc():
-    """
-    shortcut for running the management command to fetch sos results
-    """
-    local("python manage.py fetch_sbc_results")
-
-def fetch_oc():
-    """
-    shortcut for running the management command to fetch sos results
-    """
-    local("python manage.py fetch_oc_results")
-
-
-def fetch_all():
-    """
-    shortcut for running all management commands to fetch results
-    """
-    local("python manage.py fetch_sos_results")
-    local("python manage.py fetch_oc_results")
-    local("python manage.py fetch_lac_results")
-    local("python manage.py fetch_sbc_results")
-
-
-def fetch_maplight():
-    """
-    """
-    local("python manage.py fetch_measure_finance")
+    logger.debug("Loading data fixtures for %s django project" % (CONFIG["database"]["database"]))
+    load_registrar()
+    logger.debug("Election data loaded")
+    load_ballot_box()
+    logger.debug("Election results data loaded")
+    load_playlist()
+    logger.debug("Newscast playlists data loaded")
+    load_maplight()
+    logger.debug("Maplight measure finance data loaded")
 
 
-def set_elex_night():
+"""
+django-bakery functions
+"""
+
+def build():
     """
     """
-    local("python manage.py set_featured_contests")
+    local("python manage.py build")
 
 
-def zero_it():
+def buildserver():
     """
     """
-    local("python manage.py zero_out_data")
+    local("python manage.py buildserver")
 
 
-def election_night():
+def publish():
     """
     """
-    local("python manage.py election_night")
+    local("python manage.py publish")
 
 
 """
 development functions
 """
-
 
 def lrun():
     """
@@ -198,13 +223,11 @@ def lrun():
     """
     local("python manage.py runserver")
 
-
 def make():
     """
     shortcut for base manage.py function to sync the dev database
     """
     local("python manage.py makemigrations")
-
 
 def migrate():
     """
@@ -212,19 +235,12 @@ def migrate():
     """
     local("python manage.py migrate")
 
-
-def superuser():
-    """
-    shortcut for base manage.py function to create a superuser
-    """
-    local("python manage.py createsuperuser")
-
-
 def test():
     """
     shortcut for base manage.py function to create a superuser
     """
     local("python manage.py test")
+
 
 """
 bootstrapping functions
@@ -236,6 +252,11 @@ def requirements():
     """
     local("pip install -r requirements.txt")
 
+def superuser():
+    """
+    shortcut for base manage.py function to create a superuser
+    """
+    local("python manage.py createsuperuser")
 
 def create_db():
     connection = None
@@ -259,7 +280,6 @@ def create_db():
         if connection:
             connection.close()
 
-
 def makesecret(length=50, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'):
     """
     generates secret key for use in django settings
@@ -268,76 +288,35 @@ def makesecret(length=50, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789!@#
     key = ''.join(random.choice(allowed_chars) for i in range(length))
     print 'SECRET_KEY = "%s"' % key
 
-
-def build():
-    local("python manage.py build")
-
-
-def buildserver():
-    local("python manage.py buildserver")
-
-
-def publish():
-    local("python manage.py publish")
-
-
-def elex_night_s3():
-    """
-    shortcut for running all management commands to fetch results
-    """
-    local("python manage.py build_and_publish")
-
-
-def commit(message='updates'):
-    with lcd(settings.DEPLOY_DIR):
-        try:
-            message = raw_input("Enter a git commit message:  ")
-            local("git add -A && git commit -m \"%s\"" % message)
-        except:
-            print(green("Nothing new to commit.", bold=False))
-        local("git push")
-
-
-def deploy():
-    with cd(env.code_dir):
-        run("git co %s" % env.local_branch)
-        run("git pull")
-        with prefix("WORKON_HOME=$HOME/.virtualenvs"):
-            with prefix("source /usr/local/bin/virtualenvwrapper.sh"):
-                with prefix("workon %s" % (env.project_name)):
-                    run("pip install -r %s" % (env.requirements_file))
-                    run("python manage.py migrate")
-                    run("python manage.py collectstatic --noinput")
-        sudo("sudo service uwsgi restart")
-        sudo("sudo service nginx restart")
-        sudo("sudo service varnish restart")
-        sudo("sudo /etc/init.d/newrelic-sysmond start")
-
-
 def bootstrap():
-    with prefix("WORKON_HOME=$HOME/.virtualenvs"):
-        with prefix("source /usr/local/bin/virtualenvwrapper.sh"):
-            local("mkvirtualenv %s" % (env.project_name))
-            with prefix("workon %s" % (env.project_name)):
-                requirements()
-                time.sleep(2)
-                create_db()
-                time.sleep(2)
-                migrate()
-                time.sleep(2)
-                local("python manage.py createsuperuser")
-
+    """
+    run tasks to setup the base project
+    """
+    create_db()
+    time.sleep(2)
+    migrate()
+    time.sleep(2)
+    load_fixtures()
+    time.sleep(2)
+    superuser()
+    lrun()
 
 def syncstart():
-    # check if requirements need update
+    """
+    get in sync quickly when collaborating
+    """
     requirements()
-    # try migrate
     migrate()
-    # load data fixtures
-    load_registrar()
-    load_ballot_box()
-    # any new dependencies/apps the rest of the team may need?
+    load_fixtures()
 
+def syncend():
+    """
+    end a working session and dump out
+    potential changes to requirements and data
+    """
+    local("pip freeze > requirements.txt")
+    make()
+    dump_fixtures()
 
 def __env_cmd(cmd):
     return env.bin_root + cmd
