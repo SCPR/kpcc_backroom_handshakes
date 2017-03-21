@@ -169,103 +169,95 @@ We started to add some variables to ```development.yml```. Here's what all of th
         - ```from```: String that is passed through URL requests made using the Requests library.
         - ```user_agent```: String that is passed through URL requests made using the Requests library. Default is "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) AppleWebKit/525.19 (KHTML, like Gecko) Chrome/1.0.154.53 Safari/525.19"
 
-
-
 ----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Available Fabric Commands
 =========================
 
-**Data Functions**
+**Functions That Fetch Our Election Data From Our Sources**
 
-* Coming soon...
+* ```election_night```: run this on election night to fetch data from live elections and build out pages...
 
+        local("python manage.py election_night")
 
+* ```fetch_sos```: shortcut for running the management command to fetch election results from the california secretary of state
 
+        local("python manage.py fetch_sos_results")
 
+* ```fetch_lac```: shortcut for running the management command to fetch election results from the los angeles county
 
+        local("python manage.py fetch_lac_results")
 
+* ```fetch_sbc```: shortcut for running the management command to fetch election results from the san bernardino county
 
+        local("python manage.py fetch_sbc_results")
 
+* ```fetch_oc```: shortcut for running the management command to fetch election results from the orange county
 
+        local("python manage.py fetch_oc_results")
 
+* ```fetch_all```: shortcut for fetch results from all four primary sources
 
+        local("python manage.py fetch_sos_results")
+        local("python manage.py fetch_oc_results")
+        local("python manage.py fetch_lac_results")
+        local("python manage.py fetch_sbc_results")
 
+* ```fetch_maplight```: shortcut for fetch data from the maplight campaign finance api but it's specific to the general-2016-11-08 election.
 
-**Development Functions**
+        local("python manage.py fetch_measure_finance")
 
-* ```lrun```: shortcut for base manage.py function to launch the Django development server
+**Dump And Load Existing Election Data**
 
-        local("python manage.py runserver")
+* ```dump_ballot_box```: shortcut to dump data from ballot box as fixtures
 
-* ```make```: shortcut for base manage.py function to make Django database migrations to sync the dev database
+        local("python manage.py dumpdata ballot_box > ballot_box/fixtures/ballot_box.json")
 
-        local("python manage.py makemigrations")
+* ```load_ballot_box```: shortcut to load ballot box data fixtures
 
-* ```migrate```: shortcut for base manage.py function to apply Django database migrations
+        local("python manage.py loaddata ballot_box/fixtures/ballot_box.json")
 
-        local("python manage.py migrate")
+* ```dump_registrar```: shortcut to dump data from ballot box as fixtures
 
-* ```superuser```: shortcut for base manage.py function to create a superuser
+        local("python manage.py dumpdata election_registrar > election_registrar/fixtures/election_registrar.json")
 
-        local("python manage.py createsuperuser")
+* ```load_registrar```: shortcut to load ballot box data fixtures
 
+        local("python manage.py loaddata election_registrar/fixtures/election_registrar.json")
 
-**Bootstrapping Functions**
+* ```dump_playlist```: shortcut to dump data from ballot box as fixtures
 
-* ```requirements```:  shortcut to install requirements from repository's ```requirements.txt```
+        local("python manage.py dumpdata newscast > newscast/fixtures/newscast-playlist.json")
 
-        local("pip install -r requirements.txt")
+* ```load_playlist```: shortcut to dump data from ballot box as fixtures
 
-* ```create_db```: Creates a database based on DATABASE variables in ```settings_development.py``` file
+        local("python manage.py loaddata newscast/fixtures/newscast-playlist.json")
 
-        connection = None
-        db_config = CONFIG["database"]
-        logger.debug("Creating %s database for %s django project" % (db_config["database"], env.project_name))
-        create_statement = "CREATE DATABASE %s" % (db_config["database"])
-        try:
-            connection = MySQLdb.connect(
-                host = db_config["host"],
-                user = db_config["username"],
-                passwd = db_config["password"]
-            )
-            cursor = connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute(create_statement)
-            connection.commit()
-        except MySQLdb.DatabaseError, e:
-            print "Error %s" % (e)
-            sys.exit(1)
-        finally:
-            if connection:
-                connection.close()
+* ```dump_maplight```: shortcut to dump data from ballot box as fixtures
 
-* ```makesecret```: generates secret key for use in [django settings](https://github.com/datadesk/django-project-template/blob/master/fabfile/makesecret.py)
+        local("python manage.py dumpdata measure_finance > measure_finance/fixtures/measure_finance.json")
 
-        key = ''.join(random.choice(allowed_chars) for i in range(length))
-        print 'SECRET_KEY = "%s"' % key
+* ```load_maplight```:shortcut to dump data from ballot box as fixtures
 
-* ```build```: Activates the django-bakery script to build the views specified in ```settings_development.py```
+        local("python manage.py loaddata measure_finance/fixtures/measure_finance.json")
+
+* ```dump_fixtures```: shortcut to dump all data fixtures with logging
+
+        dump_registrar()
+        dump_ballot_box()
+        dump_playlist()
+        dump_maplight()
+
+* ```load_fixtures```: shortcut to load all data fixtures with logging
+
+        load_registrar()
+        load_ballot_box()
+        load_playlist()
+        load_maplight()
+
+**django-bakery functions**
+
+* ```build```: Activates the django-bakery script to build the views specified in ```config.yml``` or ```development.yml```
 
         local("python manage.py build")
 
@@ -273,13 +265,65 @@ Available Fabric Commands
 
         local("python manage.py buildserver")
 
-* ```bootstrap```: Attempts to scaffold the project by:
-        * Creating the database
-        * Applying initial Django migrations
-        * Ingesting the initial data fixtures
-        * Creating the Django superuser
-        * Running the Django development server
+* ```publish```: Publishes views and static files in the build directory to Amazon S3
 
+        local("python manage.py publish")
+
+**Development Functions**
+
+* ```lrun```: shortcut for base manage.py function to run the dev server
+
+        local("python manage.py runserver")
+
+* ```make```: shortcut for base manage.py function to sync the dev database
+
+        local("python manage.py makemigrations")
+
+* ```migrate```: shortcut for base manage.py function to apply db migrations
+
+        local("python manage.py migrate")
+
+* ```test```: shortcut for base manage.py function to create a superuser
+
+        local("python manage.py test")
+
+* ```set_featured```:
+
+        local("python manage.py set_featured_contests")
+
+* ```zero_it```:
+
+        local("python manage.py zero_out_data")
+
+**Bootstrapping Functions**
+
+* ```requirements()```:  shortcut to install requirements from repository's ```requirements.txt```
+
+        local("pip install -r requirements.txt")
+
+* ```superuser```: shortcut for base manage.py function to create a superuser
+
+        local("python manage.py createsuperuser")
+
+* ```create_db```:
+
+* ```makesecret```: generates secret key for use in django settings
+
+* ```bootstrap```: run tasks to setup the base project
+
+* ```syncstart```: get in sync quickly when collaborating
+
+        requirements()
+        migrate()
+        load_fixtures()
+
+* ```syncend```: end a working session and dump out potential changes to requirements and data
+
+        local("pip freeze > requirements.txt")
+        make()
+        dump_fixtures()
+
+----
 
 Mac OS Python development environment
 =====================================

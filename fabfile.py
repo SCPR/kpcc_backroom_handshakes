@@ -242,6 +242,17 @@ def test():
     local("python manage.py test")
 
 
+def set_featured():
+    """
+    """
+    local("python manage.py set_featured_contests")
+
+def zero_it():
+    """
+    """
+    local("python manage.py zero_out_data")
+
+
 """
 bootstrapping functions
 """
