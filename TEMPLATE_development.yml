@@ -75,6 +75,7 @@ build:
 # api settings and keys for the application
 api:
 
+  # used for the slacker_log_handler to posts data to channel in kpcc's slack account
   slack:
     token: ""
     api_key: ""
