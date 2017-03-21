@@ -7,15 +7,14 @@ secret_key: ""
 # default is generally 127.0.0.1
 internal_ips: "127.0.0.1"
 
-installed_apps:
-  - "django_admin_bootstrapped"
+site_url: ""
 
-# default is mysql. is set in accountability_tracker/accountability_tracker/settings_production.py
+# default engine is mysql
 database:
   host: "127.0.0.1"
   port: 3306
   database: "kpcc_backroom_handshakes"
-  username: ""
+  username: "root"
   password: ""
 
 # optional if you intend to generate emails from an application
@@ -26,44 +25,73 @@ email:
   port: 587
   use_tls: True
 
-cache:
-  host: localhost
-  port: 6379
-  db: 0
+installed_apps:
+  - "massadmin"
+  - "slacker_log_handler"
+  - "bakery"
+  - "election_registrar"
+  - "ballot_box"
+  - "newscast"
+  - "measure_finance"
 
-# required absolute path to the build & deploy directory for django-bakery and deployment
+deployment_env:
+  hosts: ""
+  project_name: ""
+  local_branch: "master"
+  remote_ref: "origin/master"
+  requirements_file: "requirements.txt"
+  use_ssh_config: True
+  code_dir: ""
+
+# absolute path to build & deploy directory for django-bakery & deployment
 build:
+  aws_bucket_name: "scpr-elections"
+  aws_access_key_id: "AKIAIYNZ47BNCEQ5NPCQ"
+  aws_secret_access_key: "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"
+  aws_s3_host: "s3-accelerate.amazonaws.com"
+  bakery_gzip: True
   staging: False
-  staging_prefix: ""
-  live_prefix: ""
-
-  deploy_dir: ""
-  build_dir: ""
-
+  staging_prefix: None
+  live_prefix: None
+  deploy_dir: None
+  build_dir: "/Users/ckeller/_programming/2kpcc/_projects/kpcc_backroom_handshakes/latest_build/"
   views:
-    - ""
+    - "election_registrar.views.ElectionDetailView"
+    - "ballot_box.views.BakedHomepageIndex"
+    - "ballot_box.views.BakedFeaturedIndex"
+    - "ballot_box.views.BakedResultsIndex"
+    - "ballot_box.views.BakedEmbeddedDetail"
+    - "measure_finance.views.InitialDetailView"
+    # - "rep_stance.views.RepQueryIndex"
+    # - "rep_stance.views.RepAnswerIndex"
+    # - "rep_the_people.views.ContactRepIndexView"
+
+  bakery_cache_control:
+    html: 300
+    javascript: 86400
+  static_to_ignore:
+    - "admin"
+    - "bootstrap"
+    - "bootstrap-rtl"
+    - "yaml"
+    - "congressional_data.csv"
+    - "congressional_data.json"
+    - "congressional_statements_refugee_ban.csv"
+    - "congressional_statements_refugee_ban.json"
+    - "congressional_district_cities.csv"
+    - "state_rep_data.csv"
+    - "state_rep_data.json"
 
 # api settings and keys for the application
 api:
 
-  # key to access twitter api
-  twitter:
-    consumer_key: ""
-    consumer_secret: ""
-    access_token: ""
-    access_token_secret: ""
-
-  # key for kpcc's assethost API
-  assethost:
-    token_secret: ""
-
-  # key for the public insight network
-  pin_network:
+  slack:
+    token: ""
     api_key: ""
 
-  instagram:
-    instagram_client_id: ""
-    instagram_client_secret: ""
+# required key for ProPublica's api: https://propublica.github.io/congress-api-docs/
+  propublica:
+    api_key: ""
 
   # required key for maplight's api: http://maplight.org/us-congress/guide/tools/apis-and-widgets
   maplight:
