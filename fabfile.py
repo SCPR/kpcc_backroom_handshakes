@@ -272,8 +272,7 @@ def superuser():
 def create_db():
     connection = None
     db_config = CONFIG["database"]
-    logger.debug("Creating %s database for %s django project" %
-                 (db_config["database"], env.project_name))
+    logger.debug("Creating %s database for django project" % (db_config["database"]))
     create_statement = "CREATE DATABASE %s" % (db_config["database"])
     try:
         connection = MySQLdb.connect(
@@ -297,7 +296,7 @@ def makesecret(length=50, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789!@#
     https://github.com/datadesk/django-project-template/blob/master/fabfile/makesecret.py
     """
     key = ''.join(random.choice(allowed_chars) for i in range(length))
-    print 'SECRET_KEY = "%s"' % key
+    print 'SECRET_KEY: "%s"' % key
 
 def bootstrap():
     """
