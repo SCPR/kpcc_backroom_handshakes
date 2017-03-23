@@ -82,8 +82,11 @@ Assuming you're up and running successfully, let's attempt to see if we can acce
 
 * In ```development.yml``` add the Slack Auth token and API key at line 80 and line 81. KPCC'ers can find this in our password manager program.
 
+* While in ```development.yml``` add the absolute path to the ```kpcc_backroom_handshakes/latest_build```directory
+
 * Now you should be able to now run ```fab fetch_lac``` from the command line. If everything runs appropriately you should see the following output...
 
+    ```
     [] Executing task 'fetch_lac'
     [localhost] local: python manage.py fetch_lac_results
     INFO: manager_lac_results.py (def get_results_file 61):
@@ -106,7 +109,7 @@ Assuming you're up and running successfully, let's attempt to see if we can acce
     Task finished at 2017-03-21 15:04:27.048844
 
     Done.
-
+    ```
 * Once the script has finished processing, run ```fab build``` to bake out views as flat HTML pages that will be pushed to a S3 bucket and used to display results and charts to the people of the world.
 
 ----

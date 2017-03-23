@@ -281,7 +281,9 @@ def build_data_dirs():
         "sos_latest",
     ]
     parent_dir = "ballot_box/data_dump/"
+    latest_build = "latest_build"
     try:
+        os.makedirs(latest_build)
         os.makedirs(parent_dir)
         logger.debug("Creating %s" % (parent_dir))
     except OSError:
@@ -294,15 +296,6 @@ def build_data_dirs():
         except OSError:
             if not os.path.isdir("%s%s" % (parent_dir, dir)):
                 raise
-
-
-
-
-
-
-
-
-
 
 def create_db():
     connection = None
@@ -342,6 +335,8 @@ def bootstrap():
     migrate()
     time.sleep(2)
     load_fixtures()
+    time.sleep(2)
+    build_data_dirs()
     time.sleep(2)
     superuser()
     lrun()
