@@ -11,6 +11,7 @@ Table of Contents
 
 * [Assumptions](#assumptions)
 * [Quickstart](#quickstart-to-get-up-and-running)
+* [Ingesting And Baking Election Data](#ingesting-and-baking-election-data)
 * [Config and Settings](#config-and-settings)
 * [Available Fabric Commands](#available-fabric-commands)
 * [Building A Mac OS Python Dev Environment](#building-a-mac-os-python-dev-environment)
@@ -71,6 +72,59 @@ Quickstart To Get Up And Running
 
 * Navigate to ```http://127.0.0.1:8000/``` and you should arrive at the homepage that shows the elections we have processed using the application so far.
 
+----
+
+
+
+
+
+
+
+
+Ingesting And Baking Election Data
+==================================
+
+Assuming you're up and running successfully, let's attempt to see if we can access data from the most recent election...
+
+
+In ```development.yml``` add the Slack Auth token and api key at line 80 and line 81.
+
+Running ```fab build_data_dirs``` will create the directory structure for the ballot_box application...
+
+Should be able to now run ```fab fetch_lac```. If everything runs appropriately you should see the following output...
+
+    [] Executing task 'fetch_lac'
+    [localhost] local: python manage.py fetch_lac_results
+    INFO: manager_lac_results.py (def get_results_file 61):
+    *** Beginning Request ***
+        * Success! http://rrcc.co.la.ca.us/results/2619mar17.ets responded with a file
+        * Success! _2017_03_21_15_04_19_lac_2619mar17.ets downloaded
+        * Success! _2017_03_21_15_04_19_lac_2619mar17.ets is a valid file
+        * Skipping because lac_latest exists
+        * Success! los-angeles-county-2017-municipal-primary.txt is ready to parse
+        * Success! _2017_03_21_15_04_19_lac_2619mar17.ets is archived
+        * Success: los-angeles-county-2017-municipal-primary.txt exists
+    *** Ending Request ***
+
+    INFO: manager_lac_results.py (def parse_results_file 101):
+    *****
+    we have new data to save and we'll update timestamps in the database
+    *****
+    INFO: manager_lac_results.py (def parse_results_file 119):  we've finished processing lac results
+
+    Task finished at 2017-03-21 15:04:27.048844
+
+    Done.
+
+Run ```fab build``` to build out the views with data that will be used to display results and charts to the people of the world...
+
+
+
+
+
+
+
+----
 
 Config and Settings
 ===================

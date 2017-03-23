@@ -269,6 +269,41 @@ def superuser():
     """
     local("python manage.py createsuperuser")
 
+def build_data_dirs():
+    """
+    shortcut to create directory structure to house election data files
+    """
+    data_dirs = [
+        "_archived_files",
+        "lac_latest",
+        "oc_latest",
+        "sbc_latest",
+        "sos_latest",
+    ]
+    parent_dir = "ballot_box/data_dump/"
+    try:
+        os.makedirs(parent_dir)
+        logger.debug("Creating %s" % (parent_dir))
+    except OSError:
+        if not os.path.isdir(parent_dir):
+            raise
+    for dir in data_dirs:
+        try:
+            os.makedirs("%s%s" % (parent_dir, dir))
+            logger.debug("Creating %s%s" % (parent_dir, dir))
+        except OSError:
+            if not os.path.isdir("%s%s" % (parent_dir, dir)):
+                raise
+
+
+
+
+
+
+
+
+
+
 def create_db():
     connection = None
     db_config = CONFIG["database"]

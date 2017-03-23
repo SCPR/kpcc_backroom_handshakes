@@ -50,10 +50,6 @@ build:
   aws_secret_access_key: ""
   aws_s3_host: "s3-accelerate.amazonaws.com"
   bakery_gzip: True
-  staging: False
-  staging_prefix: None
-  live_prefix: None
-  deploy_dir: None
   build_dir: None
   views:
     - "election_registrar.views.ElectionDetailView"
@@ -62,7 +58,6 @@ build:
     - "ballot_box.views.BakedResultsIndex"
     - "ballot_box.views.BakedEmbeddedDetail"
     - "measure_finance.views.InitialDetailView"
-
   bakery_cache_control:
     html: 300
     javascript: 86400
