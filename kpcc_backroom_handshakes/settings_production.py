@@ -115,10 +115,14 @@ STATICFILES_DIRS = (
 
 # build paths inside the project like this: os.path.join(base_dir, ...)
 if "build" in CONFIG:
-    STAGING = CONFIG["build"]["staging"]
-    STAGING_PREFIX = CONFIG["build"]["staging_prefix"]
-    LIVE_PREFIX = CONFIG["build"]["live_prefix"]
-    DEPLOY_DIR = CONFIG["build"]["deploy_dir"]
+    if "staging" in CONFIG["build"]:
+        STAGING = CONFIG["build"]["staging"]
+    if "staging_prefix" in CONFIG["build"]:
+        STAGING_PREFIX = CONFIG["build"]["staging_prefix"]
+    if "live_prefix" in CONFIG["build"]:
+        LIVE_PREFIX = CONFIG["build"]["live_prefix"]
+    if "deploy_dir" in CONFIG["build"]:
+        DEPLOY_DIR = CONFIG["build"]["deploy_dir"]
     STATIC_DIR = STATIC_URL
     BUILD_DIR = os.path.join(STATIC_ROOT, CONFIG["build"]["build_dir"])
     BAKERY_VIEWS = tuple(CONFIG["build"]["views"])
@@ -131,7 +135,6 @@ if "build" in CONFIG:
         'text/html': CONFIG["build"]["bakery_cache_control"]["html"],
         'application/javascript': CONFIG["build"]["bakery_cache_control"]["javascript"]
     }
-
     STATIC_TO_IGNORE = tuple(CONFIG["build"]["static_to_ignore"])
 
 # A sample logging configuration. The only tangible logging
