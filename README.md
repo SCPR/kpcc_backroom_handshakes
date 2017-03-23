@@ -67,6 +67,7 @@ Quickstart To Get Up And Running
         * Creating the database: ```fab create_db```
         * Applying initial Django migrations: ```fab migrate```
         * Load initial data fixtures: ```fab load_fixtures```
+        * Create the directory structure for the ballot_box application: ```fab build_data_dirs```
         * Creating the Django superuser: ```python manage.py createsuperuser```
         * Running the Django development server: ```fab lrun```
 
@@ -74,24 +75,14 @@ Quickstart To Get Up And Running
 
 ----
 
-
-
-
-
-
-
-
 Ingesting And Baking Election Data
 ==================================
 
 Assuming you're up and running successfully, let's attempt to see if we can access data from the most recent election...
 
+* In ```development.yml``` add the Slack Auth token and API key at line 80 and line 81. KPCC'ers can find this in our password manager program.
 
-In ```development.yml``` add the Slack Auth token and api key at line 80 and line 81.
-
-Running ```fab build_data_dirs``` will create the directory structure for the ballot_box application...
-
-Should be able to now run ```fab fetch_lac```. If everything runs appropriately you should see the following output...
+* Now you should be able to now run ```fab fetch_lac``` from the command line. If everything runs appropriately you should see the following output...
 
     [] Executing task 'fetch_lac'
     [localhost] local: python manage.py fetch_lac_results
@@ -116,13 +107,7 @@ Should be able to now run ```fab fetch_lac```. If everything runs appropriately 
 
     Done.
 
-Run ```fab build``` to build out the views with data that will be used to display results and charts to the people of the world...
-
-
-
-
-
-
+* Once the script has finished processing, run ```fab build``` to bake out views as flat HTML pages that will be pushed to a S3 bucket and used to display results and charts to the people of the world.
 
 ----
 
