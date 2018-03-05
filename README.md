@@ -413,3 +413,55 @@ Building A Mac OS Python Dev Environment
             mysql -u root -p
             SHOW DATABASES;
             SET default_storage_engine=MYISAM;
+
+----
+
+Docker Setup
+============
+
+Or, you can use [Docker](https://www.docker.com/).
+
+### Prerequisites
+
+* [Docker](https://www.docker.com/)
+* [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Instructions
+
+A [Dockerfile](Dockerfile) is included, which will build the entire environment into a Docker image.  This includes Python and dependencies needed for building requirements from source.
+
+To build the image, run `docker-compose up -d backroom-handshakes`.
+
+The build step can take several minutes, but you should only have to do it once.
+
+If you don't have an instance of MySQL or MariaDB running already, [docker-compose.yml](docker-compose.yml) includes a minimal MySQL setup.  Just run `docker-compose up -d mysql`, and you should now have a development instance ready to use.
+
+Open up your a shell for your container:
+
+```
+docker-compose exec backroom-handshakes /bin/sh
+```
+
+Now, within that shell, you can continue to install your required modules:
+
+```
+pip install -r requirements.txt
+```
+
+At this point, you can continue with the "quickstart" instructions listed above.  The only difference is, if you decided to run the MySQL container, you should change the database host in `development.yml` to this:
+
+```
+  database:
+    host: mysql
+    port: 3306
+    database: kpcc_backroom_handshakes
+    username: root
+    password: password
+```
+
+### Notes
+
+Remmber that build.build_dir in `development.yml` _must_ be an absolute path, not relative.  For development, simply setting this configuration to `/home/latest_build` works fine.
+
+
+

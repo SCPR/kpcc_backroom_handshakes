@@ -1,0 +1,43 @@
+version: '3.3'
+
+services:
+
+  backroom-handshakes: 
+    build: .
+    container_name: backroom-handshakes-python
+    ports:
+      - 8000:8000/tcp
+    networks:
+      backroom-handshakes-network:
+        aliases:
+          - python
+    volumes:
+      - ./:/home/
+      # - type: volume
+      #   source: ./site-packages
+      #   target: /usr/local/lib/python2.7/site-packages
+    command: /bin/sh
+    stdin_open: true
+    tty: true
+
+  mysql:
+    image: mysql:latest
+    container_name: backroom-handshakes-mysql
+    ports:
+      - 3200:3200/tcp
+      - 3306:3306/tcp
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      backroom-handshakes-network:
+        aliases:
+         - mysql
+
+volumes:
+  mysql-data:
+
+networks:
+  backroom-handshakes-network:
