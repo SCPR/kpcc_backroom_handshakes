@@ -19,5 +19,5 @@ urlpatterns = [
     url(r"^elections/", include("ballot_box.urls", namespace="ballot-box")),
     url(r"^elections/", include("measure_finance.urls", namespace="campaign-finance")),
     url(r"^elections/", include("election_registrar.urls", namespace="elections")),
-    url(r"^", RedirectView.as_view(url="elections/", permanent=False)),
+    # url(r"^", RedirectView.as_view(url="elections/", permanent=False)),
 ]
