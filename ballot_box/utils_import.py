@@ -34,7 +34,7 @@ class Saver(object):
             obj, created = Office.objects.get_or_create(
                 officeid=office["officeid"],
                 defaults={
-                    # "name": office["officename"],
+                    "name": office["officename"],
                     "slug": office["officeslug"],
                     "active": office["active"],
                     "poss_error": False,
@@ -67,8 +67,8 @@ class Saver(object):
                 contestid=contest["contestid"],
                 defaults={
                     # don't overwrite admin edits
-                    # "contestname": contest["contestname"],
-                    # "contestdescription": contest["contestdescription"],
+                    "contestname": contest["contestname"],
+                    "contestdescription": contest["contestdescription"],
                     "seatnum": contest["seatnum"],
                     "is_uncontested": contest["is_uncontested"],
                     "is_national": contest["is_national"],
@@ -123,9 +123,9 @@ class Saver(object):
                 defaults={
                     "ballotorder": judicial["ballotorder"],
                     # don't overwrite admin edits
-                    # "firstname": judicial["firstname"],
-                    # "lastname": judicial["lastname"],
-                    # "fullname": judicial["fullname"],
+                    "firstname": judicial["firstname"],
+                    "lastname": judicial["lastname"],
+                    "fullname": judicial["fullname"],
                     "yescount": judicial["yescount"],
                     "yespct": judicial["yespct"] / 100,
                     "nocount": judicial["nocount"],
@@ -172,8 +172,8 @@ class Saver(object):
                 defaults={
                     "ballotorder": measure["ballotorder"],
                     # don't overwrite admin edits
-                    # "fullname": measure["fullname"],
-                    # "description": measure["description"],
+                    "fullname": measure["fullname"],
+                    "description": measure["description"],
                     "yescount": measure["yescount"],
                     "yespct": measure["yespct"] / 100,
                     "nocount": measure["nocount"],
@@ -224,9 +224,9 @@ class Saver(object):
                 defaults={
                     "ballotorder": candidate["ballotorder"],
                     # don't overwrite admin edits
-                    # "firstname": candidate["firstname"],
-                    # "lastname": candidate["lastname"],
-                    # "fullname": candidate["fullname"],
+                    "firstname": candidate["firstname"],
+                    "lastname": candidate["lastname"],
+                    "fullname": candidate["fullname"],
                     "party": candidate["party"],
                     "incumbent": candidate["incumbent"],
                     "votecount": candidate["votecount"],
