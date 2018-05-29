@@ -21,7 +21,7 @@ import logging
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
 # ELECTIONID = "general-2016-11-08"
-ELECTIONID = "primary-2017-03-07"
+ELECTIONID = "primary-2018-06-05"
 
 class EmbeddedDetail(DetailView):
     model = Contest
