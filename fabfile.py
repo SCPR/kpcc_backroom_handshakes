@@ -173,8 +173,8 @@ def dump_fixtures():
     logger.debug("Election results data dumped")
     dump_playlist()
     logger.debug("Newscast playlists data dumped")
-    dump_maplight()
-    logger.debug("Maplight measure finance data dumped")
+    # dump_maplight()
+    # logger.debug("Maplight measure finance data dumped")
 
 def load_fixtures():
     """
@@ -187,8 +187,8 @@ def load_fixtures():
     logger.debug("Election results data loaded")
     load_playlist()
     logger.debug("Newscast playlists data loaded")
-    load_maplight()
-    logger.debug("Maplight measure finance data loaded")
+    # load_maplight()
+    # logger.debug("Maplight measure finance data loaded")
 
 
 """
@@ -221,7 +221,7 @@ def lrun():
     """
     shortcut for base manage.py function to run the dev server
     """
-    local("python manage.py runserver")
+    local("python manage.py runserver 0.0.0.0:8000")
 
 def make():
     """
