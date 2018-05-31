@@ -120,16 +120,16 @@ run concurrently.")
         self.sync_with_s3()
 
         # Delete anything that's left in our keys dict
-        if not self.dry_run and not self.no_delete:
-            self.deleted_file_list = list(self.s3_key_dict.keys())
-            self.deleted_files = len(self.deleted_file_list)
-            if self.deleted_files:
-                logger.debug("deleting %s keys" % self.deleted_files)
-                key_chunks = []
-                for i in range(0, len(self.deleted_file_list), 100):
-                    key_chunks.append(self.deleted_file_list[i:i+100])
-                for chunk in key_chunks:
-                    self.bucket.delete_keys(chunk)
+        # if not self.dry_run and not self.no_delete:
+        #     self.deleted_file_list = list(self.s3_key_dict.keys())
+        #     self.deleted_files = len(self.deleted_file_list)
+        #     if self.deleted_files:
+        #         logger.debug("deleting %s keys" % self.deleted_files)
+        #         key_chunks = []
+        #         for i in range(0, len(self.deleted_file_list), 100):
+        #             key_chunks.append(self.deleted_file_list[i:i+100])
+        #         for chunk in key_chunks:
+        #             self.bucket.delete_keys(chunk)
 
         # Run any post publish hooks on the views
         if not hasattr(settings, 'BAKERY_VIEWS'):
