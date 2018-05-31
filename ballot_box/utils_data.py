@@ -11,6 +11,7 @@ import datetime
 import shutil
 import re
 import types
+import pdb
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
@@ -376,15 +377,14 @@ class Namefixer(object):
             output["type"] = type
             output["prop_num"] = string[0:2]
             output["measure_fullname"] = "%s %s" % (output["type"], output["prop_num"])
-            output["description"] = self.statewide_props[output["prop_num"]]
+            # output["description"] = self.statewide_props[output["prop_num"]]
+            output["description"] = string[3:len(string)].title()
         elif type == "Recall":
-            value = string.replace("(removed) ", "")
-            value = value.replace("?", "")
             output["type"] = ""
             output["prop_num"] = ""
-            output["district"] = "Yorba Linda Water District"
-            output["measure_fullname"] = value.lower()
-            output["description"] = value.lower()
+            output["district"] = "Senate District 29"
+            output["measure_fullname"] = string.lower()
+            output["description"] = string.lower()
         elif type == "Measure":
             dash_loco = string.index("-")
             first_comma = string.find(",")
@@ -394,6 +394,12 @@ class Namefixer(object):
             output["district"] = string[dash_loco:first_comma].replace("-", "")
             output["measure_fullname"] = "%s %s" % (output["type"], output["prop_num"])
             output["description"] = string[description_index:].lower()
+        else:
+            output["type"] = type
+            output["prop_num"] = ""
+            output["district"] = ""
+            output["measure_fullname"] = string.lower()
+            output["description"]      = string.lower()
         output["type"] = unicode(output["type"])
         output["prop_num"] = unicode(output["prop_num"])
         output["measure_fullname"] = unicode(output["measure_fullname"])

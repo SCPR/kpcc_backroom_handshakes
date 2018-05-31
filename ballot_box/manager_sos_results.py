@@ -13,6 +13,7 @@ import time
 import datetime
 import os.path
 import shutil
+import pdb
 from bs4 import BeautifulSoup
 from delorean import parse
 from slugify import slugify
@@ -83,24 +84,31 @@ class BuildSosResults(object):
                     saver._update_result_timestamps(src, file_timestamp)
                     races = soup.find_all("Contest")
                     race_log = "\n"
+                    proposition_ids = [
+                        "190000000068",
+                        "190000000069",
+                        "190000000070",
+                        "190000000071",
+                        "190000000072"
+                    ]
                     for race in races:
-                        if race.ContestIdentifier.attrs["IdNumber"][0:3] == "140":
-                            """
-                            this is a judicial candidate
-                            """
-                            result = compiler._compile_judicial(race, "140", election, src)
-                            race_log += saver.make_office(result.office)
-                            race_log += saver.make_contest(result.office, result.contest)
-                            race_log += saver.make_judicial(result.contest, result.judicial)
-                        elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "150":
-                            """
-                            this is a judicial candidate
-                            """
-                            result = compiler._compile_judicial(race, "150", election, src)
-                            race_log += saver.make_office(result.office)
-                            race_log += saver.make_contest(result.office, result.contest)
-                            race_log += saver.make_judicial(result.contest, result.judicial)
-                        elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "190":
+                        # if race.ContestIdentifier.attrs["IdNumber"][0:3] == "140":
+                        #     """
+                        #     this is a judicial candidate
+                        #     """
+                        #     result = compiler._compile_judicial(race, "140", election, src)
+                        #     race_log += saver.make_office(result.office)
+                        #     race_log += saver.make_contest(result.office, result.contest)
+                        #     race_log += saver.make_judicial(result.contest, result.judicial)
+                        # elif race.ContestIdentifier.attrs["IdNumber"][0:3] == "150":
+                        #     """
+                        #     this is a judicial candidate
+                        #     """
+                        #     result = compiler._compile_judicial(race, "150", election, src)
+                        #     race_log += saver.make_office(result.office)
+                        #     race_log += saver.make_contest(result.office, result.contest)
+                        #     race_log += saver.make_judicial(result.contest, result.judicial)
+                        if race.ContestIdentifier.attrs["IdNumber"] in proposition_ids:
                             """
                             this is a proposition
                             """
@@ -115,8 +123,8 @@ class BuildSosResults(object):
                             result = compiler._compile_candidate(race, election, src)
                             race_log += saver.make_office(result.office)
                             race_log += saver.make_contest(result.office, result.contest)
-                            for candidate in result.candidates:
-                                race_log += saver.make_candidate(result.contest, candidate)
+                        for candidate in result.candidates:
+                            race_log += saver.make_candidate(result.contest, candidate)
                     #logger.info(race_log)
                     os.remove(latest_path)
                     logger.info("\n*****\nwe've finished processing sos results\n*****")

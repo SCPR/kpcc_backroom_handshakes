@@ -19,6 +19,7 @@ import re
 from bs4 import BeautifulSoup
 from delorean import parse
 from slugify import slugify
+import pdb
 
 logger = logging.getLogger("kpcc_backroom_handshakes")
 
@@ -477,7 +478,7 @@ class SbcProcessMethods(object):
             framer.contest["level"] = "county"
             framer.contest["is_statewide"] = False
             contestname = contest['CONTEST_FULL_NAME']
-            if "Proposition" in contestname:
+            if ("Proposition" in contestname) or ("Recall" in contestname):
                 this_type = "Proposition"
                 contestname = contestname.replace("State ", "")
                 measurename = contestname
@@ -487,6 +488,7 @@ class SbcProcessMethods(object):
                 split_name = contestname.split(",")
                 contestname = split_name[0]
                 measurename = split_name[1]
+
             officename = framer._concat(
                 # this_type,
                 contestname,

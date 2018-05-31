@@ -121,32 +121,24 @@ class BuildResults(object):
     fixer = Namefixer()
 
     state_measures = [
-        "1480",
-        "1481",
-        "1482",
-        "1483",
-        "1484",
-        "1485",
-        "1486",
-        "1487",
-        "1488",
-        "1489",
-        "1490",
-        "1491",
-        "1492",
-        "1493",
-        "1494",
-        "1495",
-        "1496"
+        "1656",
+        "1682",
+        "1683",
+        "1684",
+        "1685",
+        "1687"
     ]
 
-    local_recall = [
-        "1473",
-        "1475",
+    state_recall = [
+        "1655"
     ]
 
     local_measures = [
-        "1530"
+        "1687",
+        "1688",
+        "1689",
+        "1690",
+        "1691"
     ]
 
     # def _compile_judicial(self, race, race_id, election, src):
@@ -263,7 +255,7 @@ class BuildResults(object):
             this_type = "Advisory Vote"
         elif race.attrs["race_id"] in self.state_measures:
             this_type = "Proposition"
-        elif race.attrs["race_id"] in self.local_recall:
+        elif race.attrs["race_id"] in self.state_recall:
             this_type = "Recall"
         else:
             this_type = "Measure"
