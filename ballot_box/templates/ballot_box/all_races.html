@@ -16,11 +16,11 @@
 {% block og_url %}https://elections.scpr.org/{{ electionid }}/results/all.html{% endblock %}
 {% block og_description %}Results for the {{ title }} brought to you by KPCC, 89.3FM{% endblock %}
 {% block twitter_url %}https://elections.scpr.org/{{ electionid }}/results/all.html{% endblock %}
-{% block twitter_domain %}http://projects.scpr.org/{% endblock %}
+{% block twitter_domain %}https://projects.scpr.org/{% endblock %}
 {% block twitter_site %}KPCC{% endblock %}
 {% block twitter_title %}KPCC results for the {{ title }} | scpr.org{% endblock %}
 {% block twitter_description %}Results for the {{ title }} brought to you by KPCC, 89.3FM{% endblock %}
-{% block twitter_image %}http://projects.scpr.org/static-files/v3-dependencies/images/kpcc-og-twitter-logo.png{% endblock %}
+{% block twitter_image %}https://projects.scpr.org/static-files/v3-dependencies/images/kpcc-og-twitter-logo.png{% endblock %}
 
 {% block extra_css %}
     {% if baked == True %}
@@ -168,7 +168,7 @@
 {% endblock %}
 
 {% block tail_js %}
-    <script type="text/javascript" src="//pym.nprapps.org/pym.v1.min.js"></script>
+    <script type="text/javascript" src="https://pym.nprapps.org/pym.v1.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             var pymChild = new pym.Child({id: "homepage"});

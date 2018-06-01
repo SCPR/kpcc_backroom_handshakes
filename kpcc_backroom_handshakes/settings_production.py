@@ -178,26 +178,26 @@ LOGGING = {
         "slack-error": {
             "level": "ERROR",
             "api_key": SLACK_API_KEY,
-            "username": "ElexLogger",
+            "username": "backroom-handshakes",
             "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
             "class": "slacker_log_handler.SlackerLogHandler",
-            "channel": "#logging-2016-election"
+            "channel": "#2018-election-results"
         },
         "slack-debug": {
             "level": "DEBUG",
-            "username": "ElexLogger",
+            "username": "backroom-handshakes",
             "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
             "api_key": SLACK_API_KEY,
             "class": "slacker_log_handler.SlackerLogHandler",
-            "channel": "#logging-2016-election"
+            "channel": "#2018-election-results"
         },
         "slack-info": {
             "level": "INFO",
-            "username": "ElexLogger",
+            "username": "backroom-handshakes",
             "icon_url": "https://pbs.twimg.com/media/CSWMwztWoAAYoxC.jpg",
             "api_key": SLACK_API_KEY,
             "class": "slacker_log_handler.SlackerLogHandler",
-            "channel": "#logging-2016-election"
+            "channel": "#2018-election-results"
         },
         "file": {
             "level": "DEBUG",

@@ -39,19 +39,19 @@ def percentage(value):
 
 @register.filter
 def convert_political_party(value):
-    if value == "American Independent":
+    if value == "American Independent" or value == "Ai":
         output = "AI"
-    elif value == "Republican":
+    elif value == "Republican" or value == "Rep":
         output = "R"
-    elif value == "Democrat":
+    elif value == "Democrat" or value == "Dem" or value == "Democratic":
         output = "D"
     elif value == "Peace And Freedom":
         output = "PF"
-    elif value == "Peace and Freedom":
+    elif value == "Peace and Freedom" or value == "P-F":
         output = "PF"
-    elif value == "Libertarian":
+    elif value == "Libertarian" or value == "Lib":
         output = "L"
-    elif value == "Green":
+    elif value == "Green" or value == "Grn":
         output = "G"
     elif value == "Republican , American Independent":
         output = "R"

@@ -16,7 +16,7 @@ COLORS = {
 
 
 class SlackerLogHandler(Handler):
-    def __init__(self, api_key, channel, stack_trace=False, username='Python logger', icon_url=None, icon_emoji=None):
+    def __init__(self, api_key, channel, stack_trace=False, username='backroom-handshakes', icon_url=None, icon_emoji=None):
         Handler.__init__(self)
         self.slack_chat = Slacker(api_key)
         self.channel = channel

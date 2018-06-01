@@ -16,11 +16,11 @@
 {% block og_url %}{% if is_homepage == True %}https://elections.scpr.org/{{ electionid }}/results/homepage.html{% else %}https://elections.scpr.org/{{ electionid }}/results/featured.html{% endif %}{% endblock %}
 {% block og_description %}Featured results for the {{ title }} brought to you by KPCC, 89.3FM{% endblock %}
 {% block twitter_url %}{% if is_homepage == True %}https://elections.scpr.org/{{ electionid }}/results/homepage.html{% else %}https://elections.scpr.org/{{ electionid }}/results/featured.html{% endif %}{% endblock %}
-{% block twitter_domain %}http://projects.scpr.org/{% endblock %}
+{% block twitter_domain %}https://projects.scpr.org/{% endblock %}
 {% block twitter_site %}KPCC{% endblock %}
 {% block twitter_title %}Featured results for the {{ title }} | scpr.org{% endblock %}
 {% block twitter_description %}Featured results for the {{ title }} brought to you by KPCC, 89.3FM{% endblock %}
-{% block twitter_image %}http://projects.scpr.org/static-files/v3-dependencies/images/kpcc-og-twitter-logo.png{% endblock %}
+{% block twitter_image %}https://projects.scpr.org/static-files/v3-dependencies/images/kpcc-og-twitter-logo.png{% endblock %}
 
 {% block extra_css %}
     {% if baked == True %}
@@ -62,7 +62,7 @@
                                 {% endfor %}
                                 {% if contest.contestid == 'sos-statewide-president' %}
                                     <h3 class="npr-link">
-                                        <h2 class="align-right"><a href="http://www.npr.org/2016/11/08/500927768/2016-presidential-election-results-for-each-state" target="_blank">See national results on NPR.org &gt;</a></h2>
+                                        <h2 class="align-right"><a href="https://www.npr.org/2016/11/08/500927768/2016-presidential-election-results-for-each-state" target="_blank">See national results on NPR.org &gt;</a></h2>
                                     </h3>
                                 {% endif %}
                             </div>
@@ -81,7 +81,7 @@
                                 {% endfor %}
                                 {% if contest.contestid == 'sos-statewide-president' %}
                                     <h3 class="npr-link">
-                                        <h2 class="align-right"><a href="http://www.npr.org/2016/11/08/500927768/2016-presidential-election-results-for-each-state" target="_blank">See national results on NPR.org &gt;</a></h2>
+                                        <h2 class="align-right"><a href="https://www.npr.org/2016/11/08/500927768/2016-presidential-election-results-for-each-state" target="_blank">See national results on NPR.org &gt;</a></h2>
                                     </h3>
                                 {% endif %}
                             </div>
@@ -161,7 +161,7 @@
 {% endblock %}
 
 {% block tail_js %}
-    <script type="text/javascript" src="//pym.nprapps.org/pym.v1.min.js"></script>
+    <script type="text/javascript" src="https://pym.nprapps.org/pym.v1.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             var pymChild = new pym.Child({id: "homepage"});

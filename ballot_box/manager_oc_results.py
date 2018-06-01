@@ -13,6 +13,7 @@ import time
 import datetime
 import os.path
 import shutil
+import pdb
 from bs4 import BeautifulSoup
 from delorean import parse
 from slugify import slugify
@@ -461,8 +462,18 @@ class BuildResults(object):
             fullname = candidate.attrs["candidate_name"].encode('utf8')
             fullname = self.fixer._titlecase_with_accents(fullname)
             party = unicode(candidate.attrs["party"].title())
-            if party == "Democratic":
+            if party == "Democratic" or party == "Dem":
                 party = "Democrat"
+            elif party == "Rep":
+                party = "Republican"
+            elif party == "Grn":
+                party = "Green"
+            elif party == "P-F":
+                party = "Peace and Freedom"
+            elif party == "Lib":
+                party = "Libertarian"
+            elif party == "AI" or party == "A-I" or party == "Ind":
+                party = "American Independent"
             votecount = self.framer._to_num(candidate.attrs["c_total_votes"])["value"]
             votepct = 0
             this_candidate["ballotorder"] = candidate.attrs["cand_Seq_nbr"]
