@@ -13,6 +13,7 @@ services:
           - python
     volumes:
       - ./:/home/
+    restart: always
     command: /bin/sh
     stdin_open: true
     tty: false
