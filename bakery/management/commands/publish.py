@@ -108,7 +108,7 @@ run concurrently.")
         )
 
         # Grab our bucket
-        self.bucket = self.conn.get_bucket(self.aws_bucket_name)
+        self.bucket = self.conn.get_bucket(self.aws_bucket_name, validate=False)
 
         # Get a list of all keys in our s3 bucket
         self.s3_key_dict = self.get_s3_key_dict()

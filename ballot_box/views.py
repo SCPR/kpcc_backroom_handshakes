@@ -119,7 +119,12 @@ class HomepageIndex(ListView):
             Q(contestid__contains="lac-county-los-angeles-countywide") |
             Q(contestid__contains="lac-county-los-angeles-city-special-municipal")
         )
-        context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).first()
+        sources = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(
+            Q(source_short="lac") |
+            Q(source_short="oc")|
+            Q(source_short="sos")
+        )
+        context["results_meta"] = sorted(sources, key=lambda k: k.source_latest)[-1]
         return context
 
 
@@ -153,7 +158,12 @@ class BakedHomepageIndex(BuildableListView):
             Q(contestid__contains="lac-county-los-angeles-countywide") |
             Q(contestid__contains="lac-county-los-angeles-city-special-municipal")
         )
-        context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).first()
+        sources = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(
+            Q(source_short="lac") |
+            Q(source_short="oc")|
+            Q(source_short="sos")
+        )
+        context["results_meta"] = sorted(sources, key=lambda k: k.source_latest)[-1]
         return context
 
 
@@ -185,7 +195,12 @@ class FeaturedIndex(ListView):
             Q(contestid__contains="lac-county-los-angeles-countywide") |
             Q(contestid__contains="lac-county-los-angeles-city-special-municipal")
         )
-        context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).first()
+        sources = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(
+            Q(source_short="lac") |
+            Q(source_short="oc")|
+            Q(source_short="sos")
+        )
+        context["results_meta"] = sorted(sources, key=lambda k: k.source_latest)[-1]
         return context
 
 
@@ -219,7 +234,12 @@ class BakedFeaturedIndex(BuildableListView):
             Q(contestid__contains="lac-county-los-angeles-countywide") |
             Q(contestid__contains="lac-county-los-angeles-city-special-municipal")
         )
-        context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).first()
+        sources = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(
+            Q(source_short="lac") |
+            Q(source_short="oc")|
+            Q(source_short="sos")
+        )
+        context["results_meta"] = sorted(sources, key=lambda k: k.source_latest)[-1]
         return context
 
 
@@ -253,9 +273,34 @@ class ResultIndex(ListView):
         )
         context["state_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
             is_display_priority=True).filter(is_ballot_measure=False).filter(
+                Q(contestid__contains="sos-statewide-governor") |
+                Q(contestid__contains="sos-statewide-lieutenant-governor") |
                 Q(contestid__contains="sos-districtwide-state-senate") |
-                Q(contestid__contains="sos-districtwide-state-assembly")
+                Q(contestid__contains="sos-districtwide-state-assembly") |
+                Q(contestid__contains="sos-statewide-attorney-general") |
+                Q(contestid__contains="sos-statewide-controller") |
+                Q(contestid__contains="sos-statewide-insurance-commissioner") |
+                Q(contestid__contains="sos-statewide-insurance-commissioner") |
+                Q(contestid__contains="sos-districtwide-board-of-equalization-member-district-1") |
+                Q(contestid__contains="sos-districtwide-board-of-equalization-member-district-2") |
+                Q(contestid__contains="sos-districtwide-board-of-equalization-member-district-3") |
+                Q(contestid__contains="sos-districtwide-board-of-equalization-member-district-4") |
+                Q(contestid__contains="sos-statewide-secretary-of-state") |
+                Q(contestid__contains="sos-statewide-superintendent-of-public-instruction") |
+                Q(contestid__contains="sos-statewide-treasurer")
         )
+
+
+        # attorney general
+        # controller
+        # governor
+        # insurance commissioner
+        # lieutenant governor
+        # member state board of equalization (1st and 3rd districts)
+        # secretary of state
+        # superintendent of public construction
+        # treasurer
+
         context["lac_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
             is_display_priority=True).filter(is_ballot_measure=False).filter(
                 Q(resultsource__source_short="lac")
@@ -274,7 +319,13 @@ class ResultIndex(ListView):
             Q(resultsource__source_short="oc")|
             Q(resultsource__source_short="sbc")
         ).order_by("contestname")
-        context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).first()
+        # context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).first()
+        sources = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(
+            Q(source_short="lac") |
+            Q(source_short="oc")|
+            Q(source_short="sos")
+        )
+        context["results_meta"] = sorted(sources, key=lambda k: k.source_latest)[-1]
         return context
 
 
@@ -307,11 +358,24 @@ class BakedResultsIndex(BuildableListView):
                 Q(contestid__contains="sos-statewide-president") |
                 Q(contestid__contains="sos-statewide-us-senate") |
                 Q(contestid__contains="sos-districtwide-us-house-of-representatives")
-        ).order_by("contestname")
+        )
         context["state_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
             is_display_priority=True).filter(is_ballot_measure=False).filter(
+                Q(contestid__contains="sos-statewide-governor") |
+                Q(contestid__contains="sos-statewide-lieutenant-governor") |
                 Q(contestid__contains="sos-districtwide-state-senate") |
-                Q(contestid__contains="sos-districtwide-state-assembly")
+                Q(contestid__contains="sos-districtwide-state-assembly") |
+                Q(contestid__contains="sos-statewide-attorney-general") |
+                Q(contestid__contains="sos-statewide-controller") |
+                Q(contestid__contains="sos-statewide-insurance-commissioner") |
+                Q(contestid__contains="sos-statewide-insurance-commissioner") |
+                Q(contestid__contains="sos-districtwide-board-of-equalization-member-district-1") |
+                Q(contestid__contains="sos-districtwide-board-of-equalization-member-district-2") |
+                Q(contestid__contains="sos-districtwide-board-of-equalization-member-district-3") |
+                Q(contestid__contains="sos-districtwide-board-of-equalization-member-district-4") |
+                Q(contestid__contains="sos-statewide-secretary-of-state") |
+                Q(contestid__contains="sos-statewide-superintendent-of-public-instruction") |
+                Q(contestid__contains="sos-statewide-treasurer")
         )
         context["lac_races"] = Contest.objects.filter(election__electionid=context["electionid"]).filter(
             is_display_priority=True).filter(is_ballot_measure=False).filter(
@@ -330,5 +394,10 @@ class BakedResultsIndex(BuildableListView):
             Q(resultsource__source_short="lac") |
             Q(resultsource__source_short="oc")
         ).order_by("contestname")
-        context["results_meta"] = ResultSource.objects.filter(election__electionid=context["electionid"]).first()
+        sources = ResultSource.objects.filter(election__electionid=context["electionid"]).filter(
+            Q(source_short="lac") |
+            Q(source_short="oc")|
+            Q(source_short="sos")
+        )
+        context["results_meta"] = sorted(sources, key=lambda k: k.source_latest)[-1]
         return context

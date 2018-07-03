@@ -40,11 +40,11 @@ class SlackerLogHandler(Handler):
         if record.exc_info:
             trace['text'] = '\n'.join(traceback.format_exception(*record.exc_info))
         attachments = [trace]
-        self.slack_chat.chat.post_message(
-            text=message,
-            channel=self.channel,
-            username=self.username,
-            icon_url=self.icon_url,
-            icon_emoji=self.icon_emoji,
-            attachments=json.dumps(attachments)
-        )
+        # self.slack_chat.chat.post_message(
+        #     text=message,
+        #     channel=self.channel,
+        #     username=self.username,
+        #     icon_url=self.icon_url,
+        #     icon_emoji=self.icon_emoji,
+        #     attachments=json.dumps(attachments)
+        # )

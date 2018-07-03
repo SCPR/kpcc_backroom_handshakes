@@ -3,14 +3,14 @@
 {% load humanize %}
 {% load ballot_box_template_tags %}
 
-{% block title %}Featured results for the {{ title }} | scpr.org{% endblock %}
+{% block title %}2018 California primary election results: Follow along with us{% endblock %}
 {% block robots %}{% endblock %}
 {% block description %}Featured results for the {{ title }} brought to you by KPCC, 89.3FM{% endblock %}
 {% block keywords %}California, Los Angeles County, {% for contest in featured_races %}{{ contest.contestname|title }}, {% endfor %}{% for contest in featured_measures %}{{ contest.contestname|title }}, {% endfor %}{% for measure in local_measures %}{% for this in measure.ballotmeasure_set.all %}{{ this.fullname }}, {% endfor %}{% endfor %}{% endblock %}
-{% block og_title %}Featured results for the {{ title }} | scpr.org{% endblock %}
+{% block og_title %}2018 California primary election results: Follow along with us{% endblock %}
 {% block og_site_name %}{% endblock %}
 {% block og_type %}{% endblock %}
-{% block og_image %}https://elections.scpr.org/static/assets/kpcc-votergameplan-mark-horizontal.png{% endblock %}
+{% block og_image %}https://a.scpr.org/i/7cc90bd58103446b92119b069b2a008a/209503-full.jpg{% endblock %}
 {% block og_image_width %}1525{% endblock %}
 {% block og_image_height %}127{% endblock %}
 {% block og_url %}{% if is_homepage == True %}https://elections.scpr.org/{{ electionid }}/results/homepage.html{% else %}https://elections.scpr.org/{{ electionid }}/results/featured.html{% endif %}{% endblock %}
@@ -18,9 +18,9 @@
 {% block twitter_url %}{% if is_homepage == True %}https://elections.scpr.org/{{ electionid }}/results/homepage.html{% else %}https://elections.scpr.org/{{ electionid }}/results/featured.html{% endif %}{% endblock %}
 {% block twitter_domain %}https://projects.scpr.org/{% endblock %}
 {% block twitter_site %}KPCC{% endblock %}
-{% block twitter_title %}Featured results for the {{ title }} | scpr.org{% endblock %}
+{% block twitter_title %}2018 California primary election results: Follow along with us{% endblock %}
 {% block twitter_description %}Featured results for the {{ title }} brought to you by KPCC, 89.3FM{% endblock %}
-{% block twitter_image %}https://projects.scpr.org/static-files/v3-dependencies/images/kpcc-og-twitter-logo.png{% endblock %}
+{% block twitter_image %}https://a.scpr.org/i/7cc90bd58103446b92119b069b2a008a/209503-full.jpg{% endblock %}
 
 {% block extra_css %}
     {% if baked == True %}
@@ -49,7 +49,7 @@
                                     <h2 class="race-title">{{ contest.contestname|title }}{% if contest.contestid == 'sos-statewide-president' %} - <span>State of California only</span>{% endif %}</h2>
                                     <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</h2>
                                 </header>
-                                {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct"|slice:":2" %}
+                                {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct" %}
                                     <div class="result-item clearfix">
                                         {% if baked == True %}
                                             <img src="{{ candidate.candidate_image_url }}" alt="{{ candidate.fullname }}"/>
@@ -72,7 +72,7 @@
                                     <h2 class="race-title">{{ contest.contestname|title }}{% if contest.contestid == 'sos-statewide-president' %} - <span>State of California only</span>{% endif %}</h2>
                                     <h2 class="precincts-reporting">{{ contest.precinctsreportingpct|percentage|floatformat:0 }}% of precincts reporting</h2>
                                 </header>
-                                {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct"|slice:":2" %}
+                                {% for candidate in contest.candidate_set.all|dictsortreversed:"votepct" %}
                                     <div class="result-item-no-image clearfix">
                                         <div class="spacer"></div>
                                         <h3 class="candidate-name">{{ candidate.fullname }} {% if candidate.party %}({{ candidate.party|convert_political_party }}){% endif %}</h3>

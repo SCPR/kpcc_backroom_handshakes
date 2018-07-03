@@ -110,6 +110,7 @@ class Retriever(object):
                 raise
         file_exists = os.path.isfile(self.file_name)
         file_has_size = os.path.getsize(self.file_name)
+        print self.file_name
         if file_exists == True:
             self.log_message += "\t* Success! %s downloaded\n" % (this_file)
             if file_has_size > 0:
@@ -180,6 +181,7 @@ class Retriever(object):
         this_file="%s%s" % (src.source_slug, src.source_type)
         latest_path=os.path.join(latest_directory, this_file)
         if src.source_type == ".zip":
+            print "ZIPFILE"
             try:
                 with zipfile.ZipFile(latest_path) as zip:
                     files=zipfile.ZipFile.namelist(zip)

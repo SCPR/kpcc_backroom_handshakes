@@ -6,7 +6,7 @@
         {% endif %}
     </header>
     <header class="election-status">
-        {% if source_all_precincts == False %}
+        {% if source_all_precincts != True %}
             <p class="blurb-text">As of {{ results_meta.source_latest|date:"g:i a, N d, Y" }}. Returns checked every 5 minutes for updates.</p>
         {% else %}
             <p class="blurb-text">100% of precincts reporting</p>
